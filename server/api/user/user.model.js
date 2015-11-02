@@ -7,51 +7,54 @@ var authTypes = ['github', 'twitter', 'facebook', 'google'];
 
 var UserSchema = new Schema({
   name: String,
-  email: { type: String, lowercase: true },
+  email: {
+    type: String,
+    lowercase: true
+  },
   role: {
     type: String,
     default: 'user'
   },
-    
+
   hashedPassword: String,
   provider: String,
   salt: String,
   facebook: {},
   twitter: {},
   google: {},
-    github: {},
+  github: {},
 
-    firstName: String,
-    middleName: String,
-    lastName: String,
-    birthday: Date,
-    age: Number,
-    city: String,
-    state: String,
-    zipcode: String,
-    phoneNum: String,
+  firstName: String,
+  middleName: String,
+  lastName: String,
+  birthday: Date,
+  age: Number,
+  city: String,
+  state: String,
+  zipcode: String,
+  phoneNum: String,
 
-    volunteeredTo: [{
-        type: ObjectId,
-        ref: 'Event'
-    }],
+  volunteeredTo: [{
+    type: ObjectId,
+    ref: 'Event'
+  }],
 
-    creatorOf: [{
-        type: ObjectId,
-        ref: 'Event'
-    }],
-    
-    organizerOf: [{
-        type: ObjectId,
-        ref: 'Group'
-    }],
+  creatorOf: [{
+    type: ObjectId,
+    ref: 'Event'
+  }],
 
-    subscribedTo: [{
-        type: ObjectId,
-        ref: 'Group'
-    }],
+  organizerOf: [{
+    type: ObjectId,
+    ref: 'Group'
+  }],
 
-    interests: [String]
+  subscribedTo: [{
+    type: ObjectId,
+    ref: 'Group'
+  }],
+
+  interests: [String]
 });
 
 /**
@@ -113,15 +116,17 @@ UserSchema
   .path('email')
   .validate(function(value, respond) {
     var self = this;
-    this.constructor.findOne({email: value}, function(err, user) {
-      if(err) throw err;
-      if(user) {
-        if(self.id === user.id) return respond(true);
+    this.constructor.findOne({
+      email: value
+    }, function(err, user) {
+      if (err) throw err;
+      if (user) {
+        if (self.id === user.id) return respond(true);
         return respond(false);
       }
       respond(true);
     });
-}, 'The specified email address is already in use.');
+  }, 'The specified email address is already in use.');
 
 var validatePresenceOf = function(value) {
   return value && value.length;

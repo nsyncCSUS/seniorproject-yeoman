@@ -1,10 +1,11 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('UsersCtrl', function($scope) {
+    .controller('UsersCtrl', function($stateParams, $scope) {
         $scope.message = 'Hello';
 
-        $scope.userId = $routeParams.userId;
+        //$scope.userId = $routeParams.userId;
+        $scope.userId = $stateParams.userId;
 
         function refresh() {
             // Problematic code

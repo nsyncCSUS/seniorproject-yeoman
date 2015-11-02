@@ -2,7 +2,7 @@
 
 angular.module('seniorprojectYoApp')
     .filter('CheckExpired', function() {
-        return function(input) {
+        return function(events) {
             //return 'CheckExpired filter: ' + input;
 
             if (events == null)
@@ -12,7 +12,8 @@ angular.module('seniorprojectYoApp')
             var eventEndDate = "";
             for (var i = 0; i < events.length; i++) {
                 eventEndDate = new Date(events[i].endTimeDate).getTime();
-                result = eventEndDate - today;
+                var result = eventEndDate - today;
+                var expiredFlag = result < 0;
 
                 if ((result <= 0) && expiredFlag) {
                     out.push(events[i]);

@@ -1,14 +1,15 @@
+
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('EventsCtrl', function($scope) {
+    .controller('EventsCtrl', function($stateParams, $scope) {
         $scope.message = 'Hello';
 
 
         /***************************************************************************
          * Variables (includes ones from scope too)
          **************************************************************************/
-        $scope.eventId = $routeParams.eventId;
+        $scope.eventId = $stateParams.eventId;
 
 
         /***************************************************************************

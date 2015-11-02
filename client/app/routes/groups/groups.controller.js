@@ -1,14 +1,14 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('GroupsCtrl', function($scope) {
+    .controller('GroupsCtrl', function($stateParams, $scope) {
         $scope.message = 'Hello';
 
 
         /***************************************************************************
          * Variables (includes ones from scope too)
          **************************************************************************/
-        $scope.groupId = $routeParams.groupId;
+        $scope.groupId = $stateParams.groupId;
 
         $scope.isEditing = false;
         $scope.isSearching = false;

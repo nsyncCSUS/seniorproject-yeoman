@@ -12,13 +12,46 @@ var UserSchema = new Schema({
     type: String,
     default: 'user'
   },
+    
   hashedPassword: String,
   provider: String,
   salt: String,
   facebook: {},
   twitter: {},
   google: {},
-  github: {}
+    github: {},
+
+    firstName: String,
+    middleName: String,
+    lastName: String,
+    birthday: Date,
+    age: Number,
+    city: String,
+    state: String,
+    zipcode: String,
+    phoneNum: String,
+
+    volunteeredTo: [{
+        type: ObjectId,
+        ref: 'Event'
+    }],
+
+    creatorOf: [{
+        type: ObjectId,
+        ref: 'Event'
+    }],
+    
+    organizerOf: [{
+        type: ObjectId,
+        ref: 'Group'
+    }],
+
+    subscribedTo: [{
+        type: ObjectId,
+        ref: 'Group'
+    }],
+
+    interests: [String]
 });
 
 /**

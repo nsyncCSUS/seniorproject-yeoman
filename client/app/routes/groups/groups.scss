@@ -1,0 +1,113 @@
+
+
+/**********************************************************************
+    GROUP Edit CSS START
+**********************************************************************/
+.not-selected {
+    opacity: 0.5;
+}
+
+.selected {
+    opacity: 1;
+    background: rgba(39, 62, 84, 0.82);
+    overflow: hidden;
+    height: 100%;
+    z-index: 2;
+}
+
+.subscriber-thumbnail {
+    width: 64px;
+    height: 64px;
+}
+
+.add:hover {
+    border: 2px solid #000000;
+    position:relative;
+    display:inline-block;
+}
+.add:hover {
+    border: 2px solid #000000;
+    position:relative;
+    display:inline-block;
+}
+
+
+.remove:hover {
+    border: 2px solid #000000;
+    position:relative;
+    display:inline-block;
+}
+
+.addOverlay{
+    display: none;
+}
+.removeOverlay{
+    display: none;
+}
+
+.add:hover .addOverlay {
+    background-color: #00ff00;
+    opacity: .6;
+    position: absolute;
+    display:inline-block;
+    width:100%;
+    height:100%;
+    top: 0;
+    left: 0;
+}
+.remove:hover .removeOverlay {
+    background-color: #ff0000;
+    opacity: .6;
+    position: absolute;
+    display:inline-block;
+    width:100%;
+    height:100%;
+    top: 0;
+    left: 0;
+}
+
+.glyphicon-lg-center {
+    font-size: 50px;
+    top: 50%;
+    left: 50%;
+    margin-top: -25px;
+    margin-left: -25px;
+}
+
+.added {
+    position:relative;
+    display:inline-block;
+    opacity: .4;
+}
+
+/**********************************************************************
+    GROUP CSS START
+**********************************************************************/
+.eventRow {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.eventBody {
+    border-left: solid;
+    border-bottom: solid;
+    border-top: solid;
+}
+
+.eventDateRow {
+    border-left: solid thick #ff0000;
+}
+
+.infoRow {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.oneline {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.upcomingEventsRow {
+    background-color: #eeeeee;
+}

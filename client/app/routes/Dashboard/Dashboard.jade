@@ -57,7 +57,7 @@ div
                 
     .col-xs-12.col-sm-8.col-md-8.col-lg-8
         .panel-body.eventRow(ng-show='getCurrentTab("Upcoming Events")')
-            .row.eventRow(ng-repeat='event in user.volunteeredTo | orderBy:"startTimeDate" | checkExpired:false')
+            .row.eventRow(ng-repeat='event in user.volunteeredTo | orderBy:"startTimeDate" | CheckExpired:false')
                 .col-xs-12.col-sm-12.col-md-12.col-lg-12.eventDateRow
                     h3 <strong>{{event.startTimeDate | date:'MMM d, yyyy'}}</strong> 
                     h5 {{event.startTimeDate | date:'EEEE h:m a'}} 
@@ -100,7 +100,7 @@ div
                                     button.btn Opt out
                     
         .panel-body.eventRow(ng-show='getCurrentTab("Past Events")')
-            .row.eventRow(ng-repeat='event in user.volunteeredTo | orderBy:"-startTimeDate" | checkExpired:true')
+            .row.eventRow(ng-repeat='event in user.volunteeredTo | orderBy:"-startTimeDate" | CheckExpired:true')
                 .col-xs-12.col-sm-12.col-md-12.col-lg-12.eventDateRow
                     h3 <strong>{{event.startTimeDate | date:'MMM d, yyyy'}}</strong> 
                     h5 {{event.startTimeDate | date:'EEEE h:m a'}}

@@ -3,6 +3,9 @@
 angular.module('seniorprojectYoApp')
   .controller('NavbarCtrl', function ($scope, $location, Auth) {
     $scope.menu = [{
+        'title': 'Dashboard',
+        'link': '/dashboard'
+    }, {
         'title': 'Users',
         'link': '/users'
     }, {

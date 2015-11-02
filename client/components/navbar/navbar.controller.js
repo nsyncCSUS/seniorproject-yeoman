@@ -3,8 +3,20 @@
 angular.module('seniorprojectYoApp')
   .controller('NavbarCtrl', function ($scope, $location, Auth) {
     $scope.menu = [{
-      'title': 'Home',
-      'link': '/'
+        'title': 'Users',
+        'link': '/users'
+    }, {
+        'title': 'Groups',
+        'link': '/groups'
+    }, {
+        'title': 'Events',
+        'link': '/events'
+    }, {
+        'title': 'Create Group',
+        'link': '/create/group'
+    }, {
+        'title': 'Create Event',
+        'link': '/create/event'
     }];
 
     $scope.isCollapsed = true;

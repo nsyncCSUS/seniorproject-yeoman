@@ -1,4 +1,321 @@
 div(ng-include='"components/navbar/navbar.html"')
 
-.col-md-12
-    | This is the CreateEvent view.
+h1 CREATE EVENT
+div
+    div
+        .float-right.fixed
+            button.btn.btn-warning(ng-show='!getIsPreviewing()', ng-click='enablePreview()') Preview
+            button.btn.btn-warning(ng-show='getIsPreviewing()', ng-click='cancelPreview()') Cancel Preview
+            | &nbsp
+            button.btn.btn-info(ng-click='createEvent()') Create
+            | &nbsp
+            button.btn.btn-danger(ng-click='cancelCreateEvent()') Cancel
+
+div.descriptionRow
+  h2.text-center Event Creation
+
+div.eventRow(ng-show='!getIsPreviewing()')
+    .container-fluid
+        .col-xs-12.col-sm-6.col-md-4.col-lg-4.panel-default
+            h4.panel-heading Event Name
+            .form-group
+                input.form-control#eventName(ng-model='event.name')
+            .row
+                .col-xs-12.col-sm-12.col-md-12.col-lg-12.panel-default
+                    h4.panel-heading Interests
+                    .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                        .row
+                            .navbar-btn
+                                img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/animals.png', ng-class='animalsSelected', ng-click='addInterest("Animals")', tooltip='Animals')
+                                img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/education.png', ng-class='educationSelected', ng-click='addInterest("Education")', tooltip='Education')
+                                img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/environment.png', ng-class='environmentSelected', ng-click='addInterest("Environment")', tooltip='Environment')
+                                img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/people.png', ng-class='peopleSelected', ng-click='addInterest("People")', tooltip='People')
+                                img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/recreation.png', ng-class='recreationSelected', ng-click='addInterest("Recreation")', tooltip='Recreation')
+                                img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/technology.png', ng-class='technologySelected', ng-click='addInterest("Technology")', tooltip='Technology')
+                                img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/youth.png', ng-class='youthSelected', ng-click='addInterest("Youth")', tooltip='Youth')
+                        
+                .col-xs-12.col-sm-12.col-md-12.col-lg-12.panel-default
+                    h4.panel-heading Event Picture
+                    .col-xs-12.col-sm-12.col-md-12.col-lg-12.cursor-pointer
+                        img.img-responsive.img-rounded(ng-src="//placehold.it/250x250")
+                        .addOverlay
+                            span.glyphicon.glyphicon-plus.glyphicon-lg-center
+                                                                
+        .col-xs-12.col-sm-6.col-md-8.col-lg-8
+            .col-xs-12.col-sm-12.col-md-12.col-lg-12.panel-default
+                h4.panel-heading Description
+                textarea.form-control#description(rows='7', ng-model='event.description')
+                | </br>
+            
+            .col-xs-12.col-sm-6.col-md-8.col-lg-12    
+                .col-xs-12.col-sm-12.col-md-6.col-lg-6
+                    .row
+                        .col-xs-12.col-sm-12.col-md-12.col-lg-12.panel-default
+                            h4.panel-heading Location
+                            .row
+                                .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                                    .form-group
+                                        label(for='eventAddress') Address
+                                        input.form-control#eventAddress(ng-model='event.location.street')
+                                .col-xs-12.col-sm-12.col-md-12.col-lg-5
+                                    .form-group
+                                        label(for='eventCity') City
+                                        input.form-control#eventCity(ng-model='event.location.city')
+                                .col-xs-12.col-sm-6.col-md-4.col-lg-4
+                                   .form-group
+                                     label(for='eventState') State
+                                     select.form-control#eventState(ng-model='event.location.state')
+                                          option(value='AL') Alabama
+                                          option(value='AK') Alaska
+                                          option(value='AZ') Arizona
+                                          option(value='AR') Arkansas
+                                          option(value='CA') California
+                                          option(value='CO') Colorado
+                                          option(value='CT') Connecticut
+                                          option(value='DE') Delaware
+                                          option(value='DC') District Of Columbia
+                                          option(value='FL') Florida
+                                          option(value='GA') Georgia
+                                          option(value='HI') Hawaii
+                                          option(value='ID') Idaho
+                                          option(value='IL') Illinois
+                                          option(value='IN') Indiana
+                                          option(value='IA') Iowa
+                                          option(value='KS') Kansas
+                                          option(value='KY') Kentucky
+                                          option(value='LA') Louisiana
+                                          option(value='ME') Maine
+                                          option(value='MD') Maryland
+                                          option(value='MA') Massachusetts
+                                          option(value='MI') Michigan
+                                          option(value='MN') Minnesota
+                                          option(value='MS') Mississippi
+                                          option(value='MO') Missouri
+                                          option(value='MT') Montana
+                                          option(value='NE') Nebraska
+                                          option(value='NV') Nevada
+                                          option(value='NH') New Hampshire
+                                          option(value='NJ') New Jersey
+                                          option(value='NM') New Mexico
+                                          option(value='NY') New York
+                                          option(value='NC') North Carolina
+                                          option(value='ND') North Dakota
+                                          option(value='OH') Ohio
+                                          option(value='OK') Oklahoma
+                                          option(value='OR') Oregon
+                                          option(value='PA') Pennsylvania
+                                          option(value='RI') Rhode Island
+                                          option(value='SC') South Carolina
+                                          option(value='SD') South Dakota
+                                          option(value='TN') Tennessee
+                                          option(value='TX') Texas
+                                          option(value='UT') Utah
+                                          option(value='VT') Vermont
+                                          option(value='VA') Virginia
+                                          option(value='WA') Washington
+                                          option(value='WV') West Virginia
+                                          option(value='WI') Wisconsin
+                                          option(value='WY') Wyoming
+                                .col-xs-12.col-sm-6.col-md-4.col-lg-3
+                                   .form-group
+                                     label(for='eventZIP') ZIP Code
+                                     input.form-control#eventZIP(ng-model='event.location.zipcode')
+                .col-xs-12.col-sm-12.col-md-6.col-lg-6.panel-default.hidden-sm
+                   h4.panel-heading Time
+                   .row
+                       .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                           label Start Time:
+                           .form-inline
+                               input.form-control(type='text', datetime-picker='MM/dd/yyyy HH:mm', ng-model='event.startTimeDate', ng-disabled = 'true', is-open='open.startTimeDate')
+                               span
+                                   button.btn.btn-default(type='button', ng-click="openCalendar($event, 'startTimeDate'); timediff(event.startTimeDate, event.endTimeDate)")
+                                       i.fa.fa-calendar
+                           | </br>   
+                       .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                           label End Time:
+                           .form-inline
+                               input.form-control(type='text', datetime-picker='MM/dd/yyyy HH:mm', ng-model='event.endTimeDate', ng-disabled = 'true', is-open='open.endTimeDate')
+                               span
+                                   button.btn.btn-default(type='button', ng-click="openCalendar($event, 'endTimeDate')")
+                                       i.fa.fa-calendar                      
+                    
+            .col-xs-12.col-sm-12.col-md-12.col-lg-12.panel-default
+                h4.panel-heading Volunteers
+                .button.btn.btn-info.btn-default.btn-block(type='button') Invite Volunteers
+                
+                
+div.titleRow(ng-show='!getIsPreviewing()')
+    .container-fluid
+        .col-xs-12.col-sm-12.col-md-4.col-lg-12
+            pre.alert.alert-info.
+                For testing date/time string purposes, will be removed afterwards
+                Start Time is: {{event.startTimeDate | date:'medium' }}
+                End Time is: {{event.endTimeDate | date:'medium' }}     
+//                label {{$scope.tDifference}} 
+
+div.descriptionRow(ng-show='!getIsPreviewing()')
+   h2.text-center Description
+    .container-fluid
+        .col-xs-12.col-sm-6.col-md-4.col-lg-4
+                .form-group
+                    input(type='file') 
+
+div(ng-show='getIsPreviewing()')
+    .container-fluid
+        .col-xs-12.col-sm-6.col-md-4.col-lg-4.panel-default
+            h4.panel-heading.text-center
+                a(ng-href='/events/{{event.id}}/') {{event.name}}
+            .row
+                .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                    .row
+                        .col-xs-12.col-sm-12.col-md-12.col-lg-12.navbar-btn(ng-show='!getIsEditing()')
+                            img.img-thumbnail(ng-src='/images/interests/{{interest.type}}.png', ng-repeat='interest in event.interests | orderBy: "type"', tooltip='{{interest.type}}')
+                        .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                            img.img-responsive.img-thumbnail.center-item(ng-if='hasPicture("event")', src="{{group.picture}}")
+                            img.img-responsive.img-thumbnail.center-item(ng-if='!hasPicture("event")', src="//placehold.it/400x400")
+                .col-xs-12.col-sm-12.col-md-12.col-lg-12.panel-default.visible-sm
+                    h4.panel-heading Time
+                    .row
+                        .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                            h4 Start Time 
+                            h5 {{event.startTimeDate | date:'medium'}}
+                        .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                            h4 End Time 
+                            h5 {{event.endTimeDate | date:'medium'}}
+                                        
+        .col-xs-12.col-sm-6.col-md-8.col-lg-8
+            .col-xs-12.col-sm-12.col-md-12.col-lg-12.panel-default
+                h4.panel-heading Description
+                div(ng-show='!getIsEditing()')
+                    .col-xs-12.col-sm-12.col-md-12.col-lg-12                        
+                        p {{event.description}}
+                
+            .col-xs-12.col-sm-12.col-md-6.col-lg-6
+                .row
+                    .col-xs-12.col-sm-12.col-md-12.col-lg-12.panel-default
+                        h4.panel-heading Location
+                        .row
+                            .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                                h5 {{event.location.street}} 
+                                h5 {{event.location.city}}, {{event.location.state}} {{event.location.zipcode}}
+                    .col-xs-12.col-sm-12.col-md-12.col-lg-12.panel-default.hidden-sm
+                        h4.panel-heading Time
+                        .row
+                            .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                                h4 Start Time 
+                                h5 {{event.startTimeDate | date:'medium'}}
+                            .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                                h4 End Time 
+                                h5 {{event.endTimeDate | date:'medium'}}
+            .col-xs-12.col-sm-12.col-md-6.col-lg-6.panel-default
+                    h4.col-xs-12.col-sm-12.col-md-12.col-lg-12.panel-heading
+                        .row
+                            .col-xs-8.col-sm-8.col-md-8.col-lg-8
+                                |Volunteers
+                            .col-xs-4.col-sm-4.col-md-4.col-lg-4
+                                .text-right {{event.volunteers.length}} of {{event.maxVolunteers}}
+                    .row
+                        .col-xs-2.col-sm-3.col-md-3.col-lg-3(ng-repeat='volunteer in event.volunteers | limitTo: 12')
+                            a(ng-href='/users/{{volunteer.id}}/')
+                                img.img-responsive.img-rounded(ng-src="{{volunteer.picture}}", tooltip='{{volunteer.firstName}} {{volunteer.lastName}}', ng-if='hasPicture("event", $parent.$index, "volunteer", $index)')
+                                img.img-responsive.img-rounded(ng-src="//placehold.it/250x250", tooltip='{{volunteer.firstName}} {{volunteer.lastName}}', ng-if='!hasPicture("event", $parent.$index, "volunteer", $index)')
+
+div.organizersRow
+    h2.text-center Select Organizers
+     center
+          .button.btn.btn-info.btn-default.btn-block(type='button') Edit 
+    .hidden-xs
+        .container-fluid
+            .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                .carousel.slide#organizerCarousel(data-ride='carousel')
+                    .carousel-inner
+                        .item.active
+                            .row
+                                .col-sm-3.col-md-3.col-lg-3
+                                    img.img-responsive.img-thumbnail.center-item(src="//placehold.it/250x250")
+                                    .carousel-caption
+                                        h6 Organizer 1
+                                .col-sm-3.col-md-3.col-lg-3
+                                    img.img-responsive.img-thumbnail.center-item(src="//placehold.it/250x250")
+                                    .carousel-caption
+                                        h6 Organizer 2
+                                .col-sm-3.col-md-3.col-lg-3
+                                    img.img-responsive.img-thumbnail.center-item(src="//placehold.it/250x250")
+                                    .carousel-caption
+                                        h6 Organizer 3
+                                .col-sm-3.col-md-3.col-lg-3
+                                    img.img-responsive.img-thumbnail.center-item(src="//placehold.it/250x250")
+                                    .carousel-caption
+                                        h6 Organizer 4
+                        .item
+                            .row
+                                .col-sm-3.col-md-3.col-lg-3
+                                    img.img-responsive.img-thumbnail.center-item(src="//placehold.it/250x250")
+                                    .carousel-caption
+                                        h6 Organizer 5
+                                .col-sm-3.col-md-3.col-lg-3
+                                    img.img-responsive.img-thumbnail.center-item(src="//placehold.it/250x250")
+                                    .carousel-caption
+                                        h6 Organizer 6
+                                .col-sm-3.col-md-3.col-lg-3
+                                    img.img-responsive.img-thumbnail.center-item(src="//placehold.it/250x250")
+                                    .carousel-caption
+                                        h6 Organizer 7
+                                .col-sm-3.col-md-3.col-lg-3
+                                    img.img-responsive.img-thumbnail.center-item(src="//placehold.it/250x250")
+                                    .carousel-caption
+                                        h6 Organizer 8
+                    a.left.carousel-control(href='#organizerCarousel', data-slide='prev')
+                        span.glyphicon.glyphicon-chevron-left
+                    a.right.carousel-control(href='#organizerCarousel', data-slide='next')
+                        span.glyphicon.glyphicon-chevron-right
+    .visible-xs
+        .container-fluid
+            .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                .carousel.slide#organizerCarousel-xs(data-ride='carousel')
+                    .carousel-inner
+                        .item.active
+                            .row
+                                .col-xs-6
+                                    img.img-responsive.img-thumbnail.center-item(src="//placehold.it/250x250")
+                                    .carousel-caption
+                                        h6 Organizer 1
+                                .col-xs-6
+                                    img.img-responsive.img-thumbnail.center-item(src="//placehold.it/250x250")
+                                    .carousel-caption
+                                        h6 Organizer 2
+                        .item
+                            .row
+                                .col-xs-6
+                                    img.img-responsive.img-thumbnail.center-item(src="//placehold.it/250x250")
+                                    .carousel-caption
+                                        h6 Organizer 3
+                                .col-xs-6
+                                    img.img-responsive.img-thumbnail.center-item(src="//placehold.it/250x250")
+                                    .carousel-caption
+                                        h6 Organizer 4
+                        .item
+                            .row
+                                .col-xs-6
+                                    img.img-responsive.img-thumbnail.center-item(src="//placehold.it/250x250")
+                                    .carousel-caption
+                                        h6 Organizer 5
+                                .col-xs-6
+                                    img.img-responsive.img-thumbnail.center-item(src="//placehold.it/250x250")
+                                    .carousel-caption
+                                        h6 Organizer 6
+                        .item
+                            .row
+                                .col-xs-6
+                                    img.img-responsive.img-thumbnail.center-item(src="//placehold.it/250x250")
+                                    .carousel-caption
+                                        h6 Organizer 7
+                                .col-xs-6
+                                    img.img-responsive.img-thumbnail.center-item(src="//placehold.it/250x250")
+                                    .carousel-caption
+                                        h6 Organizer 8
+                    a.left.carousel-control(href='#organizerCarousel-xs', data-slide='prev')
+                        span.glyphicon.glyphicon-chevron-left
+                    a.right.carousel-control(href='#organizerCarousel-xs', data-slide='next')
+                        span.glyphicon.glyphicon-chevron-right
+                        

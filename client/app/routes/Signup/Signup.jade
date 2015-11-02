@@ -1,4 +1,33 @@
 div(ng-include='"components/navbar/navbar.html"')
 
-.col-md-12
-    | This is the Signup view.
+//HL 2 variables accessiable in the signupController scope user.username & user.password 
+// using an object(user) to make it easier to pass the information otherwise you would
+// have to pass user and password seperatly
+// placeholder inside input to add text in empty input box
+html
+  body
+    h1 Register
+    form(name='signupForm')
+      label Username:
+        input.form-control(type='text', ng-model='user.username',required)
+      br
+      br
+      label Password:
+        input.form-control(type='password', ng-model='user.password',required ) 
+      br
+      br
+      label Confirm Password: 
+        input.form-control(ng-model='passwordConfirm', type='password', data-match='user.password', name='confirmPassword',required)
+        br
+        div.bg-danger(data-ng-show='signupForm.confirmPassword.$error.match', myStyle={color:'red'}) Passwords do not match!
+      br
+      label Email:
+          input.form-control(type='email',name= 'email' ng-model='user.email')
+        div(role='alert')
+          span.error(ng-show='signupForm.email.$error.email')
+            | Not Valid Email !
+      br
+        
+      button.btn.btn-default(ng-disabled="signupForm.$invalid",ng-click='register()') Register
+    //HL calls the register function inside the signupController
+

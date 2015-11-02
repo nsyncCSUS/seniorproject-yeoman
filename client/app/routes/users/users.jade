@@ -1,4 +1,55 @@
 div(ng-include='"components/navbar/navbar.html"')
 
-.col-md-12
-    | This is the users view.
+h1 Users
+
+h6 {{userId}}
+
+div.aboutMeRow
+    h2.text-center About Me
+      .container-fluid
+        .col-xs-2.col-sm-2.col-md-2.col-lg-3
+            img.img-responsive.img-thumbnail(src="//placehold.it/250x250")
+        .col-xs-10.col-sm-10.col-md-10.col-lg-9
+            p About me information About me information About me information About me information About me information About me information About me information About me information About me information
+      .row
+        .col-xs-3.col.sm-3.col-md-3.col-lg-3
+           button.btn.btn-info(ng-click='messageUser()') Message User
+      .row
+        .col-xs-3.col.sm-3.col-md-3.col-lg-3
+          div.userContact
+            h2.text-center Contact Info
+            .row
+               a(href='https://www.facebook.com/') Facebook
+            .row
+               a(href='https://www.twitter.com/') Twitter
+            .row
+               a(href='http://www.linkedin.com') Linkedin
+            .row
+               a(href='https://www.google.com') Personal Website
+
+
+
+div.userHistory
+    .container-fluid
+      .col-xs-12.col-sm-12.col-md-12.col-lg-128x128 
+            h2.text-center History
+      .col-xs-8.col-sm-8.col-md-8.col-lg-8
+            .well
+               h6 Participated on Event X on date
+      .col-xs-4.col-sm-4.col-md-4.col-lg-4
+            img.img-responsive(src='//placehold.it/128x128')
+      .col-xs-8.col-sm-8.col-md-8.col-lg-8
+            .well
+               h6 Paticipated on Event X on date
+      .col-xs-4.col-sm-4.col-md-4.col-lg-4
+            img.img-responsive(src='//placehold.it/128x128')
+      .col-xs-8.col-sm-8.col-md-8.col-lg-8
+            .well
+               h6 Participated on Event X on date	
+      .col-xs-4.col-sm-4.col-md-4.col-lg-4
+            img.img-responsive(src='//placehold.it/128x128')
+      .col-xs-8.col-sm-8.col-md-8.col-lg-8
+            .well
+               h6 Participated on Event X on date	
+      .col-xs-4.col-sm-4.col-md-4.col-lg-4
+            img.img-responsive(src='//placehold.it/128x128')				 

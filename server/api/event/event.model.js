@@ -8,12 +8,12 @@ var EventSchema = new Schema({
   info: String,
     active: Boolean,
     creationUser: {
-        type: ObjectId,
+        type: Schema.ObjectId,
         ref: 'User'
     },
     
     group: {
-        type: ObjectId,
+        type: Schema.ObjectId,
         ref: 'Group'
     },
 
@@ -33,7 +33,7 @@ var EventSchema = new Schema({
     maxVolunteers: Number,
 
     volunteers: [{
-        type: ObjectId,
+        type: Schema.ObjectId,
         ref: 'User'
     }],
 

@@ -29,17 +29,17 @@ var GroupSchema = new Schema({
     personalWebsiteURL: String,
 
     events: [{
-        type: ObjectId,
+        type: Schema.ObjectId,
         ref: 'Event'
     }],
 
     organizers: [{
-        type: ObjectId,
+        type: Schema.ObjectId,
         ref: 'User'
     }],
 
     subscriptions: [{
-        type: ObjectId,
+        type: Schema.ObjectId,
         ref: 'User'
     }],
 

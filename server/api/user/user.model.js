@@ -35,22 +35,22 @@ var UserSchema = new Schema({
   phoneNum: String,
 
   volunteeredTo: [{
-    type: ObjectId,
+      type: Schema.ObjectId,
     ref: 'Event'
   }],
 
   creatorOf: [{
-    type: ObjectId,
+      type: Schema.ObjectId,
     ref: 'Event'
   }],
 
   organizerOf: [{
-    type: ObjectId,
+      type: Schema.ObjectId,
     ref: 'Group'
   }],
 
   subscribedTo: [{
-    type: ObjectId,
+      type: Schema.ObjectId,
     ref: 'Group'
   }],
 

@@ -9,3 +9,4 @@ dist
 npm-debug.log
 build/
 .project
+#/server/server/config/enviroment

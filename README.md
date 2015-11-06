@@ -12,7 +12,7 @@ http://rubyinstaller.org/downloads/
 **Install python 2.7.3(must be this version)**  
 https://www.python.org/download/releases/2.7.3/
   
-**Update npm  latest(optional maybe)**  
+**Update npm  latest**  
   Delete npm from you node install.    
     -Reason: Node overwrite your global npm program from your roaming folder     
     
@@ -21,7 +21,7 @@ https://www.python.org/download/releases/2.7.3/
   %ProgramFiles%\nodejs\npm.cmd    
   
   1.npm install npm -g  
-  2.npm install -g node-inspector  
+  2.npm install -g node-inspector 
   3.npm install -g node-gyp  
 
   

@@ -2,14 +2,21 @@
 N.sync() Senior Project using Yeoman
 Tutorial HOW TO (Windows) 
 
-Need to install ruby (latest works)
-http://rubyinstaller.org/downloads/
-  -Check the path option 
-1.open cmd (admin)
-2.gem install sass
-  -(gem is like npm for ruby)
+Need to install ruby (latest works)  
+http://rubyinstaller.org/downloads/  
+  -Check the path option   
+1.open cmd (admin)  
+2.gem install sass  
+  -(gem is like npm for ruby) 
   
+  Install python (optional non crashing error if not)
+  
+  
+  
+update npm  latest
+1.npm install npm -g
 
+  
 1. make empty folder open cmd and cd into it
 2. git clone https://github.com/nsyncCSUS/seniorproject-yeoman.git
 3. cd into the seniorproject-yeoman folder

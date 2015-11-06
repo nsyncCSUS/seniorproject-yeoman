@@ -9,7 +9,7 @@ http://rubyinstaller.org/downloads/
 2.gem install sass  
   -(gem is like npm for ruby) 
   
-**Install python 2.7.3(must be this version) (optional)**  
+**Install python 2.7.3(must be this version)**  
 https://www.python.org/download/releases/2.7.3/
   
 **Update npm  latest(optional maybe)**  
@@ -20,9 +20,9 @@ https://www.python.org/download/releases/2.7.3/
   %ProgramFiles%\nodejs\npm    
   %ProgramFiles%\nodejs\npm.cmd    
   
-  1.npm install npm -g
-  2.npm install -g node-inspector
-  3.npm install -g node-gyp
+  1.npm install npm -g  
+  2.npm install -g node-inspector  
+  3.npm install -g node-gyp  
 
   
 **Yeomon setup**    

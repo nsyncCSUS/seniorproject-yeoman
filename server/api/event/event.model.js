@@ -4,14 +4,14 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var EventSchema = new Schema({
-  name: String,
-  info: String,
+    name: String,
+    info: String,
     active: Boolean,
     creationUser: {
         type: Schema.ObjectId,
         ref: 'User'
     },
-    
+
     group: {
         type: Schema.ObjectId,
         ref: 'Group'

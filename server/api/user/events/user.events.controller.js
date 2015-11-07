@@ -17,8 +17,12 @@ var validationError = function(res, err) {
 exports.create = function(req, res, next) {
     var userId = req.params.userId;
     var eventId = req.body.eventId;
-    User.findByIdAndUpdate(userId, {$push: {volunteeredTo: eventId}}, function(err) {
-        if(err) {
+    User.findByIdAndUpdate(userId, {
+        $push: {
+            volunteeredTo: eventId
+        }
+    }, function(err) {
+        if (err) {
             res.send(err);
         }
     });
@@ -31,10 +35,10 @@ exports.create = function(req, res, next) {
 exports.show = function(req, res, next) {
     var userId = req.params.userId;
     User.findById(userId).
-        populate('volunteeredTo').
-        exec(function(err, user) {
-            res.json(user);
-        });
+    populate('volunteeredTo').
+    exec(function(err, user) {
+        res.json(user);
+    });
 };
 
 
@@ -42,6 +46,3 @@ exports.show = function(req, res, next) {
 exports.destroy = function(req, res, next) {
     // ...
 };
-
-
-

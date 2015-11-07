@@ -4,11 +4,78 @@ var _ = require('lodash');
 var Event = require('../event.model');
 var User = require('../../user/user.model');
 
-exports.index = function(req, res) {};
-exports.show = function(req, res) {};
-exports.create = function(req, res) {};
-exports.update = function(req, res) {};
-exports.destroy = function(req, res) {};
+
+exports.index = function(req, res) {
+    Event.findById(req.params.id)
+        .populate('organizers')
+        .exec(function(err, event) {
+            if (err) {
+                handleError(res, err);
+            } else {
+                res.json({
+                    organizers: event.organizers
+                });
+            }
+        });
+};
+
+
+exports.show = function(req, res) {
+    Event.findById(req.params.id)
+        .populate('organizers')
+        .exec(function(err, event) {
+            if (err) {
+                handleError(res, err);
+            } else {
+                var organizer = event.organizers.filter(function(item) {
+                    return item._id == req.params.organizerId;
+                });
+
+                res.json({
+                    organizer: organizer[0]
+                });
+            }
+        });
+};
+
+
+exports.create = function(req, res) {
+    Event.findByIdAndUpdate(req.params.id, {
+        $push: {
+            organizers: req.params.organizerId
+        }
+    }, function(err) {
+        if (err) {
+            handleError(res, err);
+        } else {
+            User.findByIdAndUpdate(req.params.organizerId, {
+                $push: {}
+            }, function(err) {
+                if (err) {
+                    handleError(res, err);
+                } else {
+                    res.status(200).end();
+                }
+            });
+        }
+    });
+};
+
+
+exports.destroy = function(req, res) {
+    Event.findByIdAndUpdate(req.params.id, {
+        $remove: {
+            organizers: req.params.organizerId
+        }
+    }, function(err) {
+        if (err) {
+            handleError(res, err);
+        } else {
+            res.status(200).end();
+        }
+    });
+};
+
 
 function handleError(res, err) {
     return res.status(500).send(err);

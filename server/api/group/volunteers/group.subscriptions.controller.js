@@ -2,6 +2,7 @@
 
 var Group = require('./group.model');
 
+
 exports.index = function(req, res) {
     Group.findById(req.params.id)
         .populate('subscriptions')
@@ -10,32 +11,56 @@ exports.index = function(req, res) {
         });
 };
 
+
 exports.show = function(req, res) {
     Group.findById(req.params.id)
         .populate('subscriptions')
         .exec(function(err, group) {
-            if(err) {
-                res.send(err);
+            if (err) {
+                handleError(err, res);
             } else {
-                var users = group.subscriptions.filter(function(index, item) {
+                var subscription = group.subscriptions.filter(function(index, item) {
                     return item._id == req.params.userId;
                 });
-                
-                res.json(users[0]);
+
+                res.json({
+                    subscription: subscriptions[0]
+                });
             }
         });
 };
 
+
 exports.create = function(req, res) {
-    Group.findByIdAndUpdate(req.params.id, {$push: {subscriptions: req.params.userId}}, function(err) {
-        if(err) {
-            res.send(err);
+    Group.findByIdAndUpdate(req.params.id, {
+        $push: {
+            subscriptions: req.params.userId
+        }
+    }, function(err) {
+        if (err) {
+            handleError(err, res);
+        } else {
+            res.status(200).end();
         }
     });
 };
 
+
 exports.destroy = function(req, res) {
-    // ...
+    Group.findByIdAndUpdate(req.params.id, {
+        $remove: {
+            subscriptions: req.params.userId
+        }
+    }, function(err) {
+        if (err) {
+            handleError(err, res);
+        } else {
+            res.status(200).end();
+        }
+    });
 };
 
 
+function handleError(err, res) {
+    res.status(500).send(err);
+};

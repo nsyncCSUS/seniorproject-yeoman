@@ -1,9 +1,8 @@
+'use strict';
+
 var Group = require('../group.model');
 
 
-/**
- * Get all events for a given group
- */
 exports.index = function(req, res) {
     Group.findById(req.params.id)
         .populate('events')
@@ -15,9 +14,6 @@ exports.index = function(req, res) {
 };
 
 
-/**
- * Get an individual event for some group
- */
 exports.show = function(req, res) {
     Group.findById(req.params.id)
         .populate('events')
@@ -37,9 +33,6 @@ exports.show = function(req, res) {
 };
 
 
-/**
- * Add an event to a group's events list
- */
 exports.create = function(req, res) {
     Group.findByIdAndUpdate(req.params.id, {
         $push: {
@@ -55,9 +48,6 @@ exports.create = function(req, res) {
 };
 
 
-/**
- * Delete and event from a group's event list
- */
 exports.destroy = function(req, res) {
     Group.findByIdAndUpdate(req.params.id, {
         $remove: {

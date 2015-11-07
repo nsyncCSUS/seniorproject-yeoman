@@ -38,7 +38,7 @@ var GroupSchema = new Schema({
         ref: 'User'
     }],
 
-    subscriptions: [{
+    volunteers: [{
         type: Schema.ObjectId,
         ref: 'User'
     }],

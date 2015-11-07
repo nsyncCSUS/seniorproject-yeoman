@@ -3,9 +3,6 @@
 var Group = require('../group.model');
 
 
-/**
- * Get all organizers from a group
- */
 exports.index = function(req, res) {
     Group.findById(req.params.id)
         .populate('organizers')
@@ -21,9 +18,6 @@ exports.index = function(req, res) {
 };
 
 
-/**
- * Get a single organizer from a group
- */
 exports.show = function(req, res) {
     Group.findById(req.params.id)
         .populate('organizers')
@@ -43,9 +37,7 @@ exports.show = function(req, res) {
 };
 
 
-/**
- * Add an organizer to a group
- */
+
 exports.create = function(req, res) {
     Group.findByIdAndUpdate(req.params.id, {
         $push: {
@@ -61,9 +53,7 @@ exports.create = function(req, res) {
 };
 
 
-/**
- * Delete an organizer from a group
- */
+
 exports.destroy = function(req, res) {
     Group.findByIdAndUpdate(req.params.id, {
         $remove: {
@@ -79,9 +69,7 @@ exports.destroy = function(req, res) {
 };
 
 
-/**
- * Handle server error
- */
+
 function handleError(res, err) {
     res.status(500).send(err);
 };

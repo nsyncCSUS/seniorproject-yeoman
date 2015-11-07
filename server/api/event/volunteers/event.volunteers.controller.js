@@ -2,6 +2,7 @@
 
 var Event = require('./event.model');
 
+
 exports.index = function(req, res) {
     Event.findById(req.params.id)
         .populate('volunteers')
@@ -15,6 +16,7 @@ exports.index = function(req, res) {
             }
         });
 };
+
 
 exports.show = function(req, res) {
     Event.findById(req.params.id)

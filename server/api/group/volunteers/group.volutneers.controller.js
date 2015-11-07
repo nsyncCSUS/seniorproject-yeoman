@@ -5,7 +5,7 @@ var Group = require('./group.model');
 
 exports.index = function(req, res) {
     Group.findById(req.params.id)
-        .populate('subscriptions')
+        .populate('volunteers')
         .exec(function(err, group) {
             res.json(group);
         });
@@ -14,7 +14,7 @@ exports.index = function(req, res) {
 
 exports.show = function(req, res) {
     Group.findById(req.params.id)
-        .populate('subscriptions')
+        .populate('volunteers')
         .exec(function(err, group) {
             if (err) {
                 handleError(err, res);

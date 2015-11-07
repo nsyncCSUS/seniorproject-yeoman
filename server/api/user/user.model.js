@@ -34,25 +34,40 @@ var UserSchema = new Schema({
     zipcode: String,
     phoneNum: String,
 
-    volunteeredTo: [{
-        type: Schema.ObjectId,
-        ref: 'Event'
-    }],
+    events: {
+		volunteeredTo: [{
+	        type: Schema.ObjectId,
+	        ref: 'Event'
+	    }],
+	    
+	    organizerOf: [{
+	    	type: Schema.ObjectId,
+	    	ref: 'Event'
+	    }],
+	    
+	    creatorOf: [{
+		    type: Schema.ObjectId,
+		    ref: 'Event'
+		}]
+	},
 
-    creatorOf: [{
-        type: Schema.ObjectId,
-        ref: 'Event'
-    }],
-
-    organizerOf: [{
-        type: Schema.ObjectId,
-        ref: 'Group'
-    }],
-
-    subscribedTo: [{
-        type: Schema.ObjectId,
-        ref: 'Group'
-    }],
+    
+	groups: {
+		subscribedTo: [{
+	        type: Schema.ObjectId,
+	        ref: 'Group'
+	    }],	    
+	
+	    organizerOf: [{
+	        type: Schema.ObjectId,
+	        ref: 'Group'
+	    }],
+	
+	    creatorOf: [{
+	    	type: Schema.ObjectId,
+	    	ref: 'Group'
+	    }]
+	},
 
     interests: [String]
 });

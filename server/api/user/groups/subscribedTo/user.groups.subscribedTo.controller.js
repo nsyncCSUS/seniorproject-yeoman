@@ -5,13 +5,13 @@ var User = require('../../user.model');
 
 var index = function(req, res) {
     User.findById(req.params.id)
-        .populate('subscribedTo')
+        .populate('groups.subscribedTo')
         .exec(function(err, user) {
             if (err) {
                 handleError(res, err);
             } else {
                 res.json({
-                    groups: user.subscribedTo
+                    groups: user.groups.subscribedTo
                 });
             }
         });
@@ -20,12 +20,12 @@ var index = function(req, res) {
 
 var show = function(req, res) {
     User.findById(req.params.id)
-        .populate('subscribedTo')
+        .populate('groups.subscribedTo')
         .exec(function(err, user) {
             if (err) {
                 handleError(res, err);
             } else {
-                var group = user.subscribedTo.filter(function(item) {
+                var group = user.groups.subscribedTo.filter(function(item) {
                     return item._id == req.params.groupId;
                 });
 
@@ -40,7 +40,9 @@ var show = function(req, res) {
 var create = function(req, res) {
     User.findByIdAndUpdate(req.params.id, {
         $push: {
-            subscribedTo: req.params.groupId
+    		groups: {
+            	subscribedTo: req.params.groupId
+    		}
         }
     }, function(err) {
         if (err) {
@@ -55,7 +57,9 @@ var create = function(req, res) {
 var destroy = function(req, res) {
     User.findByIdAndUpdate(req.params.id, {
         $remove: {
-            subscribedTo: req.params.groupId
+    		groups: {
+            	subscribedTo: req.params.groupId
+    		}
         }
     }, function(err) {
         if (err) {

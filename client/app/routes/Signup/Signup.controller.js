@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('SignupCtrl', function($scope) {
+    .controller('SignupCtrl', function($scope, $http) {
         $scope.message = 'Hello';
 
         $scope.register = function() {

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('LoginCtrl', function($scope) {
+    .controller('LoginCtrl', function($scope, $http) {
         $scope.message = 'Hello';
 
         // problem with this method causes aysnc problems resulting odd return object

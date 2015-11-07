@@ -191,11 +191,11 @@ div(ng-show='!getIsPreviewing()')
                                     | {{selectedTab}}
                                 button.btn.btn-xs.btn-default.cursor-pointer.otherTab(ng-click='setCurrentTab(otherTabs[0])') {{otherTabs[0]}}
                             .panel-body.eventRow(ng-show='getCurrentTab("Upcoming Events")')
-                                .row.eventRow(ng-repeat='event in group.events | orderBy:"startTimeDate" | checkExpired:false')
+                                .row.eventRow(ng-repeat='event in group.events | orderBy:"startTimeDate" | CheckExpired:false')
                                     event-card
                                                         
                             .panel-body.eventRow(ng-show='getCurrentTab("Past Events")')
-                                .row.eventRow(ng-repeat='event in group.events | orderBy:"-startTimeDate" | checkExpired:true')
+                                .row.eventRow(ng-repeat='event in group.events | orderBy:"-startTimeDate" | CheckExpired:true')
                                     past-event-card
 
 

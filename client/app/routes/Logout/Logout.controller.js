@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('LogoutCtrl', function($scope) {
+    .controller('LogoutCtrl', function($scope, $http) {
         $scope.message = 'Hello';
 
 

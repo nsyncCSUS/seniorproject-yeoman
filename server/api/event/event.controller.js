@@ -12,7 +12,10 @@ exports.index = function(req, res) {
 	        if (err) {
 	            return handleError(res, err);
 	        }
-	        return res.status(200).json(events);
+	        return res.status(200).json({
+	        	events: events
+	        });
+	        
 	    });
 };
 
@@ -25,7 +28,9 @@ exports.show = function(req, res) {
         if (!event) {
             return res.status(404).send('Not Found');
         }
-        return res.json(event);
+        return res.json({
+        	event: event
+        });
     });
 };
 
@@ -35,7 +40,9 @@ exports.create = function(req, res) {
         if (err) {
             return handleError(res, err);
         }
-        return res.status(201).json(event);
+        return res.status(201).json({
+        	event: event
+        });
     });
 };
 
@@ -56,7 +63,9 @@ exports.update = function(req, res) {
             if (err) {
                 return handleError(res, err);
             }
-            return res.status(200).json(event);
+            return res.status(200).json({
+            	event: event
+            });
         });
     });
 };

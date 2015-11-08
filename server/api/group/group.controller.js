@@ -13,9 +13,12 @@ exports.index = function(req, res) {
         if (err) {
             return handleError(res, err);
         }
-        return res.status(200).json(groups);
+        return res.status(200).json({
+        	groups: groups
+        });
     });
 };
+
 
 // Get a single group
 exports.show = function(req, res) {
@@ -23,12 +26,17 @@ exports.show = function(req, res) {
         if (err) {
             return handleError(res, err);
         }
+        
         if (!group) {
             return res.status(404).send('Not Found');
         }
-        return res.json(group);
+        
+        return res.json({
+        	group: group
+        });
     });
 };
+
 
 // Creates a new group in the DB.
 exports.create = function(req, res) {
@@ -36,9 +44,12 @@ exports.create = function(req, res) {
         if (err) {
             return handleError(res, err);
         }
-        return res.status(201).json(group);
+        return res.status(201).json({
+        	group: group
+        });
     });
 };
+
 
 // Updates an existing group in the DB.
 exports.update = function(req, res) {
@@ -57,10 +68,13 @@ exports.update = function(req, res) {
             if (err) {
                 return handleError(res, err);
             }
-            return res.status(200).json(group);
+            return res.status(200).json({
+            	group: group
+            });
         });
     });
 };
+
 
 // Deletes a group from the DB.
 exports.destroy = function(req, res) {

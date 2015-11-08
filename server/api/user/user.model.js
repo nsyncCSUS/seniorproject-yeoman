@@ -91,8 +91,24 @@ UserSchema
     .virtual('profile')
     .get(function() {
         return {
+        	'_id': this._id,
             'name': this.name,
-            'role': this.role
+            'role': this.role,
+            
+			'firstName': this.firstName,
+			'middleName': this.middleName,
+			'lastName': this.lastName,
+			'birthday': this.birthday,
+			'age': this.age,
+			'city': this.city,
+			'state': this.state,
+			'zipcode': this.zipcode,
+			'phoneNum': this.phoneNum,
+			
+			'events': this.events,
+			'groups': this.groups,
+			'interests': this.interests
+
         };
     });
 

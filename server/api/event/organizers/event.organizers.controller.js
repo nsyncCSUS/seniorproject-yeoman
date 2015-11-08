@@ -44,7 +44,7 @@ exports.create = function(req, res) {
         $push: {
             organizers: req.params.organizerId
         }
-    }, function(err) {
+    }, function(err, event) {
         if (err) {
             handleError(res, err);
         } else {
@@ -71,7 +71,7 @@ exports.destroy = function(req, res) {
         $remove: {
             organizers: req.params.organizerId
         }
-    }, function(err) {
+    }, function(err, event) {
         if (err) {
             handleError(res, err);
         } else {

@@ -21,6 +21,15 @@ describe('GET /api/events', function() {
     it('should retrieve a single element', function(done) {
         // Make sure that retrieving a single element
         // by its id works
+//        request(app)
+//        	.get('/api/events/')
+//        	.expect(200)
+//        	.expect('Content-Type', /json/)
+//        	.end(function(err, res) {
+//        		if(err) return done(err);
+//        		res.body.should.be.instanceof(Object);
+//        		done();
+//        	});
         done();
     });
 });

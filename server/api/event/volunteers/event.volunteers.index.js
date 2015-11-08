@@ -1,6 +1,6 @@
 'use strict';
 
-var controller = require('./event.volutneers.controller');
+var controller = require('./event.volunteers.controller');
 var express = require('express');
 var router = express.Router({
 	mergeParams: true

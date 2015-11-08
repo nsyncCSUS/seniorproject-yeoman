@@ -5,7 +5,11 @@ var Group = require('./group.model');
 
 // Get list of groups
 exports.index = function(req, res) {
-    Group.find(function(err, groups) {
+    Group.find({})
+    	.populate('organizers')
+    	.populate('volunteers')
+    	.populate('events')
+    	.exec(function(err, groups) {
         if (err) {
             return handleError(res, err);
         }

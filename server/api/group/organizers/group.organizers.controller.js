@@ -10,7 +10,8 @@ exports.index = function(req, res) {
             if (err) {
                 handleError(res, err);
             } else {
-                res.send({
+            	group.organizers.forEach(function(item) {console.log(item);});
+                res.json({
                     organizers: group.organizers
                 });
             }

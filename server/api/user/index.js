@@ -16,7 +16,7 @@ router.put('/:id/password', auth.isAuthenticated(), controller.changePassword);
 router.get('/:id', auth.isAuthenticated(), controller.show);
 router.post('/', controller.create);
 
-router.use('/events', events);
-router.use('/groups', groups);
+router.use('/:id/events', events);
+router.use('/:id/groups', groups);
 
 module.exports = router;

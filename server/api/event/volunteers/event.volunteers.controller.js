@@ -1,6 +1,6 @@
 'use strict';
 
-var Event = require('./event.model');
+var Event = require('../event.model');
 
 
 exports.index = function(req, res) {

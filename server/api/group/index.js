@@ -15,8 +15,8 @@ router.put('/:id', controller.update);
 router.patch('/:id', controller.update);
 router.delete('/:id', controller.destroy);
 
-router.use('/events', events);
-router.use('/organizers', organizers);
-router.use('/volunteers', volunteers);
+router.use('/:id/events', events);
+router.use('/:id/organizers', organizers);
+router.use('/:id/volunteers', volunteers);
 
 module.exports = router;

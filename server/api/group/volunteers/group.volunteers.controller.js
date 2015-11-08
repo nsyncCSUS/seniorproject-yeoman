@@ -1,6 +1,6 @@
 'use strict';
 
-var Group = require('./group.model');
+var Group = require('../group.model');
 
 
 exports.index = function(req, res) {

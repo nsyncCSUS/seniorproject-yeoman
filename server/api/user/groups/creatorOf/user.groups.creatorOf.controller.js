@@ -1,9 +1,9 @@
 'use strict';
 
-var User = require('../../../user.model');
+var User = require('../../user.model');
 
 
-var index = function(req, res) {
+exports.index = function(req, res) {
 	User.findById(req.params.id)
 		.populate('groups.creatorOf')
 		.exec(function(err, user) {
@@ -18,7 +18,7 @@ var index = function(req, res) {
 };
 
 
-var show = function(req, res) {
+exports.show = function(req, res) {
 	User.findById(req.params.id)
 		.populate('events.organizerOf')
 		.exec(function(err, user) {

@@ -3,7 +3,7 @@
 var User = require('../../user.model');
 
 
-var index = function(req, res) {
+exports.index = function(req, res) {
     User.findById(req.params.id)
         .populate('groups.organizerOf')
         .exec(function(err, user) {
@@ -18,7 +18,7 @@ var index = function(req, res) {
 };
 
 
-var show = function(req, res) {
+exports.show = function(req, res) {
     User.findById(req.params.id)
         .populate('groups.organizerOf')
         .exec(function(err, user) {
@@ -37,7 +37,7 @@ var show = function(req, res) {
 };
 
 
-var create = function(req, res) {
+exports.create = function(req, res) {
     User.findByIdAndUpdate(req.params.id, {
         $push: {
     		groups: {
@@ -54,7 +54,7 @@ var create = function(req, res) {
 };
 
 
-var destroy = function(req, res) {
+exports.destroy = function(req, res) {
     User.findByIdAndUpdate(req.params.id, {
         $remove: {
     		groups: {

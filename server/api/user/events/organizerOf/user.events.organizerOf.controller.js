@@ -1,6 +1,7 @@
 'use strict';
 
 var User = require('../../user.model');
+var Event = require('../../../event/event.model');
 
 
 exports.index = function(req, res) {
@@ -48,7 +49,17 @@ exports.create = function(req, res) {
         if (err) {
             handleError(res, err);
         } else {
-            res.status(200).end();
+        	Event.findByIdAndUpdate(req.params.eventId, {
+        		$push: {
+	        		organizers: req.params.id
+	        	}
+        	}, function(err, event) {
+        		if(err) {
+        			handleError(res, err);
+        		} else {
+        			res.status(200).end();
+        		}
+        	});
         }
     });
 };
@@ -65,7 +76,17 @@ exports.destroy = function(req, res) {
         if (err) {
             handleError(res, err);
         } else {
-            res.status(200).end();
+        	Event.findByIdAndUpdate(req.params.eventId, {
+        		$remove: {
+	        		organizers: req.params.id
+	        	}
+        	}, function(err) {
+        		if(err) {
+        			handleError(res, err);
+        		} else {
+        			res.status(200).end();
+        		}
+        	});
         }
     });
 };

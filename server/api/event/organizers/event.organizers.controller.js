@@ -49,7 +49,11 @@ exports.create = function(req, res) {
             handleError(res, err);
         } else {
             User.findByIdAndUpdate(req.params.organizerId, {
-                $push: {}
+                $push: {
+	            	events: {
+		            	organizerOf: req.params.id
+		            }
+	            }
             }, function(err) {
                 if (err) {
                     handleError(res, err);
@@ -71,7 +75,17 @@ exports.destroy = function(req, res) {
         if (err) {
             handleError(res, err);
         } else {
-            res.status(200).end();
+        	User.findByIdAndUpdate(req.params.organizerId, {
+        		events: {
+	        		organizerOf: req.params.id
+	        	}
+        	}, function(err, user) {
+        		if(err) {
+        			handleError(res, err);
+        		} else {
+        			res.status(200).end();
+        		}
+        	});
         }
     });
 };

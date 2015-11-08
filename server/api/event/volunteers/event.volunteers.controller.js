@@ -1,6 +1,7 @@
 'use strict';
 
 var Event = require('../event.model');
+var User = require('../../user/user.model');
 
 
 exports.index = function(req, res) {
@@ -46,7 +47,20 @@ exports.create = function(req, res) {
         if (err) {
             handleError(res, err);
         } else {
-            res.end();
+        	// If volunteer update successful, 
+        	User.findByIdAndUpdate(req.params.volunteerId, {
+        		$push: {
+	        		events: {
+		        		volunteeredTo: req.params.id
+		        	}
+	        	}
+        	}, function(err, user) {
+        		if(err) {
+        			handleError(res, err);
+        		} else {
+        			res.status(200).end();
+        		}
+        	});
         }
     });
 };
@@ -61,7 +75,20 @@ exports.destroy = function(req, res) {
         if (err) {
             handleError(res, err);
         } else {
-            res.status(200).end();
+        	// Remove event from volunteer's event list
+        	User.findByIdAndUpdate(req.params.volunteerId, {
+        		$remove: {
+	        		event: {
+		        		volunteeredTo: req.params.id
+		        	}
+	        	}
+        	}, function(err, volunteer) {
+        		if(err) {
+        			handleError(res, err);
+        		} else {
+        			res.status(200).end();
+        		}
+        	});
         }
     });
 };

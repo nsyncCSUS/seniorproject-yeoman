@@ -1,6 +1,7 @@
 'use strict';
 
 var Group = require('../group.model');
+var User = require('../../user/user.model');
 
 
 exports.index = function(req, res) {
@@ -10,7 +11,6 @@ exports.index = function(req, res) {
             if (err) {
                 handleError(res, err);
             } else {
-            	group.organizers.forEach(function(item) {console.log(item);});
                 res.json({
                     organizers: group.organizers
                 });
@@ -48,7 +48,19 @@ exports.create = function(req, res) {
         if (err) {
             handleError(res, err);
         } else {
-            res.status(200).end();
+        	User.findByIdAndUpdate(req.params.organizerId, {
+        		$push: {
+	        		groups: {
+		        		organizerOf: req.params.id
+		        	}
+	        	}
+        	}, function(err, organizer) {
+        		if(err) {
+        			handleError(res, err);
+        		} else {
+        			res.status(200).end();
+        		}
+        	});
         }
     });
 };
@@ -64,7 +76,19 @@ exports.destroy = function(req, res) {
         if (err) {
             handleError(res, err);
         } else {
-            res.status(200).end();
+        	User.findByIdAndUpdate(req.params.organizerId, {
+        		$remove: {
+	        		groups: {
+		        		organizerOf: req.params.id
+		        	}
+	        	}
+        	}, function(err) {
+        		if(err) {
+        			handleError(res, err);
+        		} else {
+        			res.status(200).end();
+        		}
+        	});
         }
     });
 };

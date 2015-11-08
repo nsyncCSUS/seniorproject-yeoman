@@ -1,13 +1,20 @@
 'use strict';
 
 var Group = require('../group.model');
+var User = require('../../user/user.model');
 
 
 exports.index = function(req, res) {
     Group.findById(req.params.id)
         .populate('volunteers')
         .exec(function(err, group) {
-            res.json(group);
+        	if(err) {
+        		handleError(res, err); 
+        	} else {
+        		res.json({
+        			volunteers: group.volunteers
+        		});
+        	}
         });
 };
 
@@ -19,12 +26,12 @@ exports.show = function(req, res) {
             if (err) {
                 handleError(err, res);
             } else {
-                var subscription = group.subscriptions.filter(function(index, item) {
-                    return item._id == req.params.userId;
+                var volunteers = group.volunteers.filter(function(index, item) {
+                    return item._id == req.params.volunteerId;
                 });
 
                 res.json({
-                    subscription: subscriptions[0]
+                    volunteer: volunteers[0]
                 });
             }
         });
@@ -34,13 +41,25 @@ exports.show = function(req, res) {
 exports.create = function(req, res) {
     Group.findByIdAndUpdate(req.params.id, {
         $push: {
-            subscriptions: req.params.userId
+            volunteers: req.params.volunteerId
         }
     }, function(err) {
         if (err) {
             handleError(err, res);
         } else {
-            res.status(200).end();
+        	User.findByIdAndUpdate(req.params.volunteerId, {
+        		$push: {
+	        		groups: {
+		        		volunteeredTo: req.params.id
+		        	}
+	        	}
+        	}, function(err, volunteer) {
+        		if(err) {
+        			handleError(res, err);
+        		} else {
+        			res.status(200).end();
+        		}
+        	});
         }
     });
 };
@@ -49,13 +68,25 @@ exports.create = function(req, res) {
 exports.destroy = function(req, res) {
     Group.findByIdAndUpdate(req.params.id, {
         $remove: {
-            subscriptions: req.params.userId
+            volunteers: req.params.volunteerId
         }
     }, function(err) {
         if (err) {
             handleError(err, res);
         } else {
-            res.status(200).end();
+        	User.findByIdAndUpdate(req.params.volunteerId, {
+        		$remove: {
+	        		groups: {
+		        		organizerOf: req.params.id
+		        	}
+	        	}
+        	}, function(err) {
+        		if(err) {
+        			handleError(res, err);
+        		} else {
+        			res.status(200).end();
+        		}
+        	});
         }
     });
 };

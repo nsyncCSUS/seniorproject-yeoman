@@ -8,11 +8,15 @@ exports.index = function(req, res) {
     Event.findById(req.params.id)
         .populate('volunteers')
         .exec(function(err, event) {
-            if (err) {
+            if (err || !event) {
                 handleError(res, err);
             } else {
+            	var volunteers = event.volunteers.map(function(user) {
+            		return user.profile;
+            	});
+            	
                 res.json({
-                    volunteers: event.volunteers
+                    volunteers: volunteers
                 });
             }
         });
@@ -23,11 +27,13 @@ exports.show = function(req, res) {
     Event.findById(req.params.id)
         .populate('volunteers')
         .exec(function(err, event) {
-            if (err) {
+            if (err || !event) {
                 handleError(res, err);
             } else {
-                var volunteers = event.volunteers.filter(function(index, item) {
+                var volunteers = event.volunteers.filter(function(item) {
                     return item._id == req.params.volunteerId;
+                }).map(function(user) {
+                	return user.profile;
                 });
 
                 res.json({
@@ -44,21 +50,18 @@ exports.create = function(req, res) {
             volunteers: req.params.volunteerId
         }
     }, function(err, event) {
-        if (err) {
+        if (err || !event) {
             handleError(res, err);
         } else {
-        	// If volunteer update successful, 
         	User.findByIdAndUpdate(req.params.volunteerId, {
         		$push: {
-	        		events: {
-		        		volunteeredTo: req.params.id
-		        	}
+        			'events.volunteeredTo': req.params.id
 	        	}
         	}, function(err, user) {
-        		if(err) {
+        		if(err || !user) {
         			handleError(res, err);
         		} else {
-        			res.status(200).end();
+        			res.status(200).send('success');
         		}
         	});
         }
@@ -68,7 +71,7 @@ exports.create = function(req, res) {
 
 exports.destroy = function(req, res) {
     Event.findByIdAndUpdate(req.params.id, {
-        $remove: {
+        $pull: {
             volunteers: req.params.volunteerId
         }
     }, function(err) {
@@ -77,16 +80,14 @@ exports.destroy = function(req, res) {
         } else {
         	// Remove event from volunteer's event list
         	User.findByIdAndUpdate(req.params.volunteerId, {
-        		$remove: {
-	        		event: {
-		        		volunteeredTo: req.params.id
-		        	}
+        		$pull: {
+        			'event.volunteeredTo': req.params.id
 	        	}
         	}, function(err, volunteer) {
         		if(err) {
         			handleError(res, err);
         		} else {
-        			res.status(200).end();
+        			res.status(200).send('success');
         		}
         	});
         }

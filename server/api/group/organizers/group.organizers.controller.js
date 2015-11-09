@@ -8,11 +8,15 @@ exports.index = function(req, res) {
     Group.findById(req.params.id)
         .populate('organizers')
         .exec(function(err, group) {
-            if (err) {
+            if (err || !group) {
                 handleError(res, err);
             } else {
+            	var organizers = group.organizers.map(function(user) {
+            		return user.profile;
+            	});
+            	
                 res.json({
-                    organizers: group.organizers
+                    organizers: organizers
                 });
             }
         });
@@ -23,11 +27,13 @@ exports.show = function(req, res) {
     Group.findById(req.params.id)
         .populate('organizers')
         .exec(function(err, group) {
-            if (err) {
+            if (err || !group) {
                 handleError(res, err);
             } else {
                 var organizer = group.organizers.filter(function(item) {
                     return item._id == req.params.organizerId;
+                }).map(function(user) {
+                	return user.profile;
                 });
 
                 res.json({
@@ -45,20 +51,18 @@ exports.create = function(req, res) {
             organizers: req.params.organizerId
         }
     }, function(err, group) {
-        if (err) {
+        if (err || !group) {
             handleError(res, err);
         } else {
         	User.findByIdAndUpdate(req.params.organizerId, {
         		$push: {
-	        		groups: {
-		        		organizerOf: req.params.id
-		        	}
+        			'groups.organizerOf': req.params.id
 	        	}
         	}, function(err, organizer) {
-        		if(err) {
+        		if(err || !organizer) {
         			handleError(res, err);
         		} else {
-        			res.status(200).end();
+        			res.status(200).send('success');
         		}
         	});
         }
@@ -69,24 +73,22 @@ exports.create = function(req, res) {
 
 exports.destroy = function(req, res) {
     Group.findByIdAndUpdate(req.params.id, {
-        $remove: {
+        $pull: {
             organizers: req.params.organizerId
         }
     }, function(err, group) {
-        if (err) {
+        if (err || !group) {
             handleError(res, err);
         } else {
         	User.findByIdAndUpdate(req.params.organizerId, {
-        		$remove: {
-	        		groups: {
-		        		organizerOf: req.params.id
-		        	}
+        		$pull: {
+	        		'groups.organizerOf': req.params.id
 	        	}
         	}, function(err) {
         		if(err) {
         			handleError(res, err);
         		} else {
-        			res.status(200).end();
+        			res.status(200).send('success');
         		}
         	});
         }

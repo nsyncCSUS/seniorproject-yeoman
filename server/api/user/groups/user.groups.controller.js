@@ -13,10 +13,8 @@ exports.create = function(req, res) {
 		} else {
 			User.findByIdAndUpdate(req.params.id, {
 				$push: {
-					groups: {
-						creatorOf: group._id,
-						organizerOf: group._id
-					}
+					'groups.creatorOf': group._id,
+					'groups.organizerOf': group._id
 				}
 			}, function(err, user) {
 				if(err) {

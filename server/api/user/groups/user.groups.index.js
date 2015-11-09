@@ -10,7 +10,8 @@ var router = express.Router({
 	mergeParams: true
 });
 
-router.post('/', auth.isAuthenticated(), controller.create);
+//router.post('/', auth.isAuthenticated(), controller.create);
+router.post('/', controller.create);
 router.use('/creatorOf', creatorOf);
 router.use('/organizerOf', organizerOf);
 router.use('/volunteeredTo', volunteeredTo);

@@ -32,6 +32,11 @@ var EventSchema = new Schema({
     zipcode: String,
     maxVolunteers: Number,
 
+    organizers: [{
+    	type: Schema.ObjectId,
+    	ref: 'User'
+    }],
+
     volunteers: [{
         type: Schema.ObjectId,
         ref: 'User'

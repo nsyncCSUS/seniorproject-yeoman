@@ -7,7 +7,7 @@ exports.index = function(req, res) {
 	User.findById(req.params.id)
 		.populate('events.creatorOf')
 		.exec(function(err, user) {
-			if(err) {
+			if(err || !user) {
 				handleError(res, err);
 			} else {
 				res.json({
@@ -22,15 +22,15 @@ exports.show = function(req, res) {
 	User.findById(req.params.id)
 		.populate('events.creatorOf')
 		.exec(function(err, user) {
-			if(err) {
+			if(err || !user) {
 				handleError(res, err);
 			} else {
-				var event = user.events.creatorOf.filter(function(item) {
+				var events = user.events.creatorOf.filter(function(item) {
 					return item._id == req.params.eventId;
 				});
 				
 				res.json({
-					event: event
+					event: events[0]
 				});
 			}
 		});

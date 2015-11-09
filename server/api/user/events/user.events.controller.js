@@ -40,9 +40,3 @@ exports.show = function(req, res, next) {
         res.json(user);
     });
 };
-
-
-
-exports.destroy = function(req, res, next) {
-    // ...
-};

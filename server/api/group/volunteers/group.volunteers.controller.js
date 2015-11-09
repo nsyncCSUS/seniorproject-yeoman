@@ -8,11 +8,15 @@ exports.index = function(req, res) {
     Group.findById(req.params.id)
         .populate('volunteers')
         .exec(function(err, group) {
-        	if(err) {
+        	if(err || !group) {
         		handleError(res, err); 
         	} else {
+        		var volunteers = group.volunteers.map(function(user) {
+        			return user.profile;
+        		});
+        		
         		res.json({
-        			volunteers: group.volunteers
+        			volunteers: volunteers
         		});
         	}
         });
@@ -23,11 +27,13 @@ exports.show = function(req, res) {
     Group.findById(req.params.id)
         .populate('volunteers')
         .exec(function(err, group) {
-            if (err) {
+            if (err || !group) {
                 handleError(err, res);
             } else {
-                var volunteers = group.volunteers.filter(function(index, item) {
+                var volunteers = group.volunteers.filter(function(item) {
                     return item._id == req.params.volunteerId;
+                }).map(function(user) {
+                	return user.profile;
                 });
 
                 res.json({
@@ -43,21 +49,19 @@ exports.create = function(req, res) {
         $push: {
             volunteers: req.params.volunteerId
         }
-    }, function(err) {
-        if (err) {
+    }, function(err, group) {
+        if (err || !group) {
             handleError(err, res);
         } else {
         	User.findByIdAndUpdate(req.params.volunteerId, {
         		$push: {
-	        		groups: {
-		        		volunteeredTo: req.params.id
-		        	}
+	        		'groups.volunteeredTo': req.params.id
 	        	}
         	}, function(err, volunteer) {
-        		if(err) {
+        		if(err || !volunteer) {
         			handleError(res, err);
         		} else {
-        			res.status(200).end();
+        			res.status(200).send('success');
         		}
         	});
         }
@@ -67,7 +71,7 @@ exports.create = function(req, res) {
 
 exports.destroy = function(req, res) {
     Group.findByIdAndUpdate(req.params.id, {
-        $remove: {
+        $pull: {
             volunteers: req.params.volunteerId
         }
     }, function(err) {
@@ -75,16 +79,14 @@ exports.destroy = function(req, res) {
             handleError(err, res);
         } else {
         	User.findByIdAndUpdate(req.params.volunteerId, {
-        		$remove: {
-	        		groups: {
-		        		organizerOf: req.params.id
-		        	}
+        		$pull: {
+	        		'groups.organizerOf': req.params.id
 	        	}
         	}, function(err) {
         		if(err) {
         			handleError(res, err);
         		} else {
-        			res.status(200).end();
+        			res.status(200).send('success');
         		}
         	});
         }

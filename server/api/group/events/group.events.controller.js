@@ -19,7 +19,7 @@ exports.show = function(req, res) {
     Group.findById(req.params.id)
         .populate('events')
         .exec(function(err, group) {
-            if (err) {
+            if (err || !group) {
                 handleError(res, err);
             } else {
                 var events = group.events.filter(function(index, item) {
@@ -27,8 +27,8 @@ exports.show = function(req, res) {
                 });
 
                 res.json({
-                    events: events
-                })[0];
+                    events: events[0]
+                });
             }
         });
 };
@@ -72,14 +72,14 @@ exports.create = function(req, res) {
  */
 exports.destroy = function(req, res) {
     Group.findByIdAndUpdate(req.params.id, {
-        $remove: {
+        $pull: {
             events: req.params.eventId
         }
     }, function(err) {
         if (err) {
             handleError(res, err);
         } else {
-            res.status(200).end();
+            res.status(200).send('success');
         }
     });
 };

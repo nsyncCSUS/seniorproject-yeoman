@@ -9,11 +9,15 @@ exports.index = function(req, res) {
     Event.findById(req.params.id)
         .populate('organizers')
         .exec(function(err, event) {
-            if (err) {
+            if (err || !event) {
                 handleError(res, err);
             } else {
+            	var organizers = event.organizers.map(function(user) {
+            		return user.profile;
+            	});
+            	
                 res.json({
-                    organizers: event.organizers
+                    organizers: organizers
                 });
             }
         });
@@ -24,11 +28,13 @@ exports.show = function(req, res) {
     Event.findById(req.params.id)
         .populate('organizers')
         .exec(function(err, event) {
-            if (err) {
+            if (err || !event) {
                 handleError(res, err);
             } else {
                 var organizer = event.organizers.filter(function(item) {
                     return item._id == req.params.organizerId;
+                }).filter(function(user) {
+                	return user.profile;
                 });
 
                 res.json({
@@ -45,20 +51,18 @@ exports.create = function(req, res) {
             organizers: req.params.organizerId
         }
     }, function(err, event) {
-        if (err) {
+        if (err || !event) {
             handleError(res, err);
         } else {
             User.findByIdAndUpdate(req.params.organizerId, {
                 $push: {
-	            	events: {
-		            	organizerOf: req.params.id
-		            }
+            		'events.organizerOf': req.params.id
 	            }
-            }, function(err) {
-                if (err) {
+            }, function(err, user) {
+                if (err || !user) {
                     handleError(res, err);
                 } else {
-                    res.status(200).end();
+                    res.status(200).send('success');
                 }
             });
         }
@@ -68,22 +72,22 @@ exports.create = function(req, res) {
 
 exports.destroy = function(req, res) {
     Event.findByIdAndUpdate(req.params.id, {
-        $remove: {
+        $pull: {
             organizers: req.params.organizerId
         }
     }, function(err, event) {
-        if (err) {
+        if (err || !event) {
             handleError(res, err);
         } else {
         	User.findByIdAndUpdate(req.params.organizerId, {
-        		events: {
-	        		organizerOf: req.params.id
+        		$pull: {
+	        		'events.organizerOf': req.params.id
 	        	}
         	}, function(err, user) {
-        		if(err) {
+        		if(err || !user) {
         			handleError(res, err);
         		} else {
-        			res.status(200).end();
+        			res.status(200).send('success');
         		}
         	});
         }

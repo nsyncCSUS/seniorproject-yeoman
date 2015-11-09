@@ -7,11 +7,11 @@ exports.index = function(req, res) {
 	User.findById(req.params.id)
 		.populate('groups.creatorOf')
 		.exec(function(err, user) {
-			if(err) {
+			if(err || !user) {
 				handleError(res, err);
 			} else {
 				res.json({
-					events: user.events.creatorOf
+					groups: user.groups.creatorOf
 				});
 			}
 		})
@@ -22,15 +22,15 @@ exports.show = function(req, res) {
 	User.findById(req.params.id)
 		.populate('events.organizerOf')
 		.exec(function(err, user) {
-			if(err) {
+			if(err || !user) {
 				handleError(res, err);
 			} else {
-				var event = user.events.creatorOf.filter(function(item) {
+				var groups = user.groups.creatorOf.filter(function(item) {
 					return item._id == req.params.eventId;
 				});
 				
 				res.json({
-					event: event
+					group: groups[0]
 				});
 			}
 		});

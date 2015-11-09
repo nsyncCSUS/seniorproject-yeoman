@@ -8,7 +8,7 @@ exports.index = function(req, res) {
     User.findById(req.params.id)
         .populate('events.organizerOf')
         .exec(function(err, user) {
-            if (err) {
+            if (err || !user) {
                 handleError(res, err);
             } else {
                 res.json({
@@ -23,7 +23,7 @@ exports.show = function(req, res) {
     User.findById(req.params.id)
         .populate('events.organizerOf')
         .exec(function(err, user) {
-            if (err) {
+            if (err || !user) {
                 handleError(res, err);
             } else {
                 var event = user.events.organizerOf.filter(function(item) {
@@ -31,7 +31,7 @@ exports.show = function(req, res) {
                 });
 
                 res.json({
-                    event: event
+                    event: event[0]
                 });
             }
         });
@@ -41,12 +41,10 @@ exports.show = function(req, res) {
 exports.create = function(req, res) {
     User.findByIdAndUpdate(req.params.id, {
         $push: {
-            events: {
-    			organizerOf: req.params.eventId
-    		}
+            'events.organizerOf': req.params.eventId
         }
     }, function(err, user) {
-        if (err) {
+        if (err || !user) {
             handleError(res, err);
         } else {
         	Event.findByIdAndUpdate(req.params.eventId, {
@@ -54,10 +52,10 @@ exports.create = function(req, res) {
 	        		organizers: req.params.id
 	        	}
         	}, function(err, event) {
-        		if(err) {
+        		if(err || !event) {
         			handleError(res, err);
         		} else {
-        			res.status(200).end();
+        			res.status(200).send('success');
         		}
         	});
         }
@@ -67,24 +65,22 @@ exports.create = function(req, res) {
 
 exports.destroy = function(req, res) {
     User.findByIdAndUpdate(req.params.id, {
-        $remove: {
-            events: {
-    			organizerOf: req.params.eventId
-            }
+        $pull: {
+            'events.organizerOf': req.params.eventId
         }
     }, function(err, user) {
-        if (err) {
+        if (err || !user) {
             handleError(res, err);
         } else {
         	Event.findByIdAndUpdate(req.params.eventId, {
-        		$remove: {
+        		$pull: {
 	        		organizers: req.params.id
 	        	}
-        	}, function(err) {
-        		if(err) {
+        	}, function(err, event) {
+        		if(err || !event) {
         			handleError(res, err);
         		} else {
-        			res.status(200).end();
+        			res.status(200).send('success');
         		}
         	});
         }

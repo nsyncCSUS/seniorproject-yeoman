@@ -9,7 +9,9 @@ var router = express.Router({
 
 router.get('/', controller.index);
 router.get('/:groupId', controller.show);
-router.post('/:groupId', auth.isAuthenticated(), controller.create);
-router.delete('/:groupId', auth.isAuthenticated(), controller.destroy);
+//router.post('/:groupId', auth.isAuthenticated(), controller.create);
+//router.delete('/:groupId', auth.isAuthenticated(), controller.destroy);
+router.post('/:groupId', controller.create);
+router.delete('/:groupId', controller.destroy);
 
 module.exports = router;

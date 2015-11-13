@@ -1,5 +1,7 @@
 div(ng-include='"components/navbar/navbar.html"')
 
+.creatingOverlay(ng-show='isCreating')
+
 h1 CREATE GROUP
 
 div
@@ -16,7 +18,7 @@ div
     
             
 div(ng-show='!getIsPreviewing()')
-    .container-fluid
+    .container
         .col-xs-12.col-sm-12.col-md-12.col-lg-12
             .row
                 .col-xs-12.col-sm-12.col-md-8.col-lg-8
@@ -26,18 +28,22 @@ div(ng-show='!getIsPreviewing()')
                 .col-xs-12.col-sm-12.col-md-4.col-lg-4
                     label(for='interests') Interests
                     .navbar-btn
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/animals.png', ng-class='animalsSelected', ng-click='addInterest("Animals")', tooltip='Animals')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/education.png', ng-class='educationSelected', ng-click='addInterest("Education")', tooltip='Education')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/environment.png', ng-class='environmentSelected', ng-click='addInterest("Environment")', tooltip='Environment')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/people.png', ng-class='peopleSelected', ng-click='addInterest("People")', tooltip='People')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/recreation.png', ng-class='recreationSelected', ng-click='addInterest("Recreation")', tooltip='Recreation')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/technology.png', ng-class='technologySelected', ng-click='addInterest("Technology")', tooltip='Technology')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/youth.png', ng-class='youthSelected', ng-click='addInterest("Youth")', tooltip='Youth')
-        
+                        img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/animals.png', ng-class='animalsSelected', ng-click='addInterest("Animals")', tooltip='Animals')
+                        img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/education.png', ng-class='educationSelected', ng-click='addInterest("Education")', tooltip='Education')
+                        img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/environment.png', ng-class='environmentSelected', ng-click='addInterest("Environment")', tooltip='Environment')
+                        img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/people.png', ng-class='peopleSelected', ng-click='addInterest("People")', tooltip='People')
+                        img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/recreation.png', ng-class='recreationSelected', ng-click='addInterest("Recreation")', tooltip='Recreation')
+                        img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/technology.png', ng-class='technologySelected', ng-click='addInterest("Technology")', tooltip='Technology')
+                        img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/youth.png', ng-class='youthSelected', ng-click='addInterest("Youth")', tooltip='Youth')
+            hr
+                                
         .col-xs-12.col-sm-4.col-md-4.col-lg-4
-            .form-group
-                input(type='file') 
-                | Might have to use external module for file inputs
+            img.img-responsive.img-thumbnail.center-item(src="{{group.picture}}")
+            div(ng-show='getIsEditing()')
+                .form-group
+                    input(type='file') 
+                    | Might have to use external module for file inputs
+            hr
         
         .col-xs-12.col-sm-8.col-md-8.col-lg-8
             .form-group
@@ -110,7 +116,7 @@ div(ng-show='!getIsPreviewing()')
                                         h6.text-center {{user.firstName}} {{user.lastName}}
         
 .titleRow(ng-show='getIsPreviewing()')
-    .container-fluid
+    .container
         .row
             .col-xs-12.col-sm-12.col-md-12.col-lg-12.panel-primary
                 h2.panel-heading {{group.name}}
@@ -119,24 +125,24 @@ div(ng-show='!getIsPreviewing()')
                         .row
                             .col-xs-6.col-sm-6.col-md-6.col-lg-6
                                 div(ng-show='!getIsEditing()')
-                                    img.img-thumbnail(ng-src='/images/interests/{{interest}}.png', ng-repeat='interest in group.interests | orderBy:interest', tooltip='{{interest}}')
+                                    img.img-thumbnail(ng-src='/assets/images/interests/{{interest}}.png', ng-repeat='interest in group.interests | orderBy:interest', tooltip='{{interest}}')
                                     
                             .hidden-xs
                                 .col-xs-12.col-sm-6.col-md-6.col-lg-6
                                     div.pull-right(ng-show='!getIsEditing()')
-                                        img.btn.btn-sm(ng-src='/images/social-media/googlePlus.png', ng-disabled='!checkIfHas("googlePlus")', ng-click='goTo(group.googlePlusURL)', tooltip='{{group.googlePlusURL}}')
-                                        img.btn.btn-sm(ng-src='/images/social-media/facebook.png', ng-disabled='!checkIfHas("facebook")', ng-click='goTo(group.facebookURL)', tooltip='{{group.facebookURL}}')
-                                        img.btn.btn-sm(ng-src='/images/social-media/twitter.png', ng-disabled='!checkIfHas("twitter")', ng-click='goTo(group.twitterURL)', tooltip='{{group.twitterURL}}')
-                                        img.btn.btn-sm(ng-src='/images/social-media/linkedIn.png', ng-disabled='!checkIfHas("linkedIn")', ng-click='goTo(group.linkedInURL)', tooltip='{{group.linkedInURL}}')
-                                        img.btn.btn-sm(ng-src='/images/social-media/website.png', ng-disabled='!checkIfHas("website")', ng-click='goTo(group.personalWebsiteURL)', tooltip='{{group.personalWebsiteURL}}')
+                                        img.btn.btn-sm(ng-src='/assets/images/social-media/googlePlus.png', ng-disabled='!checkIfHas("googlePlus")', ng-click='goTo(group.googlePlusURL)', tooltip='{{group.googlePlusURL}}')
+                                        img.btn.btn-sm(ng-src='/assets/images/social-media/facebook.png', ng-disabled='!checkIfHas("facebook")', ng-click='goTo(group.facebookURL)', tooltip='{{group.facebookURL}}')
+                                        img.btn.btn-sm(ng-src='/assets/images/social-media/twitter.png', ng-disabled='!checkIfHas("twitter")', ng-click='goTo(group.twitterURL)', tooltip='{{group.twitterURL}}')
+                                        img.btn.btn-sm(ng-src='/assets/images/social-media/linkedIn.png', ng-disabled='!checkIfHas("linkedIn")', ng-click='goTo(group.linkedInURL)', tooltip='{{group.linkedInURL}}')
+                                        img.btn.btn-sm(ng-src='/assets/images/social-media/website.png', ng-disabled='!checkIfHas("website")', ng-click='goTo(group.personalWebsiteURL)', tooltip='{{group.personalWebsiteURL}}')
                             .visible-xs
                                 .col-xs-6.col-sm-6.col-md-6.col-lg-6
                                     div.pull-right(ng-show='!getIsEditing()')
-                                        img.btn.btn-sm(ng-src='/images/social-media/googlePlus.png', ng-disabled='!checkIfHas("googlePlus")', ng-click='goTo(group.googlePlusURL)', tooltip='{{group.googlePlusURL}}')
-                                        img.btn.btn-sm(ng-src='/images/social-media/facebook.png', ng-disabled='!checkIfHas("facebook")', ng-click='goTo(group.facebookURL)', tooltip='{{group.facebookURL}}')
-                                        img.btn.btn-sm(ng-src='/images/social-media/twitter.png', ng-disabled='!checkIfHas("twitter")', ng-click='goTo(group.twitterURL)', tooltip='{{group.twitterURL}}')
-                                        img.btn.btn-sm(ng-src='/images/social-media/linkedIn.png', ng-disabled='!checkIfHas("linkedIn")', ng-click='goTo(group.linkedInURL)', tooltip='{{group.linkedInURL}}')
-                                        img.btn.btn-sm(ng-src='/images/social-media/website.png', ng-disabled='!checkIfHas("website")', ng-click='goTo(group.personalWebsiteURL)', tooltip='{{group.personalWebsiteURL}}')
+                                        img.btn.btn-sm(ng-src='/assets/images/social-media/googlePlus.png', ng-disabled='!checkIfHas("googlePlus")', ng-click='goTo(group.googlePlusURL)', tooltip='{{group.googlePlusURL}}')
+                                        img.btn.btn-sm(ng-src='/assets/images/social-media/facebook.png', ng-disabled='!checkIfHas("facebook")', ng-click='goTo(group.facebookURL)', tooltip='{{group.facebookURL}}')
+                                        img.btn.btn-sm(ng-src='/assets/images/social-media/twitter.png', ng-disabled='!checkIfHas("twitter")', ng-click='goTo(group.twitterURL)', tooltip='{{group.twitterURL}}')
+                                        img.btn.btn-sm(ng-src='/assets/images/social-media/linkedIn.png', ng-disabled='!checkIfHas("linkedIn")', ng-click='goTo(group.linkedInURL)', tooltip='{{group.linkedInURL}}')
+                                        img.btn.btn-sm(ng-src='/assets/images/social-media/website.png', ng-disabled='!checkIfHas("website")', ng-click='goTo(group.personalWebsiteURL)', tooltip='{{group.personalWebsiteURL}}')
                 
                 .row
                     .col-xs-12.col-sm-4.col-md-4.col-lg-4
@@ -191,11 +197,9 @@ div(ng-show='!getIsPreviewing()')
                                     | {{selectedTab}}
                                 button.btn.btn-xs.btn-default.cursor-pointer.otherTab(ng-click='setCurrentTab(otherTabs[0])') {{otherTabs[0]}}
                             .panel-body.eventRow(ng-show='getCurrentTab("Upcoming Events")')
-                                .row.eventRow(ng-repeat='event in group.events | orderBy:"startTimeDate" | CheckExpired:false')
+                                .row.eventRow(ng-repeat='event in group.events | orderBy:"startTimeDate" | checkExpired:false')
                                     event-card
                                                         
                             .panel-body.eventRow(ng-show='getCurrentTab("Past Events")')
-                                .row.eventRow(ng-repeat='event in group.events | orderBy:"-startTimeDate" | CheckExpired:true')
+                                .row.eventRow(ng-repeat='event in group.events | orderBy:"-startTimeDate" | checkExpired:true')
                                     past-event-card
-
-

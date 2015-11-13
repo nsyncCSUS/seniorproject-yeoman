@@ -1,0 +1,33 @@
+.col-xs-12.col-sm-12.col-md-12.col-lg-12.eventBody
+
+    .col-xs-12.col-sm-12.col-md-12.col-lg-12
+        .row
+            h4
+                a(ng-href='/groups/{{group.id}}/') {{group.name}}
+            h5 {{group.city}}, {{group.state}} {{group.zipcode}}
+        
+    .col-xs-12.col-sm-12.col-md-12.col-lg-12
+        .row
+            .col-xs-12.col-sm-12.col-md-12.col-lg-12.navbar-btn
+                img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/{{interest}}.png', ng-repeat='interest in group.interests | orderBy:interest', tooltip='{{interest}}')
+                
+    .col-xs-12.col-sm-12.col-md-12.col-lg-12
+        .row
+            .col-xs-12.col-sm-4.col-md-4.col-lg-4.hidden-xs
+                .row
+                    .col-xs-4.col-sm-12.col-md-12.col-lg-12
+                        a(ng-href='/groups/{{group.id}}/')
+                            img.img-responsive.img-thumbnail(src='{{group.picture}}')
+            .col-xs-12.col-sm-8.col-md-8.col-lg-8
+                .row
+                    .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                        h5 {{group.description | limitTo:10000}}
+        
+    .col-xs-12.col-sm-12.col-md-12.col-lg-12.volunteerRow.hidden-xs
+        .row
+            .col-xs-12.col-sm-3.col-md-2.col-lg-1
+                h4 Current Events
+            
+            .col-xs-12.col-sm-9.col-md-10.col-lg-11
+                a(ng-href='/events/{{event.id}}/', ng-repeat='event in group.events | limitTo:9', tooltip='{{event.name}}')
+                    img.img-rounded.volunteer-thumbnail(src='{{event.picture}}')

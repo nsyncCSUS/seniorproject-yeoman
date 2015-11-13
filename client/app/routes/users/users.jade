@@ -4,52 +4,133 @@ h1 Users
 
 h6 {{userId}}
 
-div.aboutMeRow
-    h2.text-center About Me
-      .container-fluid
-        .col-xs-2.col-sm-2.col-md-2.col-lg-3
-            img.img-responsive.img-thumbnail(src="//placehold.it/250x250")
-        .col-xs-10.col-sm-10.col-md-10.col-lg-9
-            p About me information About me information About me information About me information About me information About me information About me information About me information About me information
-      .row
-        .col-xs-3.col.sm-3.col-md-3.col-lg-3
-           button.btn.btn-info(ng-click='messageUser()') Message User
-      .row
-        .col-xs-3.col.sm-3.col-md-3.col-lg-3
-          div.userContact
-            h2.text-center Contact Info
-            .row
-               a(href='https://www.facebook.com/') Facebook
-            .row
-               a(href='https://www.twitter.com/') Twitter
-            .row
-               a(href='http://www.linkedin.com') Linkedin
-            .row
-               a(href='https://www.google.com') Personal Website
+.well
+    .container
+        button.btn.btn-default(ng-click='toggleAdmin()') Toggle Admin
+        | {{isAdmin}}
+    
+div(ng-show='isAdmin')
+    div(ng-show='!getIsEditing()')
+        .float-right
+            button.btn.btn-default(ng-show='!getIsEditing()', ng-click='enableEdit()') Edit Profile
+    div(ng-show='getIsEditing()')
+        .float-right
+            button.btn.btn-info(ng-show='getIsEditing()', ng-click='submitEdit()', ng-disabled='isUpdating') Save
+            | &nbsp
+            button.btn.btn-danger(ng-show='getIsEditing()', ng-click='cancelEdit()', ng-disabled='isUpdating') Cancel
+.float-btm.text-center
+    alert(ng-repeat='alert in alerts', type='{{alert.type}}', close='closeAlert($index)', dismiss-on-timeout='5000') {{alert.msg}}
+    
+.creatingOverlay(ng-show='isUpdating')   
 
+div(ng-show='getIsEditing()')
+    .container
+        .col-xs-12.col-sm-12.col-md-12.col-lg-12
+            .row
+                .col-xs-12.col-sm-12.col-md-8.col-lg-8
+                    .row
+                        .col-xs-4.col-sm-4.col-md-4.col-lg-4
+                            label(for='firstName') First Name
+                            input.form-control#firstName(ng-model='user.firstName')
+                        .col-xs-4.col-sm-4.col-md-4.col-lg-4
+                            label(for='middleName') Middle Name
+                            input.form-control#middleName(ng-model='user.middleName')
+                        .col-xs-4.col-sm-4.col-md-4.col-lg-4
+                            label(for='lastName') Last Name
+                            input.form-control#lastName(ng-model='user.lastName')
+                        hr
+                .col-xs-12.col-sm-12.col-md-4.col-lg-4
+                    label(for='interests') Interests
+                    #interests
+                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/animals.png', ng-class='animalsSelected', ng-click='addInterest("Animals")', tooltip='Animals')
+                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/education.png', ng-class='educationSelected', ng-click='addInterest("Education")', tooltip='Education')
+                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/environment.png', ng-class='environmentSelected', ng-click='addInterest("Environment")', tooltip='Environment')
+                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/people.png', ng-class='peopleSelected', ng-click='addInterest("People")', tooltip='People')
+                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/recreation.png', ng-class='recreationSelected', ng-click='addInterest("Recreation")', tooltip='Recreation')
+                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/technology.png', ng-class='technologySelected', ng-click='addInterest("Technology")', tooltip='Technology')
+                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/youth.png', ng-class='youthSelected', ng-click='addInterest("Youth")', tooltip='Youth')
+            hr
+            
+        .col-xs-12.col-sm-4.col-md-4.col-lg-4
+            img.img-responsive.img-thumbnail.center-item(src="{{user.picture}}")
+            div(ng-show='getIsEditing()')
+                .form-group
+                    input(type='file') 
+                    | Might have to use external module for file inputs
+            hr
+            
+        .col-xs-12.col-sm-8.col-md-8.col-lg-8
+            .form-group
+                label(for='description') Description
+                textarea.form-control#description(rows='10', ng-model='user.description')
+                label(for='googlePlus') Google Plus
+                input.form-control#googlePlus(ng-model='user.googlePlusURL')
+                label(for='facebook') Facebook
+                input.form-control#facebook(ng-model='user.facebookURL')
+                label(for='twitter') Twitter
+                input.form-control#twitter(ng-model='user.twitterURL')
+                label(for='linkedIn') Linked In
+                input.form-control#linkedIn(ng-model='user.linkedInURL')
+                hr
+                .row
+                    .col-xs-12.col-sm-6.col-md-6.col-lg-6
+                        label(for='city') City
+                        input.form-control#website(ng-model='user.city')
+                    .col-xs-4.col-sm-2.col-md-2.col-lg-2
+                        label(for='state') State
+                        input.form-control#website(ng-model='user.state')
+                    .col-xs-8.col-sm-4.col-md-4.col-lg-4
+                        label(for='zipcode') Zipcode
+                        input.form-control#website(ng-model='user.zipcode')
+    
 
-
-div.userHistory
-    .container-fluid
-      .col-xs-12.col-sm-12.col-md-12.col-lg-128x128 
-            h2.text-center History
-      .col-xs-8.col-sm-8.col-md-8.col-lg-8
-            .well
-               h6 Participated on Event X on date
-      .col-xs-4.col-sm-4.col-md-4.col-lg-4
-            img.img-responsive(src='//placehold.it/128x128')
-      .col-xs-8.col-sm-8.col-md-8.col-lg-8
-            .well
-               h6 Paticipated on Event X on date
-      .col-xs-4.col-sm-4.col-md-4.col-lg-4
-            img.img-responsive(src='//placehold.it/128x128')
-      .col-xs-8.col-sm-8.col-md-8.col-lg-8
-            .well
-               h6 Participated on Event X on date	
-      .col-xs-4.col-sm-4.col-md-4.col-lg-4
-            img.img-responsive(src='//placehold.it/128x128')
-      .col-xs-8.col-sm-8.col-md-8.col-lg-8
-            .well
-               h6 Participated on Event X on date	
-      .col-xs-4.col-sm-4.col-md-4.col-lg-4
-            img.img-responsive(src='//placehold.it/128x128')				 
+div(ng-show='!getIsEditing()') 
+    .container
+        .row
+            .col-xs-12.col-sm-8.col-md-8.col-lg-8
+                h2.hidden-xs {{user.firstName}} {{user.middleName}} {{user.lastName}}
+                h2.visible-xs.text-center {{user.firstName}} {{user.middleName}} {{user.lastName}}
+            .col-xs-12.col-sm-4.col-md-4.col-lg-4
+                h2.pull-right.hidden-xs
+                    img.btn.btn-sm(ng-src='/images/social-media/googlePlus.png', ng-disabled='!checkIfHas("googlePlus")', ng-click='goTo(user.googlePlusURL)', tooltip='{{user.googlePlusURL}}')
+                    img.btn.btn-sm(ng-src='/images/social-media/facebook.png', ng-disabled='!checkIfHas("facebook")', ng-click='goTo(user.facebookURL)', tooltip='{{user.facebookURL}}')
+                    img.btn.btn-sm(ng-src='/images/social-media/twitter.png', ng-disabled='!checkIfHas("twitter")', ng-click='goTo(user.twitterURL)', tooltip='{{user.twitterURL}}')
+                    img.btn.btn-sm(ng-src='/images/social-media/linkedIn.png', ng-disabled='!checkIfHas("linkedIn")', ng-click='goTo(user.linkedInURL)', tooltip='{{user.linkedInURL}}')
+                .visible-xs.text-center
+                    img.btn.btn-sm(ng-src='/images/social-media/googlePlus.png', ng-disabled='!checkIfHas("googlePlus")', ng-click='goTo(user.googlePlusURL)', tooltip='{{user.googlePlusURL}}')
+                    img.btn.btn-sm(ng-src='/images/social-media/facebook.png', ng-disabled='!checkIfHas("facebook")', ng-click='goTo(user.facebookURL)', tooltip='{{user.facebookURL}}')
+                    img.btn.btn-sm(ng-src='/images/social-media/twitter.png', ng-disabled='!checkIfHas("twitter")', ng-click='goTo(user.twitterURL)', tooltip='{{user.twitterURL}}')
+                    img.btn.btn-sm(ng-src='/images/social-media/linkedIn.png', ng-disabled='!checkIfHas("linkedIn")', ng-click='goTo(user.linkedInURL)', tooltip='{{user.linkedInURL}}')
+                
+        .row
+            .col-xs-12.col-sm-4.col-md-4.col-lg-4
+                .col-xs-4.col-sm-12.col-md-12.col-lg-12
+                    img.img-responsive.img-thumbnail(src="//placehold.it/500x500")
+                .col-xs-8.col-sm-12.col-md-12.col-lg-12
+                    h4.text-center
+                        | Member since: {{user.creationDate | date:'MMM dd, yyyy'}}
+                    hr
+                    button.btn.btn-info.center-item(ng-click='messageUser()') Contact {{user.firstName}}
+                
+            .col-xs-12.col-sm-8.col-md-8.col-lg-8.panel-success
+                h3.panel-heading About Me
+                p {{user.description}}
+                
+                .panel-info#tabs
+                    .panel-heading
+                        .selectedTab
+                            | {{selectedTab}}
+                        button.btn.btn-xs.btn-default.cursor-pointer.otherTab(ng-repeat='tab in otherTabs', ng-click='setCurrentTab(otherTabs[$index])') {{otherTabs[$index]}}
+                        
+                    .panel-body.eventRow(ng-show='getCurrentTab("Volunteered To")')
+                        .row.eventRow(ng-repeat='event in user.volunteeredTo | orderBy:"startTimeDate" | checkExpired:false')
+                            past-event-card
+                                                
+                    .panel-body.eventRow(ng-show='getCurrentTab("Past Events")')
+                        .row.eventRow(ng-repeat='event in user.volunteeredTo | orderBy:"-startTimeDate" | checkExpired:true')
+                            past-event-card
+                                                
+                    .panel-body.eventRow(ng-show='getCurrentTab("Subscriptions")')
+                        a(ng-href='/group/{{group.id}}/', ng-repeat='group in user.subscribedTo | limitTo: 100')
+                            img.img-thumbnail.subscriber-thumbnail.cursor-pointer(src="{{group.picture}}", tooltip='{{group.name}}')
+          

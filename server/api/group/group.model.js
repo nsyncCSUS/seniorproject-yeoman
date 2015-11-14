@@ -4,7 +4,11 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var GroupSchema = new Schema({
-    name: String,
+    name: {
+        type: String,
+        required: true
+    },
+
     info: String,
     active: Boolean,
 

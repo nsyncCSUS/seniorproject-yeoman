@@ -3,6 +3,7 @@
 var should = require('should');
 var app = require('../../app');
 var request = require('supertest');
+var expect = require('chai').expect;
 var Event = require('./event.model');
 
 
@@ -58,24 +59,45 @@ describe('GET /api/events/:eventId', function() {
 
 
 
-describe('PUT /api/events', function() {
+describe('PUT /api/events/:eventId', function() {
+    this.timeout(50000);
+
     it('should update an element in the database', function(done) {
-        /*request(app)
-            .put('/api/events/')
-            .expect(200)
-            .expect('Content-Type', /json/)
-            .end(function(err, res) {
-                done();
-         });*/
-        done();
+        Event.create({name: 'Test Event'}, function(err, event) {
+            request(app)
+                .put('/api/events/' + event._id)
+                .send({name: 'Other Name'})
+                .expect(200)
+                .end(function(err, res) {
+                    if(err) return done(err);
+                    Event.findById(event._id, function(err, _event) {
+                        if(err) return done(err);
+                        expect(_event.name).to.equal('Other Name');
+                        Event.findByIdAndRemove(event._id, function(err) {
+                            if(err) return done(err);
+                            done();
+                        });
+                    });
+                });
+        });
     });
 
     it('should not update elements with invalid fields', function(done) {
-        done();
-    });
-
-    it('should not update elements with null data', function(done) {
-        done();
+        Event.create({name: 'Test Event'}, function(err, event) {
+            request(app)
+                .put('/api/events' + event._id, {invalid_field: 'Something'})
+                .expect(200)
+                .end(function(err) {
+                    Event.findById(event._id, function(err, _event) {
+                        if(err) return done(err);
+                        expect(_event.invalid_field).to.equal(undefined);
+                        Event.findByIdAndRemove(event._id, function(err) {
+                            if(err) return done(err);
+                            done();
+                        });
+                    });
+                });
+        });
     });
 });
 

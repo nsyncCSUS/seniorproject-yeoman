@@ -5,6 +5,9 @@ var User = require('../../user/user.model');
 
 
 exports.index = function(req, res) {
+    if(!ValidId(req.params.id)) {
+        return NotFound(res);
+    }
     Event.findById(req.params.id)
         .populate('volunteers')
         .exec(function(err, event) {
@@ -15,15 +18,16 @@ exports.index = function(req, res) {
             		return user.profile;
             	});
             	
-                res.json({
-                    volunteers: volunteers
-                });
+              res.json(volunteers);
             }
         });
 };
 
 
 exports.show = function(req, res) {
+    if(!ValidId(req.params.id) || !ValidId(req.params.volunteerId)) {
+        return NotFound(res);
+    }
     Event.findById(req.params.id)
         .populate('volunteers')
         .exec(function(err, event) {
@@ -45,6 +49,9 @@ exports.show = function(req, res) {
 
 
 exports.create = function(req, res) {
+    if(!ValidId(req.params.id) || !ValidId(req.params.volunteerId)) {
+        return NotFound(res);
+    }
     Event.findByIdAndUpdate(req.params.id, {
         $push: {
             volunteers: req.params.volunteerId
@@ -70,6 +77,9 @@ exports.create = function(req, res) {
 
 
 exports.destroy = function(req, res) {
+    if(!ValidId(req.params.id) || !ValidId(req.params.volunteerId)) {
+        return NotFound(res);
+    }
     Event.findByIdAndUpdate(req.params.id, {
         $pull: {
             volunteers: req.params.volunteerId
@@ -97,4 +107,12 @@ exports.destroy = function(req, res) {
 
 function handleError(res, err) {
     res.status(500).send(err);
+};
+
+function NotFound(res) {
+    res.status(404).send('Not Found');
+};
+
+function ValidId(id) {
+    return id.match(new RegExp(/^[0-9a-fA-F]{24}$/));
 };

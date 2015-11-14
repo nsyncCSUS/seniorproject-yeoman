@@ -5,21 +5,25 @@ var Event = require('../../../event/event.model');
 
 
 exports.index = function(req, res) {
+    if(!ValidId(req.params.id)) {
+        return NotFound(res);
+    }
     User.findById(req.params.id)
         .populate('events.organizerOf')
         .exec(function(err, user) {
             if (err || !user) {
                 handleError(res, err);
             } else {
-                res.json({
-                    events: user.events.organizerOf
-                });
+                res.json(user.events.organizerOf);
             }
         });
 };
 
 
 exports.show = function(req, res) {
+    if(!ValidId(req.params.id) || !ValidId(req.params.eventId)) {
+        return NotFound(res);
+    }
     User.findById(req.params.id)
         .populate('events.organizerOf')
         .exec(function(err, user) {
@@ -39,6 +43,9 @@ exports.show = function(req, res) {
 
 
 exports.create = function(req, res) {
+    if(!ValidId(req.params.id) || !ValidId(req.params.eventId)) {
+        return NotFound(res);
+    }
     User.findByIdAndUpdate(req.params.id, {
         $push: {
             'events.organizerOf': req.params.eventId
@@ -64,6 +71,9 @@ exports.create = function(req, res) {
 
 
 exports.destroy = function(req, res) {
+    if(!ValidId(req.params.id) || !ValidId(req.params.eventId)) {
+        return NotFound(res);
+    }
     User.findByIdAndUpdate(req.params.id, {
         $pull: {
             'events.organizerOf': req.params.eventId
@@ -92,3 +102,10 @@ function handleError(res, err) {
     res.status(500).send(err);
 };
 
+function NotFound(res) {
+    return res.status(404).send('Not Found');
+};
+
+function ValidId(id) {
+    return id.match(/^[0-9a-fA-F]{24}$/);
+};

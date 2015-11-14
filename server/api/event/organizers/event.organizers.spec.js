@@ -7,10 +7,19 @@ var request = require('supertest');
 
 describe('GET /api/events/:id/organizers', function() {
     it('should retrieve a list of users', function(done) {
-        done();
+      /*request(app)
+        .get('/api/events//organizers')
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .end(function(err, res) {
+          if(err) return done(err);
+          res.body.should.be.instanceof(Array);
+          done();
+        });*/
+       done();
     });
 
-    it('should get a single user by id', function(done) {
+    it('should get a single user', function(done) {
         done();
     });
 

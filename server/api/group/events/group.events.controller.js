@@ -5,6 +5,9 @@ var Event = require('../../event/event.model');
 
 
 exports.index = function(req, res) {
+    if(!ValidId(req.params.id)) {
+        return NotFound(res);
+    }
     Group.findById(req.params.id)
         .populate('events')
         .exec(function(err, groups) {
@@ -16,6 +19,9 @@ exports.index = function(req, res) {
 
 
 exports.show = function(req, res) {
+    if(!ValidId(req.params.id) || !ValidId(req.params.eventId)) {
+        return NotFound(res);
+    }
     Group.findById(req.params.id)
         .populate('events')
         .exec(function(err, group) {
@@ -71,6 +77,9 @@ exports.create = function(req, res) {
  * event list.
  */
 exports.destroy = function(req, res) {
+    if(!ValidId(req.params.id) || !ValidId(req.params.eventId)) {
+        return NotFound(res);
+    }
     Group.findByIdAndUpdate(req.params.id, {
         $pull: {
             events: req.params.eventId
@@ -86,5 +95,13 @@ exports.destroy = function(req, res) {
 
 
 function handleError(res, err) {
-    res.status(500).send(err);
-}
+    return res.status(500).send(err);
+};
+
+function NotFound(res) {
+    return res.status(404).send('Not Found');
+};
+
+function ValidId(id) {
+    return id.match(/^[0-9a-fA-F]{24}$/);
+};

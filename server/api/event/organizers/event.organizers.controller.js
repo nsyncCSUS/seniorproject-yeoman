@@ -6,6 +6,9 @@ var User = require('../../user/user.model');
 
 
 exports.index = function(req, res) {
+    if(!ValidId(req.params.id)) {
+        return NotFound(res);
+    }
     Event.findById(req.params.id)
         .populate('organizers')
         .exec(function(err, event) {
@@ -16,15 +19,16 @@ exports.index = function(req, res) {
             		return user.profile;
             	});
             	
-                res.json({
-                    organizers: organizers
-                });
+              res.json(organizers);
             }
         });
 };
 
 
 exports.show = function(req, res) {
+    if(!ValidId(req.params.id) || !ValidId(req.params.organizerId)) {
+        return NotFound(res);
+    }
     Event.findById(req.params.id)
         .populate('organizers')
         .exec(function(err, event) {
@@ -46,6 +50,9 @@ exports.show = function(req, res) {
 
 
 exports.create = function(req, res) {
+    if(!ValidId(req.params.id) || !ValidId(req.params.organizerId)) {
+        return NotFound(res);
+    }
     Event.findByIdAndUpdate(req.params.id, {
         $push: {
             organizers: req.params.organizerId
@@ -71,6 +78,9 @@ exports.create = function(req, res) {
 
 
 exports.destroy = function(req, res) {
+    if(!ValidId(req.params.id) || !ValidId(req.params.organizerId)) {
+        return NotFound(res);
+    }
     Event.findByIdAndUpdate(req.params.id, {
         $pull: {
             organizers: req.params.organizerId
@@ -97,4 +107,12 @@ exports.destroy = function(req, res) {
 
 function handleError(res, err) {
     return res.status(500).send(err);
+};
+
+function NotFound(res) {
+    return res.status(404).send('Not Found');
+};
+
+function ValidId(id) {
+  return id.match(new RegExp(/^[0-9a-fA-F]{24}$/));
 };

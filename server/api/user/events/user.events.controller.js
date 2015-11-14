@@ -14,7 +14,7 @@ var validationError = function(res, err) {
  */
 
 
-exports.create = function(req, res, next) {
+/*exports.create = function(req, res, next) {
     var userId = req.params.userId;
     var eventId = req.body.eventId;
     User.findByIdAndUpdate(userId, {
@@ -26,7 +26,7 @@ exports.create = function(req, res, next) {
             res.send(err);
         }
     });
-};
+};*/
 
 
 /**

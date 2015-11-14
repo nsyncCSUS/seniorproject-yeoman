@@ -16,12 +16,12 @@ var validationError = function(res, err) {
 exports.index = function(req, res) {
     User.find({}, '-salt -hashedPassword', function(err, users) {
         if (err) return res.status(500).send(err);
-        
+
         // return user profile
         var _users = users.map(function(user) {
         	return user.profile;
         });
-        
+
         res.status(200).json({
         	users: _users
         });
@@ -53,6 +53,9 @@ exports.create = function(req, res, next) {
  */
 exports.show = function(req, res, next) {
     var userId = req.params.id;
+    if(!ValidId(userId)) {
+        return NotFound(res);
+    }
 
     User.findById(userId, function(err, user) {
         if (err) return next(err);
@@ -68,6 +71,9 @@ exports.show = function(req, res, next) {
  * restriction: 'admin'
  */
 exports.destroy = function(req, res) {
+    if(!ValidId(req.params.id)) {
+        return NotFound(res);
+    }
     User.findByIdAndRemove(req.params.id, function(err, user) {
         if (err) return res.status(500).send(err);
         return res.status(204).send('No Content');
@@ -81,6 +87,9 @@ exports.changePassword = function(req, res, next) {
     var userId = req.user._id;
     var oldPass = String(req.body.oldPassword);
     var newPass = String(req.body.newPassword);
+    if(!ValidId(userId)) {
+        return NotFound(res);
+    }
 
     User.findById(userId, function(err, user) {
         if (user.authenticate(oldPass)) {
@@ -100,6 +109,9 @@ exports.changePassword = function(req, res, next) {
  */
 exports.me = function(req, res, next) {
     var userId = req.user._id;
+    if(!ValidId(userId)) {
+        return NotFound(res);
+    }
     User.findOne({
         _id: userId
     }, '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
@@ -117,3 +129,12 @@ exports.me = function(req, res, next) {
 exports.authCallback = function(req, res, next) {
     res.redirect('/');
 };
+
+function NotFound(res) {
+    return res.status(404).send('Not Found');
+};
+
+function ValidId(id) {
+    return id.match(/^[0-9a-fA-F]{24}$/);
+};
+

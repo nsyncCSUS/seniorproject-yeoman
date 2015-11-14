@@ -3,10 +3,13 @@
 var should = require('should');
 var app = require('../../app');
 var request = require('supertest');
+var Event = require('./event.model');
+
 
 describe('GET /api/events', function() {
 
     it('should respond with JSON array', function(done) {
+        this.timeout(10000);
         request(app)
             .get('/api/events')
             .expect(200)
@@ -17,32 +20,46 @@ describe('GET /api/events', function() {
                 done();
             });
     });
+});
 
-    it('should retrieve a single element', function(done) {
-        // Make sure that retrieving a single element
-        // by its id works
-//        request(app)
-//        	.get('/api/events/')
-//        	.expect(200)
-//        	.expect('Content-Type', /json/)
-//        	.end(function(err, res) {
-//        		if(err) return done(err);
-//        		res.body.should.be.instanceof(Object);
-//        		done();
-//        	});
-        done();
+
+
+describe('GET /api/events/:eventId', function() {
+     it('should retrieve a single element', function(done) {
+        this.timeout(10000);
+        Event.find({}).exec(function(err, events) {
+          if(err) return done(err);
+          var id = events.pop()._id;
+          request(app)
+        	  .get('/api/events/' + id)
+        	  .expect(200)
+        	  .expect('Content-Type', /json/)
+        	  .end(function(err, res) {
+        		  if(err) return done(err);
+        		  res.body.should.be.instanceof(Object);
+        		  done();
+        	  });
+        });
+    });
+
+
+    it('should respond with a 404 if user not found', function(done) {
+      this.timeout(5000);
+      var id = 'testid';
+      request(app)
+        .get('/api/events/' + id)
+        .expect(404)
+        .end(function(err, res) {
+          if(err) return done(err);
+          done();
+        });
     });
 });
 
 
-/**
- * For put to work, we must check that some element exists
- * in the database, and then update some value for this element
- * and make sure the value was properly updated.
- */
+
 describe('PUT /api/events', function() {
     it('should update an element in the database', function(done) {
-        // Make sure that PUT works properly
         /*request(app)
             .put('/api/events/')
             .expect(200)
@@ -54,12 +71,10 @@ describe('PUT /api/events', function() {
     });
 
     it('should not update elements with invalid fields', function(done) {
-        // Make sure data not in schema does not get updated
         done();
     });
 
     it('should not update elements with null data', function(done) {
-        // Make sure that a null request is properly handled
         done();
     });
 });

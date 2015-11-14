@@ -13,24 +13,26 @@ exports.index = function(req, res) {
         if (err) {
             return handleError(res, err);
         }
-        return res.status(200).json({
-        	groups: groups
-        });
+
+        return res.status(200).json(groups);
     });
 };
 
 
 // Get a single group
 exports.show = function(req, res) {
+    if(!ValidId(req.params.id)) {
+        return NotFound(res);
+    }
     Group.findById(req.params.id, function(err, group) {
         if (err) {
             return handleError(res, err);
         }
-        
+
         if (!group) {
             return res.status(404).send('Not Found');
         }
-        
+
         return res.json({
         	group: group
         });
@@ -53,6 +55,9 @@ exports.create = function(req, res) {
 
 // Updates an existing group in the DB.
 exports.update = function(req, res) {
+    if(!ValidId(req.params.id)) {
+        return NotFound(res);
+    }
     if (req.body._id) {
         delete req.body._id;
     }
@@ -78,6 +83,9 @@ exports.update = function(req, res) {
 
 // Deletes a group from the DB.
 exports.destroy = function(req, res) {
+    if(!ValidId(req.params.id)) {
+        return NotFound(res);
+    }
     Group.findById(req.params.id, function(err, group) {
         if (err) {
             return handleError(res, err);
@@ -97,3 +105,11 @@ exports.destroy = function(req, res) {
 function handleError(res, err) {
     return res.status(500).send(err);
 }
+
+function NotFound(res) {
+    return res.status(404).send('Not Found');
+};
+
+function ValidId(id) {
+    return id.match(/^[0-9a-fA-F]{24}$/);
+};

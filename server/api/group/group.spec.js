@@ -18,3 +18,24 @@ describe('GET /api/groups', function() {
             });
     });
 });
+
+
+describe('GET /api/groups/:groupId', function() {
+  it('should respond with a single group', function(done) {
+    done();
+  });
+});
+
+
+describe('PUT /api/groups/:groupId', function() {
+  it('should update a group', function(done) {
+    done();
+  });
+});
+
+
+describe('DELETE /api/groups/:groupId', function() {
+  it('should delete a group', function(done) {
+    done();
+  });
+});

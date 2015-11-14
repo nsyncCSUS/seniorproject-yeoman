@@ -5,21 +5,25 @@ var Group = require('../../../group/group.model');
 
 
 exports.index = function(req, res) {
+    if(!ValidId(req.params.id)) {
+        return NotFound(res);
+    }
     User.findById(req.params.id)
         .populate('groups.subscribedTo')
         .exec(function(err, user) {
             if (err || !user) {
                 handleError(res, err);
             } else {
-                res.json({
-                    groups: user.groups.subscribedTo
-                });
+                res.json(user.groups.subscribedTo);
             }
         });
 };
 
 
 exports.show = function(req, res) {
+    if(!ValidId(req.params.id) || !ValidId(req.params.eventId)) {
+        return NotFound(res);
+    }
     User.findById(req.params.id)
         .populate('groups.subscribedTo')
         .exec(function(err, user) {
@@ -39,6 +43,9 @@ exports.show = function(req, res) {
 
 
 exports.create = function(req, res) {
+    if(!ValidId(req.params.id) || !ValidId(req.params.eventId)) {
+        return NotFound(res);
+    }
     User.findByIdAndUpdate(req.params.id, {
         $push: {
     		'groups.subscribedTo': req.params.groupId
@@ -64,6 +71,9 @@ exports.create = function(req, res) {
 
 
 exports.destroy = function(req, res) {
+    if(!ValidId(req.params.id) || !ValidId(req.params.eventId)) {
+        return NotFound(res);
+    }
     User.findByIdAndUpdate(req.params.id, {
         $pull: {
     		'groups.subscribedTo': req.params.groupId
@@ -90,4 +100,12 @@ exports.destroy = function(req, res) {
 
 function handleError(res, err) {
     res.status(500).send(err);
+};
+
+function NotFound(res) {
+    return res.status(404).send('Not Found');
+};
+
+function ValidId(id) {
+    return id.match(/^[0-9a-fA-F]{24}$/);
 };

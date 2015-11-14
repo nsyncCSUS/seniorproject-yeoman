@@ -5,6 +5,9 @@ var User = require('../../user/user.model');
 
 
 exports.index = function(req, res) {
+    if(!ValidId(req.params.id)) {
+        return NotFound(res);
+    }
     Group.findById(req.params.id)
         .populate('volunteers')
         .exec(function(err, group) {
@@ -24,6 +27,9 @@ exports.index = function(req, res) {
 
 
 exports.show = function(req, res) {
+    if(!ValidId(req.params.id) || !ValidId(req.params.volunteerId)) {
+        return NotFound(res);
+    }
     Group.findById(req.params.id)
         .populate('volunteers')
         .exec(function(err, group) {
@@ -45,6 +51,9 @@ exports.show = function(req, res) {
 
 
 exports.create = function(req, res) {
+    if(!ValidId(req.params.id) || !ValidId(req.params.volunteerId)) {
+        return NotFound(res);
+    }
     Group.findByIdAndUpdate(req.params.id, {
         $push: {
             volunteers: req.params.volunteerId
@@ -70,6 +79,9 @@ exports.create = function(req, res) {
 
 
 exports.destroy = function(req, res) {
+    if(!ValidId(req.params.id) || !ValidId(req.params.VolunteerId)) {
+        return NotFound(res);
+    }
     Group.findByIdAndUpdate(req.params.id, {
         $pull: {
             volunteers: req.params.volunteerId
@@ -95,5 +107,13 @@ exports.destroy = function(req, res) {
 
 
 function handleError(err, res) {
-    res.status(500).send(err);
+    return res.status(500).send(err);
+};
+
+function NotFound(res) {
+    return res.status(404).send('Not Found');
+};
+
+function ValidId(id) {
+    return id.match(/^[0-9a-fA-F]{24}$/);
 };

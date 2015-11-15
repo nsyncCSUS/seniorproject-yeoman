@@ -1,7 +1,7 @@
 div(ng-include='"components/navbar/navbar.html"')
 
 h1 Groups
-h6 {{group.id}}
+h6 {{group._id}}
 
 .well
     .container
@@ -34,13 +34,13 @@ div(ng-show='getIsEditing()')
                 .col-xs-12.col-sm-12.col-md-4.col-lg-4
                     label(for='interests') Interests
                     .navbar-btn#interests
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/animals.png', ng-class='animalsSelected', ng-click='addInterest("Animals")', tooltip='Animals')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/education.png', ng-class='educationSelected', ng-click='addInterest("Education")', tooltip='Education')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/environment.png', ng-class='environmentSelected', ng-click='addInterest("Environment")', tooltip='Environment')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/people.png', ng-class='peopleSelected', ng-click='addInterest("People")', tooltip='People')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/recreation.png', ng-class='recreationSelected', ng-click='addInterest("Recreation")', tooltip='Recreation')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/technology.png', ng-class='technologySelected', ng-click='addInterest("Technology")', tooltip='Technology')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/youth.png', ng-class='youthSelected', ng-click='addInterest("Youth")', tooltip='Youth')
+                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/animals.png', ng-class='animalsSelected', ng-click='addInterest("Animals")', uib-tooltip='Animals')
+                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/education.png', ng-class='educationSelected', ng-click='addInterest("Education")', uib-tooltip='Education')
+                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/environment.png', ng-class='environmentSelected', ng-click='addInterest("Environment")', uib-tooltip='Environment')
+                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/people.png', ng-class='peopleSelected', ng-click='addInterest("People")', uib-tooltip='People')
+                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/recreation.png', ng-class='recreationSelected', ng-click='addInterest("Recreation")', uib-tooltip='Recreation')
+                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/technology.png', ng-class='technologySelected', ng-click='addInterest("Technology")', uib-tooltip='Technology')
+                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/youth.png', ng-class='youthSelected', ng-click='addInterest("Youth")', uib-tooltip='Youth')
             hr
 
         .col-xs-12.col-sm-4.col-md-4.col-lg-4
@@ -106,7 +106,7 @@ div(ng-show='getIsEditing()')
                         div(ng-show='!hasResults()')
                             h3 No Users found, try again
                         .row
-                            .col-xs-4.col-sm-3.col-md-3.col-lg-2.cursor-pointer(id='add-{{user.id}}', ng-repeat='user in searchResults', ng-click='addOrganizer($index); scrollToRemove(user.id)')
+                            .col-xs-4.col-sm-3.col-md-3.col-lg-2.cursor-pointer(id='add-{{user._id}}', ng-repeat='user in searchResults', ng-click='addOrganizer($index); scrollToRemove(user._id)')
                                 .add
                                     img.img-responsive.img-thumbnail(src='{{user.picture}}', ng-class='user.added')
                                     .addOverlay
@@ -120,7 +120,7 @@ div(ng-show='getIsEditing()')
                             label(for='searchResults') Organizers to be invited
                             .col-xs-12.col-sm-12.col-md-12.col-lg-12#organizersAdded
                                 .row
-                                    .col-xs-4.col-sm-3.col-md-3.col-lg-2.cursor-pointer(id='remove-{{user.id}}', ng-repeat='user in organizersToAdd', ng-click='removeOrganizer($index); scrollToAdd(user.id)')
+                                    .col-xs-4.col-sm-3.col-md-3.col-lg-2.cursor-pointer(id='remove-{{user._id}}', ng-repeat='user in organizersToAdd', ng-click='removeOrganizer($index); scrollToAdd(user._id)')
                                         .remove
                                             img.img-responsive.img-thumbnail(src='{{user.picture}}')
                                             .removeOverlay
@@ -137,24 +137,24 @@ div(ng-show='!getIsEditing()')
                         .row
                             .col-xs-6.col-sm-6.col-md-6.col-lg-6
                                 div
-                                    img.img-thumbnail(ng-src='/images/interests/{{interest}}.png', ng-repeat='interest in group.interests | orderBy:interest', tooltip='{{interest}}')
+                                    img.img-thumbnail(ng-src='/images/interests/{{interest}}.png', ng-repeat='interest in group.interests | orderBy:interest', uib-tooltip='{{interest}}')
 
                             .hidden-xs
                                 .col-xs-12.col-sm-6.col-md-6.col-lg-6
                                     div.pull-right(ng-show='!getIsEditing()')
-                                        img.btn.btn-sm(ng-src='/images/social-media/googlePlus.png', ng-disabled='!checkIfHas("googlePlus")', ng-click='goTo(group.googlePlusURL)', tooltip='{{group.googlePlusURL}}')
-                                        img.btn.btn-sm(ng-src='/images/social-media/facebook.png', ng-disabled='!checkIfHas("facebook")', ng-click='goTo(group.facebookURL)', tooltip='{{group.facebookURL}}')
-                                        img.btn.btn-sm(ng-src='/images/social-media/twitter.png', ng-disabled='!checkIfHas("twitter")', ng-click='goTo(group.twitterURL)', tooltip='{{group.twitterURL}}')
-                                        img.btn.btn-sm(ng-src='/images/social-media/linkedIn.png', ng-disabled='!checkIfHas("linkedIn")', ng-click='goTo(group.linkedInURL)', tooltip='{{group.linkedInURL}}')
-                                        img.btn.btn-sm(ng-src='/images/social-media/website.png', ng-disabled='!checkIfHas("website")', ng-click='goTo(group.personalWebsiteURL)', tooltip='{{group.personalWebsiteURL}}')
+                                        img.btn.btn-sm(ng-src='/images/social-media/googlePlus.png', ng-disabled='!checkIfHas("googlePlus")', ng-click='goTo(group.googlePlusURL)', uib-tooltip='{{group.googlePlusURL}}')
+                                        img.btn.btn-sm(ng-src='/images/social-media/facebook.png', ng-disabled='!checkIfHas("facebook")', ng-click='goTo(group.facebookURL)', uib-tooltip='{{group.facebookURL}}')
+                                        img.btn.btn-sm(ng-src='/images/social-media/twitter.png', ng-disabled='!checkIfHas("twitter")', ng-click='goTo(group.twitterURL)', uib-tooltip='{{group.twitterURL}}')
+                                        img.btn.btn-sm(ng-src='/images/social-media/linkedIn.png', ng-disabled='!checkIfHas("linkedIn")', ng-click='goTo(group.linkedInURL)', uib-tooltip='{{group.linkedInURL}}')
+                                        img.btn.btn-sm(ng-src='/images/social-media/website.png', ng-disabled='!checkIfHas("website")', ng-click='goTo(group.personalWebsiteURL)', uib-tooltip='{{group.personalWebsiteURL}}')
                             .visible-xs
                                 .col-xs-6.col-sm-6.col-md-6.col-lg-6
                                     div.pull-right(ng-show='!getIsEditing()')
-                                        img.btn.btn-sm(ng-src='/images/social-media/googlePlus.png', ng-disabled='!checkIfHas("googlePlus")', ng-click='goTo(group.googlePlusURL)', tooltip='{{group.googlePlusURL}}')
-                                        img.btn.btn-sm(ng-src='/images/social-media/facebook.png', ng-disabled='!checkIfHas("facebook")', ng-click='goTo(group.facebookURL)', tooltip='{{group.facebookURL}}')
-                                        img.btn.btn-sm(ng-src='/images/social-media/twitter.png', ng-disabled='!checkIfHas("twitter")', ng-click='goTo(group.twitterURL)', tooltip='{{group.twitterURL}}')
-                                        img.btn.btn-sm(ng-src='/images/social-media/linkedIn.png', ng-disabled='!checkIfHas("linkedIn")', ng-click='goTo(group.linkedInURL)', tooltip='{{group.linkedInURL}}')
-                                        img.btn.btn-sm(ng-src='/images/social-media/website.png', ng-disabled='!checkIfHas("website")', ng-click='goTo(group.personalWebsiteURL)', tooltip='{{group.personalWebsiteURL}}')
+                                        img.btn.btn-sm(ng-src='/images/social-media/googlePlus.png', ng-disabled='!checkIfHas("googlePlus")', ng-click='goTo(group.googlePlusURL)', uib-tooltip='{{group.googlePlusURL}}')
+                                        img.btn.btn-sm(ng-src='/images/social-media/facebook.png', ng-disabled='!checkIfHas("facebook")', ng-click='goTo(group.facebookURL)', uib-tooltip='{{group.facebookURL}}')
+                                        img.btn.btn-sm(ng-src='/images/social-media/twitter.png', ng-disabled='!checkIfHas("twitter")', ng-click='goTo(group.twitterURL)', uib-tooltip='{{group.twitterURL}}')
+                                        img.btn.btn-sm(ng-src='/images/social-media/linkedIn.png', ng-disabled='!checkIfHas("linkedIn")', ng-click='goTo(group.linkedInURL)', uib-tooltip='{{group.linkedInURL}}')
+                                        img.btn.btn-sm(ng-src='/images/social-media/website.png', ng-disabled='!checkIfHas("website")', ng-click='goTo(group.personalWebsiteURL)', uib-tooltip='{{group.personalWebsiteURL}}')
 
                 .row
                     .col-xs-12.col-sm-4.col-md-4.col-lg-4
@@ -180,7 +180,7 @@ div(ng-show='!getIsEditing()')
                                                 .col-xs-6.col-sm-12.col-md-12.col-lg-6(ng-repeat='organizer in group.organizers')
                                                     .row
                                                         .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                                                            a(href='/users/{{organizer.id}}')
+                                                            a(href='/users/{{organizer._id}}')
                                                                 h6.oneline {{organizer.firstName}} {{organizer.lastName}}
                                                         .col-xs-12.col-sm-12.col-md-12.col-lg-12
                                                             .col-xs-6.col-sm-6.col-md-6.col-lg-6
@@ -196,8 +196,8 @@ div(ng-show='!getIsEditing()')
                                     .panel-body
                                         .row
                                             .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                                                a(ng-href='/users/{{subscriber.id}}/', ng-repeat='subscriber in group.subscribers | limitTo: 100')
-                                                    img.img-thumbnail.subscriber-thumbnail.cursor-pointer(src="{{subscriber.picture}}", tooltip='{{subscriber.firstName}} {{subscriber.lastName}}')
+                                                a(ng-href='/users/{{subscriber._id}}/', ng-repeat='subscriber in group.subscribers | limitTo: 100')
+                                                    img.img-thumbnail.subscriber-thumbnail.cursor-pointer(src="{{subscriber.picture}}", uib-tooltip='{{subscriber.firstName}} {{subscriber.lastName}}')
 
                     .col-xs-12.col-sm-8.col-md-8.col-lg-8.panel-success
                         h3.panel-heading About Us

@@ -28,8 +28,6 @@ angular.module('seniorprojectYoApp')
 		$scope.technologySelected = "";
 		$scope.youthSelected = "";
 
-		$scope.loaded = false;
-
 		$scope.selectedTab = "Upcoming Events";
 		$scope.otherTabs = ["Past Events"];
 
@@ -76,7 +74,7 @@ angular.module('seniorprojectYoApp')
 		else{
 			$scope.group =
 			{
-					id : "nsync",
+					_id : "nsync",
 					name: "N.Sync().......... .............. ................ ............. ..........................",
 					picture : "//placekitten.com/g/500/500/",
 					creationDate : "2015-08-26T18:50:10.111Z",
@@ -89,7 +87,7 @@ angular.module('seniorprojectYoApp')
 					linkedInURL : "https://linkedin.com",
 					twitterURL : "https://twitter.com",
 					events : [ {
-						id : "event1",
+						_id : "event1",
 						creatorId: "",
 						groupId: "",
 						name : "Awesome Event Number 1 asdf asdf asdf asdf",
@@ -114,7 +112,7 @@ angular.module('seniorprojectYoApp')
 
 					},
 					{
-						id : "event2",
+						_id : "event2",
 						creatorId: "",
 						groupId: "",
 						name : "Awesome Event Number 2 asdf asdf asdf asdf",
@@ -143,60 +141,56 @@ angular.module('seniorprojectYoApp')
 						interests : ["Animals", "Education", "Environment", "People", "Recreation"]
 					}
 					],
-					organizers : [{id : "org1", firstName : "org1", lastName: "1"},
-					              {id : "org2", firstName : "org2", lastName: "1", picture : "//placekitten.com/g/351/350/"},
-					              {id : "org3", firstName : "org3", lastName: "1", picture : "//placekitten.com/g/352/350/"},
-					              {id : "org4", firstName : "org4", lastName: "1", picture : "//placekitten.com/g/353/350/"},
-					              {id : "org5", firstName : "org5", lastName: "1"},
-					              {id : "org6", firstName : "org6", lastName: "1", picture : "//placekitten.com/g/355/350/"}],
-					subscribers : [{id : "sub1", firstName : "sub1", lastName: "1", picture : "//placekitten.com/g/350/355/"},
-					               {id : "sub2", firstName : "sub2", lastName: "1", picture : "//placekitten.com/g/351/355/"},
-					               {id : "sub3", firstName : "sub3", lastName: "1", picture : "//placekitten.com/g/352/355/"},
-					               {id : "sub4", firstName : "sub4", lastName: "1"},
-					               {id : "sub5", firstName : "sub5", lastName: "1", picture : "//placekitten.com/g/354/355/"},
-					               {id : "sub6", firstName : "sub6", lastName: "1", picture : "//placekitten.com/g/355/355/"},
-					               {id : "sub7", firstName : "sub7", lastName: "1", picture : "//placekitten.com/g/350/355/"},
-					               {id : "sub8", firstName : "sub8", lastName: "1", picture : "//placekitten.com/g/356/355/"},
-					               {id : "sub9", firstName : "sub9", lastName: "1"},
-					               {id : "sub10", firstName : "sub10", lastName: "1", picture : "//placekitten.com/g/358/355/"}],
+					organizers : [{_id : "org1", firstName : "org1", lastName: "1"},
+					              {_id : "org2", firstName : "org2", lastName: "1", picture : "//placekitten.com/g/351/350/"},
+					              {_id : "org3", firstName : "org3", lastName: "1", picture : "//placekitten.com/g/352/350/"},
+					              {_id : "org4", firstName : "org4", lastName: "1", picture : "//placekitten.com/g/353/350/"},
+					              {_id : "org5", firstName : "org5", lastName: "1"},
+					              {_id : "org6", firstName : "org6", lastName: "1", picture : "//placekitten.com/g/355/350/"}],
+					subscribers : [{_id : "sub1", firstName : "sub1", lastName: "1", picture : "//placekitten.com/g/350/355/"},
+					               {_id : "sub2", firstName : "sub2", lastName: "1", picture : "//placekitten.com/g/351/355/"},
+					               {_id : "sub3", firstName : "sub3", lastName: "1", picture : "//placekitten.com/g/352/355/"},
+					               {_id : "sub4", firstName : "sub4", lastName: "1"},
+					               {_id : "sub5", firstName : "sub5", lastName: "1", picture : "//placekitten.com/g/354/355/"},
+					               {_id : "sub6", firstName : "sub6", lastName: "1", picture : "//placekitten.com/g/355/355/"},
+					               {_id : "sub7", firstName : "sub7", lastName: "1", picture : "//placekitten.com/g/350/355/"},
+					               {_id : "sub8", firstName : "sub8", lastName: "1", picture : "//placekitten.com/g/356/355/"},
+					               {_id : "sub9", firstName : "sub9", lastName: "1"},
+					               {_id : "sub10", firstName : "sub10", lastName: "1", picture : "//placekitten.com/g/358/355/"}],
 					interests : ["Animals", "Environment", "People", "Recreation", "Technology", "Youth"]
 			};
 			buildInterests();
 		}
 
-		// Build the interests for editing
-		// Get Subscribers by ID
-		$scope.loaded = true;
 
-
-
-
-
+        /***************************************************************************
+         * Searching for organizers
+         **************************************************************************/
 		$scope.searchUsers = function() {
 			$scope.searchResultsPristine = true;
 			$scope.isSearching = true;
 			// Get search results from server
 			$scope.searchResults = [{
-				id :			"huy",
+				_id :			"huy",
 				firstName : 	"Huy",
 				lastName : 		"Le"
 			},{
-				id :			"kris",
+				_id :			"kris",
 				firstName : 	"Kristopher",
 				lastName : 		"Tadlock",
 				picture : 		"//placekitten.com/g/1001/1001/"
 			},{
-				id :			"vadzim",
+				_id :			"vadzim",
 				firstName : 	"Vadzim",
 				lastName : 		"LN",
 				picture : 		"//placekitten.com/g/1002/1002/"
 			},{
-				id :			"shane",
+				_id :			"shane",
 				firstName : 	"Shane",
 				lastName : 		"Singh",
 				picture : 		"//placekitten.com/g/1003/1003/"
 			},{
-				id :			"john",
+				_id :			"john",
 				firstName : 	"John",
 				lastName : 		"LN",
 				picture : 		"//placekitten.com/g/1004/1004/"
@@ -206,7 +200,7 @@ angular.module('seniorprojectYoApp')
 			// If the user is already in Organizers to be added list, give the CSS style to that user
 			angular.forEach($scope.organizersToAdd, function(currentOrganizerToAdd) {
 				angular.forEach($scope.searchResults, function(currentSearchResult) {
-					if (currentSearchResult.id === currentOrganizerToAdd.id)
+					if (currentSearchResult._id === currentOrganizerToAdd._id)
 						currentSearchResult.added = "added";
 				});
 			});
@@ -343,7 +337,7 @@ angular.module('seniorprojectYoApp')
 				// Checks if user has already been added
 				angular.forEach($scope.organizersToAdd, function(currentOrganizerToAdd) {
 					// If user is already in the array, flag will be true
-					if (currentOrganizerToAdd.id === $scope.searchResults[index].id){
+					if (currentOrganizerToAdd._id === $scope.searchResults[index]._id){
 						console.log(currentOrganizerToAdd + "already added");
 						alreadyAdded = true;
 					}
@@ -370,10 +364,10 @@ angular.module('seniorprojectYoApp')
 				// If the index to be removed is found
 				//		- do not add to rebuilt array
 				//		- remove class in search results that shows that it has been added if applicable
-				if (currentOrganizerToAdd.id === $scope.organizersToAdd[index].id){
+				if (currentOrganizerToAdd._id === $scope.organizersToAdd[index]._id){
 					console.log("removed " + currentOrganizerToAdd);
 					angular.forEach($scope.searchResults, function(currentSearchResult) {
-						if (currentSearchResult.id === currentOrganizerToAdd.id)
+						if (currentSearchResult._id === currentOrganizerToAdd._id)
 							currentSearchResult.added = "";
 					});
 				}
@@ -386,10 +380,6 @@ angular.module('seniorprojectYoApp')
 			// Sets the rebuilt array
 			$scope.organizersToAdd = newOrganizersToAdd;
 			console.log($scope.organizersToAdd);
-		}
-
-		$scope.closeAlert = function(index) {
-			$scope.alerts.splice(index, 1);
 		}
 
 		$scope.scrollToAdd = function(id) {
@@ -581,6 +571,10 @@ angular.module('seniorprojectYoApp')
 				$window.open(validURL, '_blank');
 			}
 
+		}
+
+		$scope.closeAlert = function(index) {
+			$scope.alerts.splice(index, 1);
 		}
 
 	} );

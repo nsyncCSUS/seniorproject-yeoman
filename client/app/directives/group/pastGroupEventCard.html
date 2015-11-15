@@ -5,19 +5,19 @@
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 eventBody">
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <div class="row">
-      <h5><a ng-href="/groups/{{event.group.id}}/">{{event.group.name}}</a></h5>
+      <h5><a ng-href="/groups/{{event.group._id}}/">{{event.group.name}}</a></h5>
     </div>
-    <h4><a ng-href="/events/{{event.id}}/">{{event.name}}</a></h4>
+    <h4><a ng-href="/events/{{event._id}}/">{{event.name}}</a></h4>
     <h5>{{event.street}} {{event.city}}, {{event.state}} {{event.zipcode}}</h5>
   </div>
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <div class="row">
-      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 navbar-btn"><img ng-src="/images/interests/{{interest}}.png" ng-repeat="interest in event.interests | orderBy:interest" tooltip="{{interest}}" class="img-thumbnail interests-thumbnail"/></div>
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 navbar-btn"><img ng-src="/images/interests/{{interest}}.png" ng-repeat="interest in event.interests | orderBy:interest" uib-tooltip="{{interest}}" class="img-thumbnail interests-thumbnail"/></div>
     </div>
   </div>
   <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 hidden-xs">
     <div class="row">
-      <div class="col-xs-4 col-sm-12 col-md-12 col-lg-12"><a ng-href="/events/{{event.id}}/"><img src="{{event.picture}}" class="img-responsive img-thumbnail"/></a></div>
+      <div class="col-xs-4 col-sm-12 col-md-12 col-lg-12"><a ng-href="/events/{{event._id}}/"><img src="{{event.picture}}" class="img-responsive img-thumbnail"/></a></div>
     </div>
   </div>
   <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">

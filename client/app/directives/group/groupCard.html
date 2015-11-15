@@ -1,20 +1,20 @@
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 eventBody">
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <div class="row">
-      <h4><a ng-href="/groups/{{group.id}}/">{{group.name}}</a></h4>
+      <h4><a ng-href="/groups/{{group._id}}/">{{group.name}}</a></h4>
       <h5>{{group.city}}, {{group.state}} {{group.zipcode}}</h5>
     </div>
   </div>
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <div class="row">
-      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 navbar-btn"><img ng-src="/images/interests/{{interest}}.png" ng-repeat="interest in group.interests | orderBy:interest" tooltip="{{interest}}" class="img-thumbnail interests-thumbnail"/></div>
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 navbar-btn"><img ng-src="/images/interests/{{interest}}.png" ng-repeat="interest in group.interests | orderBy:interest" uib-tooltip="{{interest}}" class="img-thumbnail interests-thumbnail"/></div>
     </div>
   </div>
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <div class="row">
       <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 hidden-xs">
         <div class="row">
-          <div class="col-xs-4 col-sm-12 col-md-12 col-lg-12"><a ng-href="/groups/{{group.id}}/"><img src="{{group.picture}}" class="img-responsive img-thumbnail"/></a></div>
+          <div class="col-xs-4 col-sm-12 col-md-12 col-lg-12"><a ng-href="/groups/{{group._id}}/"><img src="{{group.picture}}" class="img-responsive img-thumbnail"/></a></div>
         </div>
       </div>
       <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
@@ -31,7 +31,7 @@
       <div class="col-xs-12 col-sm-3 col-md-2 col-lg-1">
         <h4>Current Events</h4>
       </div>
-      <div class="col-xs-12 col-sm-9 col-md-10 col-lg-11"><a ng-href="/events/{{event.id}}/" ng-repeat="event in group.events | limitTo:9" tooltip="{{event.name}}"><img src="{{event.picture}}" class="img-rounded volunteer-thumbnail"/></a></div>
+      <div class="col-xs-12 col-sm-9 col-md-10 col-lg-11"><a ng-href="/events/{{event._id}}/" ng-repeat="event in group.events | limitTo:9" uib-tooltip="{{event.name}}"><img src="{{event.picture}}" class="img-rounded volunteer-thumbnail"/></a></div>
     </div>
   </div>
 </div>

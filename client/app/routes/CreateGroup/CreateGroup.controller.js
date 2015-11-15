@@ -6,25 +6,7 @@ angular.module('seniorprojectYoApp')
 		/***************************************************************************
 		 * Variables (includes ones from scope too)
 		 **************************************************************************/
-		$scope.group =
-		{
-				id : "nsync",
-				name: "N.Sync()",
-				picture : "//placekitten.com/g/500/500/",
-				creationDate : "2015-08-26T18:50:10.111Z",
-				city : "Sacramento",
-				state : "CA",
-				zipcode : 95828,
-				description: "sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem blandit non.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vulputate pellentesque lorem. Donec erat ante, sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem bland center",
-				googlePlusURL : "www.google.com",
-				facebookURL : "https://facebook.com",
-				linkedInURL : "https://linkedin.com",
-				twitterURL : "https://twitter.com",
-				interests : ["Animals", "Environment", "People", "Recreation", "Technology", "Youth"]
-		};
-
 		$scope.alerts = [];
-		$scope.group.interests = [];
 
 		$scope.organizersToAdd = [];
 		$scope.searchResults = [];
@@ -41,12 +23,33 @@ angular.module('seniorprojectYoApp')
 		$scope.technologySelected = "";
 		$scope.youthSelected = "";
 
+		$scope.selectedTab = "Upcoming Events";
+		$scope.otherTabs = ["Past Events"];
 		/***************************************************************************
 		 * Initialize $scope.group
 		 **************************************************************************/
+		$scope.group =
+		{
+				_id : "nsync",
+				name: "N.Sync()",
+				picture : "//placekitten.com/g/500/500/",
+				creationDate : "2015-08-26T18:50:10.111Z",
+				city : "Sacramento",
+				state : "CA",
+				zipcode : 95828,
+				description: "sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem blandit non.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vulputate pellentesque lorem. Donec erat ante, sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem bland center",
+				googlePlusURL : "www.google.com",
+				facebookURL : "https://facebook.com",
+				linkedInURL : "https://linkedin.com",
+				twitterURL : "https://twitter.com",
+				interests : ["Animals", "Environment", "People", "Recreation", "Technology", "Youth"]
+		};
+        
+        buildInterests();
+
 		// Add in the user as an organizer
 		var user = {
-			id :			"anthonynguyen",
+			_id :			"anthonynguyen",
 			firstName : 	"Anthony",
 			lastName : 		"Nguyen",
 			description : 	"Hi, I am a member of N.Sync().",
@@ -73,13 +76,47 @@ angular.module('seniorprojectYoApp')
         $scope.group.organizers = [];
 		$scope.group.organizers.push(user);
 
-
-		$scope.selectedTab = "Upcoming Events";
-		$scope.otherTabs = ["Past Events"];
-
 		/***************************************************************************
 		 * Building Functions
 		 **************************************************************************/
+		function buildInterests() {
+			angular.forEach($scope.group.interests, function(interest) {
+				switch(interest){
+				case "Animals":
+					$scope.animalsSelected = "selected";
+					break;
+				case "Education":
+					$scope.educationSelected = "selected";
+					break;
+				case "Environment":
+					$scope.environmentSelected = "selected";
+					break;
+				case "People":
+					$scope.peopleSelected = "selected";
+					break;
+				case "Recreation":
+					$scope.recreationSelected = "selected";
+					break;
+				case "Technology":
+					$scope.technologySelected = "selected";
+					break;
+				case "Youth":
+					$scope.youthSelected = "selected";
+					break;
+				}
+			});
+		};
+
+		function clearInterests() {
+			$scope.animalsSelected = "";
+			$scope.educationSelected = "";
+			$scope.environmentSelected = "";
+			$scope.peopleSelected = "";
+			$scope.recreationSelected = "";
+			$scope.technologySelected = "";
+			$scope.youthSelected = "";
+		}
+
 
 
 		/***********************************************************************
@@ -113,26 +150,26 @@ angular.module('seniorprojectYoApp')
 			$scope.isSearching = true;
 			// Get search results from server
 			$scope.searchResults = [{
-				id :			"huy",
+				_id :			"huy",
 				firstName : 	"Huy",
 				lastName : 		"Lee"
 			},{
-				id :			"kris",
+				_id :			"kris",
 				firstName : 	"Kristopher",
 				lastName : 		"Tadlock",
 				picture : 		"//placekitten.com/g/1001/1001/"
 			},{
-				id :			"vadzim",
+				_id :			"vadzim",
 				firstName : 	"Vadzim",
 				lastName : 		"Savenok",
 				picture : 		"//placekitten.com/g/1002/1002/"
 			},{
-				id :			"shane",
+				_id :			"shane",
 				firstName : 	"Shane",
 				lastName : 		"Singh",
 				picture : 		"//placekitten.com/g/1003/1003/"
 			},{
-				id :			"john",
+				_id :			"john",
 				firstName : 	"John",
 				lastName : 		"Ellis",
 				picture : 		"//placekitten.com/g/1004/1004/"
@@ -142,7 +179,7 @@ angular.module('seniorprojectYoApp')
 			// If the user is already in Organizers to be added list, give the CSS style to that user
 			angular.forEach($scope.organizersToAdd, function(currentOrganizerToAdd) {
 				angular.forEach($scope.searchResults, function(currentSearchResult) {
-					if (currentSearchResult.id === currentOrganizerToAdd.id)
+					if (currentSearchResult._id === currentOrganizerToAdd._id)
 						currentSearchResult.added = "added";
 				});
 			});
@@ -272,7 +309,7 @@ angular.module('seniorprojectYoApp')
 				// Checks if user has already been added
 				angular.forEach($scope.organizersToAdd, function(currentOrganizerToAdd) {
 					// If user is already in the array, flag will be true
-					if (currentOrganizerToAdd.id === $scope.searchResults[index].id){
+					if (currentOrganizerToAdd._id === $scope.searchResults[index]._id){
 						console.log(currentOrganizerToAdd + "already added");
 						alreadyAdded = true;
 					}
@@ -299,10 +336,10 @@ angular.module('seniorprojectYoApp')
 				// If the index to be removed is found
 				//		- do not add to rebuilt array
 				//		- remove class in search results that shows that it has been added if applicable
-				if (currentOrganizerToAdd.id === $scope.organizersToAdd[index].id){
+				if (currentOrganizerToAdd._id === $scope.organizersToAdd[index]._id){
 					console.log("removed " + currentOrganizerToAdd);
 					angular.forEach($scope.searchResults, function(currentSearchResult) {
-						if (currentSearchResult.id === currentOrganizerToAdd.id)
+						if (currentSearchResult._id === currentOrganizerToAdd._id)
 							currentSearchResult.added = "";
 					});
 				}
@@ -332,116 +369,6 @@ angular.module('seniorprojectYoApp')
 		/***************************************************************************
 		 * Boolean Functions
 		 **************************************************************************/
-		/*
-		 * Checks if the gorup has a picture, the view will display a default
-		 * picture if no picture is found.
-		 */
-		$scope.hasPicture = function(type1, index1, type2, index2) {
-			switch(type1){
-			case "group":
-				if ($scope.group.picture != null){
-					if ($scope.group.picture.length > 0)
-						return true;
-					else
-						return false;
-					}
-				else{
-					return false;
-				}
-			case "organizer":
-				if ($scope.group.organizersBuilt != null){
-					if ($scope.group.organizersBuilt[index1].organizers[index2].picture != null){
-						if ($scope.group.organizersBuilt[index1].organizers[index2].picture.length > 0)
-							return true;
-						else
-							return false;
-						}
-					else
-						return false;
-				}
-				else
-					return false;
-			case "organizerXS":
-				if ($scope.group.organizersBuiltXS != null){
-					if ($scope.group.organizersBuiltXS[index1].organizers[index2].picture != null){
-						if ($scope.group.organizersBuiltXS[index1].organizers[index2].picture.length > 0)
-							return true;
-						else
-							return false;
-						}
-					else
-						return false;
-				}
-				else
-					return false;
-			case "subscriber":
-				if ($scope.group.subscribers != null){
-					if ($scope.group.subscribers[index1].picture != null){
-						if ($scope.group.subscribers[index1].picture.length > 0)
-							return true;
-						else
-							return false;
-						}
-					else
-						return false;
-				}
-				else
-					return false;
-			case "event":
-				if ($scope.group.events != null){
-					if (type2 != null) {
-						switch(type2){
-						case "volunteer":
-							if ($scope.group.events[index1].volunteers[index2].picture != null) {
-								if ($scope.group.events[index1].volunteers[index2].picture.length > 0)
-									return true;
-								else
-									return false;
-							}
-						}
-					}
-					else{
-						if ($scope.group.events[index1].picture != null){
-							if ($scope.group.events[index1].picture.length > 0)
-								return true;
-							else
-								return false;
-							}
-						else
-							return false;
-					}
-				}
-				else
-					return false;
-			case "searchedUser":
-				if ($scope.searchResults != null && $scope.searchResults.length > 0){
-					if ($scope.searchResults[index1].picture != null){
-						if ($scope.searchResults[index1].picture.length > 0)
-							return true;
-						else
-							return false;
-					}
-					else
-						return false;
-				}
-				else
-					return false;
-			case "organizerToAdd":
-				if ($scope.organizersToAdd != null){
-					if ($scope.organizersToAdd[index1].picture != null){
-						if ($scope.organizersToAdd[index1].picture.length > 0)
-							return true;
-						else
-							return false;
-					}
-					else
-						return false;
-				}
-				else
-					return false;
-			}
-		}
-
 		/*
 		 * Used to check if a social media object exists
 		 */

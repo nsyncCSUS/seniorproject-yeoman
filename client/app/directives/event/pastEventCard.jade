@@ -1,32 +1,32 @@
 .col-xs-12.col-sm-12.col-md-12.col-lg-12.eventDateRow
-    h3 <strong>{{event.startTimeDate | date:'MMM d, yyyy'}}</strong> 
-    h5 {{event.startTimeDate | date:'EEEE h:m a'}} 
-    
+    h3 <strong>{{event.startTimeDate | date:'MMM d, yyyy'}}</strong>
+    h5 {{event.startTimeDate | date:'EEEE h:m a'}}
+
 .col-xs-12.col-sm-12.col-md-12.col-lg-12.eventBody
 
     .col-xs-12.col-sm-12.col-md-12.col-lg-12
         .row
             h4
-                a(ng-href='/events/{{event.id}}/') {{event.name}}
+                a(ng-href='/events/{{event._id}}/') {{event.name}}
             h5 {{event.street}} {{event.city}}, {{event.state}} {{event.zipcode}}
-        
+
     .col-xs-12.col-sm-12.col-md-12.col-lg-12
         .row
             .col-xs-12.col-sm-12.col-md-12.col-lg-12.navbar-btn
-                img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/{{interest}}.png', ng-repeat='interest in event.interests | orderBy:interest', tooltip='{{interest}}')
-                
+                img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/{{interest}}.png', ng-repeat='interest in event.interests | orderBy:interest', uib-tooltip='{{interest}}')
+
     .col-xs-12.col-sm-12.col-md-12.col-lg-12
         .row
             .col-xs-12.col-sm-4.col-md-4.col-lg-4.hidden-xs
                 .row
                     .col-xs-4.col-sm-12.col-md-12.col-lg-12
-                        a(ng-href='/events/{{event.id}}/')
+                        a(ng-href='/events/{{event._id}}/')
                             img.img-responsive.img-thumbnail(src='{{event.picture}}')
             .col-xs-12.col-sm-8.col-md-8.col-lg-8
                 .row
                     .col-xs-12.col-sm-12.col-md-12.col-lg-12
                         h5 {{event.description | limitTo:10000}}
-        
+
     .col-xs-12.col-sm-12.col-md-12.col-lg-12.volunteerRow
         .row
             .hidden-xs

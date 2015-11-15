@@ -1,27 +1,27 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('DashboardCtrl', [ '$scope', 'DashboardService', 'DashboardFactory', 'EventService', '$anchorScroll', '$timeout', function($scope, DashboardService, DashboardFactory, EventService, $anchorScroll, $timeout) {
+    .controller('DashboardCtrl', function($scope, $anchorScroll, $timeout) {
 		/***************************************************************************
 		 * Variables (includes ones from scope too)
 		 **************************************************************************/
-		
-		
-		// Call service function with a callback. The first argument 
-		// is the data you want to pass to the Http request, and the 
+
+
+		// Call service function with a callback. The first argument
+		// is the data you want to pass to the Http request, and the
 		// second argument is a function to be called when the Http
 		// request returns with a successful status code. Then reassign
 		// $scope.event to the new event object we receive from the Http
-		// response. 
-		
-		/* EventService.getEvent({id: 1}, function(response) {	
-			$scope.event = response.event; 
-		
+		// response.
+
+		/* EventService.getEvent({id: 1}, function(response) {
+			$scope.event = response.event;
+
 		});
 		EventService.getEvent({startTimeDate: event.startTimeDate}, function(response){
 			$scope.event = response.event;
 		}); */
-		
+
 //		$scope.user = {
 //				firstName : 	"",
 //				middleName : 	"",
@@ -45,7 +45,7 @@ angular.module('seniorprojectYoApp')
 //				subscribedTo : 	[{id: ""}, {id: ""}],
 //				interests : 	[{type: ""}, {type: ""}]
 //			};
-		
+
 		$scope.user = {
 				id : "AnthonyNguyen",
 				firstName : "Anthony",
@@ -79,19 +79,19 @@ angular.module('seniorprojectYoApp')
 					endTimeDate : "2015-08-27T18:50:10.111Z",
 					street: "1234 cool st", city: "Sacramento", state: "CA", zipcode: "95828",
 					maxVolunteers : 50,
-					volunteers: [{id: "v1", firstName: "Kitten 1", lastName: "1"}, 
-					             {id: "v2", firstName: "Kitten 2", lastName: "1", picture: "//placekitten.com/g/250/251"}, 
-					             {id: "v3", firstName: "Kitten 3", lastName: "1"}, 
-					             {id: "v4", firstName: "Kitten 4", lastName: "1", picture: "//placekitten.com/g/250/253"}, 
-					             {id: "v5", firstName: "Kitten 5", lastName: "1", picture: "//placekitten.com/g/250/254"}, 
-					             {id: "v6", firstName: "Kitten 6", lastName: "1", picture: "//placekitten.com/g/250/255"}, 
-					             {id: "v7", firstName: "Kitten 7", lastName: "1", picture: "//placekitten.com/g/250/256"}, 
-					             {id: "v8", firstName: "Kitten 8", lastName: "1", picture: "//placekitten.com/g/250/257"}, 
-					             {id: "v9", firstName: "Kitten 9", lastName: "1", picture: "//placekitten.com/g/250/258"}, 
-					             {id: "v10", firstName: "Kitten 10", lastName: "1", picture: "//placekitten.com/g/250/259"}, 
+					volunteers: [{id: "v1", firstName: "Kitten 1", lastName: "1"},
+					             {id: "v2", firstName: "Kitten 2", lastName: "1", picture: "//placekitten.com/g/250/251"},
+					             {id: "v3", firstName: "Kitten 3", lastName: "1"},
+					             {id: "v4", firstName: "Kitten 4", lastName: "1", picture: "//placekitten.com/g/250/253"},
+					             {id: "v5", firstName: "Kitten 5", lastName: "1", picture: "//placekitten.com/g/250/254"},
+					             {id: "v6", firstName: "Kitten 6", lastName: "1", picture: "//placekitten.com/g/250/255"},
+					             {id: "v7", firstName: "Kitten 7", lastName: "1", picture: "//placekitten.com/g/250/256"},
+					             {id: "v8", firstName: "Kitten 8", lastName: "1", picture: "//placekitten.com/g/250/257"},
+					             {id: "v9", firstName: "Kitten 9", lastName: "1", picture: "//placekitten.com/g/250/258"},
+					             {id: "v10", firstName: "Kitten 10", lastName: "1", picture: "//placekitten.com/g/250/259"},
 					             {id: "v11", firstName: "Kitten 11", lastName: "1", picture: "//placekitten.com/g/250/260"}],
 					interests : ["Animals", "Education", "Environment", "People", "Recreation", "Technology", "Youth"]
-									
+
 				},
 				{
 					id : "event2",
@@ -107,21 +107,21 @@ angular.module('seniorprojectYoApp')
 					startTimeDate : "2016-11-28T18:50:10.111Z",
 					endTimeDate : "2016-11-29T18:50:10.111Z",
 					maxVolunteers : 50,
-					volunteers: [{id: "v1", firstName: "Kitten 1", lastName: "1", picture: "//placekitten.com/g/251/250"}, 
-					             {id: "v2", firstName: "Kitten 2", lastName: "1", picture: "//placekitten.com/g/251/251"}, 
-					             {id: "v3", firstName: "Kitten 3", lastName: "1", picture: "//placekitten.com/g/251/252"}, 
-					             {id: "v4", firstName: "Kitten 4", lastName: "1", picture: "//placekitten.com/g/251/253"}, 
-					             {id: "v5", firstName: "Kitten 5", lastName: "1"}, 
-					             {id: "v6", firstName: "Kitten 6", lastName: "1", picture: "//placekitten.com/g/251/255"}, 
-					             {id: "v7", firstName: "Kitten 7", lastName: "1", picture: "//placekitten.com/g/251/256"}, 
-					             {id: "v8", firstName: "Kitten 8", lastName: "1", picture: "//placekitten.com/g/251/257"}, 
-					             {id: "v9", firstName: "Kitten 9", lastName: "1", picture: "//placekitten.com/g/251/258"}, 
-					             {id: "v10", firstName: "Kitten 10", lastName: "1"}, 
-					             {id: "v11", firstName: "Kitten 11", lastName: "1", picture: "//placekitten.com/g/251/260"}, 
-					             {id: "v12", firstName: "Kitten 12", lastName: "1", picture: "//placekitten.com/g/251/261"}, 
-					             {id: "v13", firstName: "Kitten 13", lastName: "1", picture: "//placekitten.com/g/251/262"}, 
-					             {id: "v14", firstName: "Kitten 14", lastName: "1", picture: "//placekitten.com/g/251/263"}, 
-					             {id: "v15", firstName: "Kitten 15", lastName: "1", picture: "//placekitten.com/g/251/264"}, 
+					volunteers: [{id: "v1", firstName: "Kitten 1", lastName: "1", picture: "//placekitten.com/g/251/250"},
+					             {id: "v2", firstName: "Kitten 2", lastName: "1", picture: "//placekitten.com/g/251/251"},
+					             {id: "v3", firstName: "Kitten 3", lastName: "1", picture: "//placekitten.com/g/251/252"},
+					             {id: "v4", firstName: "Kitten 4", lastName: "1", picture: "//placekitten.com/g/251/253"},
+					             {id: "v5", firstName: "Kitten 5", lastName: "1"},
+					             {id: "v6", firstName: "Kitten 6", lastName: "1", picture: "//placekitten.com/g/251/255"},
+					             {id: "v7", firstName: "Kitten 7", lastName: "1", picture: "//placekitten.com/g/251/256"},
+					             {id: "v8", firstName: "Kitten 8", lastName: "1", picture: "//placekitten.com/g/251/257"},
+					             {id: "v9", firstName: "Kitten 9", lastName: "1", picture: "//placekitten.com/g/251/258"},
+					             {id: "v10", firstName: "Kitten 10", lastName: "1"},
+					             {id: "v11", firstName: "Kitten 11", lastName: "1", picture: "//placekitten.com/g/251/260"},
+					             {id: "v12", firstName: "Kitten 12", lastName: "1", picture: "//placekitten.com/g/251/261"},
+					             {id: "v13", firstName: "Kitten 13", lastName: "1", picture: "//placekitten.com/g/251/262"},
+					             {id: "v14", firstName: "Kitten 14", lastName: "1", picture: "//placekitten.com/g/251/263"},
+					             {id: "v15", firstName: "Kitten 15", lastName: "1", picture: "//placekitten.com/g/251/264"},
 					             {id: "v16", firstName: "Kitten 16", lastName: "1", picture: "//placekitten.com/g/251/265"}],
 					interests : ["Animals", "Environment", "People", "Education"]
 				},
@@ -139,21 +139,21 @@ angular.module('seniorprojectYoApp')
 					startTimeDate : "2015-08-28T18:50:10.111Z",
 					endTimeDate : "2015-08-29T18:50:10.111Z",
 					maxVolunteers : 50,
-					volunteers: [{id: "v1", firstName: "Kitten 1", lastName: "1", picture: "//placekitten.com/g/251/250"}, 
-					             {id: "v2", firstName: "Kitten 2", lastName: "1", picture: "//placekitten.com/g/251/251"}, 
-					             {id: "v3", firstName: "Kitten 3", lastName: "1", picture: "//placekitten.com/g/251/252"}, 
-					             {id: "v4", firstName: "Kitten 4", lastName: "1", picture: "//placekitten.com/g/251/253"}, 
-					             {id: "v5", firstName: "Kitten 5", lastName: "1"}, 
-					             {id: "v6", firstName: "Kitten 6", lastName: "1", picture: "//placekitten.com/g/251/255"}, 
-					             {id: "v7", firstName: "Kitten 7", lastName: "1", picture: "//placekitten.com/g/251/256"}, 
-					             {id: "v8", firstName: "Kitten 8", lastName: "1", picture: "//placekitten.com/g/251/257"}, 
-					             {id: "v9", firstName: "Kitten 9", lastName: "1", picture: "//placekitten.com/g/251/258"}, 
-					             {id: "v10", firstName: "Kitten 10", lastName: "1"}, 
-					             {id: "v11", firstName: "Kitten 11", lastName: "1", picture: "//placekitten.com/g/251/260"}, 
-					             {id: "v12", firstName: "Kitten 12", lastName: "1", picture: "//placekitten.com/g/251/261"}, 
-					             {id: "v13", firstName: "Kitten 13", lastName: "1", picture: "//placekitten.com/g/251/262"}, 
-					             {id: "v14", firstName: "Kitten 14", lastName: "1", picture: "//placekitten.com/g/251/263"}, 
-					             {id: "v15", firstName: "Kitten 15", lastName: "1", picture: "//placekitten.com/g/251/264"}, 
+					volunteers: [{id: "v1", firstName: "Kitten 1", lastName: "1", picture: "//placekitten.com/g/251/250"},
+					             {id: "v2", firstName: "Kitten 2", lastName: "1", picture: "//placekitten.com/g/251/251"},
+					             {id: "v3", firstName: "Kitten 3", lastName: "1", picture: "//placekitten.com/g/251/252"},
+					             {id: "v4", firstName: "Kitten 4", lastName: "1", picture: "//placekitten.com/g/251/253"},
+					             {id: "v5", firstName: "Kitten 5", lastName: "1"},
+					             {id: "v6", firstName: "Kitten 6", lastName: "1", picture: "//placekitten.com/g/251/255"},
+					             {id: "v7", firstName: "Kitten 7", lastName: "1", picture: "//placekitten.com/g/251/256"},
+					             {id: "v8", firstName: "Kitten 8", lastName: "1", picture: "//placekitten.com/g/251/257"},
+					             {id: "v9", firstName: "Kitten 9", lastName: "1", picture: "//placekitten.com/g/251/258"},
+					             {id: "v10", firstName: "Kitten 10", lastName: "1"},
+					             {id: "v11", firstName: "Kitten 11", lastName: "1", picture: "//placekitten.com/g/251/260"},
+					             {id: "v12", firstName: "Kitten 12", lastName: "1", picture: "//placekitten.com/g/251/261"},
+					             {id: "v13", firstName: "Kitten 13", lastName: "1", picture: "//placekitten.com/g/251/262"},
+					             {id: "v14", firstName: "Kitten 14", lastName: "1", picture: "//placekitten.com/g/251/263"},
+					             {id: "v15", firstName: "Kitten 15", lastName: "1", picture: "//placekitten.com/g/251/264"},
 					             {id: "v16", firstName: "Kitten 16", lastName: "1", picture: "//placekitten.com/g/251/265"}],
 					interests : ["Animals", "Education", "Environment", "People", "Recreation"]
 				}
@@ -199,7 +199,7 @@ angular.module('seniorprojectYoApp')
 
 		$scope.selectedTab = "Upcoming Events";
 		$scope.otherTabs = ["Past Events", "Recommended Events"];
-		
+
 		/***********************************************************************
 		 * Building Functions
 		 **********************************************************************/
@@ -209,7 +209,7 @@ angular.module('seniorprojectYoApp')
 		 **********************************************************************/
 		$scope.setCurrentTab = function(newTab) {
 			$scope.selectedTab = newTab;
-			
+
 			switch(newTab){
 			case "Upcoming Events":
 				$scope.otherTabs[0] = "Past Events";
@@ -224,12 +224,12 @@ angular.module('seniorprojectYoApp')
 				$scope.otherTabs[1] = "Past Events";
 				break;
 			}
-			
+
 			$timeout(function() {
 				$anchorScroll('tabs');
 			}, 1);
 		}
-		
+
 		$scope.getCurrentTab = function(tabName) {
 			if ($scope.selectedTab === tabName)
 				return true;
@@ -254,6 +254,6 @@ angular.module('seniorprojectYoApp')
 			else
 				return false;
 		}
-		
-		
-		}]);
+
+
+		});

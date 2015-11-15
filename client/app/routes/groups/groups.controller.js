@@ -1,20 +1,20 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('GroupsCtrl', ['$scope', '$routeParams', '$window', '$anchorScroll', '$timeout', 'GroupService', 'GroupFactory', function($scope, $routeParams, $window, $anchorScroll, $timeout, GroupService, GroupFactory) {
+    .controller('GroupsCtrl', function($scope, $stateParams, $window, $anchorScroll, $timeout, GroupService, GroupFactory) {
 
 		/***************************************************************************
 		 * Variables (includes ones from scope too)
 		 **************************************************************************/
 		$scope.isAdmin = true;
-		
-		$scope.groupId = $routeParams.groupId;
-		
+
+		$scope.groupId = $stateParams.groupId;
+
 		$scope.isEditing = false;
 		$scope.isSearching = false;
 		$scope.isUpdating = false;
-		
-		
+
+
 
 		$scope.organizersToAdd = [];
 		$scope.searchResults = [];
@@ -27,7 +27,7 @@ angular.module('seniorprojectYoApp')
 		$scope.recreationSelected = "";
 		$scope.technologySelected = "";
 		$scope.youthSelected = "";
-		
+
 		$scope.loaded = false;
 
 		$scope.selectedTab = "Upcoming Events";
@@ -38,7 +38,7 @@ angular.module('seniorprojectYoApp')
 		 **********************************************************************/
 		$scope.setCurrentTab = function(newTab) {
 			$scope.selectedTab = newTab;
-			
+
 			switch(newTab){
 			case "Upcoming Events":
 				$scope.otherTabs[0] = "Past Events";
@@ -47,34 +47,34 @@ angular.module('seniorprojectYoApp')
 				$scope.otherTabs[0] = "Upcoming Events";
 				break;
 			}
-			
+
 			$timeout(function() {
 				$anchorScroll('tabs');
 			}, 1);
 		}
-		
+
 		$scope.getCurrentTab = function(tabName) {
 			if ($scope.selectedTab === tabName)
 				return true;
 			else
 				return false;
 		}
-		
+
 		/***************************************************************************
 		 * Get Functions
 		 **************************************************************************/
 		// Gets the group data from server
-		if($routeParams.groupId != null){
-			GroupService.get({id: $routeParams.groupId}, function(res) {
+		if($stateParams.groupId != null){
+			GroupService.get({id: $stateParams.groupId}, function(res) {
 				$scope.group = res.data.group;
 				buildInterests();
-				
+
 				// Get Organizers by ID
-				
+
 			});
 		}
 		else{
-			$scope.group =  
+			$scope.group =
 			{
 					id : "nsync",
 					name: "N.Sync().......... .............. ................ ............. ..........................",
@@ -99,19 +99,19 @@ angular.module('seniorprojectYoApp')
 						endTimeDate : "2015-10-27T18:50:10.111Z",
 						street: "1234 cool st", city: "Sacramento", state: "CA", zipcode: "95828",
 						maxVolunteers : 50,
-						volunteers: [{id: "v1", firstName: "Kitten 1", lastName: "1"}, 
-						             {id: "v2", firstName: "Kitten 2", lastName: "1", picture: "//placekitten.com/g/250/251"}, 
-						             {id: "v3", firstName: "Kitten 3", lastName: "1"}, 
-						             {id: "v4", firstName: "Kitten 4", lastName: "1", picture: "//placekitten.com/g/250/253"}, 
-						             {id: "v5", firstName: "Kitten 5", lastName: "1", picture: "//placekitten.com/g/250/254"}, 
-						             {id: "v6", firstName: "Kitten 6", lastName: "1", picture: "//placekitten.com/g/250/255"}, 
-						             {id: "v7", firstName: "Kitten 7", lastName: "1", picture: "//placekitten.com/g/250/256"}, 
-						             {id: "v8", firstName: "Kitten 8", lastName: "1", picture: "//placekitten.com/g/250/257"}, 
-						             {id: "v9", firstName: "Kitten 9", lastName: "1", picture: "//placekitten.com/g/250/258"}, 
-						             {id: "v10", firstName: "Kitten 10", lastName: "1", picture: "//placekitten.com/g/250/259"}, 
+						volunteers: [{id: "v1", firstName: "Kitten 1", lastName: "1"},
+						             {id: "v2", firstName: "Kitten 2", lastName: "1", picture: "//placekitten.com/g/250/251"},
+						             {id: "v3", firstName: "Kitten 3", lastName: "1"},
+						             {id: "v4", firstName: "Kitten 4", lastName: "1", picture: "//placekitten.com/g/250/253"},
+						             {id: "v5", firstName: "Kitten 5", lastName: "1", picture: "//placekitten.com/g/250/254"},
+						             {id: "v6", firstName: "Kitten 6", lastName: "1", picture: "//placekitten.com/g/250/255"},
+						             {id: "v7", firstName: "Kitten 7", lastName: "1", picture: "//placekitten.com/g/250/256"},
+						             {id: "v8", firstName: "Kitten 8", lastName: "1", picture: "//placekitten.com/g/250/257"},
+						             {id: "v9", firstName: "Kitten 9", lastName: "1", picture: "//placekitten.com/g/250/258"},
+						             {id: "v10", firstName: "Kitten 10", lastName: "1", picture: "//placekitten.com/g/250/259"},
 						             {id: "v11", firstName: "Kitten 11", lastName: "1", picture: "//placekitten.com/g/250/260"}],
 						interests : ["Animals", "Education", "Environment", "People", "Recreation", "Technology", "Youth"]
-										
+
 					},
 					{
 						id : "event2",
@@ -124,21 +124,21 @@ angular.module('seniorprojectYoApp')
 						startTimeDate : "2015-10-28T18:50:10.111Z",
 						endTimeDate : "2015-10-29T18:50:10.111Z",
 						maxVolunteers : 50,
-						volunteers: [{id: "v1", firstName: "Kitten 1", lastName: "1", picture: "//placekitten.com/g/251/250"}, 
-						             {id: "v2", firstName: "Kitten 2", lastName: "1", picture: "//placekitten.com/g/251/251"}, 
-						             {id: "v3", firstName: "Kitten 3", lastName: "1", picture: "//placekitten.com/g/251/252"}, 
-						             {id: "v4", firstName: "Kitten 4", lastName: "1", picture: "//placekitten.com/g/251/253"}, 
-						             {id: "v5", firstName: "Kitten 5", lastName: "1"}, 
-						             {id: "v6", firstName: "Kitten 6", lastName: "1", picture: "//placekitten.com/g/251/255"}, 
-						             {id: "v7", firstName: "Kitten 7", lastName: "1", picture: "//placekitten.com/g/251/256"}, 
-						             {id: "v8", firstName: "Kitten 8", lastName: "1", picture: "//placekitten.com/g/251/257"}, 
-						             {id: "v9", firstName: "Kitten 9", lastName: "1", picture: "//placekitten.com/g/251/258"}, 
-						             {id: "v10", firstName: "Kitten 10", lastName: "1"}, 
-						             {id: "v11", firstName: "Kitten 11", lastName: "1", picture: "//placekitten.com/g/251/260"}, 
-						             {id: "v12", firstName: "Kitten 12", lastName: "1", picture: "//placekitten.com/g/251/261"}, 
-						             {id: "v13", firstName: "Kitten 13", lastName: "1", picture: "//placekitten.com/g/251/262"}, 
-						             {id: "v14", firstName: "Kitten 14", lastName: "1", picture: "//placekitten.com/g/251/263"}, 
-						             {id: "v15", firstName: "Kitten 15", lastName: "1", picture: "//placekitten.com/g/251/264"}, 
+						volunteers: [{id: "v1", firstName: "Kitten 1", lastName: "1", picture: "//placekitten.com/g/251/250"},
+						             {id: "v2", firstName: "Kitten 2", lastName: "1", picture: "//placekitten.com/g/251/251"},
+						             {id: "v3", firstName: "Kitten 3", lastName: "1", picture: "//placekitten.com/g/251/252"},
+						             {id: "v4", firstName: "Kitten 4", lastName: "1", picture: "//placekitten.com/g/251/253"},
+						             {id: "v5", firstName: "Kitten 5", lastName: "1"},
+						             {id: "v6", firstName: "Kitten 6", lastName: "1", picture: "//placekitten.com/g/251/255"},
+						             {id: "v7", firstName: "Kitten 7", lastName: "1", picture: "//placekitten.com/g/251/256"},
+						             {id: "v8", firstName: "Kitten 8", lastName: "1", picture: "//placekitten.com/g/251/257"},
+						             {id: "v9", firstName: "Kitten 9", lastName: "1", picture: "//placekitten.com/g/251/258"},
+						             {id: "v10", firstName: "Kitten 10", lastName: "1"},
+						             {id: "v11", firstName: "Kitten 11", lastName: "1", picture: "//placekitten.com/g/251/260"},
+						             {id: "v12", firstName: "Kitten 12", lastName: "1", picture: "//placekitten.com/g/251/261"},
+						             {id: "v13", firstName: "Kitten 13", lastName: "1", picture: "//placekitten.com/g/251/262"},
+						             {id: "v14", firstName: "Kitten 14", lastName: "1", picture: "//placekitten.com/g/251/263"},
+						             {id: "v15", firstName: "Kitten 15", lastName: "1", picture: "//placekitten.com/g/251/264"},
 						             {id: "v16", firstName: "Kitten 16", lastName: "1", picture: "//placekitten.com/g/251/265"}],
 						interests : ["Animals", "Education", "Environment", "People", "Recreation"]
 					}
@@ -163,15 +163,15 @@ angular.module('seniorprojectYoApp')
 			};
 			buildInterests();
 		}
-		
+
 		// Build the interests for editing
 		// Get Subscribers by ID
 		$scope.loaded = true;
-		
-		
-		
-		
-		
+
+
+
+
+
 		$scope.searchUsers = function() {
 			$scope.searchResultsPristine = true;
 			$scope.isSearching = true;
@@ -202,7 +202,7 @@ angular.module('seniorprojectYoApp')
 				picture : 		"//placekitten.com/g/1004/1004/"
 			}
 			];
-			
+
 			// If the user is already in Organizers to be added list, give the CSS style to that user
 			angular.forEach($scope.organizersToAdd, function(currentOrganizerToAdd) {
 				angular.forEach($scope.searchResults, function(currentSearchResult) {
@@ -211,7 +211,7 @@ angular.module('seniorprojectYoApp')
 				});
 			});
 		}
-		
+
 		$scope.scrollToResults = function() {
 			$timeout(function() {
 				$anchorScroll('searchResults');
@@ -219,7 +219,7 @@ angular.module('seniorprojectYoApp')
 		}
 		/***************************************************************************
 		 * Building Functions
-		 **************************************************************************/		
+		 **************************************************************************/
 		function buildInterests() {
 			angular.forEach($scope.group.interests, function(interest) {
 				switch(interest){
@@ -247,7 +247,7 @@ angular.module('seniorprojectYoApp')
 				}
 			});
 		};
-		
+
 		function clearInterests() {
 			$scope.animalsSelected = "";
 			$scope.educationSelected = "";
@@ -403,10 +403,10 @@ angular.module('seniorprojectYoApp')
 				$anchorScroll('remove-' + id);
 			}, 1);
 		}
-		  
+
 		/***********************************************************************
 		 * Boolean Functions
-		 **********************************************************************/		
+		 **********************************************************************/
 		/*
 		 * Used to check if a social media object exists
 		 */
@@ -414,7 +414,7 @@ angular.module('seniorprojectYoApp')
 			if ($scope.group != null){
 				switch(type){
 				case "googlePlus":
-					if ($scope.group.googlePlusURL != null) 
+					if ($scope.group.googlePlusURL != null)
 						if($scope.group.googlePlusURL.length > 0)
 							return true;
 					break;
@@ -440,7 +440,7 @@ angular.module('seniorprojectYoApp')
 					break;
 				}
 			}
-			
+
 			return false;
 		}
 
@@ -458,7 +458,7 @@ angular.module('seniorprojectYoApp')
 			else
 				return false;
 		}
-		
+
 		/*
 		 * Checks if there are more than n organizers
 		 */
@@ -476,14 +476,14 @@ angular.module('seniorprojectYoApp')
 		$scope.getIsSearching = function() {
 			return $scope.isSearching;
 		}
-		
+
 		$scope.hasResults = function() {
 			if ($scope.searchResults.length > 0)
 				return true;
 			else
 				return false;
 		}
-		
+
 		$scope.hasOrganizersToAdd = function() {
 			if ($scope.organizersToAdd != null && $scope.organizersToAdd.length > 0)
 				return true;
@@ -499,10 +499,10 @@ angular.module('seniorprojectYoApp')
 			else
 				return false;
 		}
-		
+
 		$scope.enableEdit = function() {
 			$scope.isEditing = true;
-			
+
 			// Backup contents on page
 			$scope.group_bak = {};
 			angular.copy($scope.group, $scope.group_bak);
@@ -510,11 +510,11 @@ angular.module('seniorprojectYoApp')
 
 		$scope.cancelEdit = function() {
 			$scope.isEditing = false;
-			
+
 			// Restore contents on page
 			angular.copy($scope.group_bak, $scope.group);
 			$scope.group_bak = {};
-			
+
 			// Reset interests for editing
 			clearInterests();
 			buildInterests();
@@ -523,7 +523,7 @@ angular.module('seniorprojectYoApp')
 		$scope.submitEdit = function() {
 			$scope.isUpdating = true;
 			// Send changes to server
-			GroupService.put({id: $routeParams.groupId, group: $scope.group}, function(res) {
+			GroupService.put({id: $stateParams.groupId, group: $scope.group}, function(res) {
 				switch(res.data.flag){
 				case true:
 					$scope.group = res.data.group;
@@ -556,9 +556,9 @@ angular.module('seniorprojectYoApp')
 		 * Subscribe Button
 		 **************************************************************************/
 		$scope.subscribe = function() {
-			
+
 		}
-		
+
 		/***************************************************************************
 		 * Admin Testing
 		 **************************************************************************/
@@ -566,7 +566,7 @@ angular.module('seniorprojectYoApp')
 			$scope.isAdmin = !$scope.isAdmin;
 		}
 
-		
+
 		/***************************************************************************
 		 * MISC Functions
 		 **************************************************************************/
@@ -580,7 +580,7 @@ angular.module('seniorprojectYoApp')
 				var validURL = "//" + url;
 				$window.open(validURL, '_blank');
 			}
-				
+
 		}
-		
-	} ]);
+
+	} );

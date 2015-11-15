@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('CreateGroupCtrl', [ '$scope', '$location', '$anchorScroll', '$timeout', 'GroupService', function($scope, $location, $anchorScroll, $timeout, GroupService) {
+    .controller('CreateGroupCtrl', function($scope, $location, $anchorScroll, $timeout) {
 
 		/***************************************************************************
 		 * Variables (includes ones from scope too)
 		 **************************************************************************/
-		$scope.group =  
+		$scope.group =
 		{
 				id : "nsync",
 				name: "N.Sync()",
@@ -25,10 +25,10 @@ angular.module('seniorprojectYoApp')
 
 		$scope.alerts = [];
 		$scope.group.interests = [];
-		
+
 		$scope.organizersToAdd = [];
 		$scope.searchResults = [];
-		
+
 		$scope.isPreviewing = false;
 		$scope.isSearching = false;
 		$scope.isCreating = false;
@@ -72,7 +72,7 @@ angular.module('seniorprojectYoApp')
 
         $scope.group.organizers = [];
 		$scope.group.organizers.push(user);
-		
+
 
 		$scope.selectedTab = "Upcoming Events";
 		$scope.otherTabs = ["Past Events"];
@@ -80,14 +80,14 @@ angular.module('seniorprojectYoApp')
 		/***************************************************************************
 		 * Building Functions
 		 **************************************************************************/
-		
+
 
 		/***********************************************************************
 		 * Functions that controls tabs for searching
 		 **********************************************************************/
 		$scope.setCurrentTab = function(newTab) {
 			$scope.selectedTab = newTab;
-			
+
 			switch(newTab){
 			case "Upcoming Events":
 				$scope.otherTabs[0] = "Past Events";
@@ -97,14 +97,14 @@ angular.module('seniorprojectYoApp')
 				break;
 			}
 		}
-		
+
 		$scope.getCurrentTab = function(tabName) {
 			if ($scope.selectedTab === tabName)
 				return true;
 			else
 				return false;
 		}
-		
+
 		/***************************************************************************
 		 * Get Functions
 		 **************************************************************************/
@@ -138,7 +138,7 @@ angular.module('seniorprojectYoApp')
 				picture : 		"//placekitten.com/g/1004/1004/"
 			}
 			];
-			
+
 			// If the user is already in Organizers to be added list, give the CSS style to that user
 			angular.forEach($scope.organizersToAdd, function(currentOrganizerToAdd) {
 				angular.forEach($scope.searchResults, function(currentSearchResult) {
@@ -148,13 +148,13 @@ angular.module('seniorprojectYoApp')
 			});
 
 		}
-		
+
 		$scope.scrollToResults = function() {
 			$timeout(function() {
 				$anchorScroll('searchResults');
 			}, 1);
 		}
-		
+
 		/***************************************************************************
 		 * Posting Functions
 		 **************************************************************************/
@@ -177,7 +177,7 @@ angular.module('seniorprojectYoApp')
 					}, 3000);
 					break;
 				}
-				
+
 			});
 		}
 
@@ -359,7 +359,7 @@ angular.module('seniorprojectYoApp')
 					else
 						return false;
 				}
-				else 
+				else
 					return false;
 			case "organizerXS":
 				if ($scope.group.organizersBuiltXS != null){
@@ -372,7 +372,7 @@ angular.module('seniorprojectYoApp')
 					else
 						return false;
 				}
-				else 
+				else
 					return false;
 			case "subscriber":
 				if ($scope.group.subscribers != null){
@@ -385,7 +385,7 @@ angular.module('seniorprojectYoApp')
 					else
 						return false;
 				}
-				else 
+				else
 					return false;
 			case "event":
 				if ($scope.group.events != null){
@@ -393,7 +393,7 @@ angular.module('seniorprojectYoApp')
 						switch(type2){
 						case "volunteer":
 							if ($scope.group.events[index1].volunteers[index2].picture != null) {
-								if ($scope.group.events[index1].volunteers[index2].picture.length > 0) 
+								if ($scope.group.events[index1].volunteers[index2].picture.length > 0)
 									return true;
 								else
 									return false;
@@ -411,7 +411,7 @@ angular.module('seniorprojectYoApp')
 							return false;
 					}
 				}
-				else 
+				else
 					return false;
 			case "searchedUser":
 				if ($scope.searchResults != null && $scope.searchResults.length > 0){
@@ -424,7 +424,7 @@ angular.module('seniorprojectYoApp')
 					else
 						return false;
 				}
-				else 
+				else
 					return false;
 			case "organizerToAdd":
 				if ($scope.organizersToAdd != null){
@@ -437,7 +437,7 @@ angular.module('seniorprojectYoApp')
 					else
 						return false;
 				}
-				else 
+				else
 					return false;
 			}
 		}
@@ -468,10 +468,10 @@ angular.module('seniorprojectYoApp')
 					return true;
 				break;
 			}
-			
+
 			return false;
 		}
-		
+
 		/*
 		 * Checks if there are more than n organizers
 		 */
@@ -488,18 +488,18 @@ angular.module('seniorprojectYoApp')
 			else
 				return false;
 		}
-		
+
 		$scope.getIsSearching = function() {
 			return $scope.isSearching;
 		}
-		
+
 		$scope.hasResults = function() {
 			if ($scope.searchResults.length > 0)
 				return true;
 			else
 				return false;
 		}
-		
+
 		$scope.hasOrganizersToAdd = function() {
 			if ($scope.organizersToAdd != null && $scope.organizersToAdd.length > 0)
 				return true;
@@ -513,11 +513,11 @@ angular.module('seniorprojectYoApp')
 		$scope.enablePreview = function() {
 			$scope.isPreviewing = true;
 		}
-		
+
 		$scope.cancelPreview = function() {
 			$scope.isPreviewing = false;
 		}
-		
+
 		$scope.getIsPreviewing = function() {
 			if ($scope.isPreviewing === true)
 				return true;
@@ -535,4 +535,4 @@ angular.module('seniorprojectYoApp')
 		$scope.closeAlert = function(index) {
 			$scope.alerts.splice(index, 1);
 		}
-	} ]);
+	} );

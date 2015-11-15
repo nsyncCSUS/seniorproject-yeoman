@@ -8,7 +8,6 @@ var Event = require('./event.model');
 
 
 describe('GET /api/events', function() {
-
     it('should respond with JSON array', function(done) {
         this.timeout(10000);
         request(app)
@@ -126,13 +125,49 @@ describe('POST /api/events', function() {
 
 describe('DELETE /api/events', function() {
     it('should delete an element', function(done) {
-        // Make sure that DELETE is working
-        done();
+    	this.timeout(10000);
+    	Event.create({name: 'Test Event'}, function(err, event) {
+    		request(app)
+    			.delete('/api/events/' + event._id)
+    			.expect(204)
+    			.end(function(err) {
+    				if(err) return done(err);
+    				Event.findByIdAndRemove(event._id, function(err) {
+    					if(err) return done(err);
+    					done();
+    				});
+    			});
+    	});
     });
 
     it('should not delete elements that do not exist', function(done) {
-        // Make sure that you cannot delete an element
-        // that does not exist
-        done();
+    	this.timeout(10000);
+        request(app)
+        	.delete('/api/events/123456789012345678901234')
+        	.expect(404)
+        	.end(function(err) {
+        		if(err) return done(err);
+        		return done();
+        	});
+    });
+    
+    it('should reject invalid ids', function(done) {
+    	this.timeout(10000);
+    	request(app)
+    		.delete('/api/events/testid')
+    		.expect(404)
+    		.end(function(err) {
+    			if(err) return done(err);
+    			return done();
+    		});
     });
 });
+
+
+
+
+
+
+
+
+

@@ -47,3 +47,29 @@ User.find({}).remove(function() {
     }
   );
 });
+
+//Event.find({}).remove(function() {
+//	Event.create({
+//		name: 'Test Event 1',
+//		_id: '000000000000000000000000'
+//	}, {
+//		name: 'Test Event 2',
+//		_id: '111111111111111111111111'
+//	}, function() {
+//		console.log('finished populating events');
+//	});
+//});
+//
+//Group.find({}).remove(function() {
+//	Group.create({
+//		name: 'Test Group 1',
+//		_id: '222222222222222222222222'
+//	}, {
+//		name: 'Test Group 2',
+//		_id: '333333333333333333333333'
+//	}, function() {
+//		console.log('finished populating groups');
+//	});
+//});
+
+

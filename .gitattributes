@@ -1,1 +1,7 @@
-* text eol=lf
+# change windows eol to linefeed
+* text auto
+#* text eol=lf
+
+# makes image commits binary
+*.png binary
+*.jpg binary

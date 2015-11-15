@@ -11,18 +11,27 @@ var express = require('express');
 var mongoose = require('mongoose');
 var config = require('./config/environment');
 
+
+
+
+
 // Connect to database
 mongoose.connect(config.mongo.uri, config.mongo.options);
 mongoose.connection.on('error', function(err) {
-	console.error('MongoDB connection error: ' + err);
-	process.exit(-1);
-	}
+  console.error('MongoDB connection error: ' + err);
+  process.exit(-1);
+  }
 );
 // Populate DB with sample data
 if(config.seedDB) { require('./config/seed'); }
 
-// Setup server
 var app = express();
+
+//app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('./client'));
+app.use(express.static('./client/assets'));
+
+// Setup server
 var server = require('http').createServer(app);
 var socketio = require('socket.io')(server, {
   serveClient: config.env !== 'production',

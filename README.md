@@ -20,9 +20,9 @@ https://www.python.org/download/releases/2.7.3/
   %ProgramFiles%\nodejs\npm    
   %ProgramFiles%\nodejs\npm.cmd    
   
-  1.npm install npm -g  
-  2.npm install -g node-inspector 
-  3.npm install -g node-gyp  
+  1.npm install npm -g    
+  2.npm install -g node-inspector   
+  3.npm install -g node-gyp    
 
   
 **Yeomon setup**    
@@ -32,7 +32,8 @@ https://www.python.org/download/releases/2.7.3/
 4. npm install --global yo bower grunt-cli  
 5. bower install  
 6. npm install  
-7. grunt serve  
-8. open up webrowser localhost:9000 (should happen automatically)  
+7. grunt build *(New step Really important)  
+8. grunt serve  
+9. open up webrowser localhost:9000 (should happen automatically)  
 
-
+Note: Run grunt build after major changes this will do some optimizations to make the site run much quicker. 

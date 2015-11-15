@@ -1,7 +1,8 @@
 // Generated on 2015-10-29 using generator-angular-fullstack 2.1.1
-'use strict';
+
 
 module.exports = function (grunt) {
+  "use strict";
   var localConfig;
   try {
     localConfig = require('./server/config/local.env');

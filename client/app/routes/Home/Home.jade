@@ -31,19 +31,19 @@ div(ng-include='"components/navbar/navbar.html"')
                         .col-xs-12.col-sm-6.col-md-4.col-lg-4
                             form(role='form')
                                 .btn-group(data-toggle)
-                                      label.btn.active.btn-default(tooltip='Find something to do', tooltip-append-to-body='true', ng-model='search.advanced.type', btn-radio="'Events'", checked='') Events
-                                      label.btn.btn-default(tooltip='Find your friends', tooltip-append-to-body='true', ng-model='search.advanced.type', btn-radio="'People'") People
-                                      label.btn.btn-default(tooltip='Find a cause', tooltip-append-to-body='true', ng-model='search.advanced.type', btn-radio="'Groups'") Groups
+                                      label.btn.active.btn-default(uib-tooltip='Find something to do', uib-tooltip-append-to-body='true', ng-model='search.advanced.type', btn-radio="'Events'", checked='') Events
+                                      label.btn.btn-default(uib-tooltip='Find your friends', uib-tooltip-append-to-body='true', ng-model='search.advanced.type', btn-radio="'People'") People
+                                      label.btn.btn-default(uib-tooltip='Find a cause', uib-tooltip-append-to-body='true', ng-model='search.advanced.type', btn-radio="'Groups'") Groups
                         .col-xs-12.col-sm-6.col-md-4.col-lg-4
                             .visible-xs
                                 |</br></br>
-                            img.img-thumbnail(ng-src='/images/interests/animals.png',  width='35', height='35', tooltip='Animals', style='background-color: lightgrey')
-                            img.img-thumbnail(ng-src='/images/interests/education.png',  width='35', height='35', tooltip='Education')
-                            img.img-thumbnail(ng-src='/images/interests/environment.png',  width='35', height='35', tooltip='Environment')
-                            img.img-thumbnail(ng-src='/images/interests/people.png',  width='35', height='35', tooltip='People')
-                            img.img-thumbnail(ng-src='/images/interests/recreation.png',  width='35', height='35', tooltip='Recreation')
-                            img.img-thumbnail(ng-src='/images/interests/technology.png',  width='35', height='35', tooltip='Technology')
-                            img.img-thumbnail(ng-src='/images/interests/youth.png',  width='35', height='35', tooltip='Youth')
+                            img.img-thumbnail(ng-src='/images/interests/animals.png',  width='35', height='35', uib-tooltip='Animals', style='background-color: lightgrey')
+                            img.img-thumbnail(ng-src='/images/interests/education.png',  width='35', height='35', uib-tooltip='Education')
+                            img.img-thumbnail(ng-src='/images/interests/environment.png',  width='35', height='35', uib-tooltip='Environment')
+                            img.img-thumbnail(ng-src='/images/interests/people.png',  width='35', height='35', uib-tooltip='People')
+                            img.img-thumbnail(ng-src='/images/interests/recreation.png',  width='35', height='35', uib-tooltip='Recreation')
+                            img.img-thumbnail(ng-src='/images/interests/technology.png',  width='35', height='35', uib-tooltip='Technology')
+                            img.img-thumbnail(ng-src='/images/interests/youth.png',  width='35', height='35', uib-tooltip='Youth')
 
 
 
@@ -62,7 +62,7 @@ div(ng-include='"components/navbar/navbar.html"')
                             .col-xs-12.col-sm-12.col-md-12.col-lg-12
                                 .row
                                     .col-xs-12.col-sm-12.col-md-12.col-lg-12.navbar-btn
-                                        img(ng-src='/images/interests/{{interest}}.png',  width='25', height='25', ng-repeat='interest in event.Interests', tooltip='{{interest}}')
+                                        img(ng-src='/images/interests/{{interest}}.png',  width='25', height='25', ng-repeat='interest in event.Interests', uib-tooltip='{{interest}}')
                             .col-xs-12.col-sm-3.col-md-5.col-lg-4
                                 .row
                                     .col-xs-4.col-sm-12.col-md-12.col-lg-12

@@ -1,11 +1,23 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-  .directive('group', function () {
-    return {
-      templateUrl: 'app/directives/group/group.html',
-      restrict: 'EA',
-      link: function (scope, element, attrs) {
-      }
-    };
-  });
+	.directive('groupCard', function() {
+		return {
+			restrict: 'E',
+			templateUrl: 'app/directives/group/groupCard.html'
+		};
+	})
+
+	.directive('groupEventCard', function() {
+		return {
+			restrict: 'E',
+			templateUrl: 'app/directives/group/groupEventCard.html'
+		};
+	})
+
+	.directive('pastGroupEventCard', function() {
+		return {
+			restrict: 'E',
+			templateUrl: 'app/directives/group/pastGroupEventCard.html'
+		};
+	});

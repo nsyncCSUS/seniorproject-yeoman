@@ -7,5 +7,10 @@ angular.module('seniorprojectYoApp')
         url: '/groups',
         templateUrl: 'app/routes/groups/groups.html',
         controller: 'GroupsCtrl'
+      })
+      .state('groups2', {
+        url: '/groups/:id',
+        templateUrl: 'app/routes/groups/groups.html',
+        controller: 'GroupsCtrl'
       });
   });

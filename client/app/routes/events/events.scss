@@ -8,14 +8,6 @@
     padding-right: 25px;
 }
 
-
-.event-item {
-    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-    font-weight: bold;
-}
-
-
-
 .subscriber-thumbnail {
     width: 64px;
     height: 64px;
@@ -46,6 +38,23 @@
     }
 }
 
+.dateRow {
+    border-left: solid thick #ff0000;
+}
+
+.eventBody {
+    border-left: solid;
+    border-bottom: solid;
+    border-top: solid;
+}
+
+.duration {
+    display: inline;
+    padding-left: 1%;
+    font-style: italic;
+    color: #00cc00;
+}
+
 
 /**********************************************************************
     Edit CSS START
@@ -64,4 +73,3 @@
     right: 1%;
     top: 80px;
 }
-

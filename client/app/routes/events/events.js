@@ -7,5 +7,10 @@ angular.module('seniorprojectYoApp')
         url: '/events',
         templateUrl: 'app/routes/events/events.html',
         controller: 'EventsCtrl'
+      })
+      .state('events2', {
+        url: '/events/:id',
+        templateUrl: 'app/routes/events/events.html',
+        controller: 'EventsCtrl'
       });
   });

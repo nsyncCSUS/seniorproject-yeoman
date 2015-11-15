@@ -2,17 +2,22 @@
 
 angular.module('seniorprojectYoApp')
     .controller('CreateEventCtrl', function($scope) {
-        $scope.message = 'Hello';
+        /***************************************************************************
+         * Variables (includes ones from scope too)
+         **************************************************************************/
+        $scope.isPreviewing = false;
 
+        $scope.currentDate = new Date();
 
-        //    	console.log("Moment: " + moment);
-        //    	console.log("Moment toString: " + moment.toString());
-        //    	console.log("Moment JSON: " + JSON.parse(moment));
+		$scope.alerts = [];
 
-        //moment.changeLocale("de");
-        //    	for(var i in Object.keys(moment)) {
-        //    		console.log(i + ", " + moment[i]);
-        //    	}
+		$scope.animalsSelected = "";
+		$scope.educationSelected = "";
+		$scope.environmentSelected = "";
+		$scope.peopleSelected = "";
+		$scope.recreationSelected = "";
+		$scope.technologySelected = "";
+		$scope.youthSelected = "";
 
         $scope.event = {
 
@@ -20,25 +25,41 @@ angular.module('seniorprojectYoApp')
         $scope.event.startTimeDate = new Date('2015-03-01T00:00:00Z');
         $scope.event.endTimeDate = new Date('2015-03-01T00:00:00Z');
 
-        console.log($scope.event);
-        $scope.hstep = 1;
-        $scope.mstep = 15;
-        $scope.tDifference;
-
         $scope.isPreviewing = false;
         $scope.isSearching = false;
 
 
-        $scope.event.interests = [];
-        $scope.animalsSelected = "";
-        $scope.educationSelected = "";
-        $scope.environmentSelected = "";
-        $scope.peopleSelected = "";
-        $scope.recreationSelected = "";
-        $scope.technologySelected = "";
-        $scope.youthSelected = "";
+		/***************************************************************************
+		 * Get Functions
+		 **************************************************************************/
+         $scope.event = {
+             _id : "event1",
+             creationUser: "",
+             group: {
+                 _id : "nsync",
+                 name: "N.Sync().......... .............. ................ ............. ..........................",
+                 picture : "//placekitten.com/g/500/500/",
+                 creationDate : "2015-08-26T18:50:10.111Z"
+             },
+             name: "SUPER DUPER AWESOME EVENT!!!!",
+             description: "sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem blandit non.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vulputate pellentesque lorem. Donec erat ante, sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem bland center",
+             picture: "//placekitten.com/g/501/500/",
+             startTimeDate: "2015-08-26T18:50:10.111Z",
+             endTimeDate: "2015-08-27T19:50:10.111Z",
+             street: "1234 cool st",
+             city: "Sacramento",
+             state: "CA",
+             zipcode: "95828",
+             maxVolunteers: 50,
+             interests : ["Animals", "Education", "Environment", "People", "Recreation", "Technology", "Youth"]
 
+         };
 
+         buildInterests();
+         buildDuration();
+ 		/***************************************************************************
+ 		 * Posting Functions
+ 		 **************************************************************************/
         //Create Event relevant functions
         $scope.createEvent = function() {
             // Send new event to server
@@ -49,187 +70,197 @@ angular.module('seniorprojectYoApp')
             });
         }
 
-        $scope.addInterest = function(interest) {
-            var hasInterest = false;
-            // Variable for array to be rebuilt so that there are no empty elements
-            var newInterests = [];
-            // Rebuild interests array
-            // Checks if the interest selected is in the interest's array
-            angular.forEach($scope.event.interests, function(currentInterest, index) {
-                console.log(currentInterest.type);
-                // If in array, remove class to show that it is now unselected
-                if (currentInterest.type === interest) {
-                    console.log("removed " + interest);
-                    hasInterest = true;
-                    switch (interest) {
-                        case "Animals":
-                            $scope.animalsSelected = "";
-                            break;
-                        case "Education":
-                            $scope.educationSelected = "";
-                            break;
-                        case "Environment":
-                            $scope.environmentSelected = "";
-                            break;
-                        case "People":
-                            $scope.peopleSelected = "";
-                            break;
-                        case "Recreation":
-                            $scope.recreationSelected = "";
-                            break;
-                        case "Technology":
-                            $scope.technologySelected = "";
-                            break;
-                        case "Youth":
-                            $scope.youthSelected = "";
-                            break;
-                    }
-                }
-                // Otherwise, add to rebuilt array
-                else {
-                    console.log(currentInterest);
-                    newInterests.push(currentInterest);
+        /***************************************************************************
+         * Building Functions
+         **************************************************************************/
+        function buildInterests() {
+            angular.forEach($scope.event.interests, function(interest) {
+                switch(interest){
+                case "Animals":
+                    $scope.animalsSelected = "selected";
+                    break;
+                case "Education":
+                    $scope.educationSelected = "selected";
+                    break;
+                case "Environment":
+                    $scope.environmentSelected = "selected";
+                    break;
+                case "People":
+                    $scope.peopleSelected = "selected";
+                    break;
+                case "Recreation":
+                    $scope.recreationSelected = "selected";
+                    break;
+                case "Technology":
+                    $scope.technologySelected = "selected";
+                    break;
+                case "Youth":
+                    $scope.youthSelected = "selected";
+                    break;
                 }
             });
-            // Add interest if it was not in array
-            if (hasInterest === false) {
-                console.log("added " + interest);
-                newInterests.push({
-                    type: interest
-                });
-                switch (interest) {
-                    case "Animals":
-                        $scope.animalsSelected = "selected";
-                        break;
-                    case "Education":
-                        $scope.educationSelected = "selected";
-                        break;
-                    case "Environment":
-                        $scope.environmentSelected = "selected";
-                        break;
-                    case "People":
-                        $scope.peopleSelected = "selected";
-                        break;
-                    case "Recreation":
-                        $scope.recreationSelected = "selected";
-                        break;
-                    case "Technology":
-                        $scope.technologySelected = "selected";
-                        break;
-                    case "Youth":
-                        $scope.youthSelected = "selected";
-                        break;
-                }
-            }
-            // Set the new interest array
-            $scope.event.interests = newInterests;
-            console.log($scope.event.interests);
+        };
+
+        function clearInterests() {
+            $scope.animalsSelected = "";
+            $scope.educationSelected = "";
+            $scope.environmentSelected = "";
+            $scope.peopleSelected = "";
+            $scope.recreationSelected = "";
+            $scope.technologySelected = "";
+            $scope.youthSelected = "";
         }
 
+        function buildDuration() {
+            var duration = moment($scope.event.endTimeDate).diff(moment($scope.event.startTimeDate));
+            $scope.duration = {};
+            if (moment.duration(duration).get('days') > 0)
+                $scope.duration.days = moment.duration(duration).get('days');
+            if (moment.duration(duration).get('hours') > 0)
+                $scope.duration.hours = moment.duration(duration).get('hours');
+            if (moment.duration(duration).get('minutes') > 0)
+                $scope.duration.minutes = moment.duration(duration).get('minutes');
+
+        }
+
+
+		/***************************************************************************
+		 * Adding/Removing Interests Function
+		 **************************************************************************/
+		$scope.addInterest = function (interest) {
+			var hasInterest = false;
+			// Variable for array to be rebuilt so that there are no empty elements
+			var newInterests = [];
+			// Rebuild interests array
+			// Checks if the interest selected is in the interest's array
+			angular.forEach($scope.event.interests, function(currentInterest, index) {
+				console.log(currentInterest);
+				// If in array, remove class to show that it is now unselected
+				if (currentInterest === interest){
+					console.log("removed " + interest);
+					hasInterest = true;
+					switch(interest) {
+					case "Animals":
+						$scope.animalsSelected = "";
+						break;
+					case "Education":
+						$scope.educationSelected = "";
+						break;
+					case "Environment":
+						$scope.environmentSelected = "";
+						break;
+					case "People":
+						$scope.peopleSelected = "";
+						break;
+					case "Recreation":
+						$scope.recreationSelected = "";
+						break;
+					case "Technology":
+						$scope.technologySelected = "";
+						break;
+					case "Youth":
+						$scope.youthSelected = "";
+						break;
+					}
+				}
+				// Otherwise, add to rebuilt array
+				else {
+					console.log(currentInterest);
+					newInterests.push(currentInterest);
+				}
+			});
+			// Add interest if it was not in array
+			if (hasInterest === false){
+				console.log("added " + interest);
+				newInterests.push(interest);
+				switch(interest) {
+				case "Animals":
+					$scope.animalsSelected = "selected";
+					break;
+				case "Education":
+					$scope.educationSelected = "selected";
+					break;
+				case "Environment":
+					$scope.environmentSelected = "selected";
+					break;
+				case "People":
+					$scope.peopleSelected = "selected";
+					break;
+				case "Recreation":
+					$scope.recreationSelected = "selected";
+					break;
+				case "Technology":
+					$scope.technologySelected = "selected";
+					break;
+				case "Youth":
+					$scope.youthSelected = "selected";
+					break;
+				}
+			}
+			// Set the new interest array
+			$scope.event.interests = newInterests;
+			console.log($scope.event.interests);
+		}
+
+
+		/***************************************************************************
+		 * Boolean functions
+		 **************************************************************************/
+        $scope.hasDays = function(){
+            if ($scope.duration.days != null) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        $scope.hasHours = function(){
+           if ($scope.duration.hours != null) {
+               return true;
+           }
+           else {
+               return false;
+           }
+        }
+
+        $scope.hasMinutes = function(){
+          if ($scope.duration.minutes != null) {
+              return true;
+          }
+          else {
+              return false;
+          }
+        }
+
+        /***************************************************************************
+         * Previewing Functions
+         **************************************************************************/
         $scope.enablePreview = function() {
-            $scope.isPreviewing = true;
-            // Build an array for displaying organizers in a carousel
-            //buildOrganizers();
-            // Build one for mobile view also
-            //buildOrganizersXS();
+        	$scope.isPreviewing = true;
+            buildDuration();
         }
 
         $scope.cancelPreview = function() {
-            $scope.isPreviewing = false;
+        	$scope.isPreviewing = false;
         }
 
         $scope.getIsPreviewing = function() {
-            if ($scope.isPreviewing === true)
-                return true;
-            else
-                return false;
+        	if ($scope.isPreviewing === true)
+        		return true;
+        	else
+        		return false;
         }
 
+        /***************************************************************************
+         * MISC Functions
+         **************************************************************************/
         $scope.cancelCreateEvent = function() {
-            $location.path("/home").replace;
+        	$location.path("/home").replace;
         }
 
-
-        //DateTime Picker stuff
-        var in10Days = new Date();
-        in10Days.setDate(in10Days.getDate() + 10);
-
-
-
-        $scope.open = {
-            startTime: false,
-            endTime: false,
-        };
-
-        $scope.timediff = function(start, end) {
-            $scope.tDifference = moment.utc(moment(end).diff(moment(start))).format("mm");
-            //return moment.utc(moment(end).diff(moment(start))).format("mm");
-        };
-
-        // Disable weekend selection
-        $scope.disabled = function(date, mode) {
-            return (mode === 'day' && (new Date().toDateString() == date.toDateString()));
-        };
-
-        $scope.dateOptions = {
-            showWeeks: false,
-            startingDay: 1
-        };
-
-        $scope.timeOptions = {
-            readonlyInput: false,
-            showMeridian: false
-        };
-
-        $scope.dateModeOptions = {
-            minMode: 'year',
-            maxMode: 'year'
-        };
-
-        $scope.openCalendar = function(e, date) {
-            $scope.open[date] = true;
-        };
-
-        // watch date4 and date5 to calculate difference
-        $scope.calculateWatch = $scope.$watch(function() {
-            return $scope.dates;
-        }, function() {
-            if ($scope.event.startTime && $scope.event.endTime) {
-                var diff = $scope.event.startTime.getTime() - $scope.event.endTime.getTime();
-                $scope.dayRange = Math.round(Math.abs(diff / (1000 * 60 * 60 * 24)))
-            } else {
-                $scope.dayRange = 'n/a';
-            }
-        }, true);
-
-        $scope.$on('$destroy', function() {
-            $scope.calculateWatch();
-        });
-        /*
-        $scope.options = {
-          hstep: [1, 2, 3],
-          mstep: [1, 5, 10, 15, 25, 30]
-        };
-
-        $scope.ismeridian = true;
-        $scope.toggleMode = function() {
-          $scope.ismeridian = ! $scope.ismeridian;
-        };
-
-        $scope.update = function() {
-          var d = new Date();
-          d.setHours( 14 );
-          d.setMinutes( 0 );
-          $scope.mytime = d;
-        };
-
-      
-        $scope.changed = function () {
-          $log.log('Time changed to: ' + $scope.mytime);
-        };
-
-        $scope.clear = function() {
-          $scope.mytime = null;
-        };*/
+        $scope.closeAlert = function(index) {
+        	$scope.alerts.splice(index, 1);
+        }
 
     });

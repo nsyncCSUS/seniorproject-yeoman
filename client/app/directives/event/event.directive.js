@@ -6,7 +6,7 @@ angular.module('seniorprojectYoApp')
 			restrict: 'E',
 			templateUrl: 'app/directives/event/eventCard.html'
 		};
-	})
+	}) 
 
 	.directive('pastEventCard', function() {
 		return {

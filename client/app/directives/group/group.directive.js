@@ -13,7 +13,7 @@ angular.module('seniorprojectYoApp')
 			restrict: 'E',
 			templateUrl: 'app/directives/group/groupEventCard.html'
 		};
-	}) 
+	})
 
 	.directive('pastGroupEventCard', function() {
 		return {

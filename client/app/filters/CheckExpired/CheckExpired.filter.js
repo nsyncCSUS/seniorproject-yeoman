@@ -11,7 +11,7 @@ angular.module('seniorprojectYoApp')
         var eventEndDate = "";
         for (var i = 0; i < events.length; i++){
           eventEndDate = new Date(events[i].endTimeDate).getTime();
-          result = eventEndDate - today;
+          var result = eventEndDate - today;
 
           if ((result <= 0) && expiredFlag){
             out.push(events[i]);

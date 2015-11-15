@@ -55,11 +55,11 @@ h1 Dashboard Page
                 
     .col-xs-12.col-sm-8.col-md-8.col-lg-8
         .panel-body.eventRow(ng-show='getCurrentTab("Upcoming Events")')
-            .row.eventRow(ng-repeat='event in user.volunteeredTo | orderBy:"startTimeDate" | checkExpired:false')
+            .row.eventRow(ng-repeat='event in user.volunteeredTo | orderBy:"startTimeDate" | CheckExpired:false')
                 group-event-card
                     
         .panel-body.eventRow(ng-show='getCurrentTab("Past Events")')
-            .row.eventRow(ng-repeat='event in user.volunteeredTo | orderBy:"-startTimeDate" | checkExpired:true')
+            .row.eventRow(ng-repeat='event in user.volunteeredTo | orderBy:"-startTimeDate" | CheckExpired:true')
                 past-group-event-card
                     
         .panel-body.eventRow(ng-show='getCurrentTab("Recommended Events")')

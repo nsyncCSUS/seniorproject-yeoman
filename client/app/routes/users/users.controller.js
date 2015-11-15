@@ -9,7 +9,7 @@ angular.module('seniorprojectYoApp')
 		 **************************************************************************/
 		$scope.isAdmin = true;
 
-		$scope.userId = $stateParams.userId;
+		$scope.userId = $stateParams.id;
 
 		$scope.isEditing = false;
 		$scope.isUpdating = false;
@@ -34,8 +34,8 @@ angular.module('seniorprojectYoApp')
 		 * Get Functions
 		 **************************************************************************/
 		// Gets the user data from server
-		if($stateParams.userId != null){
-			GroupService.get({id: $stateParams.userId}, function(res) {
+		if($stateParams.id != null){
+			GroupService.get({id: $stateParams.id}, function(res) {
 				$scope.user = res.data.user;
 				buildInterests();
 
@@ -350,7 +350,7 @@ angular.module('seniorprojectYoApp')
 		$scope.submitEdit = function() {
 			$scope.isUpdating = true;
 			// Send changes to server
-			UserService.put({id: $stateParams.userId, user: $scope.user}, function(res) {
+			UserService.put({id: $stateParams.id, user: $scope.user}, function(res) {
 				switch(res.data.flag){
 				case true:
 					$scope.user = res.data.user;

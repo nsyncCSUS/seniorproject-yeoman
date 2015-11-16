@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('EventsCtrl', function($stateParams, $scope) {
+    .controller('EventsCtrl', function($stateParams, $scope, EventService) {
         $scope.message = 'Hello';
 
 
@@ -34,7 +34,7 @@ angular.module('seniorprojectYoApp')
 		 **************************************************************************/
 		// Gets the group data from server
 		if($stateParams.id != null){
-			EventService.show({id: $stateParams.id}, function(res) {
+			EventService.show($stateParams.id, function(res) {
 				$scope.event = res.data.group;
                 buildDuration();
 				buildInterests();

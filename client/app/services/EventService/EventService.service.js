@@ -1,19 +1,19 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .service('EventService', function() {
+    .service('EventService', function($http) {
 
 
         /**
          * A list of relevant constants for http functions
          */
         this.Constants = Object.freeze({
-        	routes: {
-	        	users: '/api/users',
-		        groups: '/api/groups',
-		        events: '/api/events'
-	        },
-            
+            routes: {
+                users: '/api/users',
+                groups: '/api/groups',
+                events: '/api/events'
+            },
+
             user: 'users',
             groups: 'groups',
             events: 'events',
@@ -34,48 +34,48 @@ angular.module('seniorprojectYoApp')
             return url;
         };
 
-        	
+
         this.index = function(_params, callback, error) {
-        	var url = constructUrl(this.Constants.routes.events);
-        	var params = {
-        		page: _params.page,
-        		offset: _params.offset,
-        		event: _params.event
-        	};
-        	
-        	$http.get(url, params).then(function(response) {
-        		console.log(response);
-        		if(callback) callback(response);
-        	}, function(response) {
-        		console.log(response);
-        		if(error) error(response);
-        	});
+            var url = constructUrl(this.Constants.routes.events);
+            var params = {
+                page: _params.page,
+                offset: _params.offset,
+                event: _params.event
+            };
+
+            $http.get(url, params).then(function(response) {
+                console.log(response);
+                if (callback) callback(response);
+            }, function(response) {
+                console.log(response);
+                if (error) error(response);
+            });
         };
 
-        	
+
 
         this.show = function(id, callback, error) {
             var url = constructUrl(this.Constants.routes.events, id);
-            
+
             $http.get(url).then(function(response) {
                 console.log(response);
-                if(callback) callback(response);
+                if (callback) callback(response);
             }, function(response) {
-            	console.log(response);
-                if(error) error(response);
+                console.log(response);
+                if (error) error(response);
             });
         };
 
 
         this.update = function(id, params, callback, error) {
             var url = constructUrl(this.Constants.routes.events, id);
-            
+
             $http.put(url, params).then(function(response) {
                 console.log(response);
-                if(callback) callback(response);
+                if (callback) callback(response);
             }, function(response) {
-            	console.log(response);
-                if(error) error(response);
+                console.log(response);
+                if (error) error(response);
             });
         };
 
@@ -83,28 +83,28 @@ angular.module('seniorprojectYoApp')
         this.create = function(_params, callback, error) {
             var url = constructUrl(this.Constants.events);
             var params = {
-            	event: _params
+                event: _params
             };
-            
+
             $http.post(url, params).then(function(response) {
                 console.log(response);
-                if(callback) callback(response);
+                if (callback) callback(response);
             }, function(response) {
-            	console.log(response);
-                if(error) error(response);
+                console.log(response);
+                if (error) error(response);
             });
         };
 
 
         this.destroy = function(id, callback, error) {
             var url = constructUrl(this.Constants.events, id);
-            
+
             $http.delete(url).then(function(response) {
                 console.log(response);
-                if(callback) callback(response);
+                if (callback) callback(response);
             }, function(response) {
-            	console.log(response);
-                if(error) error(response);
+                console.log(response);
+                if (error) error(response);
             });
         };
 
@@ -113,34 +113,34 @@ angular.module('seniorprojectYoApp')
          * Nested data structure for handling event queries
          */
         this.organizers = {
-                           
+
             index: function(id, _params, callback, error) {
-	        	var url = constructUrl(this.Constants.routes.events, id, this.Constants.organizers);
-	        	var params = {
-	        	    page: _params.page,
-	        	    offset: _params.offset,
-	        		organizer: _params.organizer
-	        	};
-	        	
-	        	$http.get(url, params).then(function(response) {
-	        		console.log(response);
-	        		if(callback) callback(response);
-	        	}, function(response) {
-	        		console.log(response);
-	        		if(error) error(response);
-	        	});
-	        },
-	        
-	        
+                var url = constructUrl(this.Constants.routes.events, id, this.Constants.organizers);
+                var params = {
+                    page: _params.page,
+                    offset: _params.offset,
+                    organizer: _params.organizer
+                };
+
+                $http.get(url, params).then(function(response) {
+                    console.log(response);
+                    if (callback) callback(response);
+                }, function(response) {
+                    console.log(response);
+                    if (error) error(response);
+                });
+            },
+
+
             show: function(id, organizerId, callback, error) {
                 var url = constructUrl(this.Constants.routes.events, id, this.Constants.organizers, organizerId);
-                
+
                 $http.get(url).then(function(response) {
                     console.log(response);
-                    if(callback) callback(response);
+                    if (callback) callback(response);
                 }, function(response) {
-                	console.log(response);
-                    if(error) error(response);
+                    console.log(response);
+                    if (error) error(response);
                 });
             },
 
@@ -148,26 +148,26 @@ angular.module('seniorprojectYoApp')
 
             create: function(id, organizerId, callback, error) {
                 var url = constructUrl(this.Constants.routes.events, id, this.Constants.organizers, organizerId);
-                
+
                 $http.post(url, params).then(function(response) {
                     console.log(response);
-                    if(callback) callback(response);
+                    if (callback) callback(response);
                 }, function(response) {
-                	console.log(response);
-                    if(error) error(response);
+                    console.log(response);
+                    if (error) error(response);
                 });
             },
 
 
             destroy: function(id, organizerId, callback, error) {
                 var url = constructUrl(this.Constants.events, id, this.Constants.organizers, organizerId);
-                
+
                 $http.delete(url).then(function(response) {
                     console.log(response);
-                    if(callback) callback(response);
+                    if (callback) callback(response);
                 }, function(response) {
-                	console.log(response);
-                    if(error) error(response);
+                    console.log(response);
+                    if (error) error(response);
                 });
             }
         };
@@ -177,60 +177,60 @@ angular.module('seniorprojectYoApp')
          * Nested data structure for handling user queries
          */
         this.volunteers = {
-                           
+
             index: function(id, params, callback, error) {
-        		var url = constructUrl(this.Constants.events, id, this.Constants.volunteers);
-	        	var params = {
-	        		page: params.page,
-	        		offset: params.offset,
-	        		volunteer: params.volunteer
-	        	};
-	        	
-	        	$http.get(url, params).then(function(response) {
-	        		console.log(response);
-	        		if(callback) callback(response);
-	        	}, function(response) {
-	        		console.log(response);
-	        		if(error) error(response);
-	        	});
-	        },
-	        
-	        
-            show: function(id, volunteerId, callback, error) {
-                var url = constructUrl(this.Constants.events, id, this.Constants.volunteers, volunteerId);
-                
+                var url = constructUrl(this.Constants.events, id, this.Constants.volunteers);
+                var params = {
+                    page: params.page,
+                    offset: params.offset,
+                    volunteer: params.volunteer
+                };
+
                 $http.get(url, params).then(function(response) {
                     console.log(response);
-                    if(callback) callback(response);
+                    if (callback) callback(response);
                 }, function(response) {
-                	console.log(response);
-                    if(error) error(response);
+                    console.log(response);
+                    if (error) error(response);
+                });
+            },
+
+
+            show: function(id, volunteerId, callback, error) {
+                var url = constructUrl(this.Constants.events, id, this.Constants.volunteers, volunteerId);
+
+                $http.get(url, params).then(function(response) {
+                    console.log(response);
+                    if (callback) callback(response);
+                }, function(response) {
+                    console.log(response);
+                    if (error) error(response);
                 });
             },
 
 
             create: function(id, volunteerId, callback, error) {
                 var url = constructUrl(this.Constants.events, id, this.Constants.volunteers, volunteerId);
-                
+
                 $http.post(url).then(function(response) {
                     console.log(response);
-                    if(callback) callback(response);
+                    if (callback) callback(response);
                 }, function(response) {
-                	console.log(response);
-                    if(error) error(response);
+                    console.log(response);
+                    if (error) error(response);
                 });
             },
 
 
             destroy: function(id, volunteerId, callback, error) {
                 var url = constructUrl(this.Constants.events, id, this.Constants.volunteers, volunteerId);
-                
+
                 $http.delete(url).then(function(response) {
                     console.log(response);
-                    if(callback) callback(response);
+                    if (callback) callback(response);
                 }, function(response) {
-                	console.log(response);
-                    if(error) error(response);
+                    console.log(response);
+                    if (error) error(response);
                 });
             }
         };

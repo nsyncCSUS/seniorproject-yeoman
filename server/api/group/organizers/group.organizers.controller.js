@@ -17,10 +17,8 @@ exports.index = function(req, res) {
             	var organizers = group.organizers.map(function(user) {
             		return user.profile;
             	});
-            	
-                res.json({
-                    organizers: organizers
-                });
+
+                res.json(organizers);
             }
         });
 };

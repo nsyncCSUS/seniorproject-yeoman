@@ -12,15 +12,13 @@ exports.index = function(req, res) {
         .populate('volunteers')
         .exec(function(err, group) {
         	if(err || !group) {
-        		handleError(res, err); 
+        		handleError(res, err);
         	} else {
         		var volunteers = group.volunteers.map(function(user) {
         			return user.profile;
         		});
-        		
-        		res.json({
-        			volunteers: volunteers
-        		});
+
+        		res.json(volunteers);
         	}
         });
 };

@@ -18,7 +18,7 @@ exports.index = function(req, res) {
             	var organizers = event.organizers.map(function(user) {
             		return user.profile;
             	});
-            	
+
               res.json(organizers);
             }
         });
@@ -37,7 +37,7 @@ exports.show = function(req, res) {
             } else {
                 var organizer = event.organizers.filter(function(item) {
                     return item._id == req.params.organizerId;
-                }).filter(function(user) {
+                }).map(function(user) {
                 	return user.profile;
                 });
 

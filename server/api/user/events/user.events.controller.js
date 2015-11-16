@@ -34,9 +34,9 @@ var validationError = function(res, err) {
  */
 exports.show = function(req, res, next) {
     var userId = req.params.userId;
-    User.findById(userId).
-    populate('volunteeredTo').
-    exec(function(err, user) {
-        res.json(user);
-    });
+    User.findById(userId)
+      .populate('volunteeredTo')
+      .exec(function(err, user) {
+          res.json(user.events.volunteeredTo);
+      });
 };

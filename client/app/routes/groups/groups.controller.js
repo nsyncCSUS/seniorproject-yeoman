@@ -63,7 +63,7 @@ angular.module('seniorprojectYoApp')
 		 **************************************************************************/
 		// Gets the group data from server
 		if($stateParams.id != null){
-			GroupService.show({id: $stateParams.id}, function(res) {
+			GroupService.show($stateParams.id, function(res) {
 				$scope.group = res.data.group;
 				buildInterests();
 
@@ -513,7 +513,7 @@ angular.module('seniorprojectYoApp')
 		$scope.submitEdit = function() {
 			$scope.isUpdating = true;
 			// Send changes to server
-			GroupService.put({id: $stateParams.id, group: $scope.group}, function(res) {
+			GroupService.update($stateParams.id, {group: $scope.group}, function(res) {
 				switch(res.data.flag){
 				case true:
 					$scope.group = res.data.group;

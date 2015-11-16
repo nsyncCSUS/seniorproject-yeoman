@@ -32,7 +32,7 @@ angular.module('seniorprojectYoApp')
 
 */
 
-        $http.get('/api/search/getagroup/3');
+        //$http.get('/api/search/getagroup/3');
 
         // upload later on form submit or something similar
         $scope.submit = function() {

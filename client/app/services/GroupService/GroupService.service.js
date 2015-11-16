@@ -8,17 +8,17 @@ angular.module('seniorprojectYoApp')
          * A list of relevant constants for http functions
          */
         this.Constants = Object.freeze({
-        	routes: {
-	        	users: 'api/users',
-		        groups: 'api/groups',
-		        events: 'api/events'
-	        },
+            routes: {
+                users: 'api/users',
+                groups: 'api/groups',
+                events: 'api/events'
+            },
 
-	        users: 'users',
-	        groups: 'groups',
-	        events: 'events',
-	        organizers: 'organizers',
-	        volunteers: 'volunteers'
+            users: 'users',
+            groups: 'groups',
+            events: 'events',
+            organizers: 'organizers',
+            volunteers: 'volunteers'
         });
 
 
@@ -36,15 +36,15 @@ angular.module('seniorprojectYoApp')
 
 
         this.index = function(params, callback, error) {
-        	var url = constructUrl(this.Constants.routes.groups);
+            var url = constructUrl(this.Constants.routes.groups);
 
-        	$http.get(url).then(function(response) {
-        		console.log(response);
-        		if(callback) callback(response);
-        	}, function(response) {
-        		console.log(response);
-        		if(error) error(response);
-        	});
+            $http.get(url).then(function(response) {
+                console.log(response);
+                if (callback) callback(response);
+            }, function(response) {
+                console.log(response);
+                if (error) error(response);
+            });
         };
 
 
@@ -54,10 +54,10 @@ angular.module('seniorprojectYoApp')
 
             $http.get(url).then(function(response) {
                 console.log(response);
-                if(callback) callback(response);
+                if (callback) callback(response);
             }, function(response) {
-            	console.log(response);
-                if(error) error(response);
+                console.log(response);
+                if (error) error(response);
             });
         };
 
@@ -65,15 +65,15 @@ angular.module('seniorprojectYoApp')
         this.update = function(id, _params, callback, error) {
             var url = constructUrl(this.Constants.routes.groups, id);
             var params = {
-            	group: _params
+                group: _params
             };
 
             $http.put(url, params).then(function(response) {
                 console.log(response);
-                if(callback) callback(response);
+                if (callback) callback(response);
             }, function(response) {
-            	console.log(response);
-                if(error) error(response);
+                console.log(response);
+                if (error) error(response);
             });
         };
 
@@ -81,15 +81,15 @@ angular.module('seniorprojectYoApp')
         this.create = function(_params, callback, error) {
             var url = constructUrl(this.Constants.groups);
             var params = {
-            	group: _params.group
+                group: _params.group
             };
 
             $http.post(url, params).then(function(response) {
                 console.log(response);
-                if(callback) callback(response);
+                if (callback) callback(response);
             }, function(response) {
-            	console.log(response);
-                if(error) error(response);
+                console.log(response);
+                if (error) error(response);
             });
         };
 
@@ -99,10 +99,10 @@ angular.module('seniorprojectYoApp')
 
             $http.delete(url).then(function(response) {
                 console.log(response);
-                if(callback) callback(response);
+                if (callback) callback(response);
             }, function(response) {
-            	console.log(response);
-                if(error) error(response);
+                console.log(response);
+                if (error) error(response);
             });
         };
 
@@ -113,21 +113,21 @@ angular.module('seniorprojectYoApp')
         this.events = {
 
             index: function(id, _params, callback, error) {
-				var url = constructUrl(this.Constants.routes.groups, id, this.Constants.events);
-				var params = {
-					page: _params.page,
-					offset: _params.offset,
-					event: _params.event
-				};
+                var url = constructUrl(this.Constants.routes.groups, id, this.Constants.events);
+                var params = {
+                    page: _params.page,
+                    offset: _params.offset,
+                    event: _params.event
+                };
 
-				$http.get(url, params).then(function(response) {
-					console.log(response);
-					if(callback) callback(response);
-				}, function(response) {
-					console.log(response);
-					if(error) error(repsonse);
-				});
-			},
+                $http.get(url, params).then(function(response) {
+                    console.log(response);
+                    if (callback) callback(response);
+                }, function(response) {
+                    console.log(response);
+                    if (error) error(repsonse);
+                });
+            },
 
 
             show: function(id, eventId, callback, error) {
@@ -135,10 +135,10 @@ angular.module('seniorprojectYoApp')
 
                 $http.get(url).then(function(response) {
                     console.log(response);
-                    if(callback) callback(response);
+                    if (callback) callback(response);
                 }, function(response) {
-                	console.log(response);
-                    if(error) error(response);
+                    console.log(response);
+                    if (error) error(response);
                 });
             },
 
@@ -148,10 +148,10 @@ angular.module('seniorprojectYoApp')
 
                 $http.post(url).then(function(response) {
                     console.log(response);
-                    if(callback) callback(response);
+                    if (callback) callback(response);
                 }, function(response) {
-                	console.log(response);
-                    if(error) error(response);
+                    console.log(response);
+                    if (error) error(response);
                 });
             },
 
@@ -161,10 +161,10 @@ angular.module('seniorprojectYoApp')
 
                 $http.delete(url).then(function(response) {
                     console.log(response);
-                    if(callback) callback(response);
+                    if (callback) callback(response);
                 }, function(response) {
-                	console.log(response);
-                    if(error) error(response);
+                    console.log(response);
+                    if (error) error(response);
                 });
             }
         };
@@ -176,21 +176,21 @@ angular.module('seniorprojectYoApp')
         this.volunteers = {
 
             index: function(id, _params, callback, error) {
-				var url = constructUrl(this.Constants.routes.groups, id, this.Constants.volunteers);
-				var params = {
-					page: _params.page,
-					offset: _params.offset,
-					volunteer: _params.volunteer
-				};
+                var url = constructUrl(this.Constants.routes.groups, id, this.Constants.volunteers);
+                var params = {
+                    page: _params.page,
+                    offset: _params.offset,
+                    volunteer: _params.volunteer
+                };
 
-				$http.get(url, params).then(function(response) {
-					console.log(response);
-					if(callback) callback(response);
-				}, function(response) {
-					console.log(response);
-					if(error) error(response);
-				});
-			},
+                $http.get(url, params).then(function(response) {
+                    console.log(response);
+                    if (callback) callback(response);
+                }, function(response) {
+                    console.log(response);
+                    if (error) error(response);
+                });
+            },
 
 
             show: function(id, volunteerId, callback, error) {
@@ -198,10 +198,10 @@ angular.module('seniorprojectYoApp')
 
                 $http.get(url).then(function(response) {
                     console.log(response);
-                    if(callback) callback(response);
+                    if (callback) callback(response);
                 }, function(response) {
-                	console.log(response);
-                    if(error) error(response);
+                    console.log(response);
+                    if (error) error(response);
                 });
             },
 
@@ -211,10 +211,10 @@ angular.module('seniorprojectYoApp')
 
                 $http.post(url).then(function(response) {
                     console.log(response);
-                    if(callback) callback(response);
+                    if (callback) callback(response);
                 }, function(response) {
-                	console.log(response);
-                    if(error) error(response);
+                    console.log(response);
+                    if (error) error(response);
                 });
             },
 
@@ -224,10 +224,10 @@ angular.module('seniorprojectYoApp')
 
                 $http.delete(url).then(function(response) {
                     console.log(response);
-                    if(callback) callback(response);
+                    if (callback) callback(response);
                 }, function(response) {
-                	console.log(response);
-                    if(error) error(response);
+                    console.log(response);
+                    if (error) error(response);
                 });
             }
         };
@@ -240,21 +240,21 @@ angular.module('seniorprojectYoApp')
         this.organizers = {
 
             index: function(id, _params, callback, error) {
-				var url = constructUrl(this.Constants.routes.groups, id, this.Constants.organizers);
-				var params = {
-					page: _params.page,
-					offset: _params.offset,
-					organizer: _params.organizer
-				};
+                var url = constructUrl(this.Constants.routes.groups, id, this.Constants.organizers);
+                var params = {
+                    page: _params.page,
+                    offset: _params.offset,
+                    organizer: _params.organizer
+                };
 
-				$http.get(url, params).then(function(response) {
-					console.log(response);
-					if(callback) callback(response);
-				}, function(response) {
-					console.log(response);
-					if(error) error(response);
-				});
-			},
+                $http.get(url, params).then(function(response) {
+                    console.log(response);
+                    if (callback) callback(response);
+                }, function(response) {
+                    console.log(response);
+                    if (error) error(response);
+                });
+            },
 
 
             show: function(id, organizerId, callback, error) {
@@ -262,10 +262,10 @@ angular.module('seniorprojectYoApp')
 
                 $http.get(url).then(function(response) {
                     console.log(response);
-                    if(callback) callback(response);
+                    if (callback) callback(response);
                 }, function(response) {
-                	console.log(response);
-                    if(error) error(response);
+                    console.log(response);
+                    if (error) error(response);
                 });
             },
 
@@ -275,10 +275,10 @@ angular.module('seniorprojectYoApp')
 
                 $http.post(url).then(function(response) {
                     console.log(response);
-                    if(callback) callback(response);
+                    if (callback) callback(response);
                 }, function(response) {
-                	console.log(response);
-                    if(error) error(response);
+                    console.log(response);
+                    if (error) error(response);
                 });
             },
 
@@ -288,10 +288,10 @@ angular.module('seniorprojectYoApp')
 
                 $http.delete(url).then(function(response) {
                     console.log(response);
-                    if(callback) callback(response);
+                    if (callback) callback(response);
                 }, function(response) {
-                	console.log(response);
-                    if(error) error(response);
+                    console.log(response);
+                    if (error) error(response);
                 });
             }
         };

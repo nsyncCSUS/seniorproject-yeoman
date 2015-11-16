@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('DashboardCtrl', function($scope, $stateParams, $anchorScroll, $timeout) {
+    .controller('DashboardCtrl', function($scope, $stateParams, $anchorScroll, $timeout, UserService, GroupService, EventService) {
 		/***************************************************************************
 		 * Variables (includes ones from scope too)
 		 **************************************************************************/

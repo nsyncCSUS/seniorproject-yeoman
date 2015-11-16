@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('CreateEventCtrl', function($scope) {
+    .controller('CreateEventCtrl', function($stateParams, $scope, EventService) {
         /***************************************************************************
          * Variables (includes ones from scope too)
          **************************************************************************/

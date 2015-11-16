@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('UsersCtrl', function($scope, $stateParams, $anchorScroll, $timeout) {
+    .controller('UsersCtrl', function($scope, $stateParams, $anchorScroll, $timeout, UserService) {
 
 
 		/***************************************************************************
@@ -35,7 +35,7 @@ angular.module('seniorprojectYoApp')
 		 **************************************************************************/
 		// Gets the user data from server
 		if($stateParams.id != null){
-			UserService.show({id: $stateParams.id}, function(res) {
+			UserService.show($stateParams.id, function(res) {
 				$scope.user = res.data.user;
 				buildInterests();
 
@@ -350,7 +350,8 @@ angular.module('seniorprojectYoApp')
 		$scope.submitEdit = function() {
 			$scope.isUpdating = true;
 			// Send changes to server
-			UserService.put({id: $stateParams.id, user: $scope.user}, function(res) {
+			console.log($stateParams.id, $scope.user);
+			UserService.update($stateParams.id, {user: $scope.user}, function(res) {
 				switch(res.data.flag){
 				case true:
 					$scope.user = res.data.user;

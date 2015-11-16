@@ -22,9 +22,7 @@ exports.index = function(req, res) {
         	return user.profile;
         });
 
-        res.status(200).json({
-        	users: _users
-        });
+        res.status(200).json(_users);
     });
 };
 

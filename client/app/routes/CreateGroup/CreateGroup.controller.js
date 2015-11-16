@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('CreateGroupCtrl', function($scope, $location, $anchorScroll, $timeout) {
+    .controller('CreateGroupCtrl', function($scope, $location, $anchorScroll, $timeout, GroupService) {
 
 		/***************************************************************************
 		 * Variables (includes ones from scope too)
@@ -44,7 +44,7 @@ angular.module('seniorprojectYoApp')
 				twitterURL : "https://twitter.com",
 				interests : ["Animals", "Environment", "People", "Recreation", "Technology", "Youth"]
 		};
-        
+
         buildInterests();
 
 		// Add in the user as an organizer

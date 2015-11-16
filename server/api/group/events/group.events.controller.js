@@ -10,10 +10,8 @@ exports.index = function(req, res) {
     }
     Group.findById(req.params.id)
         .populate('events')
-        .exec(function(err, groups) {
-            res.json({
-                events: groups.events
-            });
+        .exec(function(err, group) {
+            res.json(group.events);
         });
 };
 
@@ -41,7 +39,7 @@ exports.show = function(req, res) {
 
 
 /**
- * Create new event: must create event and add it to 
+ * Create new event: must create event and add it to
  * group's list of events, and add group as event's
  * creation group.
  */
@@ -56,7 +54,7 @@ exports.create = function(req, res) {
         } else {
 //        	Event.findByIdAndUpdate(req.params.eventId, {
 //        		$push: {
-//	        		
+//
 //	        	}
 //        	}, function(err, event) {
 //        		if(err) {
@@ -73,7 +71,7 @@ exports.create = function(req, res) {
 
 /**
  * Delete an event: To do this we must delete
- * the event and remove it from the group's 
+ * the event and remove it from the group's
  * event list.
  */
 exports.destroy = function(req, res) {

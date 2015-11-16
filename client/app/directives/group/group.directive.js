@@ -15,9 +15,23 @@ angular.module('seniorprojectYoApp')
 		};
 	})
 
+	.directive('groupEventSmCard', function() {
+		return {
+			restrict: 'E',
+			templateUrl: 'app/directives/group/groupEventSmCard.html'
+		};
+	})
+
 	.directive('pastGroupEventCard', function() {
 		return {
 			restrict: 'E',
 			templateUrl: 'app/directives/group/pastGroupEventCard.html'
+		};
+	})
+
+	.directive('pastGroupEventSmCard', function() {
+		return {
+			restrict: 'E',
+			templateUrl: 'app/directives/group/pastGroupEventSmCard.html'
 		};
 	});

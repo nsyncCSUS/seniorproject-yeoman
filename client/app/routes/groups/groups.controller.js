@@ -31,6 +31,10 @@ angular.module('seniorprojectYoApp')
 		$scope.selectedTab = "Upcoming Events";
 		$scope.otherTabs = ["Past Events"];
 
+        $scope.user = {
+            _id : "AnthonyNguyen"
+        };
+
 		/***********************************************************************
 		 * Functions that controls tabs for searching
 		 **********************************************************************/
@@ -97,47 +101,47 @@ angular.module('seniorprojectYoApp')
 						endTimeDate : "2015-10-27T18:50:10.111Z",
 						street: "1234 cool st", city: "Sacramento", state: "CA", zipcode: "95828",
 						maxVolunteers : 50,
-						volunteers: [{id: "v1", firstName: "Kitten 1", lastName: "1"},
-						             {id: "v2", firstName: "Kitten 2", lastName: "1", picture: "//placekitten.com/g/250/251"},
-						             {id: "v3", firstName: "Kitten 3", lastName: "1"},
-						             {id: "v4", firstName: "Kitten 4", lastName: "1", picture: "//placekitten.com/g/250/253"},
-						             {id: "v5", firstName: "Kitten 5", lastName: "1", picture: "//placekitten.com/g/250/254"},
-						             {id: "v6", firstName: "Kitten 6", lastName: "1", picture: "//placekitten.com/g/250/255"},
-						             {id: "v7", firstName: "Kitten 7", lastName: "1", picture: "//placekitten.com/g/250/256"},
-						             {id: "v8", firstName: "Kitten 8", lastName: "1", picture: "//placekitten.com/g/250/257"},
-						             {id: "v9", firstName: "Kitten 9", lastName: "1", picture: "//placekitten.com/g/250/258"},
-						             {id: "v10", firstName: "Kitten 10", lastName: "1", picture: "//placekitten.com/g/250/259"},
-						             {id: "v11", firstName: "Kitten 11", lastName: "1", picture: "//placekitten.com/g/250/260"}],
+						volunteers: [{_id: "v1", firstName: "Kitten 1", lastName: "1"},
+						             {_id: "v2", firstName: "Kitten 2", lastName: "1", picture: "//placekitten.com/g/250/251"},
+						             {_id: "v3", firstName: "Kitten 3", lastName: "1"},
+						             {_id: "v4", firstName: "Kitten 4", lastName: "1", picture: "//placekitten.com/g/250/253"},
+						             {_id: "v5", firstName: "Kitten 5", lastName: "1", picture: "//placekitten.com/g/250/254"},
+						             {_id: "v6", firstName: "Kitten 6", lastName: "1", picture: "//placekitten.com/g/250/255"},
+						             {_id: "v7", firstName: "Kitten 7", lastName: "1", picture: "//placekitten.com/g/250/256"},
+						             {_id: "v8", firstName: "Kitten 8", lastName: "1", picture: "//placekitten.com/g/250/257"},
+						             {_id: "v9", firstName: "Kitten 9", lastName: "1", picture: "//placekitten.com/g/250/258"},
+						             {_id: "v10", firstName: "Kitten 10", lastName: "1", picture: "//placekitten.com/g/250/259"},
+						             {_id: "v11", firstName: "Kitten 11", lastName: "1", picture: "//placekitten.com/g/250/260"}],
 						interests : ["Animals", "Education", "Environment", "People", "Recreation", "Technology", "Youth"]
 
 					},
 					{
 						_id : "event2",
-						creatorId: "",
-						groupId: "",
+						creator_id: "",
+						group_id: "",
 						name : "Awesome Event Number 2 asdf asdf asdf asdf",
 						description: "aaaaaaaaaa bbbbbbbbbbbbbbb cccccccccccccccc dddddddddddddddddd eeeeeeeeeeeeeeeeeee fffffffffffffffffff gggggggggggggggggg hhhhhhhhhhhhhh iiiiiiiiiiiiiiiiiiii jjjjjjjjjjjjjjjjjjjj",
 						picture : "//placekitten.com/g/503/500/",
 						street: "4321 cool st", city: "Sacramento", state: "CA", zipcode: "95828",
-						startTimeDate : "2015-10-28T18:50:10.111Z",
-						endTimeDate : "2015-10-29T18:50:10.111Z",
+						startTimeDate : "2016-10-28T18:50:10.111Z",
+						endTimeDate : "2016-10-29T18:50:10.111Z",
 						maxVolunteers : 50,
-						volunteers: [{id: "v1", firstName: "Kitten 1", lastName: "1", picture: "//placekitten.com/g/251/250"},
-						             {id: "v2", firstName: "Kitten 2", lastName: "1", picture: "//placekitten.com/g/251/251"},
-						             {id: "v3", firstName: "Kitten 3", lastName: "1", picture: "//placekitten.com/g/251/252"},
-						             {id: "v4", firstName: "Kitten 4", lastName: "1", picture: "//placekitten.com/g/251/253"},
-						             {id: "v5", firstName: "Kitten 5", lastName: "1"},
-						             {id: "v6", firstName: "Kitten 6", lastName: "1", picture: "//placekitten.com/g/251/255"},
-						             {id: "v7", firstName: "Kitten 7", lastName: "1", picture: "//placekitten.com/g/251/256"},
-						             {id: "v8", firstName: "Kitten 8", lastName: "1", picture: "//placekitten.com/g/251/257"},
-						             {id: "v9", firstName: "Kitten 9", lastName: "1", picture: "//placekitten.com/g/251/258"},
-						             {id: "v10", firstName: "Kitten 10", lastName: "1"},
-						             {id: "v11", firstName: "Kitten 11", lastName: "1", picture: "//placekitten.com/g/251/260"},
-						             {id: "v12", firstName: "Kitten 12", lastName: "1", picture: "//placekitten.com/g/251/261"},
-						             {id: "v13", firstName: "Kitten 13", lastName: "1", picture: "//placekitten.com/g/251/262"},
-						             {id: "v14", firstName: "Kitten 14", lastName: "1", picture: "//placekitten.com/g/251/263"},
-						             {id: "v15", firstName: "Kitten 15", lastName: "1", picture: "//placekitten.com/g/251/264"},
-						             {id: "v16", firstName: "Kitten 16", lastName: "1", picture: "//placekitten.com/g/251/265"}],
+						volunteers: [{_id: "v1", firstName: "Kitten 1", lastName: "1", picture: "//placekitten.com/g/251/250"},
+						             {_id: "v2", firstName: "Kitten 2", lastName: "1", picture: "//placekitten.com/g/251/251"},
+						             {_id: "v3", firstName: "Kitten 3", lastName: "1", picture: "//placekitten.com/g/251/252"},
+						             {_id: "v4", firstName: "Kitten 4", lastName: "1", picture: "//placekitten.com/g/251/253"},
+						             {_id: "v5", firstName: "Kitten 5", lastName: "1"},
+						             {_id: "v6", firstName: "Kitten 6", lastName: "1", picture: "//placekitten.com/g/251/255"},
+						             {_id: "v7", firstName: "Kitten 7", lastName: "1", picture: "//placekitten.com/g/251/256"},
+						             {_id: "v8", firstName: "Kitten 8", lastName: "1", picture: "//placekitten.com/g/251/257"},
+						             {_id: "v9", firstName: "Kitten 9", lastName: "1", picture: "//placekitten.com/g/251/258"},
+						             {_id: "v10", firstName: "Kitten 10", lastName: "1"},
+						             {_id: "v11", firstName: "Kitten 11", lastName: "1", picture: "//placekitten.com/g/251/260"},
+						             {_id: "v12", firstName: "Kitten 12", lastName: "1", picture: "//placekitten.com/g/251/261"},
+						             {_id: "v13", firstName: "Kitten 13", lastName: "1", picture: "//placekitten.com/g/251/262"},
+						             {_id: "v14", firstName: "Kitten 14", lastName: "1", picture: "//placekitten.com/g/251/263"},
+						             {_id: "v15", firstName: "Kitten 15", lastName: "1", picture: "//placekitten.com/g/251/264"},
+						             {_id: "v16", firstName: "Kitten 16", lastName: "1", picture: "//placekitten.com/g/251/265"}],
 						interests : ["Animals", "Education", "Environment", "People", "Recreation"]
 					}
 					],
@@ -480,6 +484,15 @@ angular.module('seniorprojectYoApp')
 			else
 				return false;
 		}
+
+        $scope.isVolunteering = function(curEvent) {
+            for (var i = 0; i < $scope.group.events[curEvent].volunteers.length; i++){
+                if ($scope.group.events[curEvent].volunteers[i]._id === $scope.user._id)
+                    return true;
+            }
+            return false;
+        }
+
 		/***********************************************************************
 		 * Editing Functions
 		 **********************************************************************/
@@ -541,6 +554,17 @@ angular.module('seniorprojectYoApp')
 			$scope.technologySelected_bak = "";
 			$scope.youthSelected_bak = "";
 		}
+
+		/***************************************************************************
+		 * Volunteer Button
+		 **************************************************************************/
+		$scope.volunteer = function(curEvent) {
+
+		}
+
+        $scope.optOut = function(curEvent) {
+
+        }
 
 		/***************************************************************************
 		 * Subscribe Button

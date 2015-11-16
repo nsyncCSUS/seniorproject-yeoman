@@ -214,6 +214,17 @@ angular.module('seniorprojectYoApp')
 				return false;
 		}
 
+		/***************************************************************************
+		 * Volunteer Button
+		 **************************************************************************/
+        $scope.volunteer = function(curEvent) {
+
+ 		}
+
+        $scope.optOut = function(curEvent) {
+
+        }
+
 		/***********************************************************************
 		 * Boolean Functions
 		 **********************************************************************/
@@ -231,6 +242,14 @@ angular.module('seniorprojectYoApp')
 			else
 				return false;
 		}
+
+        $scope.isVolunteering = function(curEvent) {
+           for (var i = 0; i < $scope.user.volunteeredTo[curEvent].volunteers.length; i++){
+               if ($scope.user.volunteeredTo[curEvent].volunteers[i]._id === $scope.user._id)
+                   return true;
+           }
+           return false;
+        }
 
 
 		});

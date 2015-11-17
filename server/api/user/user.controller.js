@@ -51,13 +51,13 @@ exports.create = function(req, res, next) {
  */
 exports.show = function(req, res, next) {
     var userId = req.params.id;
-    if(!ValidId(userId)) {
-        return NotFound(res);
+    if(!validId(userId)) {
+        return notFound(res);
     }
 
     User.findById(userId, function(err, user) {
         if (err) return next(err);
-        if (!user) return NotFound(res);
+        if (!user) return notFound(res);
         res.json({
         	user: user.profile
         });
@@ -66,12 +66,12 @@ exports.show = function(req, res, next) {
 
 
 exports.update = function(req, res) {
-    if(!ValidId(req.params.id)) {
-        return NotFound(res);
+    if(!validId(req.params.id)) {
+        return notFound(res);
     }
     User.findByIdAndUpdate(req.params.id, function(err, user) {
         if(err) return handleError(res, err);
-        return rest.status(200).send({
+        return res.status(200).send({
             user: user
         });
     });
@@ -83,8 +83,8 @@ exports.update = function(req, res) {
  * restriction: 'admin'
  */
 exports.destroy = function(req, res) {
-    if(!ValidId(req.params.id)) {
-        return NotFound(res);
+    if(!validId(req.params.id)) {
+        return notFound(res);
     }
     User.findByIdAndRemove(req.params.id, function(err, user) {
         if (err) return res.status(500).send(err);
@@ -99,8 +99,8 @@ exports.changePassword = function(req, res, next) {
     var userId = req.user._id;
     var oldPass = String(req.body.oldPassword);
     var newPass = String(req.body.newPassword);
-    if(!ValidId(userId)) {
-        return NotFound(res);
+    if(!validId(userId)) {
+        return notFound(res);
     }
 
     User.findById(userId, function(err, user) {
@@ -121,8 +121,8 @@ exports.changePassword = function(req, res, next) {
  */
 exports.me = function(req, res, next) {
     var userId = req.user._id || '';
-    if(!ValidId(userId)) {
-        return NotFound(res);
+    if(!validId(userId)) {
+        return notFound(res);
     }
     User.findOne({
         _id: userId
@@ -142,11 +142,14 @@ exports.authCallback = function(req, res, next) {
     res.redirect('/');
 };
 
-function NotFound(res) {
+function notFound(res) {
     return res.status(404).send('Not Found');
-};
+}
 
-function ValidId(id) {
+function validId(id) {
     return id.match(/^[0-9a-fA-F]{24}$/);
-};
+}
 
+function handleError(res, err) {
+    return res.status(500).send(err);
+}

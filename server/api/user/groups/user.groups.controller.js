@@ -5,8 +5,8 @@ var Group = require('../../group/group.model');
 
 
 exports.create = function(req, res) {
-    if (!ValidId(req.params.id)) {
-        return NotFound(res);
+    if (!validId(req.params.id)) {
+        return notFound(res);
     }
 
     var params = req.body.group;
@@ -15,7 +15,7 @@ exports.create = function(req, res) {
         if (err) {
             return handleError(res, err);
         } else if (!group) {
-            return NotFound(res);
+            return notFound(res);
         } else {
             return User.findByIdAndUpdate(req.params.id, {
                 $push: {
@@ -25,8 +25,8 @@ exports.create = function(req, res) {
             }, function(err, user) {
                 if (err) {
                     return handleError(res, err);
-                } else if() {
-                    return NotFound(res);
+                } else if(!user) {
+                    return notFound(res);
                 } else {
                     return res.status(200).send(group);
                 }
@@ -38,12 +38,12 @@ exports.create = function(req, res) {
 
 function handleError(res, err) {
     res.status(500).send(err);
-};
+}
 
-function NotFound(res) {
+function notFound(res) {
     return res.status(404).send('Not Found');
-};
+}
 
-function ValidId(id) {
+function validId(id) {
     return id.match(/^[0-9a-fA-F]{24}$/);
-};
+}

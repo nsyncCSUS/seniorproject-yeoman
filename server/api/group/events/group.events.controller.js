@@ -5,34 +5,44 @@ var Event = require('../../event/event.model');
 
 
 exports.index = function(req, res) {
-    if(!ValidId(req.params.id)) {
-        return NotFound(res);
+    if(!validId(req.params.id)) {
+        return notFound(res);
     }
+
     Group.findById(req.params.id)
         .populate('events')
         .exec(function(err, group) {
-            res.json({
-                events: group.events
-            });
+            if(err) {
+                return handleError(res, err);
+            } else if(!group) {
+                return notFound(res);
+            } else {
+                return res.json({
+                    events: group.events
+                });
+            }
         });
 };
 
 
 exports.show = function(req, res) {
-    if(!ValidId(req.params.id) || !ValidId(req.params.eventId)) {
-        return NotFound(res);
+    if(!validId(req.params.id) || !validId(req.params.eventId)) {
+        return notFound(res);
     }
+
     Group.findById(req.params.id)
         .populate('events')
         .exec(function(err, group) {
-            if (err || !group) {
-                handleError(res, err);
+            if (err) {
+                return handleError(res, err);
+            } else if(!group) {
+                return notFound(res);
             } else {
                 var event = group.events.filter(function(index, item) {
-                    return item._id == req.params.eventId;
+                    return item._id === req.params.eventId;
                 }).pop();
 
-                res.json({
+                return res.json({
                     events: event
                 });
             }
@@ -47,18 +57,21 @@ exports.show = function(req, res) {
  * event list.
  */
 exports.destroy = function(req, res) {
-    if(!ValidId(req.params.id) || !ValidId(req.params.eventId)) {
-        return NotFound(res);
+    if(!validId(req.params.id) || !validId(req.params.eventId)) {
+        return notFound(res);
     }
-    Group.findByIdAndUpdate(req.params.id, {
+
+    return Group.findByIdAndUpdate(req.params.id, {
         $pull: {
             events: req.params.eventId
         }
     }).populate('events').exec(function(err, group) {
         if (err) {
-            handleError(res, err);
+            return handleError(res, err);
+        } else if(!group) {
+            return notFound(res);
         } else {
-            res.status(200).send({
+            return res.status(200).send({
                 events: group.events
             });
         }
@@ -68,12 +81,12 @@ exports.destroy = function(req, res) {
 
 function handleError(res, err) {
     return res.status(500).send(err);
-};
+}
 
-function NotFound(res) {
+function notFound(res) {
     return res.status(404).send('Not Found');
-};
+}
 
-function ValidId(id) {
+function validId(id) {
     return id.match(/^[0-9a-fA-F]{24}$/);
-};
+}

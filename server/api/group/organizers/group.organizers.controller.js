@@ -5,21 +5,22 @@ var User = require('../../user/user.model');
 
 
 exports.index = function(req, res) {
-    if (!ValidId(req.params.id)) {
-        return NotFound(res);
+    if (!validId(req.params.id)) {
+        return notFound(res);
     }
-    Group.findById(req.params.id)
+
+    return Group.findById(req.params.id)
         .populate('organizers')
         .exec(function(err, group) {
             if (err) {
                 return handleError(res, err);
             } else if(!group){
-                return NotFound(res);
+                return notFound(res);
             } else {
-                res.json({
+                return res.json({
                     organizers: group.organizers.map(function(user) {
                         return user.profile;
-                    });
+                    })
                 });
             }
         });
@@ -27,24 +28,25 @@ exports.index = function(req, res) {
 
 
 exports.show = function(req, res) {
-    if (!ValidId(req.params.id) || !ValidId(req.params.organizerId)) {
-        return NotFound(res);
+    if (!validId(req.params.id) || !validId(req.params.organizerId)) {
+        return notFound(res);
     }
-    Group.findById(req.params.id)
+
+    return Group.findById(req.params.id)
         .populate('organizers')
         .exec(function(err, group) {
             if (err) {
                 return handleError(res, err);
             } else if(!group) {
-                return NotFound(res);
+                return notFound(res);
             } else {
                 var organizer = group.organizers.filter(function(item) {
-                    return item._id == req.params.organizerId;
+                    return item._id === req.params.organizerId;
                 }).map(function(user) {
                     return user.profile;
                 }).pop();
 
-                res.json({
+                return res.json({
                     organizer: organizer
                 });
             }
@@ -54,10 +56,11 @@ exports.show = function(req, res) {
 
 
 exports.create = function(req, res) {
-    if (!ValidId(req.params.id) || !ValidId(req.params.organizerId)) {
-        return NotFound(res);
+    if (!validId(req.params.id) || !validId(req.params.organizerId)) {
+        return notFound(res);
     }
-    Group.findByIdAndUpdate(req.params.id, {
+
+    return Group.findByIdAndUpdate(req.params.id, {
         $push: {
             organizers: req.params.organizerId
         }
@@ -65,17 +68,19 @@ exports.create = function(req, res) {
         if (err) {
             return handleError(res, err);
         } else if(!group) {
-            return NotFound(res);
+            return notFound(res);
         } else {
-            User.findByIdAndUpdate(req.params.organizerId, {
+            return User.findByIdAndUpdate(req.params.organizerId, {
                 $push: {
                     'groups.organizerOf': req.params.id
                 }
             }, function(err, organizer) {
-                if (err || !organizer) {
-                    handleError(res, err);
+                if (err) {
+                    return handleError(res, err);
+                } else if(!organizer) {
+                    return notFound(res);
                 } else {
-                    res.status(200).send({
+                    return res.status(200).send({
                         organizers: group.organizers
                     });
                 }
@@ -87,28 +92,31 @@ exports.create = function(req, res) {
 
 
 exports.destroy = function(req, res) {
-    if (!ValidId(req.params.id) || !ValidId(req.params.organizerId)) {
-        return NotFound(res);
+    if (!validId(req.params.id) || !validId(req.params.organizerId)) {
+        return notFound(res);
     }
-    Group.findByIdAndUpdate(req.params.id, {
+
+    return Group.findByIdAndUpdate(req.params.id, {
         $pull: {
             organizers: req.params.organizerId
         }
     }).populate('organizers').exec(function(err, group) {
         if (err) {
-            handleError(res, err);
+            return handleError(res, err);
         } else if(!group) {
-            return NotFound(res);
+            return notFound(res);
         } else {
-            User.findByIdAndUpdate(req.params.organizerId, {
+            return User.findByIdAndUpdate(req.params.organizerId, {
                 $pull: {
                     'groups.organizerOf': req.params.id
                 }
-            }, function(err) {
+            }, function(err, organizer) {
                 if (err) {
-                    handleError(res, err);
+                    return handleError(res, err);
+                } else if(!organizer) {
+                    return notFound(res);
                 } else {
-                    res.status(200).send({
+                    return res.status(200).send({
                         organizers: group.organizers
                     });
                 }
@@ -121,12 +129,12 @@ exports.destroy = function(req, res) {
 
 function handleError(res, err) {
     return res.status(500).send(err);
-};
+}
 
-function NotFound(res) {
+function notFound(res) {
     return res.status(404).send('Not Found');
-};
+}
 
-function ValidId(id) {
+function validId(id) {
     return id.match(/^[0-9a-fA-F]{24}$/);
-};
+}

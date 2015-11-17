@@ -5,26 +5,28 @@ var Group = require('./group.model');
 
 // Get list of groups
 exports.index = function(req, res) {
-    Group.find({})
+    return Group.find({})
         .populate('organizers')
         .populate('volunteers')
         .populate('events')
         .exec(function(err, groups) {
             if (err) {
                 return handleError(res, err);
+            } else if(!groups) {
+                return notFound(res);
+            } else {
+                return res.status(200).json(groups);
             }
-
-            return res.status(200).json(groups);
         });
 };
 
 
 // Get a single group
 exports.show = function(req, res) {
-    if (!ValidId(req.params.id)) {
-        return NotFound(res);
+    if (!validId(req.params.id)) {
+        return notFound(res);
     }
-    Group.findById(req.params.id, function(err, group) {
+    return Group.findById(req.params.id, function(err, group) {
         if (err) {
             return handleError(res, err);
         }
@@ -42,7 +44,7 @@ exports.show = function(req, res) {
 
 // Creates a new group in the DB.
 exports.create = function(req, res) {
-    Group.create(req.body, function(err, group) {
+    return Group.create(req.body, function(err, group) {
         if (err) {
             return handleError(res, err);
         }
@@ -55,8 +57,8 @@ exports.create = function(req, res) {
 
 // Updates an existing group in the DB.
 exports.update = function(req, res) {
-    if (!ValidId(req.params.id)) {
-        return NotFound(res);
+    if (!validId(req.params.id)) {
+        return notFound(res);
     }
     if (req.body._id) {
         delete req.body._id;
@@ -83,8 +85,8 @@ exports.update = function(req, res) {
 
 // Deletes a group from the DB.
 exports.destroy = function(req, res) {
-    if (!ValidId(req.params.id)) {
-        return NotFound(res);
+    if (!validId(req.params.id)) {
+        return notFound(res);
     }
     Group.findById(req.params.id, function(err, group) {
         if (err) {
@@ -106,10 +108,10 @@ function handleError(res, err) {
     return res.status(500).send(err);
 }
 
-function NotFound(res) {
+function notFound(res) {
     return res.status(404).send('Not Found');
-};
+}
 
-function ValidId(id) {
+function validId(id) {
     return id.match(/^[0-9a-fA-F]{24}$/);
-};
+}

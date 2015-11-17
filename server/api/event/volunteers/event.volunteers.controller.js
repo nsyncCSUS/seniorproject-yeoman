@@ -5,19 +5,22 @@ var User = require('../../user/user.model');
 
 
 exports.index = function(req, res) {
-    if (!ValidId(req.params.id)) {
-        return NotFound(res);
+    if (!validId(req.params.id)) {
+        return notFound(res);
     }
-    Event.findById(req.params.id)
+
+    return Event.findById(req.params.id)
         .populate('volunteers')
         .exec(function(err, event) {
-            if (err || !event) {
-                handleError(res, err);
+            if (err) {
+                return handleError(res, err);
+            } else if(!event) {
+                return notFound(res);
             } else {
-                res.json({
+                return res.json({
                     volunteers: event.volunteers.map(function(user) {
                         return user.profile;
-                    });
+                    })
                 });
             }
         });
@@ -25,22 +28,25 @@ exports.index = function(req, res) {
 
 
 exports.show = function(req, res) {
-    if (!ValidId(req.params.id) || !ValidId(req.params.volunteerId)) {
-        return NotFound(res);
+    if (!validId(req.params.id) || !validId(req.params.volunteerId)) {
+        return notFound(res);
     }
-    Event.findById(req.params.id)
+
+    return Event.findById(req.params.id)
         .populate('volunteers')
         .exec(function(err, event) {
-            if (err || !event) {
-                handleError(res, err);
+            if (err) {
+                return handleError(res, err);
+            } else if(!event) {
+                return notFound(res);
             } else {
                 var volunteer = event.volunteers.filter(function(item) {
-                    return item._id == req.params.volunteerId;
+                    return item._id === req.params.volunteerId;
                 }).map(function(user) {
                     return user.profile;
                 }).pop();
 
-                res.json({
+                return res.json({
                     volunteer: volunteer
                 });
             }
@@ -49,29 +55,34 @@ exports.show = function(req, res) {
 
 
 exports.create = function(req, res) {
-    if (!ValidId(req.params.id) || !ValidId(req.params.volunteerId)) {
-        return NotFound(res);
+    if (!validId(req.params.id) || !validId(req.params.volunteerId)) {
+        return notFound(res);
     }
-    Event.findByIdAndUpdate(req.params.id, {
+
+    return Event.findByIdAndUpdate(req.params.id, {
         $push: {
             volunteers: req.params.volunteerId
         }
     }).populate('volunteers').exec(function(err, event) {
-        if (err || !event) {
-            handleError(res, err);
+        if (err) {
+            return handleError(res, err);
+        } else if(!event) {
+            return notFound(res);
         } else {
-            User.findByIdAndUpdate(req.params.volunteerId, {
+            return User.findByIdAndUpdate(req.params.volunteerId, {
                 $push: {
                     'events.volunteeredTo': req.params.id
                 }
             }, function(err, user) {
-                if (err || !user) {
-                    handleError(res, err);
+                if (err) {
+                    return handleError(res, err);
+                } else if(!user) {
+                    return notFound(res);
                 } else {
-                    res.status(200).send({
+                    return res.status(200).send({
                         volunteers: event.volunteers.map(function(item) {
                             return item.profile;
-                        });
+                        })
                     });
                 }
             });
@@ -81,30 +92,34 @@ exports.create = function(req, res) {
 
 
 exports.destroy = function(req, res) {
-    if (!ValidId(req.params.id) || !ValidId(req.params.volunteerId)) {
-        return NotFound(res);
+    if (!validId(req.params.id) || !validId(req.params.volunteerId)) {
+        return notFound(res);
     }
-    Event.findByIdAndUpdate(req.params.id, {
+
+    return Event.findByIdAndUpdate(req.params.id, {
         $pull: {
             volunteers: req.params.volunteerId
         }
     }).populate('volunteers').exec(function(err, event) {
         if (err) {
-            handleError(res, err);
+            return handleError(res, err);
+        } else if(!event) {
+            return notFound(res);
         } else {
-            // Remove event from volunteer's event list
-            User.findByIdAndUpdate(req.params.volunteerId, {
+            return User.findByIdAndUpdate(req.params.volunteerId, {
                 $pull: {
                     'event.volunteeredTo': req.params.id
                 }
             }, function(err, volunteer) {
                 if (err) {
-                    handleError(res, err);
+                    return handleError(res, err);
+                } else if(!volunteer) {
+                    return notFound(res);
                 } else {
-                    res.status(200).send({
+                    return res.status(200).send({
                         volunteers: event.volunteers.map(function(item) {
                             return item.profile;
-                        });
+                        })
                     });
                 }
             });
@@ -115,12 +130,12 @@ exports.destroy = function(req, res) {
 
 function handleError(res, err) {
     res.status(500).send(err);
-};
+}
 
-function NotFound(res) {
+function notFound(res) {
     res.status(404).send('Not Found');
-};
+}
 
-function ValidId(id) {
+function validId(id) {
     return id.match(new RegExp(/^[0-9a-fA-F]{24}$/));
-};
+}

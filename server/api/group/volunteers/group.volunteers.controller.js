@@ -5,21 +5,22 @@ var User = require('../../user/user.model');
 
 
 exports.index = function(req, res) {
-    if (!ValidId(req.params.id)) {
-        return NotFound(res);
+    if (!validId(req.params.id)) {
+        return notFound(res);
     }
-    Group.findById(req.params.id)
+
+    return Group.findById(req.params.id)
         .populate('volunteers')
         .exec(function(err, group) {
             if (err) {
                 return handleError(res, err);
             } else if(!group) {
-                return NotFound(res);
+                return notFound(res);
             } else {
-                res.json({
+                return res.json({
                     volunteers: group.volunteers.map(function(user) {
                         return user.profile;
-                    });
+                    })
                 });
             }
         });
@@ -27,24 +28,25 @@ exports.index = function(req, res) {
 
 
 exports.show = function(req, res) {
-    if (!ValidId(req.params.id) || !ValidId(req.params.volunteerId)) {
-        return NotFound(res);
+    if (!validId(req.params.id) || !validId(req.params.volunteerId)) {
+        return notFound(res);
     }
-    Group.findById(req.params.id)
+
+    return Group.findById(req.params.id)
         .populate('volunteers')
         .exec(function(err, group) {
             if (err) {
                 return handleError(err, res);
-            } else if () {
-                return NotFound(res);
+            } else if (!group) {
+                return notFound(res);
             }else {
                 var volunteer = group.volunteers.filter(function(item) {
-                    return item._id == req.params.volunteerId;
+                    return item._id === req.params.volunteerId;
                 }).map(function(user) {
                     return user.profile;
                 }).pop();
 
-                res.json({
+                return res.json({
                     volunteer: volunteer
                 });
             }
@@ -53,10 +55,11 @@ exports.show = function(req, res) {
 
 
 exports.create = function(req, res) {
-    if (!ValidId(req.params.id) || !ValidId(req.params.volunteerId)) {
-        return NotFound(res);
+    if (!validId(req.params.id) || !validId(req.params.volunteerId)) {
+        return notFound(res);
     }
-    Group.findByIdAndUpdate(req.params.id, {
+
+    return Group.findByIdAndUpdate(req.params.id, {
         $push: {
             volunteers: req.params.volunteerId
         }
@@ -64,9 +67,9 @@ exports.create = function(req, res) {
         if (err) {
             return handleError(err, res);
         } else if (!group) {
-            return NotFound(res);
+            return notFound(res);
         } else {
-            User.findByIdAndUpdate(req.params.volunteerId, {
+            return User.findByIdAndUpdate(req.params.volunteerId, {
                 $push: {
                     'groups.volunteeredTo': req.params.id
                 }
@@ -74,9 +77,9 @@ exports.create = function(req, res) {
                 if (err) {
                     return handleError(res, err);
                 } else if(!volunteer) {
-                    return NotFound(res);
+                    return notFound(res);
                 } else {
-                    res.status(200).send({
+                    return res.status(200).send({
                         volunteers: group.volunteers
                     });
                 }
@@ -87,10 +90,11 @@ exports.create = function(req, res) {
 
 
 exports.destroy = function(req, res) {
-    if (!ValidId(req.params.id) || !ValidId(req.params.VolunteerId)) {
-        return NotFound(res);
+    if (!validId(req.params.id) || !validId(req.params.VolunteerId)) {
+        return notFound(res);
     }
-    Group.findByIdAndUpdate(req.params.id, {
+
+    return Group.findByIdAndUpdate(req.params.id, {
         $pull: {
             volunteers: req.params.volunteerId
         }
@@ -98,7 +102,7 @@ exports.destroy = function(req, res) {
         if (err) {
             return handleError(err, res);
         } else if(!group) {
-            return NotFound(res);
+            return notFound(res);
         } else {
             return User.findByIdAndUpdate(req.params.volunteerId, {
                 $pull: {
@@ -108,7 +112,7 @@ exports.destroy = function(req, res) {
                 if (err) {
                     return handleError(res, err);
                 } else if(!volunteer) {
-                    return NotFound(res);
+                    return notFound(res);
                 } else {
                     return res.status(200).send({
                         volunteers: group.volunteers
@@ -122,12 +126,12 @@ exports.destroy = function(req, res) {
 
 function handleError(err, res) {
     return res.status(500).send(err);
-};
+}
 
-function NotFound(res) {
+function notFound(res) {
     return res.status(404).send('Not Found');
-};
+}
 
-function ValidId(id) {
+function validId(id) {
     return id.match(/^[0-9a-fA-F]{24}$/);
-};
+}

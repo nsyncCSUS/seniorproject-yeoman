@@ -5,16 +5,17 @@ var Event = require('../../../event/event.model');
 
 
 exports.index = function(req, res) {
-    if (!ValidId(req.params.id)) {
-        return NotFound(res);
+    if (!validId(req.params.id)) {
+        return notFound(res);
     }
-    User.findById(req.params.id)
+
+    return User.findById(req.params.id)
         .populate('events.organizerOf')
         .exec(function(err, user) {
             if (err) {
                 return handleError(res, err);
             } else if (!user) {
-                return NotFound(res);
+                return notFound(res);
             } else {
                 return res.json(user.events.organizerOf);
             }
@@ -23,19 +24,20 @@ exports.index = function(req, res) {
 
 
 exports.show = function(req, res) {
-    if (!ValidId(req.params.id) || !ValidId(req.params.eventId)) {
-        return NotFound(res);
+    if (!validId(req.params.id) || !validId(req.params.eventId)) {
+        return notFound(res);
     }
-    User.findById(req.params.id)
+
+    return User.findById(req.params.id)
         .populate('events.organizerOf')
         .exec(function(err, user) {
             if (err) {
                 return handleError(res, err);
             } else if (!user) {
-                return NotFound(res);
+                return notFound(res);
             } else {
                 var event = user.events.organizerOf.filter(function(item) {
-                    return item._id == req.params.eventId;
+                    return item._id === req.params.eventId;
                 }).pop();
 
                 return res.json({
@@ -47,8 +49,8 @@ exports.show = function(req, res) {
 
 
 exports.create = function(req, res) {
-    if (!ValidId(req.params.id) || !ValidId(req.params.eventId)) {
-        return NotFound(res);
+    if (!validId(req.params.id) || !validId(req.params.eventId)) {
+        return notFound(res);
     }
 
     return User.findByIdAndUpdate(req.params.id, {
@@ -59,7 +61,7 @@ exports.create = function(req, res) {
         if (err) {
             return handleError(res, err);
         } else if (!user) {
-            return NotFound(res);
+            return notFound(res);
         } else {
             return Event.findByIdAndUpdate(req.params.eventId, {
                 $push: {
@@ -69,7 +71,7 @@ exports.create = function(req, res) {
                 if (err) {
                     return handleError(res, err);
                 } else if(!event) {
-                    return NotFound(res);
+                    return notFound(res);
                 } else {
                     return res.status(200).send({
                         events: user.events.organizerOf
@@ -82,8 +84,8 @@ exports.create = function(req, res) {
 
 
 exports.destroy = function(req, res) {
-    if (!ValidId(req.params.id) || !ValidId(req.params.eventId)) {
-        return NotFound(res);
+    if (!validId(req.params.id) || !validId(req.params.eventId)) {
+        return notFound(res);
     }
 
     return User.findByIdAndUpdate(req.params.id, {
@@ -94,7 +96,7 @@ exports.destroy = function(req, res) {
         if (err) {
             return handleError(res, err);
         } else if(!user) {
-            return NotFound(res);
+            return notFound(res);
         } else {
             return Event.findByIdAndUpdate(req.params.eventId, {
                 $pull: {
@@ -104,7 +106,7 @@ exports.destroy = function(req, res) {
                 if (err) {
                     return handleError(res, err);
                 } else if(!event) {
-                    return NotFound(res);
+                    return notFound(res);
                 } else {
                     return res.status(200).send({
                         events: user.events.organizerOf
@@ -118,12 +120,12 @@ exports.destroy = function(req, res) {
 
 function handleError(res, err) {
     res.status(500).send(err);
-};
+}
 
-function NotFound(res) {
+function notFound(res) {
     return res.status(404).send('Not Found');
-};
+}
 
-function ValidId(id) {
+function validId(id) {
     return id.match(/^[0-9a-fA-F]{24}$/);
-};
+}

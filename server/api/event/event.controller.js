@@ -9,13 +9,11 @@ exports.index = function(req, res) {
         .populate('organizers')
         .populate('volunteers')
         .exec(function(err, events) {
-                if (err) {
-                    return handleError(res, err);
-                }
+            if (err) {
+                return handleError(res, err);
+            }
 
-                return res.status(200).json({
-                    events: events
-                });
+            return res.status(200).json(events);
         });
 };
 

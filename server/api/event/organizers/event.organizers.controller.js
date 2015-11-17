@@ -18,11 +18,9 @@ exports.index = function(req, res) {
             } else if(!event) {
                 return notFound(res);
             } else {
-                return res.status(200).json({
-                    organizers: event.organizers.map(function(user) {
-                        return user.profile;
-                    })
-                });
+                return res.status(200).json(event.organizers.map(function(user) {
+                    return user.profile;
+                }));
             }
         });
 };
@@ -77,7 +75,7 @@ exports.create = function(req, res) {
             }, function(err, user) {
                 if (err) {
                     return handleError(res, err);
-                } else if(!event) {
+                } else if(!user) {
                     return notFound(res);
                 } else {
                     return res.status(200).json({

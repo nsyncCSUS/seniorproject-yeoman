@@ -60,9 +60,11 @@ exports.create = function(req, res) {
     }
 
     return Event.findByIdAndUpdate(req.params.id, {
-        $push: {
+        $addToSet: {
             volunteers: req.params.volunteerId
         }
+    }, {
+        new: true
     }).populate('volunteers').exec(function(err, event) {
         if (err) {
             return handleError(res, err);
@@ -100,6 +102,8 @@ exports.destroy = function(req, res) {
         $pull: {
             volunteers: req.params.volunteerId
         }
+    }, {
+        new: true
     }).populate('volunteers').exec(function(err, event) {
         if (err) {
             return handleError(res, err);

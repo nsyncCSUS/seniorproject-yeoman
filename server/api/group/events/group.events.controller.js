@@ -65,6 +65,8 @@ exports.destroy = function(req, res) {
         $pull: {
             events: req.params.eventId
         }
+    }, {
+        new: true
     }).populate('events').exec(function(err, group) {
         if (err) {
             return handleError(res, err);

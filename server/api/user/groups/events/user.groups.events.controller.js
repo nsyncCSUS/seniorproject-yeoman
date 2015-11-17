@@ -19,7 +19,7 @@ exports.create = function(req, res) {
             return notFound(res);
         } else {
             return User.findByIdAndUpdate(req.params.id, {
-                $push: {
+                $addToSet: {
                     'events.creatorOf': req.params.eventId,
                     'events.organizerOf': req.params.eventId
                 }
@@ -30,7 +30,7 @@ exports.create = function(req, res) {
                     return notFound(res);
                 } else {
                     return Group.findByIdAndUpdate(req.params.groupId, {
-                        $push: {
+                        $addToSet: {
                             'events': req.params.event
                         }
                     }, function(err, group) {

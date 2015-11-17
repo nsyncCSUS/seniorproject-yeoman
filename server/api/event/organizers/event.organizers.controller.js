@@ -59,9 +59,11 @@ exports.create = function(req, res) {
     }
 
     return Event.findByIdAndUpdate(req.params.id, {
-        $push: {
+        $addToSet: {
             organizers: req.params.organizerId
         }
+    }, {
+        new: true
     }).populate('organizers').exec(function(err, event) {
         if (err) {
             return handleError(res, err);
@@ -78,11 +80,9 @@ exports.create = function(req, res) {
                 } else if(!user) {
                     return notFound(res);
                 } else {
-                    return res.status(200).json({
-                        organizers: event.organizers.map(function(item) {
-                            return item.profile;
-                        })
-                    });
+                    return res.status(200).json(event.organizers.map(function(item) {
+                        return item.profile;
+                    }));
                 }
             });
         }
@@ -99,6 +99,8 @@ exports.destroy = function(req, res) {
         $pull: {
             organizers: req.params.organizerId
         }
+    }, {
+        new: true
     }).populate('organizers').exec(function(err, event) {
         if (err) {
             return handleError(res, err);

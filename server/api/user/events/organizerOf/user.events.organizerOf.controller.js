@@ -54,9 +54,11 @@ exports.create = function(req, res) {
     }
 
     return User.findByIdAndUpdate(req.params.id, {
-        $push: {
+        $addToSet: {
             'events.organizerOf': req.params.eventId
         }
+    }, {
+        new: true
     }).populate('events.organizerOf').exec(function(err, user) {
         if (err) {
             return handleError(res, err);
@@ -92,6 +94,8 @@ exports.destroy = function(req, res) {
         $pull: {
             'events.organizerOf': req.params.eventId
         }
+    }, {
+        new: true
     }).populate('events.organizerOf').exec(function(err, user) {
         if (err) {
             return handleError(res, err);

@@ -121,6 +121,23 @@ User.findOneAndRemove({_id: '000000000000000000000002'}, function(err) {
 });
 
 
+User.findOneAndRemove({_id: '000000000000000000000003'}, function(err) {
+    if(err) return console.log(err);
+    User.create({
+        name: 'Alex Something Else',
+        firstName: 'Alex',
+        middleName: 'Something',
+        lastName: 'Else',
+        _id: '000000000000000000000003',
+        password: 'test'
+    }, function(err) {
+        if(err) return console.log(err);
+        console.log('Created User: 000000000000000000000003')
+    });
+})
+
+
+
 /**
  * Seed Events
  */

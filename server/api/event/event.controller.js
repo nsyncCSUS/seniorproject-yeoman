@@ -22,7 +22,8 @@ exports.show = function(req, res) {
     if (!validId(req.params.id)) {
         return notFound(res);
     }
-    Event.findById(req.params.id, function(err, event) {
+
+    return Event.findById(req.params.id, function(err, event) {
         if (err) {
             return handleError(res, err);
         }

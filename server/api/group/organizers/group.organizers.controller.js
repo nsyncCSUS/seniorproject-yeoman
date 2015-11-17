@@ -61,9 +61,11 @@ exports.create = function(req, res) {
     }
 
     return Group.findByIdAndUpdate(req.params.id, {
-        $push: {
+        $addToSet: {
             organizers: req.params.organizerId
         }
+    }, {
+        new: true
     }).populate('organizers').exec(function(err, group) {
         if (err) {
             return handleError(res, err);
@@ -100,6 +102,8 @@ exports.destroy = function(req, res) {
         $pull: {
             organizers: req.params.organizerId
         }
+    }, {
+        new: true
     }).populate('organizers').exec(function(err, group) {
         if (err) {
             return handleError(res, err);

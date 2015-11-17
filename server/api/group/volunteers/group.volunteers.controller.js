@@ -60,9 +60,11 @@ exports.create = function(req, res) {
     }
 
     return Group.findByIdAndUpdate(req.params.id, {
-        $push: {
+        $addToSet: {
             volunteers: req.params.volunteerId
         }
+    }, {
+        new: true
     }).populate('volunteers').exec(function(err, group) {
         if (err) {
             return handleError(err, res);
@@ -98,6 +100,8 @@ exports.destroy = function(req, res) {
         $pull: {
             volunteers: req.params.volunteerId
         }
+    }, {
+        new: true
     }).populate('volunteers').exec(function(err, group) {
         if (err) {
             return handleError(err, res);

@@ -6,22 +6,22 @@ var Group = require('./group.model');
 // Get list of groups
 exports.index = function(req, res) {
     Group.find({})
-    	.populate('organizers')
-    	.populate('volunteers')
-    	.populate('events')
-    	.exec(function(err, groups) {
-        if (err) {
-            return handleError(res, err);
-        }
+        .populate('organizers')
+        .populate('volunteers')
+        .populate('events')
+        .exec(function(err, groups) {
+            if (err) {
+                return handleError(res, err);
+            }
 
-        return res.status(200).json(groups);
-    });
+            return res.status(200).json(groups);
+        });
 };
 
 
 // Get a single group
 exports.show = function(req, res) {
-    if(!ValidId(req.params.id)) {
+    if (!ValidId(req.params.id)) {
         return NotFound(res);
     }
     Group.findById(req.params.id, function(err, group) {
@@ -34,7 +34,7 @@ exports.show = function(req, res) {
         }
 
         return res.json({
-        	group: group
+            group: group
         });
     });
 };
@@ -47,7 +47,7 @@ exports.create = function(req, res) {
             return handleError(res, err);
         }
         return res.status(201).json({
-        	group: group
+            group: group
         });
     });
 };
@@ -55,7 +55,7 @@ exports.create = function(req, res) {
 
 // Updates an existing group in the DB.
 exports.update = function(req, res) {
-    if(!ValidId(req.params.id)) {
+    if (!ValidId(req.params.id)) {
         return NotFound(res);
     }
     if (req.body._id) {
@@ -74,7 +74,7 @@ exports.update = function(req, res) {
                 return handleError(res, err);
             }
             return res.status(200).json({
-            	group: group
+                group: group
             });
         });
     });
@@ -83,7 +83,7 @@ exports.update = function(req, res) {
 
 // Deletes a group from the DB.
 exports.destroy = function(req, res) {
-    if(!ValidId(req.params.id)) {
+    if (!ValidId(req.params.id)) {
         return NotFound(res);
     }
     Group.findById(req.params.id, function(err, group) {

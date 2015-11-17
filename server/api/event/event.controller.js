@@ -6,20 +6,23 @@ var Event = require('./event.model');
 // Get list of events
 exports.index = function(req, res) {
     Event.find({})
-    	.populate('organizers')
-    	.populate('volunteers')
-	    .exec(function(err, events) {
-	        if (err) {
-	            return handleError(res, err);
-	        }
+        .populate('organizers')
+        .populate('volunteers')
+        .exec(function(err, events) {
+                if (err) {
+                    return handleError(res, err);
+                }
 
-	        return res.status(200).json(events);
-	    });
+                return res.status(200).json({
+                    events: events
+                });
+            }
+        });
 };
 
 // Get a single event
 exports.show = function(req, res) {
-    if(!ValidId(req.params.id)) {
+    if (!ValidId(req.params.id)) {
         return NotFound(res);
     }
     Event.findById(req.params.id, function(err, event) {
@@ -30,30 +33,32 @@ exports.show = function(req, res) {
             return res.status(404).send('Not Found');
         }
         return res.json({
-        	event: event
+            event: event
         });
     });
 };
 
 // Creates a new event in the DB.
 exports.create = function(req, res) {
-   Event.create(req.body, function(err, event) {
+    Event.create(req.body, function(err, event) {
         if (err) {
             return handleError(res, err);
         }
         return res.status(201).json({
-        	event: event
+            event: event
         });
     });
 };
 
 // Updates an existing event in the DB.
 exports.update = function(req, res) {
-    if(!ValidId(req.params.id)) {
+    if (!ValidId(req.params.id)) {
         return NotFound(res);
     } else if (req.body._id) {
         delete req.body._id;
     }
+
+    clean(req.body);
     Event.findById(req.params.id, function(err, event) {
         if (err) {
             return handleError(res, err);
@@ -67,7 +72,7 @@ exports.update = function(req, res) {
                 return handleError(res, err);
             }
             return res.status(200).json({
-            	event: event
+                event: event
             });
         });
     });
@@ -75,7 +80,7 @@ exports.update = function(req, res) {
 
 // Deletes a event from the DB.
 exports.destroy = function(req, res) {
-    if(!ValidId(req.params.id)) {
+    if (!ValidId(req.params.id)) {
         return NotFound(res);
     }
     Event.findById(req.params.id, function(err, event) {
@@ -105,4 +110,10 @@ function NotFound(res) {
 function ValidId(id) {
     var idRegex = new RegExp(/^[0-9a-fA-F]{24}$/);
     return id.match(idRegex);
+};
+
+function clean(body) {
+    if (body.organizers) delete body.organizers;
+    if (body.volunteers) delete body.volunteers;
+    if (body.creationUser) delete body.creationUser;
 };

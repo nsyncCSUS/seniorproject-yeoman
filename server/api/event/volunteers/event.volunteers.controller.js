@@ -5,7 +5,7 @@ var User = require('../../user/user.model');
 
 
 exports.index = function(req, res) {
-    if(!ValidId(req.params.id)) {
+    if (!ValidId(req.params.id)) {
         return NotFound(res);
     }
     Event.findById(req.params.id)
@@ -14,18 +14,18 @@ exports.index = function(req, res) {
             if (err || !event) {
                 handleError(res, err);
             } else {
-            	var volunteers = event.volunteers.map(function(user) {
-            		return user.profile;
-            	});
-            	
-              res.json(volunteers);
+                res.json({
+                    volunteers: event.volunteers.map(function(user) {
+                        return user.profile;
+                    });
+                });
             }
         });
 };
 
 
 exports.show = function(req, res) {
-    if(!ValidId(req.params.id) || !ValidId(req.params.volunteerId)) {
+    if (!ValidId(req.params.id) || !ValidId(req.params.volunteerId)) {
         return NotFound(res);
     }
     Event.findById(req.params.id)
@@ -34,14 +34,14 @@ exports.show = function(req, res) {
             if (err || !event) {
                 handleError(res, err);
             } else {
-                var volunteers = event.volunteers.filter(function(item) {
+                var volunteer = event.volunteers.filter(function(item) {
                     return item._id == req.params.volunteerId;
                 }).map(function(user) {
-                	return user.profile;
-                });
+                    return user.profile;
+                }).pop();
 
                 res.json({
-                    volunteer: volunteers[0]
+                    volunteer: volunteer
                 });
             }
         });
@@ -49,57 +49,65 @@ exports.show = function(req, res) {
 
 
 exports.create = function(req, res) {
-    if(!ValidId(req.params.id) || !ValidId(req.params.volunteerId)) {
+    if (!ValidId(req.params.id) || !ValidId(req.params.volunteerId)) {
         return NotFound(res);
     }
     Event.findByIdAndUpdate(req.params.id, {
         $push: {
             volunteers: req.params.volunteerId
         }
-    }, function(err, event) {
+    }).populate('volunteers').exec(function(err, event) {
         if (err || !event) {
             handleError(res, err);
         } else {
-        	User.findByIdAndUpdate(req.params.volunteerId, {
-        		$push: {
-        			'events.volunteeredTo': req.params.id
-	        	}
-        	}, function(err, user) {
-        		if(err || !user) {
-        			handleError(res, err);
-        		} else {
-        			res.status(200).send('success');
-        		}
-        	});
+            User.findByIdAndUpdate(req.params.volunteerId, {
+                $push: {
+                    'events.volunteeredTo': req.params.id
+                }
+            }, function(err, user) {
+                if (err || !user) {
+                    handleError(res, err);
+                } else {
+                    res.status(200).send({
+                        volunteers: event.volunteers.map(function(item) {
+                            return item.profile;
+                        });
+                    });
+                }
+            });
         }
     });
 };
 
 
 exports.destroy = function(req, res) {
-    if(!ValidId(req.params.id) || !ValidId(req.params.volunteerId)) {
+    if (!ValidId(req.params.id) || !ValidId(req.params.volunteerId)) {
         return NotFound(res);
     }
     Event.findByIdAndUpdate(req.params.id, {
         $pull: {
             volunteers: req.params.volunteerId
         }
-    }, function(err) {
+    }).populate('volunteers').exec(function(err, event) {
         if (err) {
             handleError(res, err);
         } else {
-        	// Remove event from volunteer's event list
-        	User.findByIdAndUpdate(req.params.volunteerId, {
-        		$pull: {
-        			'event.volunteeredTo': req.params.id
-	        	}
-        	}, function(err, volunteer) {
-        		if(err) {
-        			handleError(res, err);
-        		} else {
-        			res.status(200).send('success');
-        		}
-        	});
+            // Remove event from volunteer's event list
+            User.findByIdAndUpdate(req.params.volunteerId, {
+                $pull: {
+                    'event.volunteeredTo': req.params.id
+                }
+            }, function(err, volunteer) {
+                if (err) {
+                    handleError(res, err);
+                } else {
+                    res.status(200).send({
+                        volunteers: event.volunteers.map(function(item) {
+                            return item.profile;
+                        });
+                    });
+                }
+            });
         }
     });
 };

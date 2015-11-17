@@ -5,43 +5,47 @@ var User = require('../../user/user.model');
 
 
 exports.index = function(req, res) {
-    if(!ValidId(req.params.id)) {
+    if (!ValidId(req.params.id)) {
         return NotFound(res);
     }
     Group.findById(req.params.id)
         .populate('volunteers')
         .exec(function(err, group) {
-        	if(err || !group) {
-        		handleError(res, err);
-        	} else {
-        		var volunteers = group.volunteers.map(function(user) {
-        			return user.profile;
-        		});
-
-        		res.json(volunteers);
-        	}
+            if (err) {
+                return handleError(res, err);
+            } else if(!group) {
+                return NotFound(res);
+            } else {
+                res.json({
+                    volunteers: group.volunteers.map(function(user) {
+                        return user.profile;
+                    });
+                });
+            }
         });
 };
 
 
 exports.show = function(req, res) {
-    if(!ValidId(req.params.id) || !ValidId(req.params.volunteerId)) {
+    if (!ValidId(req.params.id) || !ValidId(req.params.volunteerId)) {
         return NotFound(res);
     }
     Group.findById(req.params.id)
         .populate('volunteers')
         .exec(function(err, group) {
-            if (err || !group) {
-                handleError(err, res);
-            } else {
-                var volunteers = group.volunteers.filter(function(item) {
+            if (err) {
+                return handleError(err, res);
+            } else if () {
+                return NotFound(res);
+            }else {
+                var volunteer = group.volunteers.filter(function(item) {
                     return item._id == req.params.volunteerId;
                 }).map(function(user) {
-                	return user.profile;
-                });
+                    return user.profile;
+                }).pop();
 
                 res.json({
-                    volunteer: volunteers[0]
+                    volunteer: volunteer
                 });
             }
         });
@@ -49,56 +53,68 @@ exports.show = function(req, res) {
 
 
 exports.create = function(req, res) {
-    if(!ValidId(req.params.id) || !ValidId(req.params.volunteerId)) {
+    if (!ValidId(req.params.id) || !ValidId(req.params.volunteerId)) {
         return NotFound(res);
     }
     Group.findByIdAndUpdate(req.params.id, {
         $push: {
             volunteers: req.params.volunteerId
         }
-    }, function(err, group) {
-        if (err || !group) {
-            handleError(err, res);
+    }).populate('volunteers').exec(function(err, group) {
+        if (err) {
+            return handleError(err, res);
+        } else if (!group) {
+            return NotFound(res);
         } else {
-        	User.findByIdAndUpdate(req.params.volunteerId, {
-        		$push: {
-	        		'groups.volunteeredTo': req.params.id
-	        	}
-        	}, function(err, volunteer) {
-        		if(err || !volunteer) {
-        			handleError(res, err);
-        		} else {
-        			res.status(200).send('success');
-        		}
-        	});
+            User.findByIdAndUpdate(req.params.volunteerId, {
+                $push: {
+                    'groups.volunteeredTo': req.params.id
+                }
+            }, function(err, volunteer) {
+                if (err) {
+                    return handleError(res, err);
+                } else if(!volunteer) {
+                    return NotFound(res);
+                } else {
+                    res.status(200).send({
+                        volunteers: group.volunteers
+                    });
+                }
+            });
         }
     });
 };
 
 
 exports.destroy = function(req, res) {
-    if(!ValidId(req.params.id) || !ValidId(req.params.VolunteerId)) {
+    if (!ValidId(req.params.id) || !ValidId(req.params.VolunteerId)) {
         return NotFound(res);
     }
     Group.findByIdAndUpdate(req.params.id, {
         $pull: {
             volunteers: req.params.volunteerId
         }
-    }, function(err) {
+    }).populate('volunteers').exec(function(err, group) {
         if (err) {
-            handleError(err, res);
+            return handleError(err, res);
+        } else if(!group) {
+            return NotFound(res);
         } else {
-        	User.findByIdAndUpdate(req.params.volunteerId, {
-        		$pull: {
-	        		'groups.organizerOf': req.params.id
-	        	}
-        	}, function(err) {
-        		if(err) {
-        			handleError(res, err);
-        		} else {
-        			res.status(200).send('success');
-        		}
-        	});
+            return User.findByIdAndUpdate(req.params.volunteerId, {
+                $pull: {
+                    'groups.organizerOf': req.params.id
+                }
+            }, function(err, volunteer) {
+                if (err) {
+                    return handleError(res, err);
+                } else if(!volunteer) {
+                    return NotFound(res);
+                } else {
+                    return res.status(200).send({
+                        volunteers: group.volunteers
+                    });
+                }
+            });
         }
     });
 };

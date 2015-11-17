@@ -57,12 +57,26 @@ exports.show = function(req, res, next) {
 
     User.findById(userId, function(err, user) {
         if (err) return next(err);
-        if (!user) return res.status(401).send('Unauthorized');
+        if (!user) return NotFound(res);
         res.json({
         	user: user.profile
         });
     });
 };
+
+
+exports.update = function(req, res) {
+    if(!ValidId(req.params.id)) {
+        return NotFound(res);
+    }
+    User.findByIdAndUpdate(req.params.id, function(err, user) {
+        if(err) return handleError(res, err);
+        return rest.status(200).send({
+            user: user
+        });
+    });
+};
+
 
 /**
  * Deletes a user
@@ -106,7 +120,7 @@ exports.changePassword = function(req, res, next) {
  * Get my info
  */
 exports.me = function(req, res, next) {
-    var userId = req.user._id;
+    var userId = req.user._id || '';
     if(!ValidId(userId)) {
         return NotFound(res);
     }

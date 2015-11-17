@@ -5,37 +5,41 @@ var Event = require('../../../event/event.model');
 
 
 exports.index = function(req, res) {
-    if(!ValidId(req.params.id)) {
+    if (!ValidId(req.params.id)) {
         return NotFound(res);
     }
     User.findById(req.params.id)
         .populate('events.organizerOf')
         .exec(function(err, user) {
-            if (err || !user) {
-                handleError(res, err);
+            if (err) {
+                return handleError(res, err);
+            } else if (!user) {
+                return NotFound(res);
             } else {
-                res.json(user.events.organizerOf);
+                return res.json(user.events.organizerOf);
             }
         });
 };
 
 
 exports.show = function(req, res) {
-    if(!ValidId(req.params.id) || !ValidId(req.params.eventId)) {
+    if (!ValidId(req.params.id) || !ValidId(req.params.eventId)) {
         return NotFound(res);
     }
     User.findById(req.params.id)
         .populate('events.organizerOf')
         .exec(function(err, user) {
-            if (err || !user) {
-                handleError(res, err);
+            if (err) {
+                return handleError(res, err);
+            } else if (!user) {
+                return NotFound(res);
             } else {
                 var event = user.events.organizerOf.filter(function(item) {
                     return item._id == req.params.eventId;
-                });
+                }).pop();
 
-                res.json({
-                    event: event[0]
+                return res.json({
+                    event: event
                 });
             }
         });
@@ -43,56 +47,70 @@ exports.show = function(req, res) {
 
 
 exports.create = function(req, res) {
-    if(!ValidId(req.params.id) || !ValidId(req.params.eventId)) {
+    if (!ValidId(req.params.id) || !ValidId(req.params.eventId)) {
         return NotFound(res);
     }
-    User.findByIdAndUpdate(req.params.id, {
+
+    return User.findByIdAndUpdate(req.params.id, {
         $push: {
             'events.organizerOf': req.params.eventId
         }
-    }, function(err, user) {
-        if (err || !user) {
-            handleError(res, err);
+    }).populate('events.organizerOf').exec(function(err, user) {
+        if (err) {
+            return handleError(res, err);
+        } else if (!user) {
+            return NotFound(res);
         } else {
-        	Event.findByIdAndUpdate(req.params.eventId, {
-        		$push: {
-	        		organizers: req.params.id
-	        	}
-        	}, function(err, event) {
-        		if(err || !event) {
-        			handleError(res, err);
-        		} else {
-        			res.status(200).send('success');
-        		}
-        	});
+            return Event.findByIdAndUpdate(req.params.eventId, {
+                $push: {
+                    organizers: req.params.id
+                }
+            }, function(err, event) {
+                if (err) {
+                    return handleError(res, err);
+                } else if(!event) {
+                    return NotFound(res);
+                } else {
+                    return res.status(200).send({
+                        events: user.events.organizerOf
+                    });
+                }
+            });
         }
     });
 };
 
 
 exports.destroy = function(req, res) {
-    if(!ValidId(req.params.id) || !ValidId(req.params.eventId)) {
+    if (!ValidId(req.params.id) || !ValidId(req.params.eventId)) {
         return NotFound(res);
     }
-    User.findByIdAndUpdate(req.params.id, {
+
+    return User.findByIdAndUpdate(req.params.id, {
         $pull: {
             'events.organizerOf': req.params.eventId
         }
-    }, function(err, user) {
-        if (err || !user) {
-            handleError(res, err);
+    }).populate('events.organizerOf').exec(function(err, user) {
+        if (err) {
+            return handleError(res, err);
+        } else if(!user) {
+            return NotFound(res);
         } else {
-        	Event.findByIdAndUpdate(req.params.eventId, {
-        		$pull: {
-	        		organizers: req.params.id
-	        	}
-        	}, function(err, event) {
-        		if(err || !event) {
-        			handleError(res, err);
-        		} else {
-        			res.status(200).send('success');
-        		}
-        	});
+            return Event.findByIdAndUpdate(req.params.eventId, {
+                $pull: {
+                    organizers: req.params.id
+                }
+            }, function(err, event) {
+                if (err) {
+                    return handleError(res, err);
+                } else if(!event) {
+                    return NotFound(res);
+                } else {
+                    return res.status(200).send({
+                        events: user.events.organizerOf
+                    });
+                }
+            });
         }
     });
 };

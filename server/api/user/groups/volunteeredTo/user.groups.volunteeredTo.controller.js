@@ -5,37 +5,43 @@ var Group = require('../../../group/group.model');
 
 
 exports.index = function(req, res) {
-    if(!ValidId(req.params.id)) {
+    if (!ValidId(req.params.id)) {
         return NotFound(res);
     }
+
     User.findById(req.params.id)
-        .populate('groups.subscribedTo')
+        .populate('groups.volunteeredTo')
         .exec(function(err, user) {
-            if (err || !user) {
-                handleError(res, err);
+            if (err) {
+                return handleError(res, err);
+            } else if(!user) {
+                return NotFound(res);
             } else {
-                res.json(user.groups.subscribedTo);
+                return res.json(user.groups.subscribedTo);
             }
         });
 };
 
 
 exports.show = function(req, res) {
-    if(!ValidId(req.params.id) || !ValidId(req.params.eventId)) {
+    if (!ValidId(req.params.id) || !ValidId(req.params.eventId)) {
         return NotFound(res);
     }
-    User.findById(req.params.id)
-        .populate('groups.subscribedTo')
+
+    return User.findById(req.params.id)
+        .populate('groups.volunteeredTo')
         .exec(function(err, user) {
-            if (err || !user) {
-                handleError(res, err);
+            if (err) {
+                return handleError(res, err);
+            } else if(!user) {
+                return NotFound(res);
             } else {
                 var group = user.groups.subscribedTo.filter(function(item) {
                     return item._id == req.params.groupId;
-                });
+                }).pop();
 
-                res.json({
-                    group: group[0]
+                return res.json({
+                    group: group
                 });
             }
         });
@@ -43,56 +49,70 @@ exports.show = function(req, res) {
 
 
 exports.create = function(req, res) {
-    if(!ValidId(req.params.id) || !ValidId(req.params.eventId)) {
+    if (!ValidId(req.params.id) || !ValidId(req.params.eventId)) {
         return NotFound(res);
     }
-    User.findByIdAndUpdate(req.params.id, {
+
+    return User.findByIdAndUpdate(req.params.id, {
         $push: {
-    		'groups.subscribedTo': req.params.groupId
+            'groups.volunteeredTo': req.params.groupId
         }
-    }, function(err, user) {
-        if (err || !user) {
-            handleError(res, err);
+    }).populate('groups.volunteeredTo').exec(function(err, user) {
+        if (err) {
+            return handleError(res, err);
+        } else if(!user) {
+            return NotFound(res);
         } else {
-        	Group.findByIdAndUpdate(req.params.groupId, {
-        		$push: {
-	        		volunteers: req.params.id
-	        	}
-        	}, function(err, group) {
-        		if(err || !group) {
-        			handleError(res, err);
-        		} else {
-        			res.status(200).send('success');
-        		}
-        	});
+            return Group.findByIdAndUpdate(req.params.groupId, {
+                $push: {
+                    volunteers: req.params.id
+                }
+            }, function(err, group) {
+                if (err) {
+                    return handleError(res, err);
+                } else if(!group) {
+                    return NotFound(res);
+                } else {
+                    res.status(200).send({
+                        groups: user.groups.volunteeredTo
+                    });
+                }
+            });
         }
     });
 };
 
 
 exports.destroy = function(req, res) {
-    if(!ValidId(req.params.id) || !ValidId(req.params.eventId)) {
+    if (!ValidId(req.params.id) || !ValidId(req.params.eventId)) {
         return NotFound(res);
     }
-    User.findByIdAndUpdate(req.params.id, {
+
+    return User.findByIdAndUpdate(req.params.id, {
         $pull: {
-    		'groups.subscribedTo': req.params.groupId
+            'groups.volunteeredTo': req.params.groupId
         }
-    }, function(err, user) {
-        if (err || !user) {
-            handleError(res, err);
+    }).populate('groups.volunteeredTo').exec(function(err, user) {
+        if (err) {
+            return handleError(res, err);
+        } else if(!user) {
+            return NotFound(res);
         } else {
-        	Group.findByIdAndUpdate(req.params.groupId, {
-        		$pull: {
-	        		volunteers: req.params.id
-	        	}
-        	}, function(err, group) {
-        		if(err || !group) {
-        			handleError(res, err);
-        		} else {
-        			res.status(200).send('success');
-        		}
-        	});
+            return Group.findByIdAndUpdate(req.params.groupId, {
+                $pull: {
+                    volunteers: req.params.id
+                }
+            }, function(err, group) {
+                if (err) {
+                    return handleError(res, err);
+                } else if(!group) {
+                    return NotFound(res);
+                } else {
+                    return res.status(200).send({
+                        groups: user.groups.volunteeredTo
+                    });
+                }
+            });
         }
     });
 };

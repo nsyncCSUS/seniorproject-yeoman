@@ -50,7 +50,7 @@ angular.module('seniorprojectYoApp')
              city: "Sacramento",
              state: "CA",
              zipcode: "95828",
-             maxVolunteers: 50,
+             maxVolunteers: 5,
              interests : ["Animals", "Education", "Environment", "People", "Recreation", "Technology", "Youth"]
 
          };

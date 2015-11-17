@@ -27,6 +27,10 @@ angular.module('seniorprojectYoApp')
         $scope.technologySelected = "";
         $scope.youthSelected = "";
 
+        $scope.user = {
+            _id : "v1"
+        };
+
 
         /***************************************************************************
          * Get Functions
@@ -40,8 +44,13 @@ angular.module('seniorprojectYoApp')
             });
         } else {
             $scope.event = {
-                _id: "event1",
-                creationUser: "",
+                _id : "event1",
+                creationUser: {
+                    _id : "creatorid",
+                    firstName : "Anthony",
+                    lastName : "Nguyen",
+                    picture : "//placekitten.com/g/505/500/"
+                },
                 group: {
                     _id: "nsync",
                     name: "N.Sync().......... .............. ................ ............. ..........................",
@@ -279,6 +288,8 @@ angular.module('seniorprojectYoApp')
             // Reset interests for editing
             clearInterests();
             buildInterests();
+
+            buildDuration();
         }
 
         $scope.submitEdit = function() {
@@ -320,6 +331,19 @@ angular.module('seniorprojectYoApp')
             $scope.recreationSelected_bak = "";
             $scope.technologySelected_bak = "";
             $scope.youthSelected_bak = "";
+
+            buildDuration();
+        }
+
+		/***************************************************************************
+		 * Volunteer Button
+		 **************************************************************************/
+		$scope.volunteer = function() {
+
+		}
+
+        $scope.optOut = function() {
+
         }
 
         /***************************************************************************
@@ -329,10 +353,19 @@ angular.module('seniorprojectYoApp')
 
         }
 
-        /***************************************************************************
-         * Boolean functions
-         **************************************************************************/
-        $scope.hasDays = function() {
+
+		/***************************************************************************
+		 * Boolean functions
+		 **************************************************************************/
+        $scope.isVolunteering = function() {
+            for (var i = 0; i < $scope.event.volunteers.length; i++){
+                if ($scope.event.volunteers[i]._id === $scope.user._id)
+                    return true;
+            }
+            return false;
+        }
+
+        $scope.hasDays = function(){
             if ($scope.duration.days != null) {
                 return true;
             } else {

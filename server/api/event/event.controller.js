@@ -16,14 +16,13 @@ exports.index = function(req, res) {
                 return res.status(200).json({
                     events: events
                 });
-            }
         });
 };
 
 // Get a single event
 exports.show = function(req, res) {
-    if (!ValidId(req.params.id)) {
-        return NotFound(res);
+    if (!validId(req.params.id)) {
+        return notFound(res);
     }
     Event.findById(req.params.id, function(err, event) {
         if (err) {
@@ -52,8 +51,8 @@ exports.create = function(req, res) {
 
 // Updates an existing event in the DB.
 exports.update = function(req, res) {
-    if (!ValidId(req.params.id)) {
-        return NotFound(res);
+    if (!validId(req.params.id)) {
+        return notFound(res);
     } else if (req.body._id) {
         delete req.body._id;
     }
@@ -80,8 +79,8 @@ exports.update = function(req, res) {
 
 // Deletes a event from the DB.
 exports.destroy = function(req, res) {
-    if (!ValidId(req.params.id)) {
-        return NotFound(res);
+    if (!validId(req.params.id)) {
+        return notFound(res);
     }
     Event.findById(req.params.id, function(err, event) {
         if (err) {
@@ -101,19 +100,19 @@ exports.destroy = function(req, res) {
 
 function handleError(res, err) {
     return res.status(500).send(err);
-};
+}
 
-function NotFound(res) {
+function notFound(res) {
     return res.status(404).send('Not Found');
-};
+}
 
-function ValidId(id) {
+function validId(id) {
     var idRegex = new RegExp(/^[0-9a-fA-F]{24}$/);
     return id.match(idRegex);
-};
+}
 
 function clean(body) {
     if (body.organizers) delete body.organizers;
     if (body.volunteers) delete body.volunteers;
     if (body.creationUser) delete body.creationUser;
-};
+}

@@ -6,19 +6,21 @@ var User = require('../../user/user.model');
 
 
 exports.index = function(req, res) {
-    if (!ValidId(req.params.id)) {
-        return NotFound(res);
+    if (!validId(req.params.id)) {
+        return notFound(res);
     }
     Event.findById(req.params.id)
         .populate('organizers')
         .exec(function(err, event) {
-            if (err || !event) {
-                handleError(res, err);
+            if (err) {
+                return handleError(res, err);
+            } else if(!event) {
+                return notFound(res);
             } else {
                 res.status(200).json({
                     organizers: event.organizers.map(function(user) {
                         return user.profile;
-                    });
+                    })
                 });
             }
         });
@@ -26,14 +28,17 @@ exports.index = function(req, res) {
 
 
 exports.show = function(req, res) {
-    if (!ValidId(req.params.id) || !ValidId(req.params.organizerId)) {
-        return NotFound(res);
+    if (!validId(req.params.id) || !validId(req.params.organizerId)) {
+        return notFound(res);
     }
-    Event.findById(req.params.id)
+
+    return Event.findById(req.params.id)
         .populate('organizers')
         .exec(function(err, event) {
-            if (err || !event) {
-                handleError(res, err);
+            if (err) {
+                return handleError(res, err);
+            } else if(!event) {
+                return notFound(res);
             } else {
                 var organizer = event.organizers.filter(function(item) {
                     return item._id == req.params.organizerId;
@@ -50,8 +55,8 @@ exports.show = function(req, res) {
 
 
 exports.create = function(req, res) {
-    if (!ValidId(req.params.id) || !ValidId(req.params.organizerId)) {
-        return NotFound(res);
+    if (!validId(req.params.id) || !validId(req.params.organizerId)) {
+        return notFound(res);
     }
     Event.findByIdAndUpdate(req.params.id, {
         $push: {
@@ -82,8 +87,8 @@ exports.create = function(req, res) {
 
 
 exports.destroy = function(req, res) {
-    if (!ValidId(req.params.id) || !ValidId(req.params.organizerId)) {
-        return NotFound(res);
+    if (!validId(req.params.id) || !validId(req.params.organizerId)) {
+        return notFound(res);
     }
     Event.findByIdAndUpdate(req.params.id, {
         $pull: {
@@ -117,10 +122,10 @@ function handleError(res, err) {
     return res.status(500).send(err);
 };
 
-function NotFound(res) {
+function notFound(res) {
     return res.status(404).send('Not Found');
 };
 
-function ValidId(id) {
+function validId(id) {
     return id.match(new RegExp(/^[0-9a-fA-F]{24}$/));
 };

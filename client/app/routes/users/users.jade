@@ -125,11 +125,11 @@ div(ng-show='!getIsEditing()')
 
                     .panel-body.eventRow(ng-show='getCurrentTab("Volunteered To")')
                         .row.eventRow(ng-repeat='event in user.volunteeredTo | orderBy:"startTimeDate" | CheckExpired:false')
-                            group-event-card
+                            group-event-sm-card
 
                     .panel-body.eventRow(ng-show='getCurrentTab("Past Events")')
                         .row.eventRow(ng-repeat='event in user.volunteeredTo | orderBy:"-startTimeDate" | CheckExpired:true')
-                            past-group-event-card
+                            past-group-event-sm-card
 
                     .panel-body.eventRow(ng-show='getCurrentTab("Subscriptions")')
                         a(ng-href='/group/{{group._id}}/', ng-repeat='group in user.subscribedTo | limitTo: 100')

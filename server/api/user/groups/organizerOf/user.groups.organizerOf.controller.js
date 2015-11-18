@@ -24,7 +24,7 @@ exports.index = function(req, res) {
 
 
 exports.show = function(req, res) {
-    if (!validId(req.params.id) || !validId(req.params.eventId)) {
+    if (!validId(req.params.id) || !validId(req.params.groupId)) {
         return notFound(res);
     }
 
@@ -36,20 +36,24 @@ exports.show = function(req, res) {
             } else if (!user) {
                 return notFound(res);
             } else {
-                var group = user.groups.organizerOf.filter(function(item) {
-                    return item._id === req.params.groupId;
-                }).pop();
-
-                return res.json({
-                    group: group
+                var groups = user.groups.organizerOf.filter(function(item) {
+                    return item._id.toString() === req.params.groupId;
                 });
+
+                if(groups.length === 0) {
+                    return notFound(res);
+                } else {
+                    return res.json({
+                        group: groups.pop()
+                    });
+                }
             }
         });
 };
 
 
 exports.create = function(req, res) {
-    if (!validId(req.params.id) || !validId(req.params.eventId)) {
+    if (!validId(req.params.id) || !validId(req.params.groupId)) {
         return notFound(res);
     }
 
@@ -75,9 +79,7 @@ exports.create = function(req, res) {
                 } else if(!group) {
                     return notFound(res);
                 } else {
-                    return res.status(200).send({
-                        groups: user.groups.organizerOf
-                    });
+                    return res.status(200).send(user.groups.organizerOf);
                 }
             });
         }
@@ -86,7 +88,7 @@ exports.create = function(req, res) {
 
 
 exports.destroy = function(req, res) {
-    if (!validId(req.params.id) || !validId(req.params.eventId)) {
+    if (!validId(req.params.id) || !validId(req.params.groupId)) {
         return notFound(res);
     }
 
@@ -112,9 +114,7 @@ exports.destroy = function(req, res) {
                 } else if(!group) {
                     return notFound(res);
                 } else {
-                    return res.status(200).send({
-                        groups: user.groups.organizerOf
-                    });
+                    return res.status(200).send(user.groups.organizerOf);
                 }
             });
         }

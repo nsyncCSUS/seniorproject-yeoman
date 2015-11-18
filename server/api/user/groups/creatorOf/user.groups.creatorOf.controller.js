@@ -28,20 +28,25 @@ exports.show = function(req, res) {
     }
 
     return User.findById(req.params.id)
-        .populate('events.organizerOf')
+        .populate('groups.creatorOf')
         .exec(function(err, user) {
             if (err) {
                 return handleError(res, err);
             } else if(!user) {
                 return notFound(res);
             } else {
-                var group = user.groups.creatorOf.filter(function(item) {
-                    return item._id === req.params.eventId;
-                }).pop();
-
-                return res.json({
-                    group: group
+                var groups = user.groups.creatorOf.filter(function(item) {
+                    console.log(item);
+                    return item._id.toString() === req.params.eventId;
                 });
+
+                if(groups.length === 0) {
+                    return notFound(res);
+                } else {
+                    return res.json({
+                        group: group.pop()
+                    });
+                }
             }
         });
 };

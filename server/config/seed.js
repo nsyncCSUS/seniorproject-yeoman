@@ -147,7 +147,8 @@ Event.findOneAndRemove({_id: '000000000000000000000000'}, function() {
         _id: '000000000000000000000000',
         organizers: ['000000000000000000000002'],
         volunteers: ['000000000000000000000002'],
-        creationUser: '000000000000000000000002'
+        creationUser: '000000000000000000000002',
+        group: '000000000000000000000000'
     }, function(err) {
         if(err) return console.log(err);
         console.log('Created Event: 000000000000000000000000');
@@ -178,6 +179,9 @@ Group.findOneAndRemove({_id: '000000000000000000000000'}, function() {
         _id: '000000000000000000000000',
         organizers: [
             '000000000000000000000002'
+        ],
+        events: [
+            '000000000000000000000000'
         ]
     }, function(err) {
         if(err) return console.log('Err: ' + err);

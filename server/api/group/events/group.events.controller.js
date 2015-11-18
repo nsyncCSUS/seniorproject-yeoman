@@ -17,9 +17,7 @@ exports.index = function(req, res) {
             } else if(!group) {
                 return notFound(res);
             } else {
-                return res.json({
-                    events: group.events
-                });
+                return res.json(group.events);
             }
         });
 };
@@ -38,13 +36,17 @@ exports.show = function(req, res) {
             } else if(!group) {
                 return notFound(res);
             } else {
-                var event = group.events.filter(function(index, item) {
-                    return item._id === req.params.eventId;
-                }).pop();
-
-                return res.json({
-                    events: event
+                var events = group.events.filter(function(item) {
+                    return item._id.toString() === req.params.eventId;
                 });
+
+                if(events.length === 0) {
+                    return notFound(res);
+                } else {
+                    return res.json({
+                        event: events.pop()
+                    });
+                }
             }
         });
 };
@@ -61,22 +63,34 @@ exports.destroy = function(req, res) {
         return notFound(res);
     }
 
-    return Group.findByIdAndUpdate(req.params.id, {
-        $pull: {
-            events: req.params.eventId
-        }
-    }, {
-        new: true
-    }).populate('events').exec(function(err, group) {
-        if (err) {
+    return Event.findById(req.params.eventId, function(err, event) {
+        if(err) {
             return handleError(res, err);
-        } else if(!group) {
+        } else if(!event) {
             return notFound(res);
-        } else {
-            return res.status(200).send({
-                events: group.events
-            });
         }
+
+        event.remove(function() {
+            if(err) {
+                return handleError(res, err);
+            }
+
+            return Group.findByIdAndUpdate(req.params.id, {
+                $pull: {
+                    events: req.params.eventId
+                }
+            }, {
+                new: true
+            }).populate('events').exec(function(err, group) {
+                if (err) {
+                    return handleError(res, err);
+                } else if(!group) {
+                    return notFound(res);
+                } else {
+                    return res.status(200).send(group.events);
+                }
+            });
+        });
     });
 };
 

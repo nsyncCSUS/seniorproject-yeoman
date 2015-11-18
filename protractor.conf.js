@@ -6,7 +6,7 @@
 exports.config = {
   // The timeout for each script run on the browser. This should be longer
   // than the maximum time your application needs to stabilize between tasks.
-  allScriptsTimeout: 110000,
+  allScriptsTimeout: 5000000,
 
   // A base URL for your application under test. Calls to protractor.get()
   // with relative paths will be prepended with this.
@@ -20,6 +20,12 @@ exports.config = {
   specs: [
     'e2e/**/*.spec.js'
 //    'client/**/*.spec.js'
+  ],
+
+  files: [
+      'client/bower_components/angular/angular.js',
+      'client/bower_components/angular-mocks/angular-mocks.js',
+      'client/app.js'
   ],
 
   // Patterns to exclude.
@@ -40,12 +46,25 @@ exports.config = {
   // Jasmine and Cucumber are fully supported as a test and assertion framework.
   // Mocha has limited beta support. You will need to include your own
   // assertion framework if working with mocha.
-  framework: 'jasmine',
+  framework: 'jasmine2',
 
   // ----- Options to be passed to minijasminenode -----
   //
   // See the full list at https://github.com/juliemr/minijasminenode
   jasmineNodeOpts: {
     defaultTimeoutInterval: 30000
+  },
+
+  onPrepare: function() {
+    // implicit and page load timeouts
+    browser.manage().timeouts().pageLoadTimeout(40000);
+    browser.manage().timeouts().implicitlyWait(25000);
+
+    // for non-angular page
+    browser.ignoreSynchronization = true;
+
+    // sign in before all tests
+    browser.get('/');
   }
+
 };

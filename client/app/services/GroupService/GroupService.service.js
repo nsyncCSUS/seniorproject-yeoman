@@ -26,11 +26,11 @@ angular.module('seniorprojectYoApp')
          * Construct a url from different url components
          */
         function constructUrl(item1, item2, item3, item4) {
-            var url = '/';
-            if (item1 != null && item1 != undefined) url += item1 + '/';
-            if (item2 != null && item2 != undefined) url += item2 + '/';
-            if (item3 != null && item3 != undefined) url += item3 + '/';
-            if (item4 != null && item4 != undefined) url += item4 + '/';
+            var url = '';
+            if (item1 != null && item1 != undefined) url += '/' + item1;
+            if (item2 != null && item2 != undefined) url += '/' + item2;
+            if (item3 != null && item3 != undefined) url += '/' + item3;
+            if (item4 != null && item4 != undefined) url += '/' + item4;
             return url;
         };
 

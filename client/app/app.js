@@ -7,7 +7,8 @@ angular.module('seniorprojectYoApp', [
   'btford.socket-io',
   'ui.router',
   'ui.bootstrap',
-  'ui.bootstrap.datetimepicker'
+  'ui.bootstrap.datetimepicker',
+  'angularMoment'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider

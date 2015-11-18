@@ -19,7 +19,8 @@ describe('Service: EventService', function() {
 
     describe('EventService', function() {
         it('should retrieve a list of events', function() {
-            expect(false);
+            var i = 1;
+            expect(i).toBe(1);
         });
 
         it('should retrieve a single event', function() {});

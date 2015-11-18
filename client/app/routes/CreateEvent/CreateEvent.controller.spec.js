@@ -3,6 +3,7 @@
 describe('Controller: CreateEventCtrl', function () {
 
   // load the controller's module
+  beforeEach(module('angularMoment'));
   beforeEach(module('seniorprojectYoApp'));
 
   var CreateEventCtrl, scope;

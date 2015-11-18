@@ -12,3 +12,4 @@ build/
 /server/config/enviroment
 .buildpath
 seniorproject-yo.iml
+coverage/

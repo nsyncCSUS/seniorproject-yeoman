@@ -19,9 +19,12 @@ module.exports = function(config) {
       'client/bower_components/angular-sanitize/angular-sanitize.js',
       'client/bower_components/angular-route/angular-route.js',
       'client/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+      'client/bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js',
       'client/bower_components/lodash/dist/lodash.compat.js',
       'client/bower_components/angular-socket-io/socket.js',
       'client/bower_components/angular-ui-router/release/angular-ui-router.js',
+      'node_modules/moment/moment.js',
+      'node_modules/angular-moment/angular-moment.js',
       'client/app/app.js',
       'client/app/app.coffee',
       'client/app/**/*.js',
@@ -38,6 +41,7 @@ module.exports = function(config) {
       '**/*.jade': 'ng-jade2js',
       '**/*.html': 'html2js',
       'client/app/**/*.js': 'babel',
+//      'client/app/**/*.js': 'coverage',
       '**/*.coffee': 'coffee',
     },
 
@@ -49,7 +53,7 @@ module.exports = function(config) {
       stripPrefix: 'client/'
     },
 
-    
+
     babelPreprocessor: {
       options: {
         sourceMap: 'inline'
@@ -61,7 +65,7 @@ module.exports = function(config) {
         return file.originalPath;
       }
     },
-    
+
 
     // list of files / patterns to exclude
     exclude: [],
@@ -75,7 +79,7 @@ module.exports = function(config) {
 
 
     // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: false,
+    autoWatch: true,
 
 
     // Start these browsers, currently available:
@@ -86,9 +90,24 @@ module.exports = function(config) {
     // - Safari (only Mac)
     // - PhantomJS
     // - IE (only Windows)
-    //browsers: ['PhantomJS'],
-    browsers: ['Firefox'],
+    browsers: ['PhantomJS'],
+//    browsers: ['Firefox'],
 
+    plugins: [
+        'karma-jasmine',
+        'karma-phantomjs-launcher',
+        'karma-firefox-launcher',
+        'karma-coverage',
+        'karma-chai',
+        'karma-ng-jade2js-preprocessor',
+        'karma-html2js-preprocessor',
+        'karma-babel-preprocessor'
+    ],
+
+    reporters: [
+        'progress',
+        'coverage'
+    ],
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('EventsCtrl', function($stateParams, $scope, EventService) {
+    .controller('EventsCtrl', function($stateParams, $scope, EventService, moment) {
         $scope.message = 'Hello';
 
 

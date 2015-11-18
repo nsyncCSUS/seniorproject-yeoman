@@ -17,11 +17,9 @@ exports.index = function(req, res) {
             } else if(!group) {
                 return notFound(res);
             } else {
-                return res.json({
-                    volunteers: group.volunteers.map(function(user) {
-                        return user.profile;
-                    })
-                });
+                return res.json(group.volunteers.map(function(user) {
+                    return user.profile;
+                }));
             }
         });
 };
@@ -36,19 +34,23 @@ exports.show = function(req, res) {
         .populate('volunteers')
         .exec(function(err, group) {
             if (err) {
-                return handleError(err, res);
+                return handleError(res, err);
             } else if (!group) {
                 return notFound(res);
-            }else {
-                var volunteer = group.volunteers.filter(function(item) {
-                    return item._id === req.params.volunteerId;
+            } else {
+                var volunteers = group.volunteers.filter(function(item) {
+                    return item._id.toString() === req.params.volunteerId;
                 }).map(function(user) {
                     return user.profile;
-                }).pop();
-
-                return res.json({
-                    volunteer: volunteer
                 });
+
+                if(volunteers.length === 0) {
+                    return notFound(res);
+                } else {
+                    return res.json({
+                        volunteer: volunteers.pop()
+                    });
+                }
             }
         });
 };
@@ -67,7 +69,7 @@ exports.create = function(req, res) {
         new: true
     }).populate('volunteers').exec(function(err, group) {
         if (err) {
-            return handleError(err, res);
+            return handleError(res, err);
         } else if (!group) {
             return notFound(res);
         } else {
@@ -81,9 +83,7 @@ exports.create = function(req, res) {
                 } else if(!volunteer) {
                     return notFound(res);
                 } else {
-                    return res.status(200).send({
-                        volunteers: group.volunteers
-                    });
+                    return res.status(200).send(group.volunteers);
                 }
             });
         }
@@ -92,7 +92,7 @@ exports.create = function(req, res) {
 
 
 exports.destroy = function(req, res) {
-    if (!validId(req.params.id) || !validId(req.params.VolunteerId)) {
+    if (!validId(req.params.id) || !validId(req.params.volunteerId)) {
         return notFound(res);
     }
 
@@ -104,7 +104,7 @@ exports.destroy = function(req, res) {
         new: true
     }).populate('volunteers').exec(function(err, group) {
         if (err) {
-            return handleError(err, res);
+            return handleError(res, err);
         } else if(!group) {
             return notFound(res);
         } else {
@@ -118,9 +118,7 @@ exports.destroy = function(req, res) {
                 } else if(!volunteer) {
                     return notFound(res);
                 } else {
-                    return res.status(200).send({
-                        volunteers: group.volunteers
-                    });
+                    return res.status(200).send(group.volunteers);
                 }
             });
         }
@@ -128,7 +126,8 @@ exports.destroy = function(req, res) {
 };
 
 
-function handleError(err, res) {
+function handleError(res, err) {
+    console.log("Error: ", err);
     return res.status(500).send(err);
 }
 

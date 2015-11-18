@@ -39,15 +39,19 @@ exports.show = function(req, res) {
             } else if(!event) {
                 return notFound(res);
             } else {
-                var organizer = event.organizers.filter(function(item) {
-                    return item._id === req.params.organizerId;
+                var organizers = event.organizers.filter(function(item) {
+                    return item._id.toString() === req.params.organizerId;
                 }).map(function(user) {
                     return user.profile;
-                }).pop();
-
-                return res.status(200).json({
-                    organizer: organizer
                 });
+
+                if(organizers.length === 0) {
+                    return notFound(res);
+                } else {
+                    return res.status(200).json({
+                        organizer: organizers.pop()
+                    });
+                }
             }
         });
 };
@@ -117,11 +121,9 @@ exports.destroy = function(req, res) {
                 } else if(!user) {
                     return notFound(res);
                 } else {
-                    return res.status(200).json({
-                        organizers: event.organizers.map(function(item) {
-                            return item.profile;
-                        })
-                    });
+                    return res.status(200).json(event.organizers.map(function(item) {
+                        return item.profile;
+                    }));
                 }
             });
         }

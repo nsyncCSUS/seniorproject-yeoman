@@ -17,11 +17,9 @@ exports.index = function(req, res) {
             } else if(!event) {
                 return notFound(res);
             } else {
-                return res.json({
-                    volunteers: event.volunteers.map(function(user) {
-                        return user.profile;
-                    })
-                });
+                return res.json(event.volunteers.map(function(user) {
+                    return user.profile;
+                }));
             }
         });
 };
@@ -40,15 +38,19 @@ exports.show = function(req, res) {
             } else if(!event) {
                 return notFound(res);
             } else {
-                var volunteer = event.volunteers.filter(function(item) {
-                    return item._id === req.params.volunteerId;
+                var volunteers = event.volunteers.filter(function(item) {
+                    return item._id.toString() === req.params.volunteerId;
                 }).map(function(user) {
                     return user.profile;
-                }).pop();
-
-                return res.json({
-                    volunteer: volunteer
                 });
+
+                if(volunteers.length === 0) {
+                    return notFound(res);
+                } else {
+                    return res.json({
+                        volunteer: volunteers[0]
+                    });
+                }
             }
         });
 };
@@ -81,11 +83,9 @@ exports.create = function(req, res) {
                 } else if(!user) {
                     return notFound(res);
                 } else {
-                    return res.status(200).send({
-                        volunteers: event.volunteers.map(function(item) {
-                            return item.profile;
-                        })
-                    });
+                    return res.status(200).send(event.volunteers.map(function(item) {
+                        return item.profile;
+                    }));
                 }
             });
         }
@@ -120,11 +120,9 @@ exports.destroy = function(req, res) {
                 } else if(!volunteer) {
                     return notFound(res);
                 } else {
-                    return res.status(200).send({
-                        volunteers: event.volunteers.map(function(item) {
-                            return item.profile;
-                        })
-                    });
+                    return res.status(200).send(event.volunteers.map(function(item) {
+                        return item.profile;
+                    }));
                 }
             });
         }

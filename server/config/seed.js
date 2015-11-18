@@ -106,7 +106,9 @@ User.findOneAndRemove({_id: '000000000000000000000002'}, function(err) {
             ]
         },
         groups: {
-            creatorOf: [],
+            creatorOf: [
+                '000000000000000000000000'
+            ],
             organizerOf: [
                 '000000000000000000000000'
             ],
@@ -185,7 +187,8 @@ Group.findOneAndRemove({_id: '000000000000000000000000'}, function() {
         ],
         events: [
             '000000000000000000000000'
-        ]
+        ],
+        creationUser: '000000000000000000000002'
     }, function(err) {
         if(err) return console.log('Err: ' + err);
         console.log('Created Group: 000000000000000000000000')

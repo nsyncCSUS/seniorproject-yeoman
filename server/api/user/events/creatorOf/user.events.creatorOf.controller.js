@@ -35,13 +35,17 @@ exports.show = function(req, res) {
             } else if(!user) {
                 return notFound(res);
             } else {
-                var event = user.events.creatorOf.filter(function(item) {
-                    return item._id === req.params.eventId;
-                }).pop();
-
-                return res.json({
-                    event: event
+                var events = user.events.creatorOf.filter(function(item) {
+                    return item._id.toString() === req.params.eventId;
                 });
+
+                if(events.length === 0) {
+                    return notFound(res);
+                } else {
+                    return res.json({
+                        event: events.pop()
+                    });
+                }
             }
         });
 };

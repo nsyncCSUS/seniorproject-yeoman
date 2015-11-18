@@ -36,13 +36,17 @@ exports.show = function(req, res) {
             } else if (!user) {
                 return notFound(res);
             } else {
-                var event = user.events.organizerOf.filter(function(item) {
+                var events = user.events.organizerOf.filter(function(item) {
                     return item._id === req.params.eventId;
-                }).pop();
-
-                return res.json({
-                    event: event
                 });
+
+                if(events.length === 0) {
+                    return notFound(res);
+                } else {
+                    return res.json({
+                        event: events.pop()
+                    });
+                }
             }
         });
 };
@@ -75,9 +79,7 @@ exports.create = function(req, res) {
                 } else if(!event) {
                     return notFound(res);
                 } else {
-                    return res.status(200).send({
-                        events: user.events.organizerOf
-                    });
+                    return res.status(200).send(user.events.organizerOf);
                 }
             });
         }
@@ -112,9 +114,7 @@ exports.destroy = function(req, res) {
                 } else if(!event) {
                     return notFound(res);
                 } else {
-                    return res.status(200).send({
-                        events: user.events.organizerOf
-                    });
+                    return res.status(200).send(user.events.organizerOf);
                 }
             });
         }

@@ -35,39 +35,39 @@ var UserSchema = new Schema({
     phoneNum: String,
 
     events: {
-		volunteeredTo: [{
-	        type: Schema.ObjectId,
-	        ref: 'Event'
-	    }],
-	    
-	    organizerOf: [{
-	    	type: Schema.ObjectId,
-	    	ref: 'Event'
-	    }],
-	    
-	    creatorOf: [{
-		    type: Schema.ObjectId,
-		    ref: 'Event'
-		}]
-	},
+        volunteeredTo: [{
+            type: Schema.ObjectId,
+            ref: 'Event'
+        }],
 
-    
-	groups: {
-		subscribedTo: [{
-	        type: Schema.ObjectId,
-	        ref: 'Group'
-	    }],	    
-	
-	    organizerOf: [{
-	        type: Schema.ObjectId,
-	        ref: 'Group'
-	    }],
-	
-	    creatorOf: [{
-	    	type: Schema.ObjectId,
-	    	ref: 'Group'
-	    }]
-	},
+        organizerOf: [{
+            type: Schema.ObjectId,
+            ref: 'Event'
+        }],
+
+        creatorOf: [{
+            type: Schema.ObjectId,
+            ref: 'Event'
+        }]
+    },
+
+
+    groups: {
+        volunteeredTo: [{
+            type: Schema.ObjectId,
+            ref: 'Group'
+        }],
+
+        organizerOf: [{
+            type: Schema.ObjectId,
+            ref: 'Group'
+        }],
+
+        creatorOf: [{
+            type: Schema.ObjectId,
+            ref: 'Group'
+        }]
+    },
 
     interests: [String]
 });
@@ -91,23 +91,23 @@ UserSchema
     .virtual('profile')
     .get(function() {
         return {
-        	'_id': this._id,
+            '_id': this._id,
             'name': this.name,
             'role': this.role,
-            
-			'firstName': this.firstName,
-			'middleName': this.middleName,
-			'lastName': this.lastName,
-			'birthday': this.birthday,
-			'age': this.age,
-			'city': this.city,
-			'state': this.state,
-			'zipcode': this.zipcode,
-			'phoneNum': this.phoneNum,
-			
-			'events': this.events,
-			'groups': this.groups,
-			'interests': this.interests
+
+            'firstName': this.firstName,
+            'middleName': this.middleName,
+            'lastName': this.lastName,
+            'birthday': this.birthday,
+            'age': this.age,
+            'city': this.city,
+            'state': this.state,
+            'zipcode': this.zipcode,
+            'phoneNum': this.phoneNum,
+
+            'events': this.events,
+            'groups': this.groups,
+            'interests': this.interests
 
         };
     });

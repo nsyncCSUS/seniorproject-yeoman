@@ -17,11 +17,9 @@ exports.index = function(req, res) {
             } else if(!group){
                 return notFound(res);
             } else {
-                return res.json({
-                    organizers: group.organizers.map(function(user) {
-                        return user.profile;
-                    })
-                });
+                return res.json(group.organizers.map(function(user) {
+                    return user.profile;
+                }));
             }
         });
 };
@@ -40,15 +38,19 @@ exports.show = function(req, res) {
             } else if(!group) {
                 return notFound(res);
             } else {
-                var organizer = group.organizers.filter(function(item) {
-                    return item._id === req.params.organizerId;
+                var organizers = group.organizers.filter(function(item) {
+                    return item._id.toString() === req.params.organizerId;
                 }).map(function(user) {
                     return user.profile;
-                }).pop();
-
-                return res.json({
-                    organizer: organizer
                 });
+
+                if(organizers.length === 0) {
+                    return notFound(res);
+                } else {
+                    return res.json({
+                        organizer: organizers.pop()
+                    });
+                }
             }
         });
 };
@@ -82,9 +84,7 @@ exports.create = function(req, res) {
                 } else if(!organizer) {
                     return notFound(res);
                 } else {
-                    return res.status(200).send({
-                        organizers: group.organizers
-                    });
+                    return res.status(200).send(group.organizers);
                 }
             });
         }
@@ -120,9 +120,7 @@ exports.destroy = function(req, res) {
                 } else if(!organizer) {
                     return notFound(res);
                 } else {
-                    return res.status(200).send({
-                        organizers: group.organizers
-                    });
+                    return res.status(200).send(group.organizers);
                 }
             });
         }

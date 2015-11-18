@@ -24,7 +24,7 @@ describe('GET /api/groups/:id/events', function() {
             .get('/api/groups/123456789012345678901234/events')
             .expect(404)
             .end(function(err, res) {
-                if(err) return done(err);
+                if (err) return done(err);
                 done();
             })
     });
@@ -34,7 +34,7 @@ describe('GET /api/groups/:id/events', function() {
             .get('/api/groups/invalid/events')
             .expect(404)
             .end(function(err, res) {
-                if(err) return done(err);
+                if (err) return done(err);
                 done();
             });
     });
@@ -47,7 +47,7 @@ describe('GET /api/groups/:id/events/:eventId', function() {
             .get('/api/groups/000000000000000000000000/events/000000000000000000000000')
             .expect(200)
             .end(function(err, res) {
-                if(err) return done(err);
+                if (err) return done(err);
                 done();
             });
     });
@@ -57,7 +57,7 @@ describe('GET /api/groups/:id/events/:eventId', function() {
             .get('/api/groups/000000000000000000000000/events/123456789012345678901234')
             .expect(404)
             .end(function(err, res) {
-                if(err) return done(err);
+                if (err) return done(err);
                 done();
             });
     });
@@ -67,7 +67,7 @@ describe('GET /api/groups/:id/events/:eventId', function() {
             .get('/api/groups/000000000000000000000000/events/invalid')
             .expect(404)
             .end(function(err, res) {
-                if(err) return done(err);
+                if (err) return done(err);
                 done();
             });
     });
@@ -80,7 +80,7 @@ describe('DELETE /api/groups/:id/events/:eventId', function() {
             .delete('/api/groups/000000000000000000000000/events/000000000000000000000000')
             .expect(200)
             .end(function(err, res) {
-                if(err) return done(err);
+                if (err) return done(err);
                 var items = res.body.filter(function(item) {
                     return item._id.toString() === '';
                 });
@@ -94,7 +94,7 @@ describe('DELETE /api/groups/:id/events/:eventId', function() {
             .delete('/api/groups/000000000000000000000000/events/123456789012345678901234')
             .expect(404)
             .end(function(err, res) {
-                if(err) return done(err);
+                if (err) return done(err);
                 done();
             });
     });
@@ -104,7 +104,7 @@ describe('DELETE /api/groups/:id/events/:eventId', function() {
             .delete('/api/groups/000000000000000000000000/events/invalid')
             .expect(404)
             .end(function(err, res) {
-                if(err) return done(err);
+                if (err) return done(err);
                 done();
             });
     });

@@ -91,6 +91,16 @@ label {
     top: 80px;
 }
 
+.cardHeader {
+    border-left: solid thick #ff0000;
+}
+
+.cardBody {
+    border-left: solid;
+    border-bottom: solid;
+    border-top: solid;
+}
+
 
 /**********************************************************************
     Mouse Cursor CSS START

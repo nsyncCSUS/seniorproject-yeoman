@@ -16,14 +16,14 @@ var validationError = function(res, err) {
 exports.index = function(req, res) {
     User.find({}, '-salt -hashedPassword', function(err, users) {
         if (err) return res.status(500).send(err);
-        
+
         // return user profile
         var _users = users.map(function(user) {
-        	return user.profile;
+          return user.profile;
         });
-        
+
         res.status(200).json({
-        	users: _users
+          users: _users
         });
     });
 };
@@ -58,7 +58,7 @@ exports.show = function(req, res, next) {
         if (err) return next(err);
         if (!user) return res.status(401).send('Unauthorized');
         res.json({
-        	user: user.profile
+          user: user.profile
         });
     });
 };
@@ -106,7 +106,7 @@ exports.me = function(req, res, next) {
         if (err) return next(err);
         if (!user) return res.status(401).send('Unauthorized');
         res.json({
-        	user: user
+          user: user
         });
     });
 };

@@ -13,13 +13,13 @@ var router = express.Router();
 //router.delete('/:id', auth.hasRole('admin'), controller.destroy);
 //router.get('/', auth.isAuthenticated(), controller.index);
 //router.get('/:id', auth.isAuthenticated(), controller.show);
-//router.get('/me', auth.isAuthenticated(), controller.me);
+router.get('/me', auth.isAuthenticated(), controller.me);
 //router.put('/:id/password', auth.isAuthenticated(), controller.changePassword);
 //router.delete('/:id', auth.isAuthenticated(), controller.destroy);
 
 router.get('/', controller.index);
 router.delete('/:id', controller.destroy);
-router.get('/me', controller.me);
+//router.get('/me', controller.me);
 router.put('/:id/password', controller.changePassword);
 router.put('/:id', controller.update);
 router.get('/:id', controller.show);

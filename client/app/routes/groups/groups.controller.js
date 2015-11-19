@@ -13,7 +13,7 @@ angular.module('seniorprojectYoApp')
 		$scope.isEditing = false;
 		$scope.isSearching = false;
 		$scope.isUpdating = false;
-
+        $scope.submitted = false;
 
 
 		$scope.organizersToAdd = [];
@@ -523,36 +523,45 @@ angular.module('seniorprojectYoApp')
 			buildInterests();
 		}
 
-		$scope.submitEdit = function() {
-			$scope.isUpdating = true;
-			// Send changes to server
-			GroupService.put({id: $stateParams.id, group: $scope.group}, function(res) {
-				switch(res.data.flag){
-				case true:
-					$scope.group = res.data.group;
-					$scope.alerts.push({type: "success", msg: res.data.msg});
-					$timeout(function() {
-						$scope.isEditing = false;
-						$scope.isUpdating = false;
-					}, 3000);
-					break;
-				case false:
-					$scope.alerts.push({type: "danger", msg: res.data.msg});
-					$timeout(function() {
-						$scope.isUpdating = false;
-					}, 3000);
-					break;
-				}
-			});
-			// Keep changes made
-			$scope.group_bak = {};
-			$scope.animalsSelected_bak = "";
-			$scope.educationSelected_bak = "";
-			$scope.environmentSelected_bak = "";
-			$scope.peopleSelected_bak = "";
-			$scope.recreationSelected_bak = "";
-			$scope.technologySelected_bak = "";
-			$scope.youthSelected_bak = "";
+		$scope.submitEdit = function(isValid) {
+            if (isValid) {
+    			$scope.isUpdating = true;
+
+	             // Send changes to server
+    			GroupService.put({id: $stateParams.id, group: $scope.group}, function(res) {
+    				switch(res.data.flag){
+    				case true:
+    					$scope.group = res.data.group;
+    					$scope.alerts.push({type: "success", msg: res.data.msg});
+    					$timeout(function() {
+    						$scope.isEditing = false;
+    						$scope.isUpdating = false;
+    					}, 3000);
+    					break;
+    				case false:
+    					$scope.alerts.push({type: "danger", msg: res.data.msg});
+    					$timeout(function() {
+    						$scope.isUpdating = false;
+    					}, 3000);
+    					break;
+    				}
+
+        			// Keep changes made
+        			$scope.group_bak = {};
+        			$scope.animalsSelected_bak = "";
+        			$scope.educationSelected_bak = "";
+        			$scope.environmentSelected_bak = "";
+        			$scope.peopleSelected_bak = "";
+        			$scope.recreationSelected_bak = "";
+        			$scope.technologySelected_bak = "";
+        			$scope.youthSelected_bak = "";
+    			});
+            }
+            else {
+                $scope.alerts.push({type: "danger", msg: "Errors found, please fix them."});
+                $scope.submitted = true;
+                //console.log("invalid");
+            }
 		}
 
 		/***************************************************************************

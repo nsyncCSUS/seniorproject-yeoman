@@ -14,6 +14,7 @@ angular.module('seniorprojectYoApp')
 		$scope.isPreviewing = false;
 		$scope.isSearching = false;
 		$scope.isCreating = false;
+        $scope.submitted = false;
 
 		$scope.animalsSelected = "";
 		$scope.educationSelected = "";
@@ -44,7 +45,7 @@ angular.module('seniorprojectYoApp')
 				twitterURL : "https://twitter.com",
 				interests : ["Animals", "Environment", "People", "Recreation", "Technology", "Youth"]
 		};
-        
+
         buildInterests();
 
 		// Add in the user as an organizer
@@ -195,29 +196,36 @@ angular.module('seniorprojectYoApp')
 		/***************************************************************************
 		 * Posting Functions
 		 **************************************************************************/
-		$scope.createGroup = function() {
-			$scope.group.creationDate = new Date();
-			$scope.isCreating = true;
-			// Send new group to server
-			GroupService.post({group: $scope.group, user: user}, function(res) {
-				switch(res.data.flag){
-				case true:
-					$scope.alerts.push({type: "success", msg: res.data.msg});
-					$timeout(function() {
-						$location.path("/groups/" + res.data.group._id).replace;
-					}, 3000);
-					break;
-				case false:
-					$scope.alerts.push({type: "danger", msg: res.data.msg});
-					$timeout(function() {
-						$scope.isCreating = false;
-					}, 3000);
-					break;
-				}
+		$scope.createGroup = function(isValid) {
+            if (isValid) {
+    			$scope.group.creationDate = new Date();
+    			$scope.isCreating = true;
 
-			});
+	             // Send new group to server
+    			GroupService.post({group: $scope.group, user: user}, function(res) {
+    				switch(res.data.flag){
+    				case true:
+    					$scope.alerts.push({type: "success", msg: res.data.msg});
+    					$timeout(function() {
+    						$location.path("/groups/" + res.data.group._id).replace;
+    					}, 3000);
+    					break;
+    				case false:
+    					$scope.alerts.push({type: "danger", msg: res.data.msg});
+    					$timeout(function() {
+    						$scope.isCreating = false;
+    					}, 3000);
+    					break;
+    				}
+
+    			});
+            }
+            else {
+                $scope.alerts.push({type: "danger", msg: "Errors found, please fix them."});
+                $scope.submitted = true;
+                //console.log("invalid");
+            }
 		}
-
 		/***************************************************************************
 		 * Adding/Removing Interests Function
 		 **************************************************************************/

@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('seniorprojectYoApp', [
+  'ngMessages',
   'ngCookies',
   'ngResource',
   'ngSanitize',

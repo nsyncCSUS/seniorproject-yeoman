@@ -31,9 +31,9 @@ div(ng-include='"components/navbar/navbar.html"')
                         .col-xs-12.col-sm-6.col-md-4.col-lg-4
                             form(role='form')
                                 .btn-group(data-toggle)
-                                      label.btn.active.btn-default(uib-tooltip='Find something to do', uib-tooltip-append-to-body='true', ng-model='search.advanced.type', btn-radio="'Events'", checked='') Events
-                                      label.btn.btn-default(uib-tooltip='Find your friends', uib-tooltip-append-to-body='true', ng-model='search.advanced.type', btn-radio="'People'") People
-                                      label.btn.btn-default(uib-tooltip='Find a cause', uib-tooltip-append-to-body='true', ng-model='search.advanced.type', btn-radio="'Groups'") Groups
+                                      label.btn.active.btn-default(uib-tooltip='Find something to do', uib-tooltip-append-to-body='true', ng-model='search.advanced.type', uib-btn-radio="'Events'", checked='') Events
+                                      label.btn.btn-default(uib-tooltip='Find your friends', uib-tooltip-append-to-body='true', ng-model='search.advanced.type', uib-btn-radio="'People'") People
+                                      label.btn.btn-default(uib-tooltip='Find a cause', uib-tooltip-append-to-body='true', ng-model='search.advanced.type', uib-btn-radio="'Groups'") Groups
                         .col-xs-12.col-sm-6.col-md-4.col-lg-4
                             .visible-xs
                                 |</br></br>
@@ -79,4 +79,3 @@ div(ng-include='"components/navbar/navbar.html"')
                                             | &nbsp
                                             button.btn.btn-primary Volunteer Now
             |</br>
-

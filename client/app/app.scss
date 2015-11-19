@@ -98,7 +98,14 @@ label {
     border-top: solid;
 }
 
-
+.loadingOverlay {
+	z-index: 5;
+	position: absolute;
+	background-color: #aaaaaa;
+	opacity: .2;
+	height: 91%;
+	width: 100%;
+}
 /**********************************************************************
     Mouse Cursor CSS START
 **********************************************************************/

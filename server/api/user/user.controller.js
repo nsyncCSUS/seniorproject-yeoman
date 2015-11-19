@@ -159,15 +159,3 @@ exports.me = function(req, res, next) {
 exports.authCallback = function(req, res, next) {
     res.redirect('/');
 };
-
-function notFound(res) {
-    return res.status(404).send('Not Found');
-}
-
-function validId(id) {
-    return id.match(/^[0-9a-fA-F]{24}$/);
-}
-
-function handleError(res, err) {
-    return res.status(500).send(err);
-}

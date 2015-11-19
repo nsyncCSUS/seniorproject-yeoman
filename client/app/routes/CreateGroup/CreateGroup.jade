@@ -1,6 +1,6 @@
 div(ng-include='"components/navbar/navbar.html"')
 
-.creatingOverlay(ng-show='isCreating')
+.loadingOverlay(ng-show='isCreating')
 
 h1 CREATE GROUP
 
@@ -10,163 +10,193 @@ div
             button.btn.btn-warning(ng-show='!getIsPreviewing()', ng-click='enablePreview()', ng-disabled='isCreating') Preview
             button.btn.btn-warning(ng-show='getIsPreviewing()', ng-click='cancelPreview()', ng-disabled='isCreating') Cancel Preview
             | &nbsp
-            button.btn.btn-info(ng-click='createGroup()', ng-disabled='isCreating') Create
+            button.btn.btn-info(type='submit', ng-click='createGroup(groupForm.$valid)', ng-disabled='isCreating') Create
             | &nbsp
             button.btn.btn-danger(ng-click='cancelCreateGroup()', ng-disabled='isCreating') Cancel
 .float-btm.text-center
-    alert(ng-repeat='alert in alerts', type='{{alert.type}}', close='closeAlert($index)', dismiss-on-timeout='5000') {{alert.msg}}
+    uib-alert(ng-repeat='alert in alerts', type='{{alert.type}}', close='closeAlert($index)', dismiss-on-timeout='5000') {{alert.msg}}
 
 
 div(ng-show='!getIsPreviewing()')
-    .container
-        .col-xs-12.col-sm-12.col-md-12.col-lg-12
-            .row
-                .col-xs-12.col-sm-12.col-md-8.col-lg-8
-                        .form-group
-                            label(for='groupName') Group Name
-                            input.form-control#groupName(type='text', ng-model='group.name')
-                .col-xs-12.col-sm-12.col-md-4.col-lg-4
-                    label(for='interests') Interests
-                    .navbar-btn
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/animals.png', ng-class='animalsSelected', ng-click='addInterest("Animals")', uib-tooltip='Animals')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/education.png', ng-class='educationSelected', ng-click='addInterest("Education")', uib-tooltip='Education')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/environment.png', ng-class='environmentSelected', ng-click='addInterest("Environment")', uib-tooltip='Environment')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/people.png', ng-class='peopleSelected', ng-click='addInterest("People")', uib-tooltip='People')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/recreation.png', ng-class='recreationSelected', ng-click='addInterest("Recreation")', uib-tooltip='Recreation')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/technology.png', ng-class='technologySelected', ng-click='addInterest("Technology")', uib-tooltip='Technology')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/youth.png', ng-class='youthSelected', ng-click='addInterest("Youth")', uib-tooltip='Youth')
-            hr
+    form(name='groupForm', novalidate)
+        .container
+                .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                    .row
+                        .col-xs-12.col-sm-12.col-md-8.col-lg-8
+                                .form-group(ng-class='{ "has-error" : groupForm.groupName.$invalid && !groupForm.groupName.$pristine && submitted }')
+                                    label(for='groupName') Group Name*
+                                    input.form-control#groupName(type='text', name='groupName', ng-model='group.name', ng-minlength='3', required)
+                                    div(ng-messages='groupForm.groupName.$error', ng-show='groupForm.groupName.$dirty && submitted')
+                                        div.help-block(ng-message='required') Group name is required.
+                                        div.help-block(ng-message='minlength') Group name is too short!
+                        .col-xs-12.col-sm-12.col-md-4.col-lg-4
+                            label(for='interests') Interests
+                            .navbar-btn
+                                img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/animals.png', ng-class='animalsSelected', ng-click='addInterest("Animals")', uib-tooltip='Animals')
+                                img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/education.png', ng-class='educationSelected', ng-click='addInterest("Education")', uib-tooltip='Education')
+                                img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/environment.png', ng-class='environmentSelected', ng-click='addInterest("Environment")', uib-tooltip='Environment')
+                                img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/people.png', ng-class='peopleSelected', ng-click='addInterest("People")', uib-tooltip='People')
+                                img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/recreation.png', ng-class='recreationSelected', ng-click='addInterest("Recreation")', uib-tooltip='Recreation')
+                                img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/technology.png', ng-class='technologySelected', ng-click='addInterest("Technology")', uib-tooltip='Technology')
+                                img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/youth.png', ng-class='youthSelected', ng-click='addInterest("Youth")', uib-tooltip='Youth')
+                    hr
 
-        .col-xs-12.col-sm-4.col-md-4.col-lg-4
-            img.img-responsive.img-thumbnail.center-item(src="{{group.picture}}")
-            div(ng-show='getIsEditing()')
-                .form-group
-                    input(type='file')
-                    | Might have to use external module for file inputs
-            hr
+                .col-xs-12.col-sm-4.col-md-4.col-lg-4
+                    img.img-responsive.img-thumbnail.center-item(src="{{group.picture}}")
+                    .form-group
+                        input(type='file')
+                        | Might have to use external module for file inputs
+                    hr
 
-        .col-xs-12.col-sm-8.col-md-8.col-lg-8
-            .form-group
-                label(for='description') Description
-                textarea.form-control#description(type='text', rows='10', ng-model='group.description')
-                label(for='googlePlus') Google Plus
-                input.form-control#googlePlus(type='url', ng-model='group.googlePlusURL')
-                label(for='facebook') Facebook
-                input.form-control#facebook(type='url', ng-model='group.facebookURL')
-                label(for='twitter') Twitter
-                input.form-control#twitter(type='url', ng-model='group.twitterURL')
-                label(for='linkedIn') Linked In
-                input.form-control#linkedIn(type='url', ng-model='group.linkedInURL')
-                label(for='website') Personal Website
-                input.form-control#website(type='url', ng-model='group.personalWebsiteURL')
-                hr
-                .row
-                    .col-xs-12.col-sm-6.col-md-6.col-lg-6
-                        label(for='city') City
-                        input.form-control#city(type='text', name='city', ng-model='group.city')
-                    .col-xs-5.col-sm-3.col-md-2.col-lg-2
-                        label(for='state') State
-                        select.form-control#state(type='text', name='state', ng-model='group.state')
-                             option(value='AL') AL
-                             option(value='AK') AK
-                             option(value='AZ') AZ
-                             option(value='AR') AR
-                             option(value='CA') CA
-                             option(value='CO') CO
-                             option(value='CT') CT
-                             option(value='DE') DE
-                             option(value='DC') DC
-                             option(value='FL') FL
-                             option(value='GA') GA
-                             option(value='HI') HI
-                             option(value='ID') ID
-                             option(value='IL') IL
-                             option(value='IN') IN
-                             option(value='IA') IA
-                             option(value='KS') KS
-                             option(value='KY') KY
-                             option(value='LA') LA
-                             option(value='ME') ME
-                             option(value='MD') MD
-                             option(value='MA') MA
-                             option(value='MI') MI
-                             option(value='MN') MN
-                             option(value='MS') MS
-                             option(value='MO') MO
-                             option(value='MT') MT
-                             option(value='NE') NE
-                             option(value='NV') NV
-                             option(value='NH') NH
-                             option(value='NJ') NJ
-                             option(value='NM') NM
-                             option(value='NY') NY
-                             option(value='NC') NC
-                             option(value='ND') ND
-                             option(value='OH') OH
-                             option(value='OK') OK
-                             option(value='OR') OR
-                             option(value='PA') PA
-                             option(value='RI') RI
-                             option(value='SC') SC
-                             option(value='SD') SD
-                             option(value='TN') TN
-                             option(value='TX') TX
-                             option(value='UT') UT
-                             option(value='VT') VT
-                             option(value='VA') VA
-                             option(value='WA') WA
-                             option(value='WV') WV
-                             option(value='WI') WI
-                             option(value='WY') WY
-                    .col-xs-7.col-sm-3.col-md-4.col-lg-4
-                        label(for='zipcode') Zipcode
-                        input.form-control#zipcode(type='text', name='zip', ng-model='group.zipcode')
+                .col-xs-12.col-sm-8.col-md-8.col-lg-8
+                    .form-group(ng-class='{ "has-error" : groupForm.description.$invalid && !groupForm.description.$pristine && submitted }')
+                        label(for='description') Description*
+                        textarea.form-control#description(type='text', name='description', rows='10', ng-model='group.description', minlength='10', required)
+                        div(ng-messages='groupForm.description.$error', ng-show='groupForm.description.$dirty && submitted')
+                            div.help-block(ng-message='required') A description is required.
+                            div.help-block(ng-message='minlength') Description is too short!
 
+                    .form-group(ng-class='{ "has-error" : groupForm.googlePlusURL.$invalid && !groupForm.googlePlusURL.$pristine && submitted }')
+                        label(for='googlePlus') Google Plus
+                        input.form-control#googlePlus(type='url', name='googlePlusURL', ng-model='group.googlePlusURL')
+                        div(ng-messages='groupForm.googlePlusURL.$error', ng-show='groupForm.googlePlusURL.$dirty && submitted')
+                            div.help-block(ng-message='url') Url invalid. (Remember to add https:// to the beginning)
 
+                    .form-group(ng-class='{ "has-error" : groupForm.facebookURL.$invalid && !groupForm.facebookURL.$pristine && submitted }')
+                        label(for='facebook') Facebook
+                        input.form-control#facebook(type='url', name='facebookURL',  ng-model='group.facebookURL')
+                        div(ng-messages='groupForm.facebookURL.$error', ng-show='groupForm.facebookURL.$dirty && submitted')
+                            div.help-block(ng-message='url') Url invalid. (Remember to add https:// to the beginning)
 
-        .col-xs-12.col-sm-12.col-md-12.col-lg-12
-            hr
-            form.form-horizontal
-                .form-group
-                    .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                        label Invite Organizers
-                    .col-xs-8.col-sm-10.col-md-11.col-lg-11
-                        input.form-control#searchBox(type='text', placeholder='Enter a user to invite', ng-model='searchbox')
-                    .col-xs-4.col-sm-2.col-md-1.col-lg-1
-                        button.btn.btn-default#searchButton(ng-click='searchUsers(searchbox); scrollToResults()') Search
+                    .form-group(ng-class='{ "has-error" : groupForm.twitterURL.$invalid && !groupForm.twitterURL.$pristine && submitted }')
+                        label(for='twitter') Twitter
+                        input.form-control#twitter(type='url', name='twitterURL',  ng-model='group.twitterURL')
+                        div(ng-messages='groupForm.twitterURL.$error', ng-show='groupForm.twitterURL.$dirty && submitted')
+                            div.help-block(ng-message='url') Url invalid. (Remember to add https:// to the beginning)
 
-        div(ng-show='getIsSearching()')
-            .row
-                .col-xs-12.col-sm-12.col-md-12.col-lg-12#searchResults
-                    .col-xs-12.col-sm-6.col-md-6.col-lg-6
-                        label(for='searchResults') Search Results
-                        div(ng-show='!hasResults()')
-                            h3 No Users found, try again
+                    .form-group(ng-class='{ "has-error" : groupForm.linkedInURL.$invalid && !groupForm.linkedInURL.$pristine && submitted }')
+                        label(for='linkedIn') Linked In
+                        input.form-control#linkedIn(type='url', name='linkedInURL',  ng-model='group.linkedInURL')
+                        div(ng-messages='groupForm.linkedInURL.$error', ng-show='groupForm.linkedInURL.$dirty && submitted')
+                            div.help-block(ng-message='url') Url invalid. (Remember to add https:// to the beginning)
+
+                    .form-group(ng-class='{ "has-error" : groupForm.personalWebsiteURL.$invalid && !groupForm.personalWebsiteURL.$pristine && submitted }')
+                        label(for='website') Personal Website
+                        input.form-control#website(type='url', name='personalWebsiteURL',  ng-model='group.personalWebsiteURL')
+                        div(ng-messages='groupForm.personalWebsiteURL.$error', ng-show='groupForm.personalWebsiteURL.$dirty && submitted')
+                            div.help-block(ng-message='url') Url invalid. (Remember to add https:// to the beginning)
+
+                        hr
                         .row
-                            .col-xs-4.col-sm-3.col-md-3.col-lg-2.cursor-pointer(id='add-{{user._id}}', ng-repeat='user in searchResults', ng-click='addOrganizer($index); scrollToRemove(user._id)')
-                                .add
-                                    img.img-responsive.img-thumbnail(src='{{user.picture}}', ng-class='user.added', ng-show='hasPicture("searchedUser", $index)')
-                                    img.img-responsive.img-thumbnail(src='//placehold.it/350x350', ng-class='user.added', ng-show='!hasPicture("searchedUser", $index)')
-                                    .addOverlay
-                                        span.glyphicon.glyphicon-plus.glyphicon-lg-center
-                                h6.text-center {{user.firstName}} {{user.lastName}}
+                            .col-xs-12.col-sm-6.col-md-6.col-lg-6
+                                label(for='city') City
+                                input.form-control#city(type='text', name='city', ng-model='group.city')
+                            .col-xs-5.col-sm-3.col-md-2.col-lg-2
+                                label(for='state') State
+                                select.form-control#state(type='text', name='state', ng-model='group.state')
+                                     option(value='AL') AL
+                                     option(value='AK') AK
+                                     option(value='AZ') AZ
+                                     option(value='AR') AR
+                                     option(value='CA') CA
+                                     option(value='CO') CO
+                                     option(value='CT') CT
+                                     option(value='DE') DE
+                                     option(value='DC') DC
+                                     option(value='FL') FL
+                                     option(value='GA') GA
+                                     option(value='HI') HI
+                                     option(value='ID') ID
+                                     option(value='IL') IL
+                                     option(value='IN') IN
+                                     option(value='IA') IA
+                                     option(value='KS') KS
+                                     option(value='KY') KY
+                                     option(value='LA') LA
+                                     option(value='ME') ME
+                                     option(value='MD') MD
+                                     option(value='MA') MA
+                                     option(value='MI') MI
+                                     option(value='MN') MN
+                                     option(value='MS') MS
+                                     option(value='MO') MO
+                                     option(value='MT') MT
+                                     option(value='NE') NE
+                                     option(value='NV') NV
+                                     option(value='NH') NH
+                                     option(value='NJ') NJ
+                                     option(value='NM') NM
+                                     option(value='NY') NY
+                                     option(value='NC') NC
+                                     option(value='ND') ND
+                                     option(value='OH') OH
+                                     option(value='OK') OK
+                                     option(value='OR') OR
+                                     option(value='PA') PA
+                                     option(value='RI') RI
+                                     option(value='SC') SC
+                                     option(value='SD') SD
+                                     option(value='TN') TN
+                                     option(value='TX') TX
+                                     option(value='UT') UT
+                                     option(value='VT') VT
+                                     option(value='VA') VA
+                                     option(value='WA') WA
+                                     option(value='WV') WV
+                                     option(value='WI') WI
+                                     option(value='WY') WY
+                            .col-xs-7.col-sm-3.col-md-4.col-lg-4
+                                .form-group(ng-class='{ "has-error" : groupForm.zip.$invalid && !groupForm.zip.$pristine && submitted }')
+                                    label(for='zipcode') Zipcode
+                                    input.form-control#zipcode(type='text', name='zip', ng-model='group.zipcode', pattern='\\d{5}')
+                                    div(ng-messages='groupForm.zip.$error', ng-show='groupForm.zip.$dirty && submitted')
+                                        div.help-block(ng-message='pattern') Invalid zip code.
 
-                    div(ng-show='hasOrganizersToAdd()')
+
+
+            .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                hr
+                form.form-horizontal
+                    .form-group
+                        .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                            label Invite Organizers
+                        .col-xs-8.col-sm-10.col-md-11.col-lg-11
+                            input.form-control#searchBox(type='text', placeholder='Enter a user to invite', ng-model='searchbox')
+                        .col-xs-4.col-sm-2.col-md-1.col-lg-1
+                            button.btn.btn-default#searchButton(ng-click='searchUsers(searchbox); scrollToResults()') Search
+
+            div(ng-show='getIsSearching()')
+                .row
+                    .col-xs-12.col-sm-12.col-md-12.col-lg-12#searchResults
                         .col-xs-12.col-sm-6.col-md-6.col-lg-6
-                            .visible-xs
-                                hr
-                            label(for='searchResults') Organizers to be invited
-                            .col-xs-12.col-sm-12.col-md-12.col-lg-12#organizersAdded
-                                .row
-                                    .col-xs-4.col-sm-3.col-md-3.col-lg-2.cursor-pointer(id='remove-{{user._id}}', ng-repeat='user in organizersToAdd', ng-click='removeOrganizer($index); scrollToAdd(user._id)')
-                                        .remove
-                                            img.img-responsive.img-thumbnail(src='{{user.picture}}', ng-show='hasPicture("organizerToAdd", $index)')
-                                            img.img-responsive.img-thumbnail(src='//placehold.it/350x350', ng-show='!hasPicture("organizerToAdd", $index)')
-                                            .removeOverlay
-                                                span.glyphicon.glyphicon-minus.glyphicon-lg-center
-                                        h6.text-center {{user.firstName}} {{user.lastName}}
+                            label(for='searchResults') Search Results
+                            div(ng-show='!hasResults()')
+                                h3 No Users found, try again
+                            .row
+                                .col-xs-4.col-sm-3.col-md-3.col-lg-2.cursor-pointer(id='add-{{user._id}}', ng-repeat='user in searchResults', ng-click='addOrganizer($index); scrollToRemove(user._id)')
+                                    .add
+                                        img.img-responsive.img-thumbnail(src='{{user.picture}}', ng-class='user.added', ng-show='hasPicture("searchedUser", $index)')
+                                        img.img-responsive.img-thumbnail(src='//placehold.it/350x350', ng-class='user.added', ng-show='!hasPicture("searchedUser", $index)')
+                                        .addOverlay
+                                            span.glyphicon.glyphicon-plus.glyphicon-lg-center
+                                    h6.text-center {{user.firstName}} {{user.lastName}}
 
-.titleRow(ng-show='getIsPreviewing()')
+                        div(ng-show='hasOrganizersToAdd()')
+                            .col-xs-12.col-sm-6.col-md-6.col-lg-6
+                                .visible-xs
+                                    hr
+                                label(for='searchResults') Organizers to be invited
+                                .col-xs-12.col-sm-12.col-md-12.col-lg-12#organizersAdded
+                                    .row
+                                        .col-xs-4.col-sm-3.col-md-3.col-lg-2.cursor-pointer(id='remove-{{user._id}}', ng-repeat='user in organizersToAdd', ng-click='removeOrganizer($index); scrollToAdd(user._id)')
+                                            .remove
+                                                img.img-responsive.img-thumbnail(src='{{user.picture}}', ng-show='hasPicture("organizerToAdd", $index)')
+                                                img.img-responsive.img-thumbnail(src='//placehold.it/350x350', ng-show='!hasPicture("organizerToAdd", $index)')
+                                                .removeOverlay
+                                                    span.glyphicon.glyphicon-minus.glyphicon-lg-center
+                                            h6.text-center {{user.firstName}} {{user.lastName}}
+
+div(ng-show='getIsPreviewing()')
     .container
         .row
             .col-xs-12.col-sm-12.col-md-12.col-lg-12.panel-primary

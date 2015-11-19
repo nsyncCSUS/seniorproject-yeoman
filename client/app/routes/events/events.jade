@@ -19,9 +19,9 @@ div(ng-show='isAdmin')
             | &nbsp
             button.btn.btn-danger(ng-show='getIsEditing()', ng-click='cancelEdit()', ng-disabled='isUpdating') Cancel
 .float-btm.text-center
-    alert(ng-repeat='alert in alerts', type='{{alert.type}}', close='closeAlert($index)', dismiss-on-timeout='5000') {{alert.msg}}
+    uib-alert(ng-repeat='alert in alerts', type='{{alert.type}}', close='closeAlert($index)', dismiss-on-timeout='5000') {{alert.msg}}
 
-.creatingOverlay(ng-show='isUpdating')
+.loadingOverlay(ng-show='isUpdating')
 
 div(ng-show='getIsEditing()')
     .container

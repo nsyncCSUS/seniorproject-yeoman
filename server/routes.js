@@ -14,7 +14,7 @@ module.exports = function(app) {
   app.use('/api/groups', require('./api/group'));
   app.use('/api/things', require('./api/thing'));
   app.use('/api/users',  require('./api/user'));
-  app.use('/api/search', require('./api/search'));
+  //app.use('/api/search', require('./api/search'));
 
   app.use('/auth', require('./auth'));
 

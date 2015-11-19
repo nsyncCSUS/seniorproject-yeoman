@@ -1,11 +1,9 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-  .directive('user', function () {
-    return {
-      templateUrl: 'app/directives/user/user.html',
-      restrict: 'EA',
-      link: function (scope, element, attrs) {
-      }
-    };
-  });
+    .directive('userCard', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'app/directives/group/userCard.html'
+        };
+    });

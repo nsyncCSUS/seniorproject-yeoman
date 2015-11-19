@@ -28,19 +28,21 @@ div(ng-show='isAdmin')
 div(ng-show='getIsEditing()')
     .container
         .col-xs-12.col-sm-12.col-md-12.col-lg-12
-            .col-xs-12.col-sm-12.col-md-8.col-lg-8
-                    h2 {{group.name}}
             .row
+                .col-xs-12.col-sm-12.col-md-8.col-lg-8
+                        .form-group
+                            label(for='groupName') Group Name
+                            input.form-control#groupName(type='text', ng-model='group.name')
                 .col-xs-12.col-sm-12.col-md-4.col-lg-4
                     label(for='interests') Interests
-                    .navbar-btn#interests
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/animals.png', ng-class='animalsSelected', ng-click='addInterest("Animals")', uib-tooltip='Animals')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/education.png', ng-class='educationSelected', ng-click='addInterest("Education")', uib-tooltip='Education')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/environment.png', ng-class='environmentSelected', ng-click='addInterest("Environment")', uib-tooltip='Environment')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/people.png', ng-class='peopleSelected', ng-click='addInterest("People")', uib-tooltip='People')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/recreation.png', ng-class='recreationSelected', ng-click='addInterest("Recreation")', uib-tooltip='Recreation')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/technology.png', ng-class='technologySelected', ng-click='addInterest("Technology")', uib-tooltip='Technology')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/youth.png', ng-class='youthSelected', ng-click='addInterest("Youth")', uib-tooltip='Youth')
+                    .navbar-btn
+                        img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/animals.png', ng-class='animalsSelected', ng-click='addInterest("Animals")', uib-tooltip='Animals')
+                        img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/education.png', ng-class='educationSelected', ng-click='addInterest("Education")', uib-tooltip='Education')
+                        img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/environment.png', ng-class='environmentSelected', ng-click='addInterest("Environment")', uib-tooltip='Environment')
+                        img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/people.png', ng-class='peopleSelected', ng-click='addInterest("People")', uib-tooltip='People')
+                        img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/recreation.png', ng-class='recreationSelected', ng-click='addInterest("Recreation")', uib-tooltip='Recreation')
+                        img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/technology.png', ng-class='technologySelected', ng-click='addInterest("Technology")', uib-tooltip='Technology')
+                        img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/youth.png', ng-class='youthSelected', ng-click='addInterest("Youth")', uib-tooltip='Youth')
             hr
 
         .col-xs-12.col-sm-4.col-md-4.col-lg-4
@@ -54,38 +56,30 @@ div(ng-show='getIsEditing()')
         .col-xs-12.col-sm-8.col-md-8.col-lg-8
             .form-group
                 label(for='description') Description
-                textarea.form-control#description(rows='10', ng-model='group.description')
+                textarea.form-control#description(type='text', rows='10', ng-model='group.description')
                 label(for='googlePlus') Google Plus
-                input.form-control#googlePlus(ng-model='group.googlePlusURL')
+                input.form-control#googlePlus(type='url', ng-model='group.googlePlusURL')
                 label(for='facebook') Facebook
-                input.form-control#facebook(ng-model='group.facebookURL')
+                input.form-control#facebook(type='url', ng-model='group.facebookURL')
                 label(for='twitter') Twitter
-                input.form-control#twitter(ng-model='group.twitterURL')
+                input.form-control#twitter(type='url', ng-model='group.twitterURL')
                 label(for='linkedIn') Linked In
-                input.form-control#linkedIn(ng-model='group.linkedInURL')
+                input.form-control#linkedIn(type='url', ng-model='group.linkedInURL')
                 label(for='website') Personal Website
-                input.form-control#website(ng-model='group.personalWebsiteURL')
+                input.form-control#website(type='url', ng-model='group.personalWebsiteURL')
                 hr
                 .row
                     .col-xs-12.col-sm-6.col-md-6.col-lg-6
                         label(for='city') City
-                        input.form-control#website(ng-model='group.city')
+                        input.form-control#city(type='text', name='city', ng-model='group.city')
                     .col-xs-4.col-sm-2.col-md-2.col-lg-2
                         label(for='state') State
-                        input.form-control#website(ng-model='group.state')
+                        input.form-control#state(type='text', name='state', ng-model='group.state')
                     .col-xs-8.col-sm-4.col-md-4.col-lg-4
                         label(for='zipcode') Zipcode
-                        input.form-control#website(ng-model='group.zipcode')
+                        input.form-control#zipcode(type='text', name='zip', ng-model='group.zipcode')
 
 
-        .col-xs-12.col-sm-12.col-md-12.col-lg-12
-            hr
-            label(for='currentOrganizers') Current Organizers
-            .col-xs-12.col-sm-12.col-md-12.col-lg-12#currentOrganizers
-                .col-xs-4.col-sm-3.col-md-3.col-lg-2(ng-repeat='organizer in group.organizers')
-                    img.img-responsive.img-thumbnail.center-item.cursor-pointer(src='{{organizer.picture}}')
-                    .carousel-caption.cursor-pointer
-                        h6  {{organizer.firstName}} {{organizer.lastName}}
 
         .col-xs-12.col-sm-12.col-md-12.col-lg-12
             hr
@@ -108,7 +102,8 @@ div(ng-show='getIsEditing()')
                         .row
                             .col-xs-4.col-sm-3.col-md-3.col-lg-2.cursor-pointer(id='add-{{user._id}}', ng-repeat='user in searchResults', ng-click='addOrganizer($index); scrollToRemove(user._id)')
                                 .add
-                                    img.img-responsive.img-thumbnail(src='{{user.picture}}', ng-class='user.added')
+                                    img.img-responsive.img-thumbnail(src='{{user.picture}}', ng-class='user.added', ng-show='hasPicture("searchedUser", $index)')
+                                    img.img-responsive.img-thumbnail(src='//placehold.it/350x350', ng-class='user.added', ng-show='!hasPicture("searchedUser", $index)')
                                     .addOverlay
                                         span.glyphicon.glyphicon-plus.glyphicon-lg-center
                                 h6.text-center {{user.firstName}} {{user.lastName}}
@@ -122,7 +117,8 @@ div(ng-show='getIsEditing()')
                                 .row
                                     .col-xs-4.col-sm-3.col-md-3.col-lg-2.cursor-pointer(id='remove-{{user._id}}', ng-repeat='user in organizersToAdd', ng-click='removeOrganizer($index); scrollToAdd(user._id)')
                                         .remove
-                                            img.img-responsive.img-thumbnail(src='{{user.picture}}')
+                                            img.img-responsive.img-thumbnail(src='{{user.picture}}', ng-show='hasPicture("organizerToAdd", $index)')
+                                            img.img-responsive.img-thumbnail(src='//placehold.it/350x350', ng-show='!hasPicture("organizerToAdd", $index)')
                                             .removeOverlay
                                                 span.glyphicon.glyphicon-minus.glyphicon-lg-center
                                         h6.text-center {{user.firstName}} {{user.lastName}}
@@ -161,6 +157,7 @@ div(ng-show='!getIsEditing()')
                         .col-xs-6.col-sm-12.col-md-12.col-lg-12
                             img.img-responsive.img-thumbnail.center-item(src='{{group.picture}}')
                         .col-xs-6.col-sm-12.col-md-12.col-lg-12.text-center.infoRow
+                            h5 {{group.city}}, {{group.state}}
                             h5 Founded on: {{group.creationDate | date:'MMM dd, yyyy'}}
                             hr
                             button.btn.btn-default.center-item(ng-click='subscribe()')

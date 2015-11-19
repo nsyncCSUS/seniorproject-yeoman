@@ -83,13 +83,17 @@
 /**********************************************************************
     GROUP CSS START
 **********************************************************************/
+
+.groupBody {
+    border-left: solid;
+    border-bottom: solid;
+    border-top: solid;
+}
+
+
 .eventRow {
     padding-top: 5px;
     padding-bottom: 5px;
-}
-
-.eventDateRow {
-    border-left: solid thick #ff0000;
 }
 
 .infoRow {

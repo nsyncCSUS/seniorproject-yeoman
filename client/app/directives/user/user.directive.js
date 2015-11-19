@@ -7,5 +7,3 @@ angular.module('seniorprojectYoApp')
             templateUrl: 'app/directives/group/userCard.html'
         };
     });
-    
-  });

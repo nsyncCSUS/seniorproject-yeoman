@@ -134,14 +134,11 @@ exports.changePassword = function(req, res, next) {
  * Get my info
  */
 exports.me = function(req, res, next) {
-    console.log('params: ', req.params);
-    console.log('body: ', req.body);
-    console.log('user: ', req.user);
-    console.log('headers: ', req.headers);
-    if(!req.user || !validId(req.user._id.toString())) {
+    console.log(req.user);
+    var userId = req.user._id || '';
+    if(!req.user || !validId(userId.toString())) {
         return notFound(res);
     }
-    var userId = req.user._id || '';
     User.findOne({
         _id: userId
     }, '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt

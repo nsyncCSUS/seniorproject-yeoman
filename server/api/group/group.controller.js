@@ -57,30 +57,55 @@ exports.create = function(req, res) {
 
 // Updates an existing group in the DB.
 exports.update = function(req, res) {
-    if (!validId(req.params.id)) {
+    if(!validId(req.params.id)) {
         return notFound(res);
     }
-    if (req.body._id) {
-        delete req.body._id;
-    }
-    Group.findById(req.params.id, function(err, group) {
-        if (err) {
+
+    if(req.body.group._id) delete req.body.group._id
+    if(req.body.group.events) delete req.body.group.events;
+    if(req.body.group.volunteers) delete req.body.group.volunteers;
+    if(req.body.group.organizers) delete req.body.group.organizers;
+
+    Group.findByIdAndUpdate(req.params.id, req.body.group, {
+        new: true
+    }, function(err, group) {
+        if(err) {
             return handleError(res, err);
-        }
-        if (!group) {
-            return res.status(404).send('Not Found');
-        }
-        var updated = _.merge(group, req.body);
-        updated.save(function(err) {
-            if (err) {
-                return handleError(res, err);
-            }
+        } else if(!group) {
+            return notFound(res);
+        } else {
             return res.status(200).json({
                 group: group
             });
-        });
+        }
     });
 };
+
+//exports.update = function(req, res) {
+//    if (!validId(req.params.id)) {
+//        return notFound(res);
+//    }
+//    if (req.body._id) {
+//        delete req.body._id;
+//    }
+//    Group.findById(req.params.id, function(err, group) {
+//        if (err) {
+//            return handleError(res, err);
+//        }
+//        if (!group) {
+//            return res.status(404).send('Not Found');
+//        }
+//        var updated = _.merge(group, req.body);
+//        updated.save(function(err) {
+//            if (err) {
+//                return handleError(res, err);
+//            }
+//            return res.status(200).json({
+//                group: group
+//            });
+//        });
+//    });
+//};
 
 
 // Deletes a group from the DB.

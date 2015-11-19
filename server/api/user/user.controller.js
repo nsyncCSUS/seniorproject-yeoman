@@ -69,10 +69,24 @@ exports.update = function(req, res) {
     if(!validId(req.params.id)) {
         return notFound(res);
     }
-    User.findByIdAndUpdate(req.params.id, function(err, user) {
-        if(err) return handleError(res, err);
+
+    if(req.body.user._id) delete req.body.user._id;
+    if(req.body.user.events) delete req.body.user.events;
+    if(req.body.user.groups) delete req.body.user.groups;
+    if(req.body.user.hashedPassword) delete req.body.user.hashedPassword;
+    if(req.body.user.creationDate) delete req.body.user.creationDate;
+
+    User.findByIdAndUpdate(req.params.id, req.body.user, {
+        new: true
+    }, function(err, user) {
+        if(err) {
+            console.log(err);
+            return handleError(res, err);
+        } else if(!user) {
+            return notFound(res);
+        }
         return res.status(200).send({
-            user: user
+            user: user.profile
         });
     });
 };

@@ -50,31 +50,57 @@ exports.create = function(req, res) {
 
 // Updates an existing event in the DB.
 exports.update = function(req, res) {
-    if (!validId(req.params.id)) {
+    if(!validId(req.params.id)) {
         return notFound(res);
-    } else if (req.body._id) {
-        delete req.body._id;
     }
 
-    clean(req.body);
-    Event.findById(req.params.id, function(err, event) {
-        if (err) {
+    if(req.body.event._id) delete req.body.event._id;
+    if(req.body.event.volunteers) delete req.body.event.volunteers;
+    if(req.body.event.organizers) delete req.body.event.organizers;
+    if(req.body.event.creationUser) delete req.body.event.creationUser;
+
+    return Event.findByIdAndUpdate(req.params.id, req.body.event, {
+        new: true
+    }, function(err, event) {
+        if(err) {
             return handleError(res, err);
-        }
-        if (!event) {
-            return res.status(404).send('Not Found');
-        }
-        var updated = _.merge(event, req.body);
-        updated.save(function(err) {
-            if (err) {
-                return handleError(res, err);
-            }
+        } else if(!event) {
+            return notFound(res);
+        } else {
             return res.status(200).json({
                 event: event
             });
-        });
+        }
     });
+
 };
+
+//exports.update = function(req, res) {
+//    if (!validId(req.params.id)) {
+//        return notFound(res);
+//    } else if (req.body._id) {
+//        delete req.body._id;
+//    }
+//
+//    clean(req.body);
+//    Event.findById(req.params.id, function(err, event) {
+//        if (err) {
+//            return handleError(res, err);
+//        }
+//        if (!event) {
+//            return res.status(404).send('Not Found');
+//        }
+//        var updated = _.merge(event, req.body);
+//        updated.save(function(err) {
+//            if (err) {
+//                return handleError(res, err);
+//            }
+//            return res.status(200).json({
+//                event: event
+//            });
+//        });
+//    });
+//};
 
 // Deletes a event from the DB.
 exports.destroy = function(req, res) {

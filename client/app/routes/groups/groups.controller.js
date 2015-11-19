@@ -7,14 +7,10 @@ angular.module('seniorprojectYoApp')
          * Variables (includes ones from scope too)
          **************************************************************************/
         $scope.isAdmin = true;
-
         $scope.groupId = $stateParams.id;
-
         $scope.isEditing = false;
         $scope.isSearching = false;
         $scope.isUpdating = false;
-
-
 
         $scope.organizersToAdd = [];
         $scope.searchResults = [];
@@ -62,270 +58,13 @@ angular.module('seniorprojectYoApp')
          * Get Functions
          **************************************************************************/
         // Gets the group data from server
-        if ($stateParams.id != null) {
+        if ($stateParams.id) {
             GroupService.show($stateParams.id, function(res) {
                 $scope.group = res.data.group;
                 buildInterests();
             });
         } else {
-            $scope.group = {
-                _id: "nsync",
-                name: "N.Sync().......... .............. ................ ............. ..........................",
-                picture: "//placekitten.com/g/500/500/",
-                creationDate: "2015-08-26T18:50:10.111Z",
-                city: "Sacramento",
-                state: "CA",
-                zipcode: 95828,
-                description: "sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem blandit non.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vulputate pellentesque lorem. Donec erat ante, sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem bland center",
-                googlePlusURL: "www.google.com",
-                facebookURL: "https://facebook.com",
-                linkedInURL: "https://linkedin.com",
-                twitterURL: "https://twitter.com",
-                events: [{
-                    _id: "event1",
-                    creatorId: "",
-                    groupId: "",
-                    name: "Awesome Event Number 1 asdf asdf asdf asdf",
-                    description: "sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem blandit non.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vulputate pellentesque lorem. Donec erat ante, sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem bland center",
-                    picture: "//placekitten.com/g/501/500/",
-                    startTimeDate: "2015-10-26T18:50:10.111Z",
-                    endTimeDate: "2015-10-27T18:50:10.111Z",
-                    street: "1234 cool st",
-                    city: "Sacramento",
-                    state: "CA",
-                    zipcode: "95828",
-                    maxVolunteers: 50,
-                    volunteers: [{
-                        id: "v1",
-                        firstName: "Kitten 1",
-                        lastName: "1"
-                    }, {
-                        id: "v2",
-                        firstName: "Kitten 2",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/250/251"
-                    }, {
-                        id: "v3",
-                        firstName: "Kitten 3",
-                        lastName: "1"
-                    }, {
-                        id: "v4",
-                        firstName: "Kitten 4",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/250/253"
-                    }, {
-                        id: "v5",
-                        firstName: "Kitten 5",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/250/254"
-                    }, {
-                        id: "v6",
-                        firstName: "Kitten 6",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/250/255"
-                    }, {
-                        id: "v7",
-                        firstName: "Kitten 7",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/250/256"
-                    }, {
-                        id: "v8",
-                        firstName: "Kitten 8",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/250/257"
-                    }, {
-                        id: "v9",
-                        firstName: "Kitten 9",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/250/258"
-                    }, {
-                        id: "v10",
-                        firstName: "Kitten 10",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/250/259"
-                    }, {
-                        id: "v11",
-                        firstName: "Kitten 11",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/250/260"
-                    }],
-                    interests: ["Animals", "Education", "Environment", "People", "Recreation", "Technology", "Youth"]
-
-                }, {
-                    _id: "event2",
-                    creatorId: "",
-                    groupId: "",
-                    name: "Awesome Event Number 2 asdf asdf asdf asdf",
-                    description: "aaaaaaaaaa bbbbbbbbbbbbbbb cccccccccccccccc dddddddddddddddddd eeeeeeeeeeeeeeeeeee fffffffffffffffffff gggggggggggggggggg hhhhhhhhhhhhhh iiiiiiiiiiiiiiiiiiii jjjjjjjjjjjjjjjjjjjj",
-                    picture: "//placekitten.com/g/503/500/",
-                    street: "4321 cool st",
-                    city: "Sacramento",
-                    state: "CA",
-                    zipcode: "95828",
-                    startTimeDate: "2015-10-28T18:50:10.111Z",
-                    endTimeDate: "2015-10-29T18:50:10.111Z",
-                    maxVolunteers: 50,
-                    volunteers: [{
-                        id: "v1",
-                        firstName: "Kitten 1",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/251/250"
-                    }, {
-                        id: "v2",
-                        firstName: "Kitten 2",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/251/251"
-                    }, {
-                        id: "v3",
-                        firstName: "Kitten 3",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/251/252"
-                    }, {
-                        id: "v4",
-                        firstName: "Kitten 4",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/251/253"
-                    }, {
-                        id: "v5",
-                        firstName: "Kitten 5",
-                        lastName: "1"
-                    }, {
-                        id: "v6",
-                        firstName: "Kitten 6",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/251/255"
-                    }, {
-                        id: "v7",
-                        firstName: "Kitten 7",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/251/256"
-                    }, {
-                        id: "v8",
-                        firstName: "Kitten 8",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/251/257"
-                    }, {
-                        id: "v9",
-                        firstName: "Kitten 9",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/251/258"
-                    }, {
-                        id: "v10",
-                        firstName: "Kitten 10",
-                        lastName: "1"
-                    }, {
-                        id: "v11",
-                        firstName: "Kitten 11",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/251/260"
-                    }, {
-                        id: "v12",
-                        firstName: "Kitten 12",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/251/261"
-                    }, {
-                        id: "v13",
-                        firstName: "Kitten 13",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/251/262"
-                    }, {
-                        id: "v14",
-                        firstName: "Kitten 14",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/251/263"
-                    }, {
-                        id: "v15",
-                        firstName: "Kitten 15",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/251/264"
-                    }, {
-                        id: "v16",
-                        firstName: "Kitten 16",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/251/265"
-                    }],
-                    interests: ["Animals", "Education", "Environment", "People", "Recreation"]
-                }],
-                organizers: [{
-                    _id: "org1",
-                    firstName: "org1",
-                    lastName: "1"
-                }, {
-                    _id: "org2",
-                    firstName: "org2",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/351/350/"
-                }, {
-                    _id: "org3",
-                    firstName: "org3",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/352/350/"
-                }, {
-                    _id: "org4",
-                    firstName: "org4",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/353/350/"
-                }, {
-                    _id: "org5",
-                    firstName: "org5",
-                    lastName: "1"
-                }, {
-                    _id: "org6",
-                    firstName: "org6",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/355/350/"
-                }],
-                subscribers: [{
-                    _id: "sub1",
-                    firstName: "sub1",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/350/355/"
-                }, {
-                    _id: "sub2",
-                    firstName: "sub2",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/351/355/"
-                }, {
-                    _id: "sub3",
-                    firstName: "sub3",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/352/355/"
-                }, {
-                    _id: "sub4",
-                    firstName: "sub4",
-                    lastName: "1"
-                }, {
-                    _id: "sub5",
-                    firstName: "sub5",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/354/355/"
-                }, {
-                    _id: "sub6",
-                    firstName: "sub6",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/355/355/"
-                }, {
-                    _id: "sub7",
-                    firstName: "sub7",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/350/355/"
-                }, {
-                    _id: "sub8",
-                    firstName: "sub8",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/356/355/"
-                }, {
-                    _id: "sub9",
-                    firstName: "sub9",
-                    lastName: "1"
-                }, {
-                    _id: "sub10",
-                    firstName: "sub10",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/358/355/"
-                }],
-                interests: ["Animals", "Environment", "People", "Recreation", "Technology", "Youth"]
-            };
+            $scope.group = {};
             buildInterests();
         }
 
@@ -680,28 +419,23 @@ angular.module('seniorprojectYoApp')
             GroupService.update($stateParams.id, {
                 group: $scope.group
             }, function(res) {
-                switch (res.data.flag) {
-                    case true:
-                        $scope.group = res.data.group;
-                        $scope.alerts.push({
-                            type: "success",
-                            msg: res.data.msg
-                        });
-                        $timeout(function() {
-                            $scope.isEditing = false;
-                            $scope.isUpdating = false;
-                        }, 3000);
-                        break;
-                    case false:
-                        $scope.alerts.push({
-                            type: "danger",
-                            msg: res.data.msg
-                        });
-                        $timeout(function() {
-                            $scope.isUpdating = false;
-                        }, 3000);
-                        break;
-                }
+                $scope.group = res.data.group;
+                $scope.alerts.push({
+                    type: "success",
+                    msg: 'Group has been updated'
+//                    msg: res.data.msg
+                });
+
+                $scope.isEditing = false;
+                $scope.isUpdating = false;
+            }, function(res) {
+                $scope.alerts.push({
+                    type: "danger",
+                    msg: 'There was a problem updating the group'
+//                    msg: res.data.msg
+                });
+
+                $scope.isUpdating = false;
             });
             // Keep changes made
             $scope.group_bak = {};
@@ -750,3 +484,262 @@ angular.module('seniorprojectYoApp')
         }
 
     });
+
+/*{
+                _id: "nsync",
+                name: "N.Sync().......... .............. ................ ............. ..........................",
+                picture: "//placekitten.com/g/500/500/",
+                creationDate: "2015-08-26T18:50:10.111Z",
+                city: "Sacramento",
+                state: "CA",
+                zipcode: 95828,
+                description: "sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem blandit non.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vulputate pellentesque lorem. Donec erat ante, sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem bland center",
+                googlePlusURL: "www.google.com",
+                facebookURL: "https://facebook.com",
+                linkedInURL: "https://linkedin.com",
+                twitterURL: "https://twitter.com",
+                events: [{
+                    _id: "event1",
+                    creatorId: "",
+                    groupId: "",
+                    name: "Awesome Event Number 1 asdf asdf asdf asdf",
+                    description: "sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem blandit non.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vulputate pellentesque lorem. Donec erat ante, sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem bland center",
+                    picture: "//placekitten.com/g/501/500/",
+                    startTimeDate: "2015-10-26T18:50:10.111Z",
+                    endTimeDate: "2015-10-27T18:50:10.111Z",
+                    street: "1234 cool st",
+                    city: "Sacramento",
+                    state: "CA",
+                    zipcode: "95828",
+                    maxVolunteers: 50,
+                    volunteers: [{
+                        id: "v1",
+                        firstName: "Kitten 1",
+                        lastName: "1"
+                    }, {
+                        id: "v2",
+                        firstName: "Kitten 2",
+                        lastName: "1",
+                        picture: "//placekitten.com/g/250/251"
+                    }, {
+                        id: "v3",
+                        firstName: "Kitten 3",
+                        lastName: "1"
+                    }, {
+                        id: "v4",
+                        firstName: "Kitten 4",
+                        lastName: "1",
+                        picture: "//placekitten.com/g/250/253"
+                    }, {
+                        id: "v5",
+                        firstName: "Kitten 5",
+                        lastName: "1",
+                        picture: "//placekitten.com/g/250/254"
+                    }, {
+                        id: "v6",
+                        firstName: "Kitten 6",
+                        lastName: "1",
+                        picture: "//placekitten.com/g/250/255"
+                    }, {
+                        id: "v7",
+                        firstName: "Kitten 7",
+                        lastName: "1",
+                        picture: "//placekitten.com/g/250/256"
+                    }, {
+                        id: "v8",
+                        firstName: "Kitten 8",
+                        lastName: "1",
+                        picture: "//placekitten.com/g/250/257"
+                    }, {
+                        id: "v9",
+                        firstName: "Kitten 9",
+                        lastName: "1",
+                        picture: "//placekitten.com/g/250/258"
+                    }, {
+                        id: "v10",
+                        firstName: "Kitten 10",
+                        lastName: "1",
+                        picture: "//placekitten.com/g/250/259"
+                    }, {
+                        id: "v11",
+                        firstName: "Kitten 11",
+                        lastName: "1",
+                        picture: "//placekitten.com/g/250/260"
+                    }],
+                    interests: ["Animals", "Education", "Environment", "People", "Recreation", "Technology", "Youth"]
+
+                }, {
+                    _id: "event2",
+                    creatorId: "",
+                    groupId: "",
+                    name: "Awesome Event Number 2 asdf asdf asdf asdf",
+                    description: "aaaaaaaaaa bbbbbbbbbbbbbbb cccccccccccccccc dddddddddddddddddd eeeeeeeeeeeeeeeeeee fffffffffffffffffff gggggggggggggggggg hhhhhhhhhhhhhh iiiiiiiiiiiiiiiiiiii jjjjjjjjjjjjjjjjjjjj",
+                    picture: "//placekitten.com/g/503/500/",
+                    street: "4321 cool st",
+                    city: "Sacramento",
+                    state: "CA",
+                    zipcode: "95828",
+                    startTimeDate: "2015-10-28T18:50:10.111Z",
+                    endTimeDate: "2015-10-29T18:50:10.111Z",
+                    maxVolunteers: 50,
+                    volunteers: [{
+                        id: "v1",
+                        firstName: "Kitten 1",
+                        lastName: "1",
+                        picture: "//placekitten.com/g/251/250"
+                    }, {
+                        id: "v2",
+                        firstName: "Kitten 2",
+                        lastName: "1",
+                        picture: "//placekitten.com/g/251/251"
+                    }, {
+                        id: "v3",
+                        firstName: "Kitten 3",
+                        lastName: "1",
+                        picture: "//placekitten.com/g/251/252"
+                    }, {
+                        id: "v4",
+                        firstName: "Kitten 4",
+                        lastName: "1",
+                        picture: "//placekitten.com/g/251/253"
+                    }, {
+                        id: "v5",
+                        firstName: "Kitten 5",
+                        lastName: "1"
+                    }, {
+                        id: "v6",
+                        firstName: "Kitten 6",
+                        lastName: "1",
+                        picture: "//placekitten.com/g/251/255"
+                    }, {
+                        id: "v7",
+                        firstName: "Kitten 7",
+                        lastName: "1",
+                        picture: "//placekitten.com/g/251/256"
+                    }, {
+                        id: "v8",
+                        firstName: "Kitten 8",
+                        lastName: "1",
+                        picture: "//placekitten.com/g/251/257"
+                    }, {
+                        id: "v9",
+                        firstName: "Kitten 9",
+                        lastName: "1",
+                        picture: "//placekitten.com/g/251/258"
+                    }, {
+                        id: "v10",
+                        firstName: "Kitten 10",
+                        lastName: "1"
+                    }, {
+                        id: "v11",
+                        firstName: "Kitten 11",
+                        lastName: "1",
+                        picture: "//placekitten.com/g/251/260"
+                    }, {
+                        id: "v12",
+                        firstName: "Kitten 12",
+                        lastName: "1",
+                        picture: "//placekitten.com/g/251/261"
+                    }, {
+                        id: "v13",
+                        firstName: "Kitten 13",
+                        lastName: "1",
+                        picture: "//placekitten.com/g/251/262"
+                    }, {
+                        id: "v14",
+                        firstName: "Kitten 14",
+                        lastName: "1",
+                        picture: "//placekitten.com/g/251/263"
+                    }, {
+                        id: "v15",
+                        firstName: "Kitten 15",
+                        lastName: "1",
+                        picture: "//placekitten.com/g/251/264"
+                    }, {
+                        id: "v16",
+                        firstName: "Kitten 16",
+                        lastName: "1",
+                        picture: "//placekitten.com/g/251/265"
+                    }],
+                    interests: ["Animals", "Education", "Environment", "People", "Recreation"]
+                }],
+                organizers: [{
+                    _id: "org1",
+                    firstName: "org1",
+                    lastName: "1"
+                }, {
+                    _id: "org2",
+                    firstName: "org2",
+                    lastName: "1",
+                    picture: "//placekitten.com/g/351/350/"
+                }, {
+                    _id: "org3",
+                    firstName: "org3",
+                    lastName: "1",
+                    picture: "//placekitten.com/g/352/350/"
+                }, {
+                    _id: "org4",
+                    firstName: "org4",
+                    lastName: "1",
+                    picture: "//placekitten.com/g/353/350/"
+                }, {
+                    _id: "org5",
+                    firstName: "org5",
+                    lastName: "1"
+                }, {
+                    _id: "org6",
+                    firstName: "org6",
+                    lastName: "1",
+                    picture: "//placekitten.com/g/355/350/"
+                }],
+                subscribers: [{
+                    _id: "sub1",
+                    firstName: "sub1",
+                    lastName: "1",
+                    picture: "//placekitten.com/g/350/355/"
+                }, {
+                    _id: "sub2",
+                    firstName: "sub2",
+                    lastName: "1",
+                    picture: "//placekitten.com/g/351/355/"
+                }, {
+                    _id: "sub3",
+                    firstName: "sub3",
+                    lastName: "1",
+                    picture: "//placekitten.com/g/352/355/"
+                }, {
+                    _id: "sub4",
+                    firstName: "sub4",
+                    lastName: "1"
+                }, {
+                    _id: "sub5",
+                    firstName: "sub5",
+                    lastName: "1",
+                    picture: "//placekitten.com/g/354/355/"
+                }, {
+                    _id: "sub6",
+                    firstName: "sub6",
+                    lastName: "1",
+                    picture: "//placekitten.com/g/355/355/"
+                }, {
+                    _id: "sub7",
+                    firstName: "sub7",
+                    lastName: "1",
+                    picture: "//placekitten.com/g/350/355/"
+                }, {
+                    _id: "sub8",
+                    firstName: "sub8",
+                    lastName: "1",
+                    picture: "//placekitten.com/g/356/355/"
+                }, {
+                    _id: "sub9",
+                    firstName: "sub9",
+                    lastName: "1"
+                }, {
+                    _id: "sub10",
+                    firstName: "sub10",
+                    lastName: "1",
+                    picture: "//placekitten.com/g/358/355/"
+                }],
+                interests: ["Animals", "Environment", "People", "Recreation", "Technology", "Youth"]
+            }*/

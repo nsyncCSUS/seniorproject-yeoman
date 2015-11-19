@@ -62,11 +62,8 @@ angular.module('seniorprojectYoApp')
         };
 
 
-        this.update = function(id, _params, callback, error) {
+        this.update = function(id, params, callback, error) {
             var url = constructUrl(this.Constants.routes.groups, id);
-            var params = {
-                group: _params
-            };
 
             $http.put(url, params).then(function(response) {
                 console.log(response);

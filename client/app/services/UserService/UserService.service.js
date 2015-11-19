@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .service('UserService', function($http) {
+    .service('UserService', function($http, $rootScope) {
 
         /**
          * A list of relevant constants for http functions

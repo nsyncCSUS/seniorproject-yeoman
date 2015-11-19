@@ -8,15 +8,11 @@ angular.module('seniorprojectYoApp')
          * Variables (includes ones from scope too)
          **************************************************************************/
         $scope.isAdmin = true;
-
         $scope.userId = $stateParams.id;
-
         $scope.isEditing = false;
         $scope.isUpdating = false;
-
-
-
         $scope.alerts = [];
+        $scope.errorMessage = '';
 
         $scope.animalsSelected = "";
         $scope.educationSelected = "";
@@ -34,12 +30,15 @@ angular.module('seniorprojectYoApp')
          * Get Functions
          **************************************************************************/
         // Gets the user data from server
-//        if ($stateParams.id != null && $stateParams.id != undefined) {
-        if($stateParams.id) {
+        //        if ($stateParams.id != null && $stateParams.id != undefined) {
+        if ($stateParams.id) {
             UserService.show($stateParams.id, function(res) {
-                console.log('User: ' + res.data.user);
-                $scope.user = res.data.user;
-                buildInterests();
+                if (res.status === 404) {
+                    $scope.errorMessage = 'There was a problem retrieving the user';
+                } else {
+                    $scope.user = res.data.user;
+                    buildInterests();
+                }
             });
         } else {
             $scope.user = {
@@ -367,10 +366,7 @@ angular.module('seniorprojectYoApp')
         }
 
         $scope.getCurrentTab = function(tabName) {
-            if ($scope.selectedTab === tabName)
-                return true;
-            else
-                return false;
+            return $scope.selectedTab === tabName;
         }
 
         /***************************************************************************
@@ -418,79 +414,73 @@ angular.module('seniorprojectYoApp')
          * Adding/Removing Interests Function
          **************************************************************************/
         $scope.addInterest = function(interest) {
-                var hasInterest = false;
-                var newInterests = [];
-                angular.forEach($scope.user.interests, function(currentInterest, index) {
-                    //console.log(currentInterest.type);
-                    if (currentInterest === interest) {
-                        //console.log("removed " + interest);
-                        hasInterest = true;
-                        switch (interest) {
-                            case "Animals":
-                                $scope.animalsSelected = "";
-                                break;
-                            case "Education":
-                                $scope.educationSelected = "";
-                                break;
-                            case "Environment":
-                                $scope.environmentSelected = "";
-                                break;
-                            case "People":
-                                $scope.peopleSelected = "";
-                                break;
-                            case "Recreation":
-                                $scope.recreationSelected = "";
-                                break;
-                            case "Technology":
-                                $scope.technologySelected = "";
-                                break;
-                            case "Youth":
-                                $scope.youthSelected = "";
-                                break;
-                        }
-                    } else {
-                        //console.log(currentInterest);
-                        newInterests.push(currentInterest);
-                    }
-                });
-                if (hasInterest === false) {
-                    //console.log("added " + interest);
-                    newInterests.push(interest);
+            var hasInterest = false;
+            var newInterests = [];
+            angular.forEach($scope.user.interests, function(currentInterest, index) {
+                if (currentInterest === interest) {
+                    hasInterest = true;
                     switch (interest) {
                         case "Animals":
-                            $scope.animalsSelected = "selected";
+                            $scope.animalsSelected = "";
                             break;
                         case "Education":
-                            $scope.educationSelected = "selected";
+                            $scope.educationSelected = "";
                             break;
                         case "Environment":
-                            $scope.environmentSelected = "selected";
+                            $scope.environmentSelected = "";
                             break;
                         case "People":
-                            $scope.peopleSelected = "selected";
+                            $scope.peopleSelected = "";
                             break;
                         case "Recreation":
-                            $scope.recreationSelected = "selected";
+                            $scope.recreationSelected = "";
                             break;
                         case "Technology":
-                            $scope.technologySelected = "selected";
+                            $scope.technologySelected = "";
                             break;
                         case "Youth":
-                            $scope.youthSelected = "selected";
+                            $scope.youthSelected = "";
                             break;
                     }
+                } else {
+                    newInterests.push(currentInterest);
                 }
-                $scope.user.interests = newInterests;
-                //console.log($scope.user.interests);
+            });
+
+            if (hasInterest === false) {
+                newInterests.push(interest);
+                switch (interest) {
+                    case "Animals":
+                        $scope.animalsSelected = "selected";
+                        break;
+                    case "Education":
+                        $scope.educationSelected = "selected";
+                        break;
+                    case "Environment":
+                        $scope.environmentSelected = "selected";
+                        break;
+                    case "People":
+                        $scope.peopleSelected = "selected";
+                        break;
+                    case "Recreation":
+                        $scope.recreationSelected = "selected";
+                        break;
+                    case "Technology":
+                        $scope.technologySelected = "selected";
+                        break;
+                    case "Youth":
+                        $scope.youthSelected = "selected";
+                        break;
+                }
             }
-            /***********************************************************************
-             * Editing Functions
-             **********************************************************************/
+
+            $scope.user.interests = newInterests;
+        };
+        /***********************************************************************
+         * Editing Functions
+         **********************************************************************/
         $scope.getIsEditing = function() {
-            if ($scope.isEditing === true)
-                return true;
-            else
-                return false;
+            return $scope.isEditing;
         }
 
         $scope.enableEdit = function() {
@@ -515,8 +505,6 @@ angular.module('seniorprojectYoApp')
 
         $scope.submitEdit = function() {
             $scope.isUpdating = true;
-            // Send changes to server
-            console.log($stateParams.id, $scope.user);
 
             // Keep changes made
             $scope.user_bak = {};
@@ -528,31 +516,28 @@ angular.module('seniorprojectYoApp')
             $scope.technologySelected_bak = "";
             $scope.youthSelected_bak = "";
 
+            console.log('In submitUser');
             UserService.update($stateParams.id, {
                 user: $scope.user
             }, function(res) {
+                console.log('Updated');
+                console.log(res.data);
+                console.log(res.data.user);
                 $scope.user = res.data.user;
-                $scope.alerts.push({
-                    type: "success",
-                    msg: res.data.msg
-                });
+//                $scope.alerts.push({
+//                    type: "success",
+//                    msg: res.data.msg
+//                });
 
                 $scope.isEditing = false;
                 $scope.isUpdating = false;
-//                $timeout(function() {
-//                    $scope.isEditing = false;
-//                    $scope.isUpdating = false;
-//                }, 3000);
             }, function(res) {
-                $scope.alerts.push({
-                    type: "danger",
-                    msg: res.data.msg
-                });
+//                $scope.alerts.push({
+//                    type: "danger",
+//                    msg: res.data.msg
+//                });
 
                 $scope.isUpdating = false;
-//                $timeout(function() {
-//                    $scope.isUpdating = false;
-//                }, 3000);
             });
         }
 

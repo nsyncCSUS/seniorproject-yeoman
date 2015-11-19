@@ -4,19 +4,14 @@ angular.module('seniorprojectYoApp')
     .controller('EventsCtrl', function($stateParams, $scope, EventService, moment) {
         $scope.message = 'Hello';
 
-
         /***************************************************************************
          * Variables (includes ones from scope too)
          **************************************************************************/
         $scope.isAdmin = true;
-
         $scope.eventId = $stateParams.eventId;
-
         $scope.isEditing = false;
         $scope.isUpdating = false;
-
         $scope.currentDate = new Date();
-
         $scope.alerts = [];
 
         $scope.animalsSelected = "";
@@ -27,103 +22,20 @@ angular.module('seniorprojectYoApp')
         $scope.technologySelected = "";
         $scope.youthSelected = "";
 
-        $scope.user = {
-            _id : "v1"
-        };
-
-
         /***************************************************************************
          * Get Functions
          **************************************************************************/
         // Gets the group data from server
-        if ($stateParams.id != null) {
+        if ($stateParams.id) {
+            console.log('Getting event');
             EventService.show($stateParams.id, function(res) {
-                $scope.event = res.data.group;
+                $scope.event = res.data.event;
+                console.log('Back from getting event');
                 buildDuration();
                 buildInterests();
             });
         } else {
-            $scope.event = {
-                _id : "event1",
-                creationUser: {
-                    _id : "creatorid",
-                    firstName : "Anthony",
-                    lastName : "Nguyen",
-                    picture : "//placekitten.com/g/505/500/"
-                },
-                group: {
-                    _id: "nsync",
-                    name: "N.Sync().......... .............. ................ ............. ..........................",
-                    picture: "//placekitten.com/g/500/500/",
-                    creationDate: "2015-08-26T18:50:10.111Z"
-                },
-                name: "SUPER DUPER AWESOME EVENT!!!!",
-                description: "sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem blandit non.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vulputate pellentesque lorem. Donec erat ante, sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem bland center",
-                picture: "//placekitten.com/g/501/500/",
-                startTimeDate: "2015-08-26T18:50:10.111Z",
-                endTimeDate: "2015-08-27T19:50:10.111Z",
-                street: "1234 cool st",
-                city: "Sacramento",
-                state: "CA",
-                zipcode: "95828",
-                maxVolunteers: 50,
-                volunteers: [{
-                    _id: "v1",
-                    firstName: "Kitten 1",
-                    lastName: "1"
-                }, {
-                    _id: "v2",
-                    firstName: "Kitten 2",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/250/251"
-                }, {
-                    _id: "v3",
-                    firstName: "Kitten 3",
-                    lastName: "1"
-                }, {
-                    _id: "v4",
-                    firstName: "Kitten 4",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/250/253"
-                }, {
-                    _id: "v5",
-                    firstName: "Kitten 5",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/250/254"
-                }, {
-                    _id: "v6",
-                    firstName: "Kitten 6",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/250/255"
-                }, {
-                    _id: "v7",
-                    firstName: "Kitten 7",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/250/256"
-                }, {
-                    _id: "v8",
-                    firstName: "Kitten 8",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/250/257"
-                }, {
-                    _id: "v9",
-                    firstName: "Kitten 9",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/250/258"
-                }, {
-                    _id: "v10",
-                    firstName: "Kitten 10",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/250/259"
-                }, {
-                    _id: "v11",
-                    firstName: "Kitten 11",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/250/260"
-                }],
-                interests: ["Animals", "Education", "Environment", "People", "Recreation", "Technology", "Youth"]
-
-            };
+            $scope.event = {};
 
             buildInterests();
             buildDuration();
@@ -264,10 +176,7 @@ angular.module('seniorprojectYoApp')
          * Editing Functions
          **********************************************************************/
         $scope.getIsEditing = function() {
-            if ($scope.isEditing === true)
-                return true;
-            else
-                return false;
+            return $scope.isEditing === true
         }
 
         $scope.enableEdit = function() {
@@ -295,33 +204,28 @@ angular.module('seniorprojectYoApp')
         $scope.submitEdit = function() {
             $scope.isUpdating = true;
             // Send changes to server
-            GroupService.put({
-                id: $stateParams.id,
-                group: $scope.event
+            EventService.update($stateParams.id, {
+                event: $scope.event
             }, function(res) {
-                switch (res.data.flag) {
-                    case true:
-                        $scope.event = res.data.group;
-                        $scope.alerts.push({
-                            type: "success",
-                            msg: res.data.msg
-                        });
-                        $timeout(function() {
-                            $scope.isEditing = false;
-                            $scope.isUpdating = false;
-                        }, 3000);
-                        break;
-                    case false:
-                        $scope.alerts.push({
-                            type: "danger",
-                            msg: res.data.msg
-                        });
-                        $timeout(function() {
-                            $scope.isUpdating = false;
-                        }, 3000);
-                        break;
-                }
+                $scope.event = res.data.event;
+                $scope.alerts.push({
+                    type: "success",
+                    msg: 'Event updated'
+//                    msg: res.data.msg
+                });
+
+                $scope.isEditing = false;
+                $scope.isUpdating = false;
+            }, function(res) {
+                $scope.alerts.push({
+                    type: "danger",
+                    msg: 'There was a problem updating the event'
+//                    msg: res.data.msg
+                });
+
+                $scope.isUpdating = false;
             });
+
             // Keep changes made
             $scope.event_bak = {};
             $scope.animalsSelected_bak = "";
@@ -335,12 +239,12 @@ angular.module('seniorprojectYoApp')
             buildDuration();
         }
 
-		/***************************************************************************
-		 * Volunteer Button
-		 **************************************************************************/
-		$scope.volunteer = function() {
+        /***************************************************************************
+         * Volunteer Button
+         **************************************************************************/
+        $scope.volunteer = function() {
 
-		}
+        }
 
         $scope.optOut = function() {
 
@@ -354,39 +258,27 @@ angular.module('seniorprojectYoApp')
         }
 
 
-		/***************************************************************************
-		 * Boolean functions
-		 **************************************************************************/
+        /***************************************************************************
+         * Boolean functions
+         **************************************************************************/
         $scope.isVolunteering = function() {
-            for (var i = 0; i < $scope.event.volunteers.length; i++){
+            for (var i = 0; i < $scope.event.volunteers.length; i++) {
                 if ($scope.event.volunteers[i]._id === $scope.user._id)
                     return true;
             }
             return false;
         }
 
-        $scope.hasDays = function(){
-            if ($scope.duration.days != null) {
-                return true;
-            } else {
-                return false;
-            }
+        $scope.hasDays = function() {
+            return $scope.duration.days != null
         }
 
         $scope.hasHours = function() {
-            if ($scope.duration.hours != null) {
-                return true;
-            } else {
-                return false;
-            }
+            return $scope.duration.hours != null
         }
 
         $scope.hasMinutes = function() {
-            if ($scope.duration.minutes != null) {
-                return true;
-            } else {
-                return false;
-            }
+            return $scope.duration.minutes != null
         }
 
         /***************************************************************************
@@ -404,3 +296,85 @@ angular.module('seniorprojectYoApp')
         }
 
     });
+
+/*{
+                  _id : "event1",
+                  creationUser: {
+                      _id : "creatorid",
+                      firstName : "Anthony",
+                      lastName : "Nguyen",
+                      picture : "//placekitten.com/g/505/500/"
+                  },
+                  group: {
+                      _id: "nsync",
+                      name: "N.Sync().......... .............. ................ ............. ..........................",
+                      picture: "//placekitten.com/g/500/500/",
+                      creationDate: "2015-08-26T18:50:10.111Z"
+                  },
+                  name: "SUPER DUPER AWESOME EVENT!!!!",
+                  description: "sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem blandit non.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vulputate pellentesque lorem. Donec erat ante, sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem bland center",
+                  picture: "//placekitten.com/g/501/500/",
+                  startTimeDate: "2015-08-26T18:50:10.111Z",
+                  endTimeDate: "2015-08-27T19:50:10.111Z",
+                  street: "1234 cool st",
+                  city: "Sacramento",
+                  state: "CA",
+                  zipcode: "95828",
+                  maxVolunteers: 50,
+                  volunteers: [{
+                      _id: "v1",
+                      firstName: "Kitten 1",
+                      lastName: "1"
+                  }, {
+                      _id: "v2",
+                      firstName: "Kitten 2",
+                      lastName: "1",
+                      picture: "//placekitten.com/g/250/251"
+                  }, {
+                      _id: "v3",
+                      firstName: "Kitten 3",
+                      lastName: "1"
+                  }, {
+                      _id: "v4",
+                      firstName: "Kitten 4",
+                      lastName: "1",
+                      picture: "//placekitten.com/g/250/253"
+                  }, {
+                      _id: "v5",
+                      firstName: "Kitten 5",
+                      lastName: "1",
+                      picture: "//placekitten.com/g/250/254"
+                  }, {
+                      _id: "v6",
+                      firstName: "Kitten 6",
+                      lastName: "1",
+                      picture: "//placekitten.com/g/250/255"
+                  }, {
+                      _id: "v7",
+                      firstName: "Kitten 7",
+                      lastName: "1",
+                      picture: "//placekitten.com/g/250/256"
+                  }, {
+                      _id: "v8",
+                      firstName: "Kitten 8",
+                      lastName: "1",
+                      picture: "//placekitten.com/g/250/257"
+                  }, {
+                      _id: "v9",
+                      firstName: "Kitten 9",
+                      lastName: "1",
+                      picture: "//placekitten.com/g/250/258"
+                  }, {
+                      _id: "v10",
+                      firstName: "Kitten 10",
+                      lastName: "1",
+                      picture: "//placekitten.com/g/250/259"
+                  }, {
+                      _id: "v11",
+                      firstName: "Kitten 11",
+                      lastName: "1",
+                      picture: "//placekitten.com/g/250/260"
+                  }],
+                  interests: ["Animals", "Education", "Environment", "People", "Recreation", "Technology", "Youth"]
+
+              }*/

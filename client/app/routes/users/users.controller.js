@@ -1,16 +1,16 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('UsersCtrl', function($scope, $stateParams, $anchorScroll, $timeout, UserService) {
+    .controller('UsersCtrl', function($scope, $stateParams, $anchorScroll, $timeout, UserService, $http, Auth) {
 
 
         /***************************************************************************
          * Variables (includes ones from scope too)
          **************************************************************************/
         $scope.isAdmin = true;
-        $scope.userId = $stateParams.id;
         $scope.isEditing = false;
         $scope.isUpdating = false;
+        $scope.userId = $stateParams.id;
         $scope.alerts = [];
         $scope.errorMessage = '';
 
@@ -25,6 +25,13 @@ angular.module('seniorprojectYoApp')
 
         $scope.selectedTab = "Volunteered To";
         $scope.otherTabs = ["Past Events", "Subscriptions"];
+
+//        Auth.getCurrentUser().$promise.then(function(res) {
+//            console.log(res);
+//        });
+//        $http.get('/api/users/me').then(function(res) {
+//            console.log(res);
+//        });
 
         /***************************************************************************
          * Get Functions

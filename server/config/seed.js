@@ -130,6 +130,7 @@ User.findOneAndRemove({_id: '000000000000000000000003'}, function(err) {
         firstName: 'Alex',
         middleName: 'Something',
         lastName: 'Else',
+        email: 'alex@test.com',
         _id: '000000000000000000000003',
         password: 'test'
     }, function(err) {

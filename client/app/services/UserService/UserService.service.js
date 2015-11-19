@@ -43,9 +43,9 @@ angular.module('seniorprojectYoApp')
         this.index = function(_params, callback, error) {
             var url = constructUrl(this.Constants.routes.users);
             var params = {
-                page: params.page,
-                offset: params.offset,
-                user: params.user
+                page: _params.page,
+                offset: _params.offset,
+                user: _params.user
             };
 
             $http.get(url, params).then(function(response) {

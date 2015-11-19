@@ -18,7 +18,7 @@ div.eventRow(ng-show='!getIsPreviewing()')
                 .col-xs-12.col-sm-12.col-md-7.col-lg-8
                         .form-group
                             label(for='eventName') Event Name
-                            input.form-control#eventName(ng-model='event.name')
+                            input.form-control#eventName(type='text', ng-model='event.name')
                 .col-xs-12.col-sm-12.col-md-5.col-lg-4
                     label(for='interests') Interests
                     .navbar-btn
@@ -90,13 +90,13 @@ div.eventRow(ng-show='!getIsPreviewing()')
                 .row
                     .col-xs-12.col-sm-12.col-md-12.col-lg-12
                         label(for='street') Street
-                        input.form-control#street(ng-model='event.street')
+                        input.form-control#street(type='text', name='address-line-1', ng-model='event.street')
                     .col-xs-12.col-sm-6.col-md-6.col-lg-6
                         label(for='city') City
-                        input.form-control#city(ng-model='event.city')
+                        input.form-control#city(type='text', name='city', ng-model='event.city')
                     .col-xs-5.col-sm-3.col-md-2.col-lg-2
                         label(for='state') State
-                        select.form-control#state(ng-model='event.state')
+                        select.form-control#state(type='text', name='state', ng-model='event.state')
                              option(value='AL') AL
                              option(value='AK') AK
                              option(value='AZ') AZ
@@ -150,7 +150,7 @@ div.eventRow(ng-show='!getIsPreviewing()')
                              option(value='WY') WY
                     .col-xs-7.col-sm-3.col-md-4.col-lg-4
                         label(for='zipcode') Zipcode
-                        input.form-control#zipcode(ng-model='event.zipcode')
+                        input.form-control#zipcode(type='text', name='zip', ng-model='event.zipcode')
 
 
 

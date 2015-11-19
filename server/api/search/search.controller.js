@@ -9,6 +9,13 @@
 
 'use strict';
 
+var User = require('../user/user.model');
+
+function handleError(res, err) {
+  return res.status(500).send(err);
+}
+
+
 // Get list of things
 exports.index = function(req, res) {
   User.find(function (err, things) {

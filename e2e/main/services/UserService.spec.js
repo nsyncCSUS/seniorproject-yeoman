@@ -6,7 +6,7 @@ chai.use(require('chai-as-promised'));
 
 describe('UserService', function() {
     beforeEach(function() {
-        browser.get('/');
+//        browser.get('/');
     });
 
     it('should retrieve a list of users', function() {

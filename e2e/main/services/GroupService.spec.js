@@ -6,7 +6,7 @@ chai.use(require('chai-as-promised'));
 
 describe('GroupService', function() {
     beforeEach(function() {
-        browser.get('/');
+//        browser.get('/');
     });
 
     it('should retrieve a list of groups', function() {

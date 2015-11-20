@@ -11,4 +11,8 @@ describe('Main View', function() {
       browser.get('/');
       page = require('./main.po');
     });
+
+    it('should do a thing', function() {
+        expect(1).to.equal(1);
+    });
 });

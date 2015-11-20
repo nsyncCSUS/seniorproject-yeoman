@@ -37,7 +37,7 @@ exports.show = function(req, res) {
                 return notFound(res);
             } else {
                 var events = user.events.organizerOf.filter(function(item) {
-                    return item._id === req.params.eventId;
+                    return item._id.toString() === req.params.eventId;
                 });
 
                 if(events.length === 0) {

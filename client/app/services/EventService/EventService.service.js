@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .service('EventService', function($http) {
+    .service('EventService', function($http, Restangular) {
 
 
         /**
          * A list of relevant constants for http functions
          */
-        this.Constants = Object.freeze({
+        var Constants = Object.freeze({
             routes: {
                 users: 'api/users',
                 groups: 'api/groups',
@@ -22,90 +22,44 @@ angular.module('seniorprojectYoApp')
         });
 
 
-        /**
-         * Construct a url from different url components
-         */
-        function constructUrl(item1, item2, item3, item4) {
-            var url = '';
-            if (item1 != null && item1 != undefined) url += '/' + item1;
-            if (item2 != null && item2 != undefined) url += '/' + item2;
-            if (item3 != null && item3 != undefined) url += '/' + item3;
-            if (item4 != null && item4 != undefined) url += '/' + item4;
-            return url;
-        };
-
-
         this.index = function(_params, callback, error) {
-            var url = constructUrl(this.Constants.routes.events);
             var params = {
-                page: _params.page,
-                offset: _params.offset,
-                event: _params.event
+                page: _params.page || 1,
+                offset: _params.offset || 0
             };
 
-            $http.get(url, params).then(function(response) {
-                console.log(response);
-                if (callback) callback(response);
-            }, function(response) {
-                console.log(response);
-                if (error) error(response);
-            });
+            Restangular.one(Constants.routes.events)
+                .get(params)
+                .then(callback, error);
         };
 
 
 
         this.show = function(id, callback, error) {
-            var url = constructUrl(this.Constants.routes.events, id);
-
-            $http.get(url).then(function(response) {
-                console.log(response);
-                if (callback) callback(response);
-            }, function(response) {
-                console.log(response);
-                if (error) error(response);
-            });
+            Restangular.one(Constants.routes.events, id)
+                .get()
+                .then(callback, error);
         };
 
 
         this.update = function(id, params, callback, error) {
-            var url = constructUrl(this.Constants.routes.events, id);
-
-            $http.put(url, params).then(function(response) {
-                console.log(response);
-                if (callback) callback(response);
-            }, function(response) {
-                console.log(response);
-                if (error) error(response);
-            });
+            Restangular.one(Constants.routes.events, id)
+                .put(params)
+                .then(callback, error);
         };
 
 
         this.create = function(_params, callback, error) {
-            var url = constructUrl(this.Constants.events);
-            var params = {
-                event: _params
-            };
-
-            $http.post(url, params).then(function(response) {
-                console.log(response);
-                if (callback) callback(response);
-            }, function(response) {
-                console.log(response);
-                if (error) error(response);
-            });
+            Restangular.one(Constants.routes.events)
+                .post({event: params})
+                .then(callback, error);
         };
 
 
         this.destroy = function(id, callback, error) {
-            var url = constructUrl(this.Constants.events, id);
-
-            $http.delete(url).then(function(response) {
-                console.log(response);
-                if (callback) callback(response);
-            }, function(response) {
-                console.log(response);
-                if (error) error(response);
-            });
+            Restangular.one(Constants.routes.events, id)
+                .remove()
+                .then(callback, error);
         };
 
 
@@ -115,60 +69,41 @@ angular.module('seniorprojectYoApp')
         this.organizers = {
 
             index: function(id, _params, callback, error) {
-                var url = constructUrl(this.Constants.routes.events, id, this.Constants.organizers);
                 var params = {
                     page: _params.page,
                     offset: _params.offset,
                     organizer: _params.organizer
                 };
 
-                $http.get(url, params).then(function(response) {
-                    console.log(response);
-                    if (callback) callback(response);
-                }, function(response) {
-                    console.log(response);
-                    if (error) error(response);
-                });
+                Restangular.one(Constants.routes.events, id)
+                    .one(Constants.organizers)
+                    .getList(params)
+                    .then(callback, error);
             },
 
 
             show: function(id, organizerId, callback, error) {
-                var url = constructUrl(this.Constants.routes.events, id, this.Constants.organizers, organizerId);
-
-                $http.get(url).then(function(response) {
-                    console.log(response);
-                    if (callback) callback(response);
-                }, function(response) {
-                    console.log(response);
-                    if (error) error(response);
-                });
+                Restangular.one(Constants.routes.events, id)
+                    .one(Constants.organizers, organizerId)
+                    .get()
+                    .then(callback, error);
             },
 
 
 
             create: function(id, organizerId, callback, error) {
-                var url = constructUrl(this.Constants.routes.events, id, this.Constants.organizers, organizerId);
-
-                $http.post(url, params).then(function(response) {
-                    console.log(response);
-                    if (callback) callback(response);
-                }, function(response) {
-                    console.log(response);
-                    if (error) error(response);
-                });
+                Restangular.one(Constants.routes.events, id)
+                    .one(Constants.organizers, organizerId)
+                    .post()
+                    .then(callback, error);
             },
 
 
             destroy: function(id, organizerId, callback, error) {
-                var url = constructUrl(this.Constants.events, id, this.Constants.organizers, organizerId);
-
-                $http.delete(url).then(function(response) {
-                    console.log(response);
-                    if (callback) callback(response);
-                }, function(response) {
-                    console.log(response);
-                    if (error) error(response);
-                });
+                Restangular.one(Constants.routes.events, id)
+                    .one(Constants.organizers, organizerId)
+                    .remove()
+                    .then(callback, error);
             }
         };
 
@@ -179,59 +114,40 @@ angular.module('seniorprojectYoApp')
         this.volunteers = {
 
             index: function(id, params, callback, error) {
-                var url = constructUrl(this.Constants.events, id, this.Constants.volunteers);
                 var params = {
                     page: params.page,
                     offset: params.offset,
                     volunteer: params.volunteer
                 };
 
-                $http.get(url, params).then(function(response) {
-                    console.log(response);
-                    if (callback) callback(response);
-                }, function(response) {
-                    console.log(response);
-                    if (error) error(response);
-                });
+                Restangular.one(Constants.routes.events, id)
+                    .one(Constants.volunteers)
+                    .getList()
+                    .then(callback, error);
             },
 
 
             show: function(id, volunteerId, callback, error) {
-                var url = constructUrl(this.Constants.events, id, this.Constants.volunteers, volunteerId);
-
-                $http.get(url, params).then(function(response) {
-                    console.log(response);
-                    if (callback) callback(response);
-                }, function(response) {
-                    console.log(response);
-                    if (error) error(response);
-                });
+                Restangular.one(Constants.routes.events, id)
+                    .one(Constants.volunteers, volunteerId)
+                    .get()
+                    .then(callback, error);
             },
 
 
             create: function(id, volunteerId, callback, error) {
-                var url = constructUrl(this.Constants.events, id, this.Constants.volunteers, volunteerId);
-
-                $http.post(url).then(function(response) {
-                    console.log(response);
-                    if (callback) callback(response);
-                }, function(response) {
-                    console.log(response);
-                    if (error) error(response);
-                });
+                Restangular.one(Constants.routes.events, id)
+                    .one(Constants.volunteers, volunteerId)
+                    .post()
+                    .then(callback, error);
             },
 
 
             destroy: function(id, volunteerId, callback, error) {
-                var url = constructUrl(this.Constants.events, id, this.Constants.volunteers, volunteerId);
-
-                $http.delete(url).then(function(response) {
-                    console.log(response);
-                    if (callback) callback(response);
-                }, function(response) {
-                    console.log(response);
-                    if (error) error(response);
-                });
+                Restangular.one(Constants.routes.events, id)
+                    .one(Constants.volunteers, volunteerId)
+                    .remove()
+                    .then(callback, error);
             }
         };
     });

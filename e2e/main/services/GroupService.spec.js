@@ -14,13 +14,40 @@ describe('GroupService', function() {
             var GroupService = angular.element(document.body)
                 .injector()
                 .get('GroupService');
-            GroupService.index({}, function(res) {
-                callback(res);
-            });
+            GroupService.index({}, callback, callback);
         }).then(function(res) {
-            console.log(res);
             expect(res.data).to.be.an('array');
         });
+    });
+
+    describe('index', function() {});
+    describe('show', function() {});
+    describe('update', function() {});
+    describe('create', function() {});
+    describe('destroy', function() {});
+
+
+    describe('events', function() {
+        describe('index', function() {});
+        describe('show', function() {});
+        describe('create', function() {});
+        describe('destroy', function() {});
+    });
+
+
+    describe('organizers', function() {
+        describe('index', function() {});
+        describe('show', function() {});
+        describe('create', function() {});
+        describe('destroy', function() {});
+    });
+
+
+    describe('volunteers', function() {
+        describe('index', function() {});
+        describe('show', function() {});
+        describe('create', function() {});
+        describe('destroy', function() {});
     });
 });
 

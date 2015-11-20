@@ -14,6 +14,7 @@ var validationError = function(res, err) {
  * restriction: 'admin'
  */
 exports.index = function(req, res) {
+    var params = req.query || {};
     User.find({}, '-salt -hashedPassword', function(err, users) {
         if (err) return res.status(500).send(err);
 
@@ -66,11 +67,11 @@ exports.show = function(req, res, next) {
 
 
 exports.update = function(req, res) {
-    if(!validId(req.params.id)) {
+    if(!req.body.user || !validId(req.params.id)) {
         return notFound(res);
     }
 
-    if(req.body.user._id) delete req.body.user._id;
+    if(req.body.user.id) delete req.body.user.id;
     if(req.body.user.events) delete req.body.user.events;
     if(req.body.user.groups) delete req.body.user.groups;
     if(req.body.user.hashedPassword) delete req.body.user.hashedPassword;
@@ -100,6 +101,7 @@ exports.destroy = function(req, res) {
     if(!validId(req.params.id)) {
         return notFound(res);
     }
+
     User.findByIdAndRemove(req.params.id, function(err, user) {
         if (err) return res.status(500).send(err);
         return res.status(204).send('No Content');
@@ -134,11 +136,11 @@ exports.changePassword = function(req, res, next) {
  * Get my info
  */
 exports.me = function(req, res, next) {
-    console.log(req.user);
     var userId = req.user._id || '';
     if(!req.user || !validId(userId.toString())) {
         return notFound(res);
     }
+
     User.findOne({
         _id: userId
     }, '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt

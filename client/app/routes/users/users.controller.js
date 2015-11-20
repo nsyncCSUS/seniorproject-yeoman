@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('UsersCtrl', function($scope, $stateParams, $anchorScroll, $timeout, UserService, $http, Auth) {
+    .controller('UsersCtrl', function($scope, $stateParams, $anchorScroll, $timeout, UserService, $http, Auth, Restangular) {
 
 
         /***************************************************************************
@@ -25,12 +25,6 @@ angular.module('seniorprojectYoApp')
 
         $scope.selectedTab = "Volunteered To";
         $scope.otherTabs = ["Past Events", "Subscriptions"];
-
-        console.log(Auth.getCurrentUser());
-//        $http.get('/api/users/me').then(function(res) {
-//            console.log(res.data.user);
-//        });
-        console.log(Auth.isLoggedIn());
 
         /***************************************************************************
          * Get Functions

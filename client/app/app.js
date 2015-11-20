@@ -9,14 +9,16 @@ angular.module('seniorprojectYoApp', [
   'ui.router',
   'ui.bootstrap',
   'ui.bootstrap.datetimepicker',
-  'angularMoment'
+  'angularMoment',
+  'restangular'
 ])
-  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
+  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, RestangularProvider) {
     $urlRouterProvider
       .otherwise('/home');
 
     $locationProvider.html5Mode(true);
     $httpProvider.interceptors.push('authInterceptor');
+    RestangularProvider.setFullResponse(true); // Configure Restangular to return full Http responses
   })
 
   .factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location) {

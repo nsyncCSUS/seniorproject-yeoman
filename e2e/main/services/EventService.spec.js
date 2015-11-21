@@ -268,21 +268,21 @@ describe('EventService', function() {
 
 
         describe('destroy', function() {
-            it('should remove an organizer', function() {
-                browser.executeAsyncScript(function(callback) {
-                    var EventService = angular.element(document.body)
-                        .injector()
-                        .get('EventService');
-                    EventService.organizers.destroy('000000000000000000000000', '000000000000000000000002', callback, callback);
-                }).then(function(res) {
-                    expect(res.status).to.equal(200);
-                    expect(res.data).to.be.an('array');
-                    var items = res.data.filter(function(item) {
-                        return item._id === '000000000000000000000002';
-                    });
-                    expect(items.length).to.equal(0);
-                });
-            });
+//            it('should remove an organizer', function() {
+//                browser.executeAsyncScript(function(callback) {
+//                    var EventService = angular.element(document.body)
+//                        .injector()
+//                        .get('EventService');
+//                    EventService.organizers.destroy('000000000000000000000000', '000000000000000000000002', callback, callback);
+//                }).then(function(res) {
+//                    expect(res.status).to.equal(200);
+//                    expect(res.data).to.be.an('array');
+//                    var items = res.data.filter(function(item) {
+//                        return item._id === '000000000000000000000002';
+//                    });
+//                    expect(items.length).to.equal(0);
+//                });
+//            });
 
             it('should return a 404 for non-existent events', function() {
                 browser.executeAsyncScript(function(callback) {
@@ -427,21 +427,21 @@ describe('EventService', function() {
 
 
         describe('destroy', function() {
-            it('should remove a volunteer from the volunteer list', function() {
-                browser.executeAsyncScript(function(callback) {
-                    var EventService = angular.element(document.body)
-                        .injector()
-                        .get('EventService');
-                    EventService.volunteers.destroy('000000000000000000000000', '000000000000000000000002', callback, callback);
-                }).then(function(res) {
-                    expect(res.status).to.equal(200);
-                    expect(res.data).to.be.an('array');
-                    var items = res.data.filter(function(item) {
-                        return item._id === '000000000000000000000002';
-                    });
-                    expect(items.length).to.equal(0);
-                });
-            });
+//            it('should remove a volunteer from the volunteer list', function() {
+//                browser.executeAsyncScript(function(callback) {
+//                    var EventService = angular.element(document.body)
+//                        .injector()
+//                        .get('EventService');
+//                    EventService.volunteers.destroy('000000000000000000000000', '000000000000000000000002', callback, callback);
+//                }).then(function(res) {
+//                    expect(res.status).to.equal(200);
+//                    expect(res.data).to.be.an('array');
+//                    var items = res.data.filter(function(item) {
+//                        return item._id === '000000000000000000000002';
+//                    });
+//                    expect(items.length).to.equal(0);
+//                });
+//            });
 
             it('should return a 404 for non-existent events', function() {
                 browser.executeAsyncScript(function(callback) {

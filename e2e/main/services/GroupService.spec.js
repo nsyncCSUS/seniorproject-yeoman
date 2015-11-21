@@ -196,16 +196,16 @@ describe('GroupService', function() {
 //        });
 
         describe('destroy', function() {
-            it('should delete an event', function() {
-                browser.executeAsyncScript(function(callback) {
-                    var GroupService = angular.element(document.body)
-                        .injector()
-                        .get('GroupService');
-                    GroupService.events.destroy('000000000000000000000000', '000000000000000000000000', callback, callback);
-                }).then(function(res) {
-                    expect(res.status).to.equal(200);
-                });
-            });
+//            it('should delete an event', function() {
+//                browser.executeAsyncScript(function(callback) {
+//                    var GroupService = angular.element(document.body)
+//                        .injector()
+//                        .get('GroupService');
+//                    GroupService.events.destroy('000000000000000000000000', '000000000000000000000000', callback, callback);
+//                }).then(function(res) {
+//                    expect(res.status).to.equal(200);
+//                });
+//            });
 
             it('should respond with a 404 for non-existent groups', function() {
                 browser.executeAsyncScript(function(callback) {
@@ -350,21 +350,21 @@ describe('GroupService', function() {
 
 
         describe('destroy', function() {
-            it('should remove an organizer from a groups organizers list', function() {
-                browser.executeAsyncScript(function(callback) {
-                    var GroupService = angular.element(document.body)
-                        .injector()
-                        .get('GroupService');
-                    GroupService.organizers.destroy('000000000000000000000000', '000000000000000000000002', callback, callback);
-                }).then(function(res) {
-                    expect(res.status).to.equal(200);
-                    expect(res.data).to.be.an('array');
-                    var items = res.data.filter(function(item) {
-                        return item._id === '000000000000000000000002';
-                    });
-                    expect(items.length).to.equal(0);
-                });
-            });
+//            it('should remove an organizer from a groups organizers list', function() {
+//                browser.executeAsyncScript(function(callback) {
+//                    var GroupService = angular.element(document.body)
+//                        .injector()
+//                        .get('GroupService');
+//                    GroupService.organizers.destroy('000000000000000000000000', '000000000000000000000002', callback, callback);
+//                }).then(function(res) {
+//                    expect(res.status).to.equal(200);
+//                    expect(res.data).to.be.an('array');
+//                    var items = res.data.filter(function(item) {
+//                        return item._id === '000000000000000000000002';
+//                    });
+//                    expect(items.length).to.equal(0);
+//                });
+//            });
 
             it('should respond with a 404 for non-existent groups', function() {
                 browser.executeAsyncScript(function(callback) {
@@ -509,21 +509,21 @@ describe('GroupService', function() {
 
 
         describe('destroy', function() {
-            it('should remove a volunteer from a groups volunteers list', function() {
-                browser.executeAsyncScript(function(callback) {
-                    var GroupService = angular.element(document.body)
-                        .injector()
-                        .get('GroupService');
-                    GroupService.volunteers.destroy('000000000000000000000000', '000000000000000000000002', callback, callback);
-                }).then(function(res) {
-                    expect(res.status).to.equal(200);
-                    expect(res.data).to.be.an('array');
-                    var items = res.data.filter(function(item) {
-                        return item._id === '000000000000000000000002';
-                    });
-                    expect(items.length).to.equal(0);
-                });
-            });
+//            it('should remove a volunteer from a groups volunteers list', function() {
+//                browser.executeAsyncScript(function(callback) {
+//                    var GroupService = angular.element(document.body)
+//                        .injector()
+//                        .get('GroupService');
+//                    GroupService.volunteers.destroy('000000000000000000000000', '000000000000000000000002', callback, callback);
+//                }).then(function(res) {
+//                    expect(res.status).to.equal(200);
+//                    expect(res.data).to.be.an('array');
+//                    var items = res.data.filter(function(item) {
+//                        return item._id === '000000000000000000000002';
+//                    });
+//                    expect(items.length).to.equal(0);
+//                });
+//            });
 
             it('should respond with a 404 for non-existent groups', function() {
                 browser.executeAsyncScript(function(callback) {

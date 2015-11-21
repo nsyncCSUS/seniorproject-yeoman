@@ -22,6 +22,7 @@ router.delete('/:id', controller.destroy);
 //router.get('/me', controller.me);
 router.put('/:id/password', controller.changePassword);
 router.put('/:id', controller.update);
+router.patch('/:id', controller.update);
 router.get('/:id', controller.show);
 router.post('/', controller.create);
 

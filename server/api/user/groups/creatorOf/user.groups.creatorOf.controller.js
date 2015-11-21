@@ -36,15 +36,14 @@ exports.show = function(req, res) {
                 return notFound(res);
             } else {
                 var groups = user.groups.creatorOf.filter(function(item) {
-                    console.log(item);
-                    return item._id.toString() === req.params.eventId;
+                    return item._id.toString() === req.params.groupId;
                 });
 
                 if(groups.length === 0) {
                     return notFound(res);
                 } else {
                     return res.json({
-                        group: group.pop()
+                        group: groups.pop()
                     });
                 }
             }

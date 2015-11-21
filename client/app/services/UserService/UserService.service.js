@@ -65,7 +65,12 @@ angular.module('seniorprojectYoApp')
              * Get creator data
              */
             creatorOf: {
-                index: function(id, callback, error) {
+                index: function(id, _params, callback, error) {
+                    var params = {
+                        page: _params.page || 0,
+                        offset: _params.offset || 0
+                    };
+
                     Users.one(id).one(Constants.events.creatorOf).getList().then(callback, error);
                 },
 
@@ -80,7 +85,12 @@ angular.module('seniorprojectYoApp')
              * Get organizer data
              */
             organizerOf: {
-                index: function(id, callback, error) {
+                index: function(id, _params, callback, error) {
+                    var params = {
+                        page: _params.page || 0,
+                        offset: _params.offset || 0
+                    };
+
                     Users.one(id).one(Constants.events.organizerOf).getList().then(callback, error);
                 },
 
@@ -103,7 +113,12 @@ angular.module('seniorprojectYoApp')
              * Get volunteer data
              */
             volunteeredTo: {
-                index: function(id, callback, error) {
+                index: function(id, _params, callback, error) {
+                    var params = {
+                        page: _params.page || 0,
+                        offset: _params.offset || 0
+                    };
+
                     Users.one(id).one(Constants.events.volunteeredTo).getList().then(callback, error);
                 },
 
@@ -133,7 +148,12 @@ angular.module('seniorprojectYoApp')
              * Get creator data
              */
             creatorOf: {
-                index: function(id, callback, error) {
+                index: function(id, _params, callback, error) {
+                    var params = {
+                        page: _params.page || 0,
+                        offset: _params.offset || 0
+                    };
+
                     Users.one(id).one(Constants.groups.creatorOf).getList().then(callback, error);
                 },
 
@@ -148,7 +168,12 @@ angular.module('seniorprojectYoApp')
              * Get organizer data
              */
             organizerOf: {
-                index: function(id, callback, error) {
+                index: function(id, _params, callback, error) {
+                    var params = {
+                        page: _params.page || 0,
+                        offset: _params.offset || 0
+                    };
+
                     Users.one(id).one(Constants.groups.organizerOf).getList().then(callback, error);
                 },
 
@@ -171,7 +196,12 @@ angular.module('seniorprojectYoApp')
              * Get volunteer data
              */
             volunteeredTo: {
-                index: function(id, callback, error) {
+                index: function(id, _params, callback, error) {
+                    var params = {
+                        page: _params.page || 0,
+                        offset: _params.offset || 0
+                    };
+
                     Users.one(id).one(Constants.groups.volunteeredTo).getList().then(callback, error);
                 },
 

@@ -81,7 +81,6 @@ exports.update = function(req, res) {
         new: true
     }, function(err, user) {
         if(err) {
-            console.log(err);
             return handleError(res, err);
         } else if(!user) {
             return notFound(res);

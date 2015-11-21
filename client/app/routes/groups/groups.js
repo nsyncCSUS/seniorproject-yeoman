@@ -9,7 +9,7 @@ angular.module('seniorprojectYoApp')
         controller: 'GroupsCtrl'
       })
       .state('groups2', {
-        url: '/groups/:id',
+        url: '/groups/:groupId',
         templateUrl: 'app/routes/groups/groups.html',
         controller: 'GroupsCtrl'
       });

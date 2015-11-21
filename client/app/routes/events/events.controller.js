@@ -10,6 +10,7 @@ angular.module('seniorprojectYoApp')
         $scope.isEditing = false;
         $scope.isUpdating = false;
         $scope.currentDate = new Date();
+        $scope.submitted = false;
         $scope.alerts = [];
 
         $scope.animalsSelected = "";
@@ -36,7 +37,6 @@ angular.module('seniorprojectYoApp')
             $scope.event = {};
 
             buildInterests();
-            buildDuration();
         }
 
         /***************************************************************************
@@ -223,42 +223,75 @@ angular.module('seniorprojectYoApp')
             buildDuration();
         }
 
-        $scope.submitEdit = function() {
-            $scope.isUpdating = true;
-            // Send changes to server
-            EventService.update($stateParams.id, {
-                event: $scope.event
-            }, function(res) {
-                $scope.event = res.data.event;
-                $scope.alerts.push({
-                    type: "success",
-                    msg: 'Event updated'
-//                    msg: res.data.msg
+        $scope.submitEdit = function(isValid) {
+            checkStartTime();
+            checkEndTime();
+            
+            if (isValid) {
+                $scope.isUpdating = true;
+
+                buildDuration();
+
+                // Send changes to server
+                EventService.update($stateParams.id, {
+                    event: $scope.event
+                }, function(res) {
+                    $scope.event = res.data.event;
+                    $scope.alerts.push({
+                        type: "success",
+                        msg: 'Event updated'
+    //                    msg: res.data.msg
+                    });
+
+                    $scope.isEditing = false;
+                    $scope.isUpdating = false;
+                }, function(res) {
+                    $scope.alerts.push({
+                        type: "danger",
+                        msg: 'There was a problem updating the event'
+    //                    msg: res.data.msg
+                    });
+
+                    $scope.isUpdating = false;
                 });
 
-                $scope.isEditing = false;
-                $scope.isUpdating = false;
-            }, function(res) {
-                $scope.alerts.push({
-                    type: "danger",
-                    msg: 'There was a problem updating the event'
-//                    msg: res.data.msg
-                });
+                // Keep changes made
+                $scope.event_bak = {};
+                $scope.animalsSelected_bak = "";
+                $scope.educationSelected_bak = "";
+                $scope.environmentSelected_bak = "";
+                $scope.peopleSelected_bak = "";
+                $scope.recreationSelected_bak = "";
+                $scope.technologySelected_bak = "";
+                $scope.youthSelected_bak = "";
+            }
+            else {
+                $scope.alerts.push({type: "danger", msg: "Errors found, please fix them."});
+                $scope.submitted = true;
+            }
+        }
 
-                $scope.isUpdating = false;
-            });
+        function checkStartTime() {
+            var today = new Date();
+            var startTime = new Date($scope.eventForm.startTimeDate.$modelValue);
+            if ((startTime - today) < 1) {
+                $scope.eventForm.startTimeDate.$setValidity('startTimeDate', false);
+            }
+            else {
+                $scope.eventForm.startTimeDate.$setValidity('startTimeDate', true);
+            }
+        }
 
-            // Keep changes made
-            $scope.event_bak = {};
-            $scope.animalsSelected_bak = "";
-            $scope.educationSelected_bak = "";
-            $scope.environmentSelected_bak = "";
-            $scope.peopleSelected_bak = "";
-            $scope.recreationSelected_bak = "";
-            $scope.technologySelected_bak = "";
-            $scope.youthSelected_bak = "";
+        function checkEndTime() {
+            var startTime = new Date($scope.eventForm.startTimeDate.$modelValue);
+            var endTime = new Date($scope.eventForm.endTimeDate.$modelValue);
 
-            buildDuration();
+            if ((endTime - startTime) < 1) {
+                $scope.eventForm.endTimeDate.$setValidity('endTimeDate', false);
+            }
+            else {
+                $scope.eventForm.endTimeDate.$setValidity('endTimeDate', true);
+            }
         }
 
         /***************************************************************************

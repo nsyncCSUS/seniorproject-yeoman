@@ -6,6 +6,9 @@ angular.module('seniorprojectYoApp')
          * Variables (includes ones from scope too)
          **************************************************************************/
         $scope.isPreviewing = false;
+        $scope.isCreating = false;
+        $scope.isSearching = false;
+        $scope.submitted = false;
 
         $scope.currentDate = new Date();
 
@@ -20,8 +23,6 @@ angular.module('seniorprojectYoApp')
         $scope.youthSelected = "";
 
 
-        $scope.isPreviewing = false;
-        $scope.isSearching = false;
 
 
         /***************************************************************************
@@ -32,7 +33,7 @@ angular.module('seniorprojectYoApp')
         };
         $scope.event.startTimeDate = new Date();
         $scope.event.endTimeDate = new Date();
-        $scope.maxVolunteers = 0;
+        $scope.maxVolunteers = 1;
 
         $scope.event = {
             _id: "event1",
@@ -58,18 +59,54 @@ angular.module('seniorprojectYoApp')
 
         buildInterests();
         buildDuration();
-        
+
         /***************************************************************************
          * Posting Functions
          **************************************************************************/
         //Create Event relevant functions
-        $scope.createEvent = function() {
-            // Send new event to server
-            CreateEventService.createEvent({
-                eventData: $scope.event
-            }, function(res) {
-                $scope.savedSuccessMsg = res.data.msg;
-            });
+        $scope.createEvent = function(isValid) {
+            checkStartTime();
+            checkEndTime();
+            
+            if (isValid) {
+                $scope.isCreating = true;
+
+                buildDuration();
+
+                // Send new event to server
+                CreateEventService.createEvent({
+                    eventData: $scope.event
+                }, function(res) {
+                    $scope.savedSuccessMsg = res.data.msg;
+                });
+                }
+            else {
+                $scope.alerts.push({type: "danger", msg: "Errors found, please fix them."});
+                $scope.submitted = true;
+            }
+        }
+
+        function checkStartTime() {
+            var today = new Date();
+            var startTime = new Date($scope.eventForm.startTimeDate.$modelValue);
+            if ((startTime - today) < 1) {
+                $scope.eventForm.startTimeDate.$setValidity('startTimeDate', false);
+            }
+            else {
+                $scope.eventForm.startTimeDate.$setValidity('startTimeDate', true);
+            }
+        }
+
+        function checkEndTime() {
+            var startTime = new Date($scope.eventForm.startTimeDate.$modelValue);
+            var endTime = new Date($scope.eventForm.endTimeDate.$modelValue);
+
+            if ((endTime - startTime) < 1) {
+                $scope.eventForm.endTimeDate.$setValidity('endTimeDate', false);
+            }
+            else {
+                $scope.eventForm.endTimeDate.$setValidity('endTimeDate', true);
+            }
         }
 
         /***************************************************************************

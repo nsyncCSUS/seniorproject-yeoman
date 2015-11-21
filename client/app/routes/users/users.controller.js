@@ -10,9 +10,9 @@ angular.module('seniorprojectYoApp')
         $scope.isAdmin = true;
         $scope.isEditing = false;
         $scope.isUpdating = false;
+        $scope.submitted = false;
         $scope.userId = $stateParams.id;
         $scope.alerts = [];
-        $scope.errorMessage = '';
 
         $scope.animalsSelected = "";
         $scope.educationSelected = "";
@@ -37,8 +37,8 @@ angular.module('seniorprojectYoApp')
          **************************************************************************/
         // Gets the user data from server
         //        if ($stateParams.id != null && $stateParams.id != undefined) {
-        if ($stateParams.id) {
-            UserService.show($stateParams.id, function(res) {
+        if ($stateParams.userId) {
+            UserService.show($stateParams.userId, function(res) {
                 if (res.status === 404) {
                     $scope.errorMessage = 'There was a problem retrieving the user';
                 } else {
@@ -350,7 +350,7 @@ angular.module('seniorprojectYoApp')
          **********************************************************************/
         $scope.setCurrentTab = function(newTab) {
             $scope.selectedTab = newTab;
-            console.log(newTab.replace(/\s/g, ''))
+            //console.log(newTab.replace(/\s/g, ''))
             switch (newTab) {
                 case "Volunteered To":
                     $scope.otherTabs[0] = "Past Events";
@@ -509,42 +509,48 @@ angular.module('seniorprojectYoApp')
             buildInterests();
         }
 
-        $scope.submitEdit = function() {
-            $scope.isUpdating = true;
+        $scope.submitEdit = function(isValid) {
+            if (isValid) {
+                $scope.isUpdating = true;
 
-            // Keep changes made
-            $scope.user_bak = {};
-            $scope.animalsSelected_bak = "";
-            $scope.educationSelected_bak = "";
-            $scope.environmentSelected_bak = "";
-            $scope.peopleSelected_bak = "";
-            $scope.recreationSelected_bak = "";
-            $scope.technologySelected_bak = "";
-            $scope.youthSelected_bak = "";
+                // Keep changes made
+                $scope.user_bak = {};
+                $scope.animalsSelected_bak = "";
+                $scope.educationSelected_bak = "";
+                $scope.environmentSelected_bak = "";
+                $scope.peopleSelected_bak = "";
+                $scope.recreationSelected_bak = "";
+                $scope.technologySelected_bak = "";
+                $scope.youthSelected_bak = "";
 
-            console.log('In submitUser');
-            UserService.update($stateParams.id, {
-                user: $scope.user
-            }, function(res) {
-                console.log('Updated');
-                console.log(res.data);
-                console.log(res.data.user);
-                $scope.user = res.data.user;
-//                $scope.alerts.push({
-//                    type: "success",
-//                    msg: res.data.msg
-//                });
+                console.log('In submitUser');
+                UserService.update($stateParams.id, {
+                    user: $scope.user
+                }, function(res) {
+                    console.log('Updated');
+                    console.log(res.data);
+                    console.log(res.data.user);
+                    $scope.user = res.data.user;
+    //                $scope.alerts.push({
+    //                    type: "success",
+    //                    msg: res.data.msg
+    //                });
 
-                $scope.isEditing = false;
-                $scope.isUpdating = false;
-            }, function(res) {
-//                $scope.alerts.push({
-//                    type: "danger",
-//                    msg: res.data.msg
-//                });
+                    $scope.isEditing = false;
+                    $scope.isUpdating = false;
+                }, function(res) {
+    //                $scope.alerts.push({
+    //                    type: "danger",
+    //                    msg: res.data.msg
+    //                });
 
-                $scope.isUpdating = false;
-            });
+                    $scope.isUpdating = false;
+                });
+            }
+            else {
+                $scope.alerts.push({type: "danger", msg: "Errors found, please fix them."});
+                $scope.submitted = true;
+            }
         }
 
         /***********************************************************************

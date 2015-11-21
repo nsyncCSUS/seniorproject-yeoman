@@ -25,9 +25,9 @@ angular.module('seniorprojectYoApp')
          * Get Functions
          **************************************************************************/
         // Gets the group data from server
-        if ($stateParams.id) {
+        if ($stateParams.eventId) {
             console.log('Getting event');
-            EventService.show($stateParams.id, function(res) {
+            EventService.show($stateParams.eventId, function(res) {
                 $scope.event = res.data.event;
                 console.log('Back from getting event');
                 buildDuration();
@@ -226,7 +226,7 @@ angular.module('seniorprojectYoApp')
         $scope.submitEdit = function(isValid) {
             checkStartTime();
             checkEndTime();
-            
+
             if (isValid) {
                 $scope.isUpdating = true;
 

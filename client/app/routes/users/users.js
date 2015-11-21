@@ -11,7 +11,7 @@ angular.module('seniorprojectYoApp')
       })
       .state('users2', {
         isFree: true,
-        url: '/users/:id',
+        url: '/users/:userId',
         templateUrl: 'app/routes/users/users.html',
         controller: 'UsersCtrl'
       });

@@ -59,8 +59,8 @@ angular.module('seniorprojectYoApp')
          * Get Functions
          **************************************************************************/
         // Gets the group data from server
-        if ($stateParams.id) {
-            GroupService.show($stateParams.id, function(res) {
+        if ($stateParams.groupId) {
+            GroupService.show($stateParams.groupId, function(res) {
                 $scope.group = res.data.group;
                 buildInterests();
             });

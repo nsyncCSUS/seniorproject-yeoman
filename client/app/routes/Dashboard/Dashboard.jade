@@ -18,7 +18,7 @@ h1 Dashboard Page
         .col-xs-12.col-sm-12.col-md-12.col-lg-12
             .visible-xs
                 hr
-            .panel-default
+            .panel-default.cursor-pointer
                 .panel-heading(role='button', data-toggle='collapse', data-target='#groups', aria-expanded='true', aria-controls='groups')
                     h4.panel-title
                         a Organizer of <strong>{{user.organizerOf.length}} Groups</strong>
@@ -31,7 +31,7 @@ h1 Dashboard Page
                                     a(href='/groups/{{group._id}}')
                                         img.img-responsive.img-thumbnail(src='{{group.picture}}')
                                     h6.oneline {{group.name}}
-            .panel-default
+            .panel-default.cursor-pointer
                 .panel-heading(role='button', data-toggle='collapse', data-target='#subscribers', aria-expanded='true', aria-controls='subscribers')
                     h4.panel-title
                         a Subscribed to <strong>{{user.subscribedTo.length}} Groups</strong>

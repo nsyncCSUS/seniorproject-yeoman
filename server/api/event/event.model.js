@@ -9,7 +9,7 @@ var EventSchema = new Schema({
       required: true
     },
 
-    info: String,
+    description: String,
     active: Boolean,
     creationUser: {
         type: Schema.ObjectId,

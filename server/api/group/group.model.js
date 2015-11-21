@@ -9,7 +9,7 @@ var GroupSchema = new Schema({
         required: true
     },
 
-    info: String,
+    description: String,
     active: Boolean,
 
     picture: {

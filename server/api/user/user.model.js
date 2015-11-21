@@ -15,14 +15,14 @@ var UserSchema = new Schema({
         type: String,
         default: 'user'
     },
+    picture: {
+        type: String,
+        default: '//placehold.it/500x500/'
+    },
 
     hashedPassword: String,
     provider: String,
     salt: String,
-    facebook: {},
-    twitter: {},
-    google: {},
-    github: {},
 
     firstName: String,
     middleName: String,
@@ -34,6 +34,10 @@ var UserSchema = new Schema({
     state: String,
     zipcode: String,
     phoneNum: String,
+    googlePlusURL: String,
+    facebookURL: String,
+    linkedInURL: String,
+    twitterURL: String,
 
     events: {
         volunteeredTo: [{

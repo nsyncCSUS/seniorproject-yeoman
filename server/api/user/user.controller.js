@@ -70,9 +70,11 @@ exports.update = function(req, res) {
         return notFound(res);
     }
 
+    console.log(req.body.user);
+
     if(req.body.user._id) delete req.body.user._id;
-    if(req.body.user.events) delete req.body.user.events;
-    if(req.body.user.groups) delete req.body.user.groups;
+    //if(req.body.user.events) delete req.body.user.events;
+    //if(req.body.user.groups) delete req.body.user.groups;
     if(req.body.user.hashedPassword) delete req.body.user.hashedPassword;
     if(req.body.user.creationDate) delete req.body.user.creationDate;
 

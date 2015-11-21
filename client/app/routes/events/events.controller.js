@@ -1,9 +1,7 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('EventsCtrl', function($stateParams, $scope, EventService, moment) {
-        $scope.message = 'Hello';
-
+    .controller('EventsCtrl', function($stateParams, $scope, EventService) {
         /***************************************************************************
          * Variables (includes ones from scope too)
          **************************************************************************/
@@ -84,14 +82,38 @@ angular.module('seniorprojectYoApp')
 
         function buildDuration() {
             var duration = moment($scope.event.endTimeDate).diff(moment($scope.event.startTimeDate));
-            $scope.duration = {};
-            if (moment.duration(duration).get('days') > 0)
-                $scope.duration.days = moment.duration(duration).get('days');
-            if (moment.duration(duration).get('hours') > 0)
-                $scope.duration.hours = moment.duration(duration).get('hours');
-            if (moment.duration(duration).get('minutes') > 0)
-                $scope.duration.minutes = moment.duration(duration).get('minutes');
+            var years = moment.duration(duration).get('years');
+            var months = moment.duration(duration).get('years');
+            var days = moment.duration(duration).get('days');
+            var hours = moment.duration(duration).get('hours');
+            var minutes = moment.duration(duration).get('minutes');
 
+            $scope.event.duration = "";
+            if (years > 0) {
+                $scope.event.duration += " " + years + " year";
+                if (years > 1)
+                    $scope.event.duration += "s";
+            }
+            if (months > 0) {
+                $scope.event.duration += " " + months + " month";
+                if (months > 1)
+                    $scope.event.duration += "s";
+            }
+            if (days > 0) {
+                $scope.event.duration += " " + days + " day";
+                if (days > 1)
+                    $scope.event.duration += "s";
+            }
+            if (hours > 0) {
+                $scope.event.duration += " " + hours + " hour";
+                if (hours > 1)
+                    $scope.event.duration += "s";
+            }
+            if (minutes > 0) {
+                $scope.event.duration += " " + minutes + " minute";
+                if (minutes > 1)
+                    $scope.event.duration += "s";
+            }
         }
 
         /***************************************************************************
@@ -267,18 +289,6 @@ angular.module('seniorprojectYoApp')
                     return true;
             }
             return false;
-        }
-
-        $scope.hasDays = function() {
-            return $scope.duration.days != null
-        }
-
-        $scope.hasHours = function() {
-            return $scope.duration.hours != null
-        }
-
-        $scope.hasMinutes = function() {
-            return $scope.duration.minutes != null
         }
 
         /***************************************************************************

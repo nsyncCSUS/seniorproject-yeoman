@@ -48,27 +48,27 @@ div(ng-show='getIsEditing()')
                     label(for='startTimeDate') Start Time
                     .row
                         .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                            .btn-group#startTimeDate(uib-dropdown='')
-                                button#split-button.btn.btn-success(type='button') {{event.startTimeDate | date:'MM-dd-yyyy hh:mm a'}}
-                                button.btn.btn-success(type='button', uib-dropdown-toggle='')
-                                    span.glyphicon.glyphicon-calendar
-                                ul.uib-dropdown-menu(role='menu', aria-labelledby='split-button')
-                                    li(role='menuitem')
-                                        datetimepicker(data-ng-model='event.startTimeDate')
-
-
+                            .dropdown
+                                a#startTimeDate.dropdown-toggle(role='button', data-toggle='dropdown', data-target='#', href='#')
+                                    .btn-group
+                                        button#split-button.btn.btn-success(type='button') {{event.startTimeDate | date:'MM-dd-yyyy hh:mm a'}}
+                                        button.btn.btn-success(type='button')
+                                            span.glyphicon.glyphicon-calendar
+                                ul.dropdown-menu(role='menu', aria-labelledby='dLabel')
+                                    datetimepicker(data-ng-model='event.startTimeDate', data-datetimepicker-config="{ dropdownSelector: '#startTimeDate' }")
 
                 .col-xs-12.col-sm-6.col-md-4.col-lg-4.text-center
                     label(for='endTimeDate') End Time
                     .row
                         .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                            .btn-group#startTimeDate(uib-dropdown='')
-                                button#split-button.btn.btn-danger(type='button') {{event.endTimeDate | date:'MM-dd-yyyy hh:mm a'}}
-                                button.btn.btn-danger(type='button', uib-dropdown-toggle='')
-                                    span.glyphicon.glyphicon-calendar
-                                ul.uib-dropdown-menu(role='menu', aria-labelledby='split-button')
-                                    li(role='menuitem')
-                                        datetimepicker(data-ng-model='event.endTimeDate')
+                            .dropdown
+                                a#endTimeDate.dropdown-toggle(role='button', data-toggle='dropdown', data-target='#', href='#')
+                                    .btn-group
+                                        button#split-button.btn.btn-danger(type='button') {{event.endTimeDate | date:'MM-dd-yyyy hh:mm a'}}
+                                        button.btn.btn-danger(type='button')
+                                            span.glyphicon.glyphicon-calendar
+                                ul.dropdown-menu(role='menu', aria-labelledby='dLabel')
+                                    datetimepicker(data-ng-model='event.endTimeDate', data-datetimepicker-config="{ dropdownSelector: '#endTimeDate' }")
 
                 .col-xs-12.col-sm-12.col-md-4.col-lg-4.text-center
                     label(for='maxVolunteers') Number of Volunteers
@@ -199,10 +199,7 @@ div(ng-show='!getIsEditing()')
                         h3 {{event.startTimeDate | date:'MMM d, yyyy'}}
 
                         h5.timeRow {{event.startTimeDate | date:'EEEE h:mm a'}}
-                            .duration for
-                            .duration(ng-show='hasDays()') {{duration.days}} Day(s)
-                            .duration(ng-show='hasHours()') {{duration.hours}} Hour(s)
-                            .duration(ng-show='hasMinutes()') {{duration.minutes}} Minute(s)
+                            .duration for {{event.duration}}
 
                     .col-xs-12.col-sm-12.col-md-12.col-lg-12.cardBody
                         h5 {{event.street}} {{event.city}}, {{event.state}} {{event.zipcode}}

@@ -77,39 +77,42 @@ angular.module('seniorprojectYoApp')
             index: function(id, _params, callback, error) {
                 var params = {
                     page: _params.page,
-                    offset: _params.offset,
-                    organizer: _params.organizer
+                    offset: _params.offset
                 };
 
-                Restangular.one(Constants.routes.events, id)
-                    .one(Constants.organizers)
-                    .getList(params)
-                    .then(callback, error);
+//                Restangular.one(Constants.routes.events, id)
+//                    .one(Constants.organizers)
+//                    .getList(params)
+//                    .then(callback, error);
+                Events.one(id).one(Constants.organizers).get(params).then(callback, error);
             },
 
 
             show: function(id, organizerId, callback, error) {
-                Restangular.one(Constants.routes.events, id)
-                    .one(Constants.organizers, organizerId)
-                    .get()
-                    .then(callback, error);
+//                Restangular.one(Constants.routes.events, id)
+//                    .one(Constants.organizers, organizerId)
+//                    .get()
+//                    .then(callback, error);
+                Events.one(id).one(Constants.organizers, organizerId).get().then(callback, error);
             },
 
 
 
             create: function(id, organizerId, callback, error) {
-                Restangular.one(Constants.routes.events, id)
-                    .one(Constants.organizers, organizerId)
-                    .post()
-                    .then(callback, error);
+//                Restangular.one(Constants.routes.events, id)
+//                    .one(Constants.organizers, organizerId)
+//                    .post()
+//                    .then(callback, error);
+                Events.one(id).one(Constants.organizers, organizerId).post().then(callback, error);
             },
 
 
             destroy: function(id, organizerId, callback, error) {
-                Restangular.one(Constants.routes.events, id)
-                    .one(Constants.organizers, organizerId)
-                    .remove()
-                    .then(callback, error);
+//                Restangular.one(Constants.routes.events, id)
+//                    .one(Constants.organizers, organizerId)
+//                    .remove()
+//                    .then(callback, error);
+                Events.one(id).one(Constants.organizers, organizerId).remove().then(callback, error);
             }
         };
 
@@ -135,26 +138,29 @@ angular.module('seniorprojectYoApp')
 
 
             show: function(id, volunteerId, callback, error) {
-                Restangular.one(Constants.routes.events, id)
-                    .one(Constants.volunteers, volunteerId)
-                    .get()
-                    .then(callback, error);
+//                Restangular.one(Constants.routes.events, id)
+//                    .one(Constants.volunteers, volunteerId)
+//                    .get()
+//                    .then(callback, error);
+                Events.one(id).one(Constants.volunteers, volunteerId).get().then(callback, error);
             },
 
 
             create: function(id, volunteerId, callback, error) {
-                Restangular.one(Constants.routes.events, id)
-                    .one(Constants.volunteers, volunteerId)
-                    .post()
-                    .then(callback, error);
+//                Restangular.one(Constants.routes.events, id)
+//                    .one(Constants.volunteers, volunteerId)
+//                    .post()
+//                    .then(callback, error);
+                Events.one(id).one(Constants.volunteers, volunteerId).post().then(callback, error);
             },
 
 
             destroy: function(id, volunteerId, callback, error) {
-                Restangular.one(Constants.routes.events, id)
-                    .one(Constants.volunteers, volunteerId)
-                    .remove()
-                    .then(callback, error);
+//                Restangular.one(Constants.routes.events, id)
+//                    .one(Constants.volunteers, volunteerId)
+//                    .remove()
+//                    .then(callback, error);
+                Events.one(id).one(Constants.volunteers, volunteerId).remove().then(callback, error);
             }
         };
     });

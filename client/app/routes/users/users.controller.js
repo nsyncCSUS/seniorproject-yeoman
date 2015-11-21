@@ -524,7 +524,7 @@ angular.module('seniorprojectYoApp')
                 $scope.youthSelected_bak = "";
 
                 console.log('In submitUser');
-                UserService.update($stateParams.id, {
+                UserService.update($stateParams.userId, {
                     user: $scope.user
                 }, function(res) {
                     console.log('Updated');

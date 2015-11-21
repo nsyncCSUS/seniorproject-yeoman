@@ -2,7 +2,7 @@
 
 angular.module('seniorprojectYoApp')
     .service('GroupService', function($http, Restangular) {
-
+        Restangular.setFullResponse(true);
 
         /**
          * A list of relevant constants for http functions

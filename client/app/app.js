@@ -12,13 +12,12 @@ angular.module('seniorprojectYoApp', [
   'angularMoment',
   'restangular'
 ])
-  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, RestangularProvider) {
+  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider
       .otherwise('/home');
 
     $locationProvider.html5Mode(true);
     $httpProvider.interceptors.push('authInterceptor');
-    RestangularProvider.setFullResponse(true); // Configure Restangular to return full Http responses
   })
 
   .factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location) {

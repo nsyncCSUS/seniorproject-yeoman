@@ -2,6 +2,7 @@
 
 angular.module('seniorprojectYoApp')
     .service('UserService', function($http, $rootScope, Restangular) {
+        Restangular.setFullResponse(true);
 
         /**
          * A list of relevant constants for http functions

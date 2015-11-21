@@ -8,8 +8,8 @@ var auth = require('../../auth/auth.service');
 var router = express.Router();
 
 
-router.get('/', controller.index);
-router.get('/events',controller.events);
+//router.get('/', controller.index);
+router.get('/events/:searchstring',controller.events);
 //router.get('/:id', controller.show);
 //router.get('/:id', controller.show);
 

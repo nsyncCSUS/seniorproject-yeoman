@@ -49,5 +49,5 @@ exports.events = function(req,res){
     }
     res.send(data);
 
-}).$where('this.maxVolunteers > this.currentVolunteers').sort({currentVolunteers: -1});
+}).$where('this.maxVolunteers > this.currentVolunteers').sort({currentVolunteers: -1}).limit(100);
 };

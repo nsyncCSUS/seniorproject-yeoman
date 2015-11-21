@@ -11,13 +11,13 @@ h6 {{group._id}}
 div(ng-show='isAdmin')
     div(ng-show='!getIsEditing()')
         .float-right
-            a(href='/create/event')
+            a(href='/groups/{{group._id}}/create/event')
                 button.btn.btn-default Create Event
             | &nbsp
             button.btn.btn-default(ng-show='!getIsEditing()', ng-click='enableEdit()') Edit Group
     div(ng-show='getIsEditing()')
         .float-right
-            button.btn.btn-info(ng-show='getIsEditing()', ng-click='submitEdit(groupForm.$valid)', ng-disabled='isUpdating') Save
+            button.btn.btn-info(ng-show='getIsEditing()', ng-click='submitEdit()', ng-disabled='isUpdating') Save
             | &nbsp
             button.btn.btn-danger(ng-show='getIsEditing()', ng-click='cancelEdit()', ng-disabled='isUpdating') Cancel
 .float-btm.text-center

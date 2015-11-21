@@ -12,10 +12,10 @@ h6 {{eventId}}
 div(ng-show='isAdmin')
     div(ng-show='!getIsEditing()')
         .float-right
-            button.btn.btn-default(ng-show='!getIsEditing()', ng-click='enableEdit()') Edit Event
+            button.btn.btn-default(ng-show='!getIsEditing()', ng-disabled='getCurrentlyActive()', ng-click='enableEdit()') Edit Event
     div(ng-show='getIsEditing()')
         .float-right
-            button.btn.btn-info(ng-show='getIsEditing()', ng-click='submitEdit()', ng-disabled='isUpdating') Save
+            button.btn.btn-info(ng-show='getIsEditing()', ng-click='submitEdit()', ng-disabled='isUpdating || getCurrentlyActive()') Save
             | &nbsp
             button.btn.btn-danger(ng-show='getIsEditing()', ng-click='cancelEdit()', ng-disabled='isUpdating') Cancel
 .float-btm.text-center
@@ -243,8 +243,8 @@ div(ng-show='!getIsEditing()')
                                 .col-xs-12.col-sm-12.col-md-12.col-lg-12
                                     h4.text-center {{event.volunteers.length}} / {{event.maxVolunteers}}
                                         | &nbsp
-                                        button.btn(ng-show='isVolunteering()', ng-click='optOut()') Opt out
-                                        button.btn(ng-show='!isVolunteering()', ng-click='volunteer()') Volunteer
+                                        button.btn(ng-show='isVolunteering()', ng-click='optOut()', ng-disabled='getCurrentlyActive()') Opt out
+                                        button.btn(ng-show='!isVolunteering()', ng-click='volunteer()', ng-disabled='getCurrentlyActive()') Volunteer
                                     hr
                                 .hidden-xs
                                     .col-xs-12.col-sm-12.col-md-12.col-lg-12

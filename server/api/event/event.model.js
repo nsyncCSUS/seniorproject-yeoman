@@ -10,7 +10,7 @@ var EventSchema = new Schema({
     },
 
     description: String,
-    active: Boolean,
+
     creationUser: {
         type: Schema.ObjectId,
         ref: 'User'
@@ -30,6 +30,7 @@ var EventSchema = new Schema({
     creationDate: Date,
     startTimeDate: Date,
     endTimeDate: Date,
+    duration: String,
     street: String,
     city: String,
     state: String,

@@ -47,6 +47,7 @@ angular.module('seniorprojectYoApp')
 
         buildInterests();
 		$scope.group.organizers.push(Auth.getCurrentUser());
+		$scope.group.creationUser = Auth.getCurrentUser();
 
 		/***************************************************************************
 		 * Building Functions
@@ -167,15 +168,16 @@ angular.module('seniorprojectYoApp')
 		/***************************************************************************
 		 * Posting Functions
 		 **************************************************************************/
-		$scope.createGroup = function(isValid) {
-            if (isValid) {
+		$scope.createGroup = function() {
+            if ($scope.groupForm.$valid) {
     			$scope.group.creationDate = new Date();
     			$scope.isCreating = true;
 
+                console.log($scope.group);
 	             // Send new group to server
-    			GroupService.create({group: $scope.group}, function(res) {
-                    // Successfully created a group
-                    if (res.data.group != null) {
+    			GroupService.create({group: $scope.group},
+                    function(res) {     // success
+
     					$scope.alerts.push({type: "success", msg: "Successfully created group, redirecting in 3 seconds..."});
 
                         // Add newly created group to user
@@ -185,24 +187,25 @@ angular.module('seniorprojectYoApp')
 
                         //console.log(user);
 
-                        UserService.update( user._id, {
-                            user: user
-                        }, function(res) {
+                        UserService.update( user._id, { user: user },
+                            function(res) { // success
                             //console.log(res.data.user);
-                        });
+                            },
+                            function(res) { // error
+
+                            });
 
                         $timeout(function() {
                             $location.path("/groups/" + res.data.group._id).replace;
                         }, 3000);
-                    }
-                    // Unsuccessful
-                    else {
+                    },
+                    function(res) {     // error
     					$scope.alerts.push({type: "danger", msg: "Unsuccessfully created group"});
     					$timeout(function() {
     						$scope.isCreating = false;
     					}, 3000);
-                    }
-    			});
+
+	             });
             }
             else {
                 $scope.alerts.push({type: "danger", msg: "Errors found, please fix them."});

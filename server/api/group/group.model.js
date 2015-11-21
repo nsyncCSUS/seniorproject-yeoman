@@ -8,6 +8,10 @@ var GroupSchema = new Schema({
         type: String,
         required: true
     },
+    creationUser: {
+        type: Schema.ObjectId,
+        ref: 'User'
+    },
 
     description: String,
     active: Boolean,

@@ -13,7 +13,7 @@ div(ng-show='isAdmin')
             button.btn.btn-default(ng-show='!getIsEditing()', ng-click='enableEdit()') Edit Profile
     div(ng-show='getIsEditing()')
         .float-right
-            button.btn.btn-info(ng-show='getIsEditing()', ng-click='submitEdit(userForm.$valid)', ng-disabled='isUpdating') Save
+            button.btn.btn-info(ng-show='getIsEditing()', ng-click='submitEdit()', ng-disabled='isUpdating') Save
             | &nbsp
             button.btn.btn-danger(ng-show='getIsEditing()', ng-click='cancelEdit()', ng-disabled='isUpdating') Cancel
 .float-btm.text-center
@@ -209,13 +209,17 @@ div(ng-show='!getIsEditing()')
                         button.btn.btn-xs.btn-default.cursor-pointer.otherTab(ng-repeat='tab in otherTabs', ng-click='setCurrentTab(otherTabs[$index])') {{otherTabs[$index]}}
 
                     .panel-body.eventRow(ng-show='getCurrentTab("Volunteered To")')
-                        .row.eventRow(ng-repeat='event in user.volunteeredTo | orderBy:"startTimeDate" | CheckExpired:false')
+                        .row.eventRow(ng-repeat='event in user.events.volunteeredTo | orderBy:"startTimeDate" | CheckExpired:false')
                             group-event-sm-card
 
                     .panel-body.eventRow(ng-show='getCurrentTab("Past Events")')
-                        .row.eventRow(ng-repeat='event in user.volunteeredTo | orderBy:"-startTimeDate" | CheckExpired:true')
+                        .row.eventRow(ng-repeat='event in user.events.volunteeredTo | orderBy:"-startTimeDate" | CheckExpired:true')
                             past-group-event-sm-card
 
                     .panel-body.eventRow(ng-show='getCurrentTab("Subscriptions")')
-                        a(ng-href='/group/{{group._id}}/', ng-repeat='group in user.subscribedTo | limitTo: 100')
+                        a(ng-href='/group/{{group._id}}/', ng-repeat='group in user.groups.subscribedTo | limitTo: 100')
+                            img.img-thumbnail.subscriber-thumbnail.cursor-pointer(src="{{group.picture}}", uib-tooltip='{{group.name}}')
+
+                    .panel-body.eventRow(ng-show='getCurrentTab("Organizer Of")')
+                        a(ng-href='/group/{{group._id}}/', ng-repeat='group in user.groups.organizerOf | limitTo: 100')
                             img.img-thumbnail.subscriber-thumbnail.cursor-pointer(src="{{group.picture}}", uib-tooltip='{{group.name}}')

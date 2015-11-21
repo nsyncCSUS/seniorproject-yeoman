@@ -81,9 +81,9 @@ angular.module('seniorprojectYoApp')
 
 
         this.create = function(_params, callback, error) {
-            var url = constructUrl(this.Constants.events);
+            var url = constructUrl(this.Constants.routes.events);
             var params = {
-                event: _params
+                event: _params.event
             };
 
             $http.post(url, params).then(function(response) {
@@ -97,7 +97,7 @@ angular.module('seniorprojectYoApp')
 
 
         this.destroy = function(id, callback, error) {
-            var url = constructUrl(this.Constants.events, id);
+            var url = constructUrl(this.Constants.routes.events, id);
 
             $http.delete(url).then(function(response) {
                 console.log(response);

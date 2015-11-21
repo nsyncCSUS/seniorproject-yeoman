@@ -325,48 +325,227 @@ describe('GroupService', function() {
                 });
             });
 
-            it('should respond with a 404 for non-existent groups', function() {});
+            it('should respond with a 404 for non-existent groups', function() {
+                browser.executeAsyncScript(function(callback) {
+                    var GroupService = angular.element(document.body)
+                        .injector()
+                        .get('GroupService');
+                    GroupService.organizers.create('000000000000000000000000', '123456789012345678901234', callback, callback);
+                }).then(function(res) {
+                    expect(res.status).to.equal(404);
+                });
+            });
 
-            it('should reject invalid ids', function() {});
+            it('should reject invalid ids', function() {
+                browser.executeAsyncScript(function(callback) {
+                    var GroupService = angular.element(document.body)
+                        .injector()
+                        .get('GroupService');
+                    GroupService.organizers.create('000000000000000000000000', 'invalid', callback, callback);
+                }).then(function(res) {
+                    expect(res.status).to.equal(404);
+                });
+            });
         });
 
 
         describe('destroy', function() {
-            it('should remove an organizer from a groups organizers list', function() {});
+            it('should remove an organizer from a groups organizers list', function() {
+                browser.executeAsyncScript(function(callback) {
+                    var GroupService = angular.element(document.body)
+                        .injector()
+                        .get('GroupService');
+                    GroupService.organizers.destroy('000000000000000000000000', '000000000000000000000002', callback, callback);
+                }).then(function(res) {
+                    expect(res.status).to.equal(200);
+                    expect(res.data).to.be.an('array');
+                    var items = res.data.filter(function(item) {
+                        return item._id === '000000000000000000000002';
+                    });
+                    expect(items.length).to.equal(0);
+                });
+            });
 
-            it('should respond with a 404 for non-existent groups', function() {});
+            it('should respond with a 404 for non-existent groups', function() {
+                browser.executeAsyncScript(function(callback) {
+                    var GroupService = angular.element(document.body)
+                        .injector()
+                        .get('GroupService');
+                    GroupService.organizers.destroy('000000000000000000000000', '123456789012345678901234', callback, callback);
+                }).then(function(res) {
+                    expect(res.status).to.equal(404);
+                });
+            });
 
-            it('should reject invalid ids', function() {});
+            it('should reject invalid ids', function() {
+                browser.executeAsyncScript(function(callback) {
+                    var GroupService = angular.element(document.body)
+                        .injector()
+                        .get('GroupService');
+                    GroupService.organizers.destroy('000000000000000000000000', 'invalid', callback, callback);
+                }).then(function(res) {
+                    expect(res.status).to.equal(404);
+                });
+            });
         });
     });
 
 
     describe('volunteers', function() {
         describe('index', function() {
-            it('should retrieve a list of volunteers', function() {});
-            it('should respond with a 404 for non-existent groups', function() {});
-            it('should reject invalid ids', function() {});
+            it('should retrieve a list of volunteers', function() {
+                browser.executeAsyncScript(function(callback) {
+                    var GroupService = angular.element(document.body)
+                        .injector()
+                        .get('GroupService');
+                    GroupService.volunteers.index('000000000000000000000000', {}, callback, callback);
+                }).then(function(res) {
+                    expect(res.status).to.equal(200);
+                    expect(res.data).to.be.an('array');
+                });
+            });
+
+            it('should respond with a 404 for non-existent groups', function() {
+                browser.executeAsyncScript(function(callback) {
+                    var GroupService = angular.element(document.body)
+                        .injector()
+                        .get('GroupService');
+                    GroupService.volunteers.index('123456789012345678901234', {}, callback, callback);
+                }).then(function(res) {
+                    expect(res.status).to.equal(404);
+                });
+            });
+
+            it('should reject invalid ids', function() {
+                browser.executeAsyncScript(function(callback) {
+                    var GroupService = angular.element(document.body)
+                        .injector()
+                        .get('GroupService');
+                    GroupService.volunteers.index('invalid', {}, callback, callback);
+                }).then(function(res) {
+                    expect(res.status).to.equal(404);
+                });
+            });
         });
 
 
         describe('show', function() {
-            it('should retrieve a single volunteer', function() {});
-            it('should respond with a 404 for non-existent groups', function() {});
-            it('should reject invalid ids', function() {});
+            it('should retrieve a single volunteer', function() {
+                browser.executeAsyncScript(function(callback) {
+                    var GroupService = angular.element(document.body)
+                        .injector()
+                        .get('GroupService');
+                    GroupService.volunteers.show('000000000000000000000000', '000000000000000000000002', callback, callback);
+                }).then(function(res) {
+                    expect(res.status).to.equal(200);
+                    expect(res.data.volunteer).to.exist;
+                    expect(res.data.volunteer._id).to.equal('000000000000000000000002');
+                });
+            });
+
+            it('should respond with a 404 for non-existent groups', function() {
+                browser.executeAsyncScript(function(callback) {
+                    var GroupService = angular.element(document.body)
+                        .injector()
+                        .get('GroupService');
+                    GroupService.volunteers.show('000000000000000000000000', '123456789012345678901234', callback, callback);
+                }).then(function(res) {
+                    expect(res.status).to.equal(404);
+                });
+            });
+
+            it('should reject invalid ids', function() {
+                browser.executeAsyncScript(function(callback) {
+                    var GroupService = angular.element(document.body)
+                        .injector()
+                        .get('GroupService');
+                    GroupService.volunteers.show('000000000000000000000000', 'invalid', callback, callback);
+                }).then(function(res) {
+                    expect(res.status).to.equal(404);
+                });
+            });
         });
 
 
         describe('create', function() {
-            it('should add a volunteer to a groups volunteers list', function() {});
-            it('should respond with a 404 for non-existent groups', function() {});
-            it('should reject invalid ids', function() {});
+            it('should add a volunteer to a groups volunteers list', function() {
+                browser.executeAsyncScript(function(callback) {
+                    var GroupService = angular.element(document.body)
+                        .injector()
+                        .get('GroupService');
+                    GroupService.volunteers.create('000000000000000000000000', '000000000000000000000003', callback, callback);
+                }).then(function(res) {
+                    expect(res.status).to.equal(200);
+                    expect(res.data).to.be.an('array');
+                    var items = res.data.filter(function(item) {
+                        return item._id === '000000000000000000000003';
+                    });
+                    expect(items.length).to.equal(1);
+                });
+            });
+
+            it('should respond with a 404 for non-existent groups', function() {
+                browser.executeAsyncScript(function(callback) {
+                    var GroupService = angular.element(document.body)
+                        .injector()
+                        .get('GroupService');
+                    GroupService.volunteers.create('000000000000000000000000', '123456789012345678901234', callback, callback);
+                }).then(function(res) {
+                    expect(res.status).to.equal(404);
+                });
+            });
+
+            it('should reject invalid ids', function() {
+                browser.executeAsyncScript(function(callback) {
+                    var GroupService = angular.element(document.body)
+                        .injector()
+                        .get('GroupService');
+                    GroupService.volunteers.create('000000000000000000000000', 'invalid', callback, callback);
+                }).then(function(res) {
+                    expect(res.status).to.equal(404);
+                });
+            });
         });
 
 
         describe('destroy', function() {
-            it('should remove a volunteer from a groups volunteers list', function() {});
-            it('should respond with a 404 for non-existent groups', function() {});
-            it('should reject invalid ids', function() {});
+            it('should remove a volunteer from a groups volunteers list', function() {
+                browser.executeAsyncScript(function(callback) {
+                    var GroupService = angular.element(document.body)
+                        .injector()
+                        .get('GroupService');
+                    GroupService.volunteers.destroy('000000000000000000000000', '000000000000000000000002', callback, callback);
+                }).then(function(res) {
+                    expect(res.status).to.equal(200);
+                    expect(res.data).to.be.an('array');
+                    var items = res.data.filter(function(item) {
+                        return item._id === '000000000000000000000002';
+                    });
+                    expect(items.length).to.equal(0);
+                });
+            });
+
+            it('should respond with a 404 for non-existent groups', function() {
+                browser.executeAsyncScript(function(callback) {
+                    var GroupService = angular.element(document.body)
+                        .injector()
+                        .get('GroupService');
+                    GroupService.volunteers.destroy('000000000000000000000000', '123456789012345678901234', callback, callback);
+                }).then(function(res) {
+                    expect(res.status).to.equal(404);
+                });
+            });
+
+            it('should reject invalid ids', function() {
+                browser.executeAsyncScript(function(callback) {
+                    var GroupService = angular.element(document.body)
+                        .injector()
+                        .get('GroupService');
+                    GroupService.volunteers.destroy('000000000000000000000000', 'invalid', callback, callback);
+                }).then(function(res) {
+                    expect(res.status).to.equal(404);
+                });
+            });
         });
     });
 });

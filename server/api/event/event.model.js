@@ -35,10 +35,11 @@ var EventSchema = new Schema({
     state: String,
     zipcode: String,
     maxVolunteers: Number,
+    currentVolunteers: Number,
 
     organizers: [{
-    	type: Schema.ObjectId,
-    	ref: 'User'
+      type: Schema.ObjectId,
+      ref: 'User'
     }],
 
     volunteers: [{

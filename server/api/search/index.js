@@ -9,6 +9,7 @@ var router = express.Router();
 
 
 router.get('/', controller.index);
+router.get('/events',controller.events);
 //router.get('/:id', controller.show);
 //router.get('/:id', controller.show);
 

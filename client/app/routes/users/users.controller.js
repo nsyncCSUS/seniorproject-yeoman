@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('UsersCtrl', function($scope, $stateParams, $anchorScroll, $timeout, UserService, $http, Auth, Restangular) {
+    .controller('UsersCtrl', function($scope, $stateParams, $anchorScroll, $timeout, UserService, $http, Auth) {
 
 
         /***************************************************************************

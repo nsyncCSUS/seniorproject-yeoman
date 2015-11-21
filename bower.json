@@ -5,12 +5,10 @@
     "angular": ">=1.2.*",
     "angular-bootstrap": "~0.14.3",
     "angular-bootstrap-datetimepicker": "latest",
-    "angular-cookies": ">=1.2.*",
-    "angular-messages": "~1.4.7",
     "angular-moment": "~0.10.3",
     "angular-resource": ">=1.2.*",
+    "angular-cookies": ">=1.2.*",
     "angular-sanitize": ">=1.2.*",
-    "angular-socket-io": "~0.6.0",
     "angular-ui-router": "~0.2.15",
     "bootstrap": "~3.3.5",
     "bootstrap-sass-official": "~3.1.1",
@@ -18,11 +16,21 @@
     "font-awesome": ">=4.1.0",
     "json3": "~3.3.1",
     "lodash": "~2.4.1",
+    "angular-socket-io": "~0.6.0",
     "moment": "~2.10.6",
+    "angular-messages": "~1.4.7",
     "restangular": "~1.5.1"
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*",
     "angular-scenario": ">=1.2.*"
+  },
+  "overrides": {
+    "angular-bootstrap-datetimepicker": {
+      "main": [
+        "/src/js/datetimepicker.js",
+        "/src/css/datetimepicker.css"
+      ]
+    }
   }
 }

@@ -9,8 +9,8 @@ var EventSchema = new Schema({
       required: true
     },
 
-    info: String,
-    active: Boolean,
+    description: String,
+
     creationUser: {
         type: Schema.ObjectId,
         ref: 'User'
@@ -30,15 +30,17 @@ var EventSchema = new Schema({
     creationDate: Date,
     startTimeDate: Date,
     endTimeDate: Date,
+    duration: String,
     street: String,
     city: String,
     state: String,
     zipcode: String,
     maxVolunteers: Number,
+    currentVolunteers: Number,
 
     organizers: [{
-    	type: Schema.ObjectId,
-    	ref: 'User'
+      type: Schema.ObjectId,
+      ref: 'User'
     }],
 
     volunteers: [{

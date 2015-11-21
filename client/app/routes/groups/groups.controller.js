@@ -1,16 +1,16 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('GroupsCtrl', function($scope, $stateParams, $window, $anchorScroll, $timeout, GroupService, GroupFactory) {
+    .controller('GroupsCtrl', function($scope, $stateParams, $window, $anchorScroll, $timeout, GroupService, GroupFactory, Auth) {
 
         /***************************************************************************
          * Variables (includes ones from scope too)
          **************************************************************************/
-        $scope.isAdmin = true;
-        $scope.groupId = $stateParams.id;
+        $scope.isAdmin = false;
         $scope.isEditing = false;
         $scope.isSearching = false;
         $scope.isUpdating = false;
+        $scope.submitted = false;
 
         $scope.organizersToAdd = [];
         $scope.searchResults = [];
@@ -26,6 +26,58 @@ angular.module('seniorprojectYoApp')
 
         $scope.selectedTab = "Upcoming Events";
         $scope.otherTabs = ["Past Events"];
+
+
+        /***************************************************************************
+         * Get Functions
+         **************************************************************************/
+        // Get group data
+        Auth.isLoggedInAsync(function(success) {
+            if (Auth.isLoggedIn()) {
+                for (var i = 0; i < Auth.getCurrentUser().groups.organizerOf.length; i++){
+                    if (Auth.getCurrentUser().groups.organizerOf[i] == $stateParams.groupId){
+                        $scope.isAdmin = true;
+                        break;
+                    }
+                }
+            }
+            else {
+                $scope.isAdmin = false;
+            }
+            // Gets the group data from server
+            if ($stateParams.groupId) {
+                GroupService.show($stateParams.groupId, function(res) {
+                    if (res.status === 404) {
+                        $scope.errorMessage = 'There was a problem retrieving the group';
+                    } else {
+                        $scope.group = res.data.group;
+                        populateGroup();
+                    }
+                });
+            } else {
+                console.log("no group found");
+            }
+
+        });
+
+
+        function populateGroup() {
+            // Populate organizers
+            GroupService.organizers.index($scope.group._id, function(res) {
+                $scope.groups.organizes = res.data;
+            });
+
+            // Populate subscribers
+            //GroupService.subscribers.index($scope.group._id, function(res) {
+            //    $scope.groups.organizes = res.data;
+            //});
+
+            // Populate events
+            GroupService.events.index($scope.group._id, function(res) {
+                $scope.groups.events = res.data;
+            });
+        };
+
 
         /***********************************************************************
          * Functions that controls tabs for searching
@@ -53,21 +105,6 @@ angular.module('seniorprojectYoApp')
             else
                 return false;
         }
-
-        /***************************************************************************
-         * Get Functions
-         **************************************************************************/
-        // Gets the group data from server
-        if ($stateParams.id) {
-            GroupService.show($stateParams.id, function(res) {
-                $scope.group = res.data.group;
-                buildInterests();
-            });
-        } else {
-            $scope.group = {};
-            buildInterests();
-        }
-
 
 
         /***************************************************************************
@@ -378,14 +415,15 @@ angular.module('seniorprojectYoApp')
         }
 
         $scope.hasOrganizersToAdd = function() {
-                if ($scope.organizersToAdd != null && $scope.organizersToAdd.length > 0)
-                    return true;
-                else
-                    return false;
-            }
-            /***********************************************************************
-             * Editing Functions
-             **********************************************************************/
+            if ($scope.organizersToAdd != null && $scope.organizersToAdd.length > 0)
+                return true;
+            else
+                return false;
+        }
+
+        /***********************************************************************
+         * Editing Functions
+         **********************************************************************/
         $scope.getIsEditing = function() {
             if ($scope.isEditing === true)
                 return true;
@@ -395,6 +433,8 @@ angular.module('seniorprojectYoApp')
 
         $scope.enableEdit = function() {
             $scope.isEditing = true;
+
+            buildInterests();
 
             // Backup contents on page
             $scope.group_bak = {};
@@ -414,38 +454,44 @@ angular.module('seniorprojectYoApp')
         }
 
         $scope.submitEdit = function() {
-            $scope.isUpdating = true;
-            // Send changes to server
-            GroupService.update($stateParams.id, {
-                group: $scope.group
-            }, function(res) {
-                $scope.group = res.data.group;
-                $scope.alerts.push({
-                    type: "success",
-                    msg: 'Group has been updated'
-//                    msg: res.data.msg
-                });
+            if ($scope.groupForm.$valid) {
+                $scope.isUpdating = true;
+                // Send changes to server
+                GroupService.update($stateParams.id, { group: $scope.group },
+                    function(res) {  // success
+                        $scope.group = res.data.group;
+                        $scope.alerts.push({
+                            type: "success",
+                            msg: 'Group has been updated'
+                        });
 
-                $scope.isEditing = false;
-                $scope.isUpdating = false;
-            }, function(res) {
-                $scope.alerts.push({
-                    type: "danger",
-                    msg: 'There was a problem updating the group'
-//                    msg: res.data.msg
-                });
+                        $scope.isEditing = false;
+                        $scope.isUpdating = false;
+                    },
+                    function(res) {  //error
+                        $scope.alerts.push({
+                            type: "danger",
+                            msg: 'There was a problem updating the group'
+                        });
 
-                $scope.isUpdating = false;
-            });
-            // Keep changes made
-            $scope.group_bak = {};
-            $scope.animalsSelected_bak = "";
-            $scope.educationSelected_bak = "";
-            $scope.environmentSelected_bak = "";
-            $scope.peopleSelected_bak = "";
-            $scope.recreationSelected_bak = "";
-            $scope.technologySelected_bak = "";
-            $scope.youthSelected_bak = "";
+                        $scope.isUpdating = false;
+                });
+                // Keep changes made
+                $scope.group_bak = {};
+                $scope.animalsSelected_bak = "";
+                $scope.educationSelected_bak = "";
+                $scope.environmentSelected_bak = "";
+                $scope.peopleSelected_bak = "";
+                $scope.recreationSelected_bak = "";
+                $scope.technologySelected_bak = "";
+                $scope.youthSelected_bak = "";
+
+                populateGroup();
+            }
+            else {
+                $scope.alerts.push({type: "danger", msg: "Errors found, please fix them."});
+                $scope.submitted = true;
+            }
         }
 
         /***************************************************************************

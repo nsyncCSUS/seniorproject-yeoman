@@ -44,7 +44,7 @@ exports.show = function(req, res) {
 
 // Creates a new group in the DB.
 exports.create = function(req, res) {
-    return Group.create(req.body, function(err, group) {
+    return Group.create(req.body.group, function(err, group) {
         if (err) {
             return handleError(res, err);
         }

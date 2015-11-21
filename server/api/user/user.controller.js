@@ -81,6 +81,7 @@ exports.update = function(req, res) {
         new: true
     }, function(err, user) {
         if(err) {
+            console.log(err);
             return handleError(res, err);
         } else if(!user) {
             return notFound(res);
@@ -135,6 +136,7 @@ exports.changePassword = function(req, res, next) {
  * Get my info
  */
 exports.me = function(req, res, next) {
+    console.log(req.user);
     var userId = req.user._id || '';
     if(!req.user || !validId(userId.toString())) {
         return notFound(res);

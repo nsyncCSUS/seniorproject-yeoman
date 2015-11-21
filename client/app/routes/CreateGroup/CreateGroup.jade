@@ -8,7 +8,7 @@ div
             button.btn.btn-warning(ng-show='!getIsPreviewing()', ng-click='enablePreview()', ng-disabled='isCreating') Preview
             button.btn.btn-warning(ng-show='getIsPreviewing()', ng-click='cancelPreview()', ng-disabled='isCreating') Cancel Preview
             | &nbsp
-            button.btn.btn-info(type='submit', ng-click='createGroup(groupForm.$valid)', ng-disabled='isCreating') Create
+            button.btn.btn-info(type='submit', ng-click='createGroup()', ng-disabled='isCreating') Create
             | &nbsp
             button.btn.btn-danger(ng-click='cancelCreateGroup()', ng-disabled='isCreating') Cancel
 .float-btm.text-center

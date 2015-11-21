@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('CreateGroupCtrl', function($scope, $location, $anchorScroll, $timeout, GroupService) {
+    .controller('CreateGroupCtrl', function($scope, $location, $anchorScroll, $timeout, GroupService, UserService, Auth) {
 
 		/***************************************************************************
 		 * Variables (includes ones from scope too)
@@ -31,51 +31,23 @@ angular.module('seniorprojectYoApp')
 		 **************************************************************************/
 		$scope.group =
 		{
-				_id : "nsync",
-				name: "N.Sync()",
-				picture : "//placekitten.com/g/500/500/",
-				creationDate : "2015-08-26T18:50:10.111Z",
-				city : "Sacramento",
-				state : "CA",
-				zipcode : 95828,
-				description: "sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem blandit non.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vulputate pellentesque lorem. Donec erat ante, sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem bland center",
-				googlePlusURL : "www.google.com",
-				facebookURL : "https://facebook.com",
-				linkedInURL : "https://linkedin.com",
-				twitterURL : "https://twitter.com",
-				interests : ["Animals", "Environment", "People", "Recreation", "Technology", "Youth"]
+				name: "",
+				creationDate : new Date(),
+				city : "",
+				state : "",
+				zipcode : "",
+				description: "",
+				googlePlusURL : "",
+				facebookURL : "",
+				linkedInURL : "",
+				twitterURL : "",
+                organizers : [],
+				interests : []
 		};
 
         buildInterests();
-
-		// Add in the user as an organizer
-		var user = {
-			_id :			"anthonynguyen",
-			firstName : 	"Anthony",
-			lastName : 		"Nguyen",
-			description : 	"Hi, I am a member of N.Sync().",
-			picture : 		"//placekitten.com/g/1000/1000/",
-			email : 		"anthonyn916@gmail.com",
-			birthday : 		"1991-07-24",
-			age : 			24,
-			city : 			"Elk Grove",
-			state : 		"CA",
-			zipcode : 		95624,
-			phoneNum : 		19162047928,
-			googlePlus : 	"google.com",
-			facebook : 		"facebook.com",
-			linkedIn : 		"linkedin.com",
-			twitter : 		"twitter.com",
-			volunteeredTo : [],
-			creatorOf : 	[],
-			organizerOf : 	[],
-			subscribedTo : 	[],
-			interests : 	[{type: "Technology"}]
-		};
-
-
-        $scope.group.organizers = [];
-		$scope.group.organizers.push(user);
+		$scope.group.organizers.push(Auth.getCurrentUser());
+		$scope.group.creationUser = Auth.getCurrentUser();
 
 		/***************************************************************************
 		 * Building Functions
@@ -196,29 +168,44 @@ angular.module('seniorprojectYoApp')
 		/***************************************************************************
 		 * Posting Functions
 		 **************************************************************************/
-		$scope.createGroup = function(isValid) {
-            if (isValid) {
+		$scope.createGroup = function() {
+            if ($scope.groupForm.$valid) {
     			$scope.group.creationDate = new Date();
     			$scope.isCreating = true;
 
+                console.log($scope.group);
 	             // Send new group to server
-    			GroupService.post({group: $scope.group, user: user}, function(res) {
-    				switch(res.data.flag){
-    				case true:
-    					$scope.alerts.push({type: "success", msg: res.data.msg});
-    					$timeout(function() {
-    						$location.path("/groups/" + res.data.group._id).replace;
-    					}, 3000);
-    					break;
-    				case false:
-    					$scope.alerts.push({type: "danger", msg: res.data.msg});
+    			GroupService.create({group: $scope.group},
+                    function(res) {     // success
+
+    					$scope.alerts.push({type: "success", msg: "Successfully created group, redirecting in 3 seconds..."});
+
+                        // Add newly created group to user
+                        var user = Auth.getCurrentUser();
+                        user.groups.organizerOf.push(res.data.group);
+                        user.groups.creatorOf.push(res.data.group);
+
+                        //console.log(user);
+
+                        UserService.update( user._id, { user: user },
+                            function(res) { // success
+                            //console.log(res.data.user);
+                            },
+                            function(res) { // error
+
+                            });
+
+                        $timeout(function() {
+                            $location.path("/groups/" + res.data.group._id).replace;
+                        }, 3000);
+                    },
+                    function(res) {     // error
+    					$scope.alerts.push({type: "danger", msg: "Unsuccessfully created group"});
     					$timeout(function() {
     						$scope.isCreating = false;
     					}, 3000);
-    					break;
-    				}
 
-    			});
+	             });
             }
             else {
                 $scope.alerts.push({type: "danger", msg: "Errors found, please fix them."});
@@ -236,10 +223,10 @@ angular.module('seniorprojectYoApp')
 			// Rebuild interests array
 			// Checks if the interest selected is in the interest's array
 			angular.forEach($scope.group.interests, function(currentInterest, index) {
-				console.log(currentInterest);
+				//console.log(currentInterest);
 				// If in array, remove class to show that it is now unselected
 				if (currentInterest === interest){
-					console.log("removed " + interest);
+					//console.log("removed " + interest);
 					hasInterest = true;
 					switch(interest) {
 					case "Animals":
@@ -267,13 +254,13 @@ angular.module('seniorprojectYoApp')
 				}
 				// Otherwise, add to rebuilt array
 				else {
-					console.log(currentInterest);
+					//console.log(currentInterest);
 					newInterests.push(currentInterest);
 				}
 			});
 			// Add interest if it was not in array
 			if (hasInterest === false){
-				console.log("added " + interest);
+				//console.log("added " + interest);
 				newInterests.push(interest);
 				switch(interest) {
 				case "Animals":
@@ -301,7 +288,7 @@ angular.module('seniorprojectYoApp')
 			}
 			// Set the new interest array
 			$scope.group.interests = newInterests;
-			console.log($scope.group.interests);
+			//console.log($scope.group.interests);
 		}
 
 		/***************************************************************************

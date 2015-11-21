@@ -9,7 +9,7 @@ angular.module('seniorprojectYoApp')
             controller: 'CreateEventCtrl'
         })
         .state('CreateEvent2', {
-            url: '/group/:groupId/create/event',
+            url: '/groups/:groupId/create/event',
             templateUrl: 'app/routes/CreateEvent/CreateEvent.html',
             controller: 'CreateEventCtrl'
         });

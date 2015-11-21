@@ -76,11 +76,11 @@ angular.module('seniorprojectYoApp')
 
 
         this.create = function(_params, callback, error) {
-            var url = constructUrl(this.Constants.groups);
+            var url = constructUrl(this.Constants.routes.groups);
             var params = {
                 group: _params.group
             };
-
+            
             $http.post(url, params).then(function(response) {
                 console.log(response);
                 if (callback) callback(response);

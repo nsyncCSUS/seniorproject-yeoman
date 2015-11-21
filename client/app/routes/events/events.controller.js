@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('EventsCtrl', function($stateParams, $scope, EventService) {
+    .controller('EventsCtrl', function($stateParams, $scope, $timeout, EventService, GroupService, Auth) {
         /***************************************************************************
          * Variables (includes ones from scope too)
          **************************************************************************/
-        $scope.isAdmin = true;
+        $scope.isAdmin = false;
         $scope.eventId = $stateParams.eventId;
         $scope.isEditing = false;
         $scope.isUpdating = false;
@@ -24,21 +24,58 @@ angular.module('seniorprojectYoApp')
         /***************************************************************************
          * Get Functions
          **************************************************************************/
-        // Gets the group data from server
-        if ($stateParams.eventId) {
-            console.log('Getting event');
-            EventService.show($stateParams.eventId, function(res) {
-                $scope.event = res.data.event;
-                console.log('Back from getting event');
-                buildDuration();
-                buildInterests();
-            });
-        } else {
-            $scope.event = {};
 
-            buildInterests();
-        }
+        // Get event data
+        Auth.isLoggedInAsync(function(success) {
+           if (Auth.isLoggedIn()) {
+               for (var i = 0; i < Auth.getCurrentUser().events.organizerOf.length; i++){
+                   if (Auth.getCurrentUser().events.organizerOf[i] == $stateParams.eventId){
+                       $scope.isAdmin = true;
+                       break;
+                   }
+               }
+           }
+           else {
+               $scope.isAdmin = false;
+           }
+           // Gets the event data from server
+           if ($stateParams.eventId) {
+               EventService.show($stateParams.eventId, function(res) {
+                   if (res.status === 404) {
+                       $scope.errorMessage = 'There was a problem retrieving the event';
+                   } else {
+                       $scope.event = res.data.event;
+                       populateEvent();
+                   }
+               });
+           } else {
+               console.log("no event found");
+           }
 
+        });
+
+
+        function populateEvent() {
+           // Populate group
+           GroupService.show($scope.event.group, function(res) {
+               if (res.status === 404) {
+                   $scope.errorMessage = 'There was a problem retrieving the group';
+               } else {
+                   $scope.event.group = res.data.group;
+               }
+           });
+
+           // Populate organizers
+           EventService.organizers.index($scope.event._id, function(res) {
+               $scope.event.organizes = res.data;
+           });
+
+           // Populate volunteers
+           EventService.volunteers.index($scope.event._id, function(res) {
+               $scope.event.volunteers = res.data;
+           });
+
+        };
         /***************************************************************************
          * Building Functions
          **************************************************************************/
@@ -203,6 +240,10 @@ angular.module('seniorprojectYoApp')
 
         $scope.enableEdit = function() {
             $scope.isEditing = true;
+            buildInterests();
+
+            checkStartTime();
+            checkEndTime();
 
             // Backup contents on page
             $scope.event_bak = {};
@@ -220,36 +261,36 @@ angular.module('seniorprojectYoApp')
             clearInterests();
             buildInterests();
 
-            buildDuration();
-        }
-
-        $scope.submitEdit = function(isValid) {
             checkStartTime();
             checkEndTime();
 
-            if (isValid) {
+            buildDuration();
+        }
+
+        $scope.submitEdit = function() {
+
+            if ($scope.eventForm.$valid) {
                 $scope.isUpdating = true;
 
                 buildDuration();
 
                 // Send changes to server
-                EventService.update($stateParams.id, {
+                EventService.update($scope.event._id, {
                     event: $scope.event
-                }, function(res) {
+                }, function(res) {  // success
                     $scope.event = res.data.event;
                     $scope.alerts.push({
                         type: "success",
-                        msg: 'Event updated'
-    //                    msg: res.data.msg
+                        msg: 'Event has been updated'
                     });
 
                     $scope.isEditing = false;
                     $scope.isUpdating = false;
-                }, function(res) {
+                    populateEvent();
+                }, function(res) {  // error
                     $scope.alerts.push({
                         type: "danger",
                         msg: 'There was a problem updating the event'
-    //                    msg: res.data.msg
                     });
 
                     $scope.isUpdating = false;
@@ -264,9 +305,11 @@ angular.module('seniorprojectYoApp')
                 $scope.recreationSelected_bak = "";
                 $scope.technologySelected_bak = "";
                 $scope.youthSelected_bak = "";
+
             }
             else {
                 $scope.alerts.push({type: "danger", msg: "Errors found, please fix them."});
+                console.log($scope.eventForm.$error);
                 $scope.submitted = true;
             }
         }
@@ -317,11 +360,29 @@ angular.module('seniorprojectYoApp')
          * Boolean functions
          **************************************************************************/
         $scope.isVolunteering = function() {
-            for (var i = 0; i < $scope.event.volunteers.length; i++) {
-                if ($scope.event.volunteers[i]._id === $scope.user._id)
-                    return true;
+            if ($scope.event != null){
+                for (var i = 0; i < $scope.event.volunteers.length; i++) {
+                    if ($scope.event.volunteers[i]._id === $scope.user._id)
+                        return true;
+                }
             }
             return false;
+        }
+
+        $scope.getCurrentlyActive = function() {
+            var rightNow = new Date();
+
+            if ($scope.event != null) {
+                var startTime = new Date($scope.event.startTimeDate);
+                if ((startTime - rightNow) < 1) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         /***************************************************************************

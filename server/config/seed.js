@@ -169,6 +169,87 @@ Event.findOneAndRemove({_id: '000000000000000000000001'}, function() {
     });
 });
 
+// Testing for endTimeDate Search (Pass Condition)
+Event.findOneAndRemove({_id: '000000000000000000000003'}, function() {
+    Event.create({
+      name: 'Testing date ',
+      _id: '000000000000000000000003',
+      volunteers: ['000000000000000000000003','000000000000000000000043'],
+      description: "String",
+      creationDate: new Date(2017,10,10),
+      startTimeDate: new Date(2017,10,10),
+      endTimeDate: new Date(2017,10,10),
+      street: 'stree String',
+      city: 'city strting',
+      state: 'state String',
+      zipcode: 'zip String',
+      maxVolunteers: 3,
+      currentVolunteers: 2
+
+
+
+
+    }, function(err) {
+        if(err) return console.log(err);
+        console.log('Created Event: 000000000000000000000003');
+
+    });
+});
+
+// Testing for endTimeDate Search (Pass Condition)
+Event.findOneAndRemove({_id: '000000000000000000000005'}, function() {
+    Event.create({
+      name: 'Testing date ',
+      _id: '000000000000000000000005',
+      volunteers: ['000000000000000000000003','000000000000000000000043'],
+      description: "String",
+      creationDate: new Date(2017,10,10),
+      startTimeDate: new Date(2017,10,10),
+      endTimeDate: new Date(2017,10,10),
+      street: 'stree String',
+      city: 'city strting',
+      state: 'state String',
+      zipcode: 'zip String',
+      maxVolunteers: 8,
+      currentVolunteers: 3
+
+
+
+
+    }, function(err) {
+        if(err) return console.log(err);
+        console.log('Created Event: 000000000000000000000005');
+
+    });
+});
+
+
+// Testing for endTimeDate Search (Fail Condition)
+Event.findOneAndRemove({_id: '000000000000000000000004'}, function() {
+    Event.create({
+      name: 'Testing date ',
+      _id: '000000000000000000000004',
+      volunteers: ['000000000000000000000004'],
+      description: "String",
+      creationDate: new Date(2017,10,10),
+      startTimeDate: new Date(2017,10,10),
+      endTimeDate: new Date(2013,10,10),// fail: less then current date
+      street: 'stree String',
+      city: 'city strting',
+      state: 'state String',
+      zipcode: 'zip String',
+      maxVolunteers: 80,
+
+
+
+
+    }, function(err) {
+        if(err) return console.log(err);
+        console.log('Created Event: 000000000000000000000004');
+    });
+});
+
+
 
 
 /**
@@ -223,4 +304,3 @@ Group.findOneAndRemove({_id: '000000000000000000000002'}, function() {
         console.log('Created Group: 000000000000000000000002')
     });
 });
-

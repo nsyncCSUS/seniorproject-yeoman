@@ -1,11 +1,14 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('CreateEventCtrl', function($stateParams, $scope, EventService, moment) {
+    .controller('CreateEventCtrl', function($stateParams, $scope, EventService) {
         /***************************************************************************
          * Variables (includes ones from scope too)
          **************************************************************************/
         $scope.isPreviewing = false;
+        $scope.isCreating = false;
+        $scope.isSearching = false;
+        $scope.submitted = false;
 
         $scope.currentDate = new Date();
 
@@ -19,19 +22,19 @@ angular.module('seniorprojectYoApp')
         $scope.technologySelected = "";
         $scope.youthSelected = "";
 
-        $scope.event = {
 
-        };
-        $scope.event.startTimeDate = new Date('2015-03-01T00:00:00Z');
-        $scope.event.endTimeDate = new Date('2015-03-01T00:00:00Z');
-
-        $scope.isPreviewing = false;
-        $scope.isSearching = false;
 
 
         /***************************************************************************
-         * Get Functions
+         * Initialize form data
          **************************************************************************/
+        $scope.event = {
+
+        };
+        $scope.event.startTimeDate = new Date();
+        $scope.event.endTimeDate = new Date();
+        $scope.maxVolunteers = 1;
+
         $scope.event = {
             _id: "event1",
             creationUser: "",
@@ -52,22 +55,58 @@ angular.module('seniorprojectYoApp')
             zipcode: "95828",
             maxVolunteers: 5,
             interests: ["Animals", "Education", "Environment", "People", "Recreation", "Technology", "Youth"]
-
         };
 
         buildInterests();
         buildDuration();
+
         /***************************************************************************
          * Posting Functions
          **************************************************************************/
         //Create Event relevant functions
-        $scope.createEvent = function() {
-            // Send new event to server
-            CreateEventService.createEvent({
-                eventData: $scope.event
-            }, function(res) {
-                $scope.savedSuccessMsg = res.data.msg;
-            });
+        $scope.createEvent = function(isValid) {
+            checkStartTime();
+            checkEndTime();
+            
+            if (isValid) {
+                $scope.isCreating = true;
+
+                buildDuration();
+
+                // Send new event to server
+                CreateEventService.createEvent({
+                    eventData: $scope.event
+                }, function(res) {
+                    $scope.savedSuccessMsg = res.data.msg;
+                });
+                }
+            else {
+                $scope.alerts.push({type: "danger", msg: "Errors found, please fix them."});
+                $scope.submitted = true;
+            }
+        }
+
+        function checkStartTime() {
+            var today = new Date();
+            var startTime = new Date($scope.eventForm.startTimeDate.$modelValue);
+            if ((startTime - today) < 1) {
+                $scope.eventForm.startTimeDate.$setValidity('startTimeDate', false);
+            }
+            else {
+                $scope.eventForm.startTimeDate.$setValidity('startTimeDate', true);
+            }
+        }
+
+        function checkEndTime() {
+            var startTime = new Date($scope.eventForm.startTimeDate.$modelValue);
+            var endTime = new Date($scope.eventForm.endTimeDate.$modelValue);
+
+            if ((endTime - startTime) < 1) {
+                $scope.eventForm.endTimeDate.$setValidity('endTimeDate', false);
+            }
+            else {
+                $scope.eventForm.endTimeDate.$setValidity('endTimeDate', true);
+            }
         }
 
         /***************************************************************************
@@ -113,14 +152,38 @@ angular.module('seniorprojectYoApp')
 
         function buildDuration() {
             var duration = moment($scope.event.endTimeDate).diff(moment($scope.event.startTimeDate));
-            $scope.duration = {};
-            if (moment.duration(duration).get('days') > 0)
-                $scope.duration.days = moment.duration(duration).get('days');
-            if (moment.duration(duration).get('hours') > 0)
-                $scope.duration.hours = moment.duration(duration).get('hours');
-            if (moment.duration(duration).get('minutes') > 0)
-                $scope.duration.minutes = moment.duration(duration).get('minutes');
+            var years = moment.duration(duration).get('years');
+            var months = moment.duration(duration).get('years');
+            var days = moment.duration(duration).get('days');
+            var hours = moment.duration(duration).get('hours');
+            var minutes = moment.duration(duration).get('minutes');
 
+            $scope.event.duration = "";
+            if (years > 0) {
+                $scope.event.duration += " " + years + " year";
+                if (years > 1)
+                    $scope.event.duration += "s";
+            }
+            if (months > 0) {
+                $scope.event.duration += " " + months + " month";
+                if (months > 1)
+                    $scope.event.duration += "s";
+            }
+            if (days > 0) {
+                $scope.event.duration += " " + days + " day";
+                if (days > 1)
+                    $scope.event.duration += "s";
+            }
+            if (hours > 0) {
+                $scope.event.duration += " " + hours + " hour";
+                if (hours > 1)
+                    $scope.event.duration += "s";
+            }
+            if (minutes > 0) {
+                $scope.event.duration += " " + minutes + " minute";
+                if (minutes > 1)
+                    $scope.event.duration += "s";
+            }
         }
 
 
@@ -206,29 +269,6 @@ angular.module('seniorprojectYoApp')
         /***************************************************************************
          * Boolean functions
          **************************************************************************/
-        $scope.hasDays = function() {
-            if ($scope.duration.days != null) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        $scope.hasHours = function() {
-            if ($scope.duration.hours != null) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        $scope.hasMinutes = function() {
-            if ($scope.duration.minutes != null) {
-                return true;
-            } else {
-                return false;
-            }
-        }
 
         /***************************************************************************
          * Previewing Functions

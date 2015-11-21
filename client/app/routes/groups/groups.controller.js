@@ -11,6 +11,7 @@ angular.module('seniorprojectYoApp')
         $scope.isEditing = false;
         $scope.isSearching = false;
         $scope.isUpdating = false;
+        $scope.submitted = false;
 
         $scope.organizersToAdd = [];
         $scope.searchResults = [];
@@ -58,8 +59,8 @@ angular.module('seniorprojectYoApp')
          * Get Functions
          **************************************************************************/
         // Gets the group data from server
-        if ($stateParams.id) {
-            GroupService.show($stateParams.id, function(res) {
+        if ($stateParams.groupId) {
+            GroupService.show($stateParams.groupId, function(res) {
                 $scope.group = res.data.group;
                 buildInterests();
             });
@@ -413,39 +414,45 @@ angular.module('seniorprojectYoApp')
             buildInterests();
         }
 
-        $scope.submitEdit = function() {
-            $scope.isUpdating = true;
-            // Send changes to server
-            GroupService.update($stateParams.id, {
-                group: $scope.group
-            }, function(res) {
-                $scope.group = res.data.group;
-                $scope.alerts.push({
-                    type: "success",
-                    msg: 'Group has been updated'
-//                    msg: res.data.msg
-                });
+        $scope.submitEdit = function(isValid) {
+            if (isValid) {
+                $scope.isUpdating = true;
+                // Send changes to server
+                GroupService.update($stateParams.id, {
+                    group: $scope.group
+                }, function(res) {
+                    $scope.group = res.data.group;
+                    $scope.alerts.push({
+                        type: "success",
+                        msg: 'Group has been updated'
+    //                    msg: res.data.msg
+                    });
 
-                $scope.isEditing = false;
-                $scope.isUpdating = false;
-            }, function(res) {
-                $scope.alerts.push({
-                    type: "danger",
-                    msg: 'There was a problem updating the group'
-//                    msg: res.data.msg
-                });
+                    $scope.isEditing = false;
+                    $scope.isUpdating = false;
+                }, function(res) {
+                    $scope.alerts.push({
+                        type: "danger",
+                        msg: 'There was a problem updating the group'
+    //                    msg: res.data.msg
+                    });
 
-                $scope.isUpdating = false;
-            });
-            // Keep changes made
-            $scope.group_bak = {};
-            $scope.animalsSelected_bak = "";
-            $scope.educationSelected_bak = "";
-            $scope.environmentSelected_bak = "";
-            $scope.peopleSelected_bak = "";
-            $scope.recreationSelected_bak = "";
-            $scope.technologySelected_bak = "";
-            $scope.youthSelected_bak = "";
+                    $scope.isUpdating = false;
+                });
+                // Keep changes made
+                $scope.group_bak = {};
+                $scope.animalsSelected_bak = "";
+                $scope.educationSelected_bak = "";
+                $scope.environmentSelected_bak = "";
+                $scope.peopleSelected_bak = "";
+                $scope.recreationSelected_bak = "";
+                $scope.technologySelected_bak = "";
+                $scope.youthSelected_bak = "";
+            }
+            else {
+                $scope.alerts.push({type: "danger", msg: "Errors found, please fix them."});
+                $scope.submitted = true;
+            }
         }
 
         /***************************************************************************

@@ -1,9 +1,7 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('EventsCtrl', function($stateParams, $scope, EventService, moment) {
-        $scope.message = 'Hello';
-
+    .controller('EventsCtrl', function($stateParams, $scope, EventService) {
         /***************************************************************************
          * Variables (includes ones from scope too)
          **************************************************************************/
@@ -12,6 +10,7 @@ angular.module('seniorprojectYoApp')
         $scope.isEditing = false;
         $scope.isUpdating = false;
         $scope.currentDate = new Date();
+        $scope.submitted = false;
         $scope.alerts = [];
 
         $scope.animalsSelected = "";
@@ -26,9 +25,9 @@ angular.module('seniorprojectYoApp')
          * Get Functions
          **************************************************************************/
         // Gets the group data from server
-        if ($stateParams.id) {
+        if ($stateParams.eventId) {
             console.log('Getting event');
-            EventService.show($stateParams.id, function(res) {
+            EventService.show($stateParams.eventId, function(res) {
                 $scope.event = res.data.event;
                 console.log('Back from getting event');
                 buildDuration();
@@ -38,7 +37,6 @@ angular.module('seniorprojectYoApp')
             $scope.event = {};
 
             buildInterests();
-            buildDuration();
         }
 
         /***************************************************************************
@@ -84,14 +82,38 @@ angular.module('seniorprojectYoApp')
 
         function buildDuration() {
             var duration = moment($scope.event.endTimeDate).diff(moment($scope.event.startTimeDate));
-            $scope.duration = {};
-            if (moment.duration(duration).get('days') > 0)
-                $scope.duration.days = moment.duration(duration).get('days');
-            if (moment.duration(duration).get('hours') > 0)
-                $scope.duration.hours = moment.duration(duration).get('hours');
-            if (moment.duration(duration).get('minutes') > 0)
-                $scope.duration.minutes = moment.duration(duration).get('minutes');
+            var years = moment.duration(duration).get('years');
+            var months = moment.duration(duration).get('years');
+            var days = moment.duration(duration).get('days');
+            var hours = moment.duration(duration).get('hours');
+            var minutes = moment.duration(duration).get('minutes');
 
+            $scope.event.duration = "";
+            if (years > 0) {
+                $scope.event.duration += " " + years + " year";
+                if (years > 1)
+                    $scope.event.duration += "s";
+            }
+            if (months > 0) {
+                $scope.event.duration += " " + months + " month";
+                if (months > 1)
+                    $scope.event.duration += "s";
+            }
+            if (days > 0) {
+                $scope.event.duration += " " + days + " day";
+                if (days > 1)
+                    $scope.event.duration += "s";
+            }
+            if (hours > 0) {
+                $scope.event.duration += " " + hours + " hour";
+                if (hours > 1)
+                    $scope.event.duration += "s";
+            }
+            if (minutes > 0) {
+                $scope.event.duration += " " + minutes + " minute";
+                if (minutes > 1)
+                    $scope.event.duration += "s";
+            }
         }
 
         /***************************************************************************
@@ -201,42 +223,75 @@ angular.module('seniorprojectYoApp')
             buildDuration();
         }
 
-        $scope.submitEdit = function() {
-            $scope.isUpdating = true;
-            // Send changes to server
-            EventService.update($stateParams.id, {
-                event: $scope.event
-            }, function(res) {
-                $scope.event = res.data.event;
-                $scope.alerts.push({
-                    type: "success",
-                    msg: 'Event updated'
-//                    msg: res.data.msg
+        $scope.submitEdit = function(isValid) {
+            checkStartTime();
+            checkEndTime();
+
+            if (isValid) {
+                $scope.isUpdating = true;
+
+                buildDuration();
+
+                // Send changes to server
+                EventService.update($stateParams.id, {
+                    event: $scope.event
+                }, function(res) {
+                    $scope.event = res.data.event;
+                    $scope.alerts.push({
+                        type: "success",
+                        msg: 'Event updated'
+    //                    msg: res.data.msg
+                    });
+
+                    $scope.isEditing = false;
+                    $scope.isUpdating = false;
+                }, function(res) {
+                    $scope.alerts.push({
+                        type: "danger",
+                        msg: 'There was a problem updating the event'
+    //                    msg: res.data.msg
+                    });
+
+                    $scope.isUpdating = false;
                 });
 
-                $scope.isEditing = false;
-                $scope.isUpdating = false;
-            }, function(res) {
-                $scope.alerts.push({
-                    type: "danger",
-                    msg: 'There was a problem updating the event'
-//                    msg: res.data.msg
-                });
+                // Keep changes made
+                $scope.event_bak = {};
+                $scope.animalsSelected_bak = "";
+                $scope.educationSelected_bak = "";
+                $scope.environmentSelected_bak = "";
+                $scope.peopleSelected_bak = "";
+                $scope.recreationSelected_bak = "";
+                $scope.technologySelected_bak = "";
+                $scope.youthSelected_bak = "";
+            }
+            else {
+                $scope.alerts.push({type: "danger", msg: "Errors found, please fix them."});
+                $scope.submitted = true;
+            }
+        }
 
-                $scope.isUpdating = false;
-            });
+        function checkStartTime() {
+            var today = new Date();
+            var startTime = new Date($scope.eventForm.startTimeDate.$modelValue);
+            if ((startTime - today) < 1) {
+                $scope.eventForm.startTimeDate.$setValidity('startTimeDate', false);
+            }
+            else {
+                $scope.eventForm.startTimeDate.$setValidity('startTimeDate', true);
+            }
+        }
 
-            // Keep changes made
-            $scope.event_bak = {};
-            $scope.animalsSelected_bak = "";
-            $scope.educationSelected_bak = "";
-            $scope.environmentSelected_bak = "";
-            $scope.peopleSelected_bak = "";
-            $scope.recreationSelected_bak = "";
-            $scope.technologySelected_bak = "";
-            $scope.youthSelected_bak = "";
+        function checkEndTime() {
+            var startTime = new Date($scope.eventForm.startTimeDate.$modelValue);
+            var endTime = new Date($scope.eventForm.endTimeDate.$modelValue);
 
-            buildDuration();
+            if ((endTime - startTime) < 1) {
+                $scope.eventForm.endTimeDate.$setValidity('endTimeDate', false);
+            }
+            else {
+                $scope.eventForm.endTimeDate.$setValidity('endTimeDate', true);
+            }
         }
 
         /***************************************************************************
@@ -267,18 +322,6 @@ angular.module('seniorprojectYoApp')
                     return true;
             }
             return false;
-        }
-
-        $scope.hasDays = function() {
-            return $scope.duration.days != null
-        }
-
-        $scope.hasHours = function() {
-            return $scope.duration.hours != null
-        }
-
-        $scope.hasMinutes = function() {
-            return $scope.duration.minutes != null
         }
 
         /***************************************************************************

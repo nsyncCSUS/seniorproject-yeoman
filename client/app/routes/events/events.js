@@ -9,7 +9,12 @@ angular.module('seniorprojectYoApp')
         controller: 'EventsCtrl'
       })
       .state('events2', {
-        url: '/events/:id',
+        url: 'events/:eventId',
+        templateUrl: 'app/routes/events/events.html',
+        controller: 'EventsCtrl'
+      })
+      .state('events3', {
+        url: '/groups/:groupId/events/:eventId',
         templateUrl: 'app/routes/events/events.html',
         controller: 'EventsCtrl'
       });

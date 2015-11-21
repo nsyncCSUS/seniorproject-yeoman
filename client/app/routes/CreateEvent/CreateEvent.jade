@@ -1,156 +1,190 @@
 div(ng-include='"components/navbar/navbar.html"')
 
 h1 CREATE EVENT
+
 div
     div
         .float-right.fixed
-            button.btn.btn-warning(ng-show='!getIsPreviewing()', ng-click='enablePreview()') Preview
-            button.btn.btn-warning(ng-show='getIsPreviewing()', ng-click='cancelPreview()') Cancel Preview
+            button.btn.btn-warning(ng-show='!getIsPreviewing()', ng-click='enablePreview()', ng-disabled='isCreating') Preview
+            button.btn.btn-warning(ng-show='getIsPreviewing()', ng-click='cancelPreview()', ng-disabled='isCreating') Cancel Preview
             | &nbsp
-            button.btn.btn-info(ng-click='createEvent()') Create
+            button.btn.btn-info(ng-click='createEvent(eventForm.$valid)', ng-disabled='isCreating') Create
             | &nbsp
-            button.btn.btn-danger(ng-click='cancelCreateEvent()') Cancel
+            button.btn.btn-danger(ng-click='cancelCreateEvent()', ng-disabled='isCreating') Cancel
+.float-btm.text-center
+    uib-alert(ng-repeat='alert in alerts', type='{{alert.type}}', close='closeAlert($index)', dismiss-on-timeout='5000') {{alert.msg}}
+
+.loadingOverlay(ng-show='isCreating')
 
 div.eventRow(ng-show='!getIsPreviewing()')
-    .container
-        .col-xs-12.col-sm-12.col-md-12.col-lg-12
-            .row
-                .col-xs-12.col-sm-12.col-md-7.col-lg-8
-                        .form-group
-                            label(for='eventName') Event Name
-                            input.form-control#eventName(type='text', ng-model='event.name')
-                .col-xs-12.col-sm-12.col-md-5.col-lg-4
-                    label(for='interests') Interests
-                    .navbar-btn
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/animals.png', ng-class='animalsSelected', ng-click='addInterest("Animals")', uib-tooltip='Animals')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/education.png', ng-class='educationSelected', ng-click='addInterest("Education")', uib-tooltip='Education')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/environment.png', ng-class='environmentSelected', ng-click='addInterest("Environment")', uib-tooltip='Environment')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/people.png', ng-class='peopleSelected', ng-click='addInterest("People")', uib-tooltip='People')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/recreation.png', ng-class='recreationSelected', ng-click='addInterest("Recreation")', uib-tooltip='Recreation')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/technology.png', ng-class='technologySelected', ng-click='addInterest("Technology")', uib-tooltip='Technology')
-                        img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/youth.png', ng-class='youthSelected', ng-click='addInterest("Youth")', uib-tooltip='Youth')
-            hr
+    form(name='eventForm', novalidate)
+        .container
+            .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                .row
+                    .col-xs-12.col-sm-12.col-md-7.col-lg-8
+                            .form-group(ng-class='{ "has-error" : eventForm.eventName.$invalid && submitted }')
+                                label(for='eventName') Event Name*
+                                input.form-control#eventName(type='text', name='eventName', ng-model='event.name', ng-minlength='3', required)
+                                div(ng-messages='eventForm.eventName.$error', ng-show='submitted')
+                                    div.help-block(ng-message='required') Event name is required.
+                                    div.help-block(ng-message='minlength') Event name is too short!
+                    .col-xs-12.col-sm-12.col-md-5.col-lg-4
+                        label(for='interests') Interests
+                        .navbar-btn
+                            img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/animals.png', ng-class='animalsSelected', ng-click='addInterest("Animals")', uib-tooltip='Animals')
+                            img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/education.png', ng-class='educationSelected', ng-click='addInterest("Education")', uib-tooltip='Education')
+                            img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/environment.png', ng-class='environmentSelected', ng-click='addInterest("Environment")', uib-tooltip='Environment')
+                            img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/people.png', ng-class='peopleSelected', ng-click='addInterest("People")', uib-tooltip='People')
+                            img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/recreation.png', ng-class='recreationSelected', ng-click='addInterest("Recreation")', uib-tooltip='Recreation')
+                            img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/technology.png', ng-class='technologySelected', ng-click='addInterest("Technology")', uib-tooltip='Technology')
+                            img.img-thumbnail.not-selected.cursor-pointer(src='/assets/images/interests/youth.png', ng-class='youthSelected', ng-click='addInterest("Youth")', uib-tooltip='Youth')
+                hr
 
-            .row
-                .col-xs-12.col-sm-6.col-md-4.col-lg-4.text-center
-                    label(for='startTimeDate') Start Time
-                    .row
-                        .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                            .btn-group#startTimeDate(uib-dropdown='')
-                                button#split-button.btn.btn-success(type='button') {{event.startTimeDate | date:'MM-dd-yyyy hh:mm a'}}
-                                button.btn.btn-success(type='button', uib-dropdown-toggle='')
-                                    span.glyphicon.glyphicon-calendar
-                                ul.uib-dropdown-menu(role='menu', aria-labelledby='split-button')
-                                    li(role='menuitem')
-                                        datetimepicker(data-ng-model='event.startTimeDate')
+                .row
+                    .col-xs-12.col-sm-6.col-md-4.col-lg-4.text-center
+                        .form-group(ng-class='{ "has-error" : eventForm.startTimeDate.$invalid && submitted }')
+                            label(for='startTimeDate') Start Time*
+                            .row
+                                .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                                    .dropdown
+                                        a#startTimeDate.dropdown-toggle(role='button', data-toggle='dropdown', data-target='#', href='#')
+                                            .btn-group
+                                                button#split-button.btn.btn-success(type='button', name='startTimeDate', data-ng-model='event.startTimeDate') {{event.startTimeDate | date:'MM-dd-yyyy hh:mm a'}}
+                                                button.btn.btn-success(type='button')
+                                                    span.glyphicon.glyphicon-calendar
+                                        ul.dropdown-menu(role='menu', aria-labelledby='dLabel')
+                                            datetimepicker(data-ng-model='event.startTimeDate', data-datetimepicker-config="{ dropdownSelector: '#startTimeDate' }")
+                                    div.help-block(ng-show='eventForm.startTimeDate.$invalid && submitted')
+                                        | Start time cannot start before today.
+
+                    .col-xs-12.col-sm-6.col-md-4.col-lg-4.text-center
+                        .form-group(ng-class='{ "has-error" : eventForm.endTimeDate.$invalid && submitted }')
+                            label(for='endTimeDate') End Time*
+                            .row
+                                .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                                    .dropdown
+                                        a#endTimeDate.dropdown-toggle(role='button', data-toggle='dropdown', data-target='#', href='#')
+                                            .btn-group
+                                                button#split-button.btn.btn-danger(type='button', name='endTimeDate', data-ng-model='event.endTimeDate') {{event.endTimeDate | date:'MM-dd-yyyy hh:mm a'}}
+                                                button.btn.btn-danger(type='button')
+                                                    span.glyphicon.glyphicon-calendar
+                                        ul.dropdown-menu(role='menu', aria-labelledby='dLabel')
+                                            datetimepicker(data-ng-model='event.endTimeDate', data-datetimepicker-config="{ dropdownSelector: '#endTimeDate' }")
+                                    div.help-block(ng-show='eventForm.endTimeDate.$invalid && submitted')
+                                        | End time cannot end before the start time.
+
+                    .col-xs-12.col-sm-12.col-md-4.col-lg-4.text-center
+                        .form-group(ng-class='{ "has-error" : eventForm.maxVolunteers.$invalid && submitted }')
+                            label(for='maxVolunteers') Number of Volunteers*
+                            .row
+                                .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                                    .btn-group(role='group')
+                                        button.btn.btn-default(type='button', ng-disabled='event.maxVolunteers <= 1', ng-click='event.maxVolunteers = event.maxVolunteers - 1', aria-label='Decrease Volunteers')
+                                            span.glyphicon.glyphicon-chevron-left(aria-hidden='true')
+                                        input.btn.btn-default(type='number', name='maxVolunteers', data-ng-model='event.maxVolunteers', required)
+                                        button.btn.btn-default(type='button', ng-click='event.maxVolunteers = event.maxVolunteers + 1', aria-label='Increase Volunteers')
+                                            span.glyphicon.glyphicon-chevron-right(aria-hidden='true')
+                                    div(ng-messages='eventForm.maxVolunteers.$error', ng-show='submitted')
+                                        div.help-block(ng-message='required') Volunteer(s) are required.
 
 
-
-                .col-xs-12.col-sm-6.col-md-4.col-lg-4.text-center
-                    label(for='endTimeDate') End Time
-                    .row
-                        .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                            .btn-group#startTimeDate(uib-dropdown='')
-                                button#split-button.btn.btn-danger(type='button') {{event.endTimeDate | date:'MM-dd-yyyy hh:mm a'}}
-                                button.btn.btn-danger(type='button', uib-dropdown-toggle='')
-                                    span.glyphicon.glyphicon-calendar
-                                ul.uib-dropdown-menu(role='menu', aria-labelledby='split-button')
-                                    li(role='menuitem')
-                                        datetimepicker(data-ng-model='event.endTimeDate')
-
-                .col-xs-12.col-sm-12.col-md-4.col-lg-4.text-center
-                    label(for='maxVolunteers') Number of Volunteers
-                    .row
-                        .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                            .btn-group(role='group')
-                                button.btn.btn-default(type='button', ng-disabled='event.maxVolunteers <= 1', ng-click='event.maxVolunteers = event.maxVolunteers - 1', aria-label='Decrease Volunteers')
-                                    span.glyphicon.glyphicon-chevron-left(aria-hidden='true')
-                                button.btn.btn-default(type='button') {{event.maxVolunteers}}
-                                button.btn.btn-default(type='button', ng-click='event.maxVolunteers = event.maxVolunteers + 1', aria-label='Increase Volunteers')
-                                    span.glyphicon.glyphicon-chevron-right(aria-hidden='true')
+                hr
 
 
-            hr
-
-
-        .col-xs-12.col-sm-4.col-md-4.col-lg-4
-            img.img-responsive.img-thumbnail.center-item(src="{{event.picture}}")
-            div(ng-show='getIsEditing()')
+            .col-xs-12.col-sm-4.col-md-4.col-lg-4
+                img.img-responsive.img-thumbnail.center-item(src="{{event.picture}}")
                 .form-group
                     input(type='file')
                     | Might have to use external module for file inputs
-            hr
-
-        .col-xs-12.col-sm-8.col-md-8.col-lg-8
-            .form-group
-                label(for='description') Description
-                textarea.form-control#description(rows='10', ng-model='event.description')
-
                 hr
-                .row
-                    .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                        label(for='street') Street
-                        input.form-control#street(type='text', name='address-line-1', ng-model='event.street')
-                    .col-xs-12.col-sm-6.col-md-6.col-lg-6
-                        label(for='city') City
-                        input.form-control#city(type='text', name='city', ng-model='event.city')
-                    .col-xs-5.col-sm-3.col-md-2.col-lg-2
-                        label(for='state') State
-                        select.form-control#state(type='text', name='state', ng-model='event.state')
-                             option(value='AL') AL
-                             option(value='AK') AK
-                             option(value='AZ') AZ
-                             option(value='AR') AR
-                             option(value='CA') CA
-                             option(value='CO') CO
-                             option(value='CT') CT
-                             option(value='DE') DE
-                             option(value='DC') DC
-                             option(value='FL') FL
-                             option(value='GA') GA
-                             option(value='HI') HI
-                             option(value='ID') ID
-                             option(value='IL') IL
-                             option(value='IN') IN
-                             option(value='IA') IA
-                             option(value='KS') KS
-                             option(value='KY') KY
-                             option(value='LA') LA
-                             option(value='ME') ME
-                             option(value='MD') MD
-                             option(value='MA') MA
-                             option(value='MI') MI
-                             option(value='MN') MN
-                             option(value='MS') MS
-                             option(value='MO') MO
-                             option(value='MT') MT
-                             option(value='NE') NE
-                             option(value='NV') NV
-                             option(value='NH') NH
-                             option(value='NJ') NJ
-                             option(value='NM') NM
-                             option(value='NY') NY
-                             option(value='NC') NC
-                             option(value='ND') ND
-                             option(value='OH') OH
-                             option(value='OK') OK
-                             option(value='OR') OR
-                             option(value='PA') PA
-                             option(value='RI') RI
-                             option(value='SC') SC
-                             option(value='SD') SD
-                             option(value='TN') TN
-                             option(value='TX') TX
-                             option(value='UT') UT
-                             option(value='VT') VT
-                             option(value='VA') VA
-                             option(value='WA') WA
-                             option(value='WV') WV
-                             option(value='WI') WI
-                             option(value='WY') WY
-                    .col-xs-7.col-sm-3.col-md-4.col-lg-4
-                        label(for='zipcode') Zipcode
-                        input.form-control#zipcode(type='text', name='zip', ng-model='event.zipcode')
+
+            .col-xs-12.col-sm-8.col-md-8.col-lg-8
+                .form-group(ng-class='{ "has-error" : eventForm.description.$invalid && submitted }')
+                    label(for='description') Description*
+                    textarea.form-control#description(rows='10', name='description', ng-model='event.description', minlength='10', required)
+                    div(ng-messages='eventForm.description.$error', ng-show='submitted')
+                        div.help-block(ng-message='required') A description is required.
+                        div.help-block(ng-message='minlength') Description is too short!
+
+                    hr
+                    .row
+                        .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                            .form-group(ng-class='{ "has-error" : eventForm.address.$invalid && submitted }')
+                                label(for='street') Street*
+                                input.form-control#street(type='text', name='address', ng-model='event.street', required)
+                                div(ng-messages='eventForm.address.$error', ng-show='submitted')
+                                    div.help-block(ng-message='required') Street Address is required.
+                        .col-xs-12.col-sm-6.col-md-6.col-lg-6
+                            .form-group(ng-class='{ "has-error" : eventForm.city.$invalid && submitted }')
+                                label(for='city') City*
+                                input.form-control#city(type='text', name='city', ng-model='event.city', required)
+                                div(ng-messages='eventForm.city.$error', ng-show='submitted')
+                                    div.help-block(ng-message='required') City is required.
+                        .col-xs-5.col-sm-3.col-md-2.col-lg-2
+                            .form-group(ng-class='{ "has-error" : eventForm.state.$invalid && submitted }')
+                                label(for='state') State*
+                                select.form-control#state(type='text', name='state', ng-model='event.state', required)
+                                    option(value='') Select
+                                    option(value='AL') AL
+                                    option(value='AK') AK
+                                    option(value='AZ') AZ
+                                    option(value='AR') AR
+                                    option(value='CA') CA
+                                    option(value='CO') CO
+                                    option(value='CT') CT
+                                    option(value='DE') DE
+                                    option(value='DC') DC
+                                    option(value='FL') FL
+                                    option(value='GA') GA
+                                    option(value='HI') HI
+                                    option(value='ID') ID
+                                    option(value='IL') IL
+                                    option(value='IN') IN
+                                    option(value='IA') IA
+                                    option(value='KS') KS
+                                    option(value='KY') KY
+                                    option(value='LA') LA
+                                    option(value='ME') ME
+                                    option(value='MD') MD
+                                    option(value='MA') MA
+                                    option(value='MI') MI
+                                    option(value='MN') MN
+                                    option(value='MS') MS
+                                    option(value='MO') MO
+                                    option(value='MT') MT
+                                    option(value='NE') NE
+                                    option(value='NV') NV
+                                    option(value='NH') NH
+                                    option(value='NJ') NJ
+                                    option(value='NM') NM
+                                    option(value='NY') NY
+                                    option(value='NC') NC
+                                    option(value='ND') ND
+                                    option(value='OH') OH
+                                    option(value='OK') OK
+                                    option(value='OR') OR
+                                    option(value='PA') PA
+                                    option(value='RI') RI
+                                    option(value='SC') SC
+                                    option(value='SD') SD
+                                    option(value='TN') TN
+                                    option(value='TX') TX
+                                    option(value='UT') UT
+                                    option(value='VT') VT
+                                    option(value='VA') VA
+                                    option(value='WA') WA
+                                    option(value='WV') WV
+                                    option(value='WI') WI
+                                    option(value='WY') WY
+                                div(ng-messages='eventForm.state.$error', ng-show='submitted')
+                                    div.help-block(ng-message='required') State is required.
+                        .col-xs-7.col-sm-3.col-md-4.col-lg-4
+                            .form-group(ng-class='{ "has-error" : eventForm.zip.$invalid && submitted }')
+                                label(for='zipcode') Zipcode*
+                                input.form-control#zipcode(type='text', name='zip', ng-model='event.zipcode', pattern='\\d{5}', required)
+                                div(ng-messages='eventForm.zip.$error', ng-show='submitted')
+                                    div.help-block(ng-message='required') Zip code is required.
+                                    div.help-block(ng-message='pattern') Invalid zip code.
 
 
 
@@ -186,10 +220,7 @@ div(ng-show='getIsPreviewing()')
                         h3 {{event.startTimeDate | date:'MMM d, yyyy'}}
 
                         h5.timeRow {{event.startTimeDate | date:'EEEE h:mm a'}}
-                            .duration for
-                            .duration(ng-show='hasDays()') {{duration.days}} Day(s)
-                            .duration(ng-show='hasHours()') {{duration.hours}} Hour(s)
-                            .duration(ng-show='hasMinutes()') {{duration.minutes}} Minute(s)
+                            .duration for {{event.duration}}
 
                     .col-xs-12.col-sm-12.col-md-12.col-lg-12.cardBody
                         h5 {{event.street}} {{event.city}}, {{event.state}} {{event.zipcode}}

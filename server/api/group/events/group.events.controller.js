@@ -52,6 +52,39 @@ exports.show = function(req, res) {
 };
 
 
+exports.create = function(req, res) {
+    if(!validId(req.params.id)) {
+        return notFound(res);
+    }
+
+    return Group.findById(req.params.id, function(err, group) {
+        if(err) {
+            return handleError(res, err);
+        } else if(!group) {
+            return notFound(res);
+        } else {
+            return Event.create(req.body, function(err, event) {
+                if(err) {
+                    console.log(err);
+                    return handleError(res, err);
+                } else {
+                    group.events.push(event._id);
+                    group.save(function(err) {
+                        if(err) {
+                            return handleError(res, err);
+                        } else {
+                            return res.status(201).json({
+                                event: event
+                            });
+                        }
+                    })
+                }
+            });
+        }
+    })
+}
+
+
 
 /**
  * Delete an event: To do this we must delete

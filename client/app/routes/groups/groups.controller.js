@@ -108,6 +108,12 @@ angular.module('seniorprojectYoApp')
 
         };
 
+        function populateAnEventVolunteers(event) {
+            EventService.volunteers.index(event._id, {}, function(res) {
+                event.volunteers = res.data;
+            });
+        }
+
         function checkAdmin() {
             if (Auth.isLoggedIn()) {
                 // Populate required user data first
@@ -389,17 +395,16 @@ angular.module('seniorprojectYoApp')
          **************************************************************************/
          $scope.volunteer = function(curEvent) {
              if (Auth.isLoggedIn()) {
-
-
-                 /*
+                 
                  $scope.isBusy = true;
                  var eventIndex = $scope.group.events.indexOf($filter('filter')($scope.group.events, {_id: curEvent._id}, true)[0]);
-                 EventService.show(curEvent._id, function(res) {
+                 EventService.show($scope.group.events[eventIndex]._id, function(res) {
                      if (res.status === 404) {
                          $scope.errorMessage = 'There was a problem retrieving the event';
                      } else {
-                         var _event = res.data.event;
-                         if (_event.volunteers.length >= _event.maxVolunteers){
+                         $scope.group.events[eventIndex].volunteers = res.data.event.volunteers;
+                         $scope.group.events[eventIndex].maxVolunteers = res.data.event.maxVolunteers;
+                         if ($scope.group.events[eventIndex].volunteers.length >= $scope.group.events[eventIndex].maxVolunteers){
                              $scope.alerts.push({
                                  type: "warning",
                                  msg: 'Event is full.'
@@ -407,8 +412,9 @@ angular.module('seniorprojectYoApp')
                              $scope.isBusy = false;
                          }
                          else {
-                             EventService.volunteers.create(_event._id, $scope.user._id, function(res) {
-                                 $scope.group.events[eventIndex] = res.data.event
+                             EventService.volunteers.create($scope.group.events[eventIndex]._id, $scope.user._id, function(res) {
+                                 $scope.group.events[eventIndex].volunteers = res.data;
+                                 populateAnEventVolunteers($scope.group.events[eventIndex]);
                                  $scope.alerts.push({
                                      type: "success",
                                      msg: 'You have successfully volunteered'
@@ -427,149 +433,39 @@ angular.module('seniorprojectYoApp')
                          }
                      }
                  });
-                 */
-
-
-
-
-
-                 var eventIndex = $scope.group.events.indexOf($filter('filter')($scope.group.events, {_id: curEvent._id}, true)[0]);
-                 // Get updated event before trying to
-                 EventService.show($scope.group.events[eventIndex]._id, function(res) {
-                     if (res.status === 404) {
-                         $scope.errorMessage = 'There was a problem retrieving the event';
-                     } else {
-                         $scope.group.events[eventIndex] = res.data.event;
-                         if ($scope.group.events[eventIndex].volunteers.length >= $scope.group.events[eventIndex].maxVolunteers){
-                             $scope.alerts.push({
-                                 type: "warning",
-                                 msg: 'Event is full.'
-                             });
-                         }
-                         else {
-                             $scope.isBusy = true;
-
-                             $scope.user = Auth.getCurrentUser();
-
-                             $scope.user.events.volunteeredTo.push($scope.group.events[eventIndex]);
-
-                             UserService.update($scope.user._id, { user: $scope.user },
-                                 function(res) {  // success
-                                     //$scope.user = res.data.user;
-                                     //console.log(res.data.user);
-                                     $scope.group.events[eventIndex].volunteers.push(res.data.user);
-
-                                     EventService.update($scope.group.events[eventIndex]._id, { event: $scope.group.events[eventIndex] },
-                                         function(res) {  // success
-                                             //$scope.group.events[eventIndex] = res.data.event;
-                                             //console.log(res.data.event);
-
-                                             //populateGroup();
-
-                                             $scope.alerts.push({
-                                                 type: "success",
-                                                 msg: 'You have successfully volunteered'
-                                             });
-
-                                             $scope.isBusy = false;
-
-                                         },
-                                         function(res) {  //error
-                                             $scope.alerts.push({
-                                                 type: "danger",
-                                                 msg: 'There was a problem volunteering'
-                                             });
-                                         });
-
-                                     },
-                                     function(res) {  // error
-                                         $scope.alerts.push({
-                                             type: "danger",
-                                             msg: 'There was a problem volunteering'
-                                         });
-                                     });
-                                 }
-                             }
-                         });
-                     }
-                     else {
-                         $location.path("/login/").replace;
-                     }
-                 }
+             }
+             else {
+                 $location.path("/login/").replace;
+             }
+         }
 
          $scope.optOut = function(curEvent) {
              if (Auth.isLoggedIn()) {
+
+                 $scope.isBusy = true;
                  var eventIndex = $scope.group.events.indexOf($filter('filter')($scope.group.events, {_id: curEvent._id}, true)[0]);
-                 // Get updated event before trying to
-                 EventService.show($scope.group.events[eventIndex]._id, function(res) {
-                     if (res.status === 404) {
-                         $scope.errorMessage = 'There was a problem retrieving the event';
-                     } else {
-                         $scope.group.events[eventIndex] = res.data.event;
+                 EventService.volunteers.destroy($scope.group.events[eventIndex]._id, $scope.user._id, function(res) {
+                     $scope.group.events[eventIndex].volunteers = res.data;
+                     populateAnEventVolunteers($scope.group.events[eventIndex]);
+                     $scope.alerts.push({
+                         type: "success",
+                         msg: 'You have successfully unvolunteered'
+                     });
 
-                         EventService.volunteers.index($scope.group.events[eventIndex]._id, {}, function(res) {
-                             $scope.group.events[eventIndex].volunteers = res.data;
+                     $scope.isBusy = false;
+                 }, function(res) { // error
 
-                             $scope.isBusy = true;
+                     $scope.alerts.push({
+                         type: "danger",
+                         msg: 'There was a problem unvolunteering'
+                     });
 
-                             $scope.user = Auth.getCurrentUser();
-
-                             // Remove event from user volunteer list
-                             for (var i = 0; i < $scope.user.events.volunteeredTo.length; i++) {
-                                 if ($scope.user.events.volunteeredTo[i]._id === $scope.group.events[eventIndex]._id){
-                                     $scope.user.events.volunteeredTo.splice(i, 1);
-                                 }
-                             }
-
-                             // Remove user from event volunteer list
-                             for (var i = 0; i < $scope.group.events[eventIndex].volunteers.length; i++) {
-                                 if ($scope.group.events[eventIndex].volunteers[i]._id === $scope.user._id){
-                                     $scope.group.events[eventIndex].volunteers.splice(i, 1);
-                                 }
-                             }
-
-                             UserService.update($scope.user._id, { user: $scope.user },
-                                 function(res) {  // success
-                                     //$scope.user = res.data.user;
-                                     //console.log(res.data.user);
-
-                                     EventService.update($scope.group.events[eventIndex]._id, { event: $scope.group.events[eventIndex] },
-                                         function(res) {  // success
-                                             //$scope.group.events[eventIndex] = res.data.event;
-                                             //console.log(res.data.event);
-
-                                             //populateGroup();
-
-                                             $scope.alerts.push({
-                                                 type: "success",
-                                                 msg: 'You have successfully opted out'
-                                             });
-
-                                             $scope.isBusy = false;
-
-                                         },
-                                         function(res) {  //error
-                                             $scope.alerts.push({
-                                                 type: "danger",
-                                                 msg: 'There was a problem opting out'
-                                             });
-                                         });
-
-                                     },
-                                     function(res) {  // error
-                                         $scope.alerts.push({
-                                             type: "danger",
-                                             msg: 'There was a problem opting out'
-                                         });
-                                     });
-                                 });
-
-                             }
-                         });
-                     }
-                     else {
-                         $location.path("/login/").replace;
-                     }
+                     $scope.isBusy = false;
+                 });
+             }
+             else {
+                 $location.path("/login/").replace;
+             }
 
          }
 

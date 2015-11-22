@@ -55,14 +55,28 @@ exports.events = function(req,res){
  // you cant put in variables directly into a regex
  // req.body.searchString is the string from angular
 
+  //  console.log( Object.keys(req.query)[0]);
+    //console.log(req.query);
+    var intrestsRegExObj;
+    var parsedIntrests= Object.keys(req.query)[0];
+
     var parsedSearch = req.params.searchstring.replace(/\s/gi, "|");
     var searchStringRegExObj = new RegExp(parsedSearch, "gi");
+
     if(req.params.searchstring ==='all'){
       searchStringRegExObj = new RegExp('.*', "gi");
     }
+     if(parsedIntrests=== undefined){
+      intrestsRegExObj = new RegExp('.*', "gi");
+    }else{
+       parsedIntrests = parsedIntrests.replace(/\s/gi, "|");
+       intrestsRegExObj = new RegExp(parsedIntrests, "gi");
+    }
+
 
   Event.find({
      $or:[ {name:searchStringRegExObj}, {description:searchStringRegExObj}],
+     interests :intrestsRegExObj,
     endTimeDate: {$gte: new Date(y,mm,dd)}
   }, function(err, data) {
     if (err) {
@@ -74,6 +88,8 @@ exports.events = function(req,res){
 };
 
 
+
+// find the users given
 exports.users = function(req,res){
   var searchStringRegExObj = new RegExp(req.params.username, "gi");
   if(req.params.username ==='all'){

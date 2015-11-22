@@ -21,8 +21,8 @@ if (mongoose.connection.readyState === 0) {
 }
 
 // Run seeds
- userSeed();
-//eventSeed();
+ //userSeed();
+eventSeed();
 //groupSeed();
 
 function userSeed() {
@@ -207,7 +207,8 @@ function eventSeed() {
       state: 'state String',
       zipcode: 'zip String',
       maxVolunteers: 3,
-      currentVolunteers: 2
+      currentVolunteers: 2,
+      interests: ['sports','cats']
 
 
 
@@ -236,7 +237,8 @@ function eventSeed() {
       state: 'state String',
       zipcode: 'zip String',
       maxVolunteers: 8,
-      currentVolunteers: 3
+      currentVolunteers: 3,
+      interests: ["sports","dog"]
 
 
 

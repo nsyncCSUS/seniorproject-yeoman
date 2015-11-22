@@ -11,6 +11,7 @@
 
 var User = require('../user/user.model');
 var Event = require('../event/event.model');
+var Group = require('../group/group.model');
 var _ = require('lodash');
 var mongoose = require('mongoose');
 mongoose.set('debug', true);
@@ -84,7 +85,7 @@ exports.events = function(req,res){
     }
     res.send(data);
 
-}).$where('this.maxVolunteers > this.currentVolunteers').sort({currentVolunteers: -1}).limit(100);
+}).$where('this.maxVolunteers > this.numberVolunteers').sort({numberVolunteers: -1}).limit(100);
 };
 
 
@@ -107,4 +108,36 @@ exports.users = function(req,res){
       res.send(data);
   }).limit(100);
 
+};
+
+
+//find group Search option(groupname groupdescription or group intrests )
+exports.groups = function(req,res){
+  var intrestsRegExObj;
+  var parsedIntrests= Object.keys(req.query)[0];
+
+  var parsedSearch = req.params.groupname.replace(/\s/gi, "|");
+  var searchStringRegExObj = new RegExp(parsedSearch, "gi");
+
+  if(req.params.groupname ==='all'){
+    searchStringRegExObj = new RegExp('.*', "gi");
+  }
+   if(parsedIntrests=== undefined){
+    intrestsRegExObj = new RegExp('.*', "gi");
+  }else{
+     parsedIntrests = parsedIntrests.replace(/\s/gi, "|");
+     intrestsRegExObj = new RegExp(parsedIntrests, "gi");
+  }
+
+
+Group.find({
+   $or:[ {name:searchStringRegExObj}, {description:searchStringRegExObj}],
+   interests :intrestsRegExObj,
+}, function(err, data) {
+  if (err) {
+    throw err;
+  }
+  res.send(data);
+
+}).sort({numberSubcribers: -1}).limit(100);
 };

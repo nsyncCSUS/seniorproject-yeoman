@@ -22,8 +22,8 @@ if (mongoose.connection.readyState === 0) {
 
 // Run seeds
  //userSeed();
-eventSeed();
-//groupSeed();
+//eventSeed();
+groupSeed();
 
 function userSeed() {
   console.log('Seeding...');
@@ -207,7 +207,7 @@ function eventSeed() {
       state: 'state String',
       zipcode: 'zip String',
       maxVolunteers: 3,
-      currentVolunteers: 2,
+      numberVolunteers: 2,
       interests: ['sports','cats']
 
 
@@ -237,7 +237,7 @@ function eventSeed() {
       state: 'state String',
       zipcode: 'zip String',
       maxVolunteers: 8,
-      currentVolunteers: 3,
+      numberVolunteers: 3,
       interests: ["sports","dog"]
 
 
@@ -304,6 +304,11 @@ function groupSeed() {
       events: [
         '000000000000000000000000'
       ],
+      description: "Group Description",
+      interests: ["sports","dog"],
+      numberSubcribers: 5,
+
+
       creationUser: '000000000000000000000002'
     }, function(err) {
       if (err) return console.log('Err: ' + err);
@@ -320,7 +325,10 @@ function groupSeed() {
       _id: '000000000000000000000001',
       organizers: [
         '000000000000000000000002'
-      ]
+      ],
+      description: "Group Description",
+      interests: ["sports","cat"],
+      numberSubcribers: 12,
     }, function(err) {
       if (err) return console.log(err);
       console.log('Created Group: 000000000000000000000001')

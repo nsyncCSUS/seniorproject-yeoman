@@ -31,6 +31,7 @@ var GroupSchema = new Schema({
     linkedInURL: String,
     twitterURL: String,
     personalWebsiteURL: String,
+    numberSubcribers: Number,
 
     events: [{
         type: Schema.ObjectId,

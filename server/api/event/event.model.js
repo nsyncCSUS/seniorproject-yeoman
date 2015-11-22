@@ -35,7 +35,7 @@ var EventSchema = new Schema({
     state: String,
     zipcode: String,
     maxVolunteers: Number,
-    currentVolunteers: Number,
+    numberVolunteers: Number,
 
     organizers: [{
       type: Schema.ObjectId,

@@ -1,11 +1,6 @@
 div(ng-include='"components/navbar/navbar.html"')
 
-h1 Users
-
-.well
-    .container
-        button.btn.btn-default(ng-click='toggleAdmin()') Toggle Admin
-        | {{isAdmin}}
+.adminPadding(ng-show='isAdmin')
 
 div(ng-show='isAdmin')
     div(ng-show='!getIsEditing()')

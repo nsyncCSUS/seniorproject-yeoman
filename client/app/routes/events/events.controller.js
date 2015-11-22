@@ -43,7 +43,7 @@ angular.module('seniorprojectYoApp')
                    }
                });
            } else {
-               console.log("no event found");
+               //console.log("no event found");
            }
 
         });
@@ -62,7 +62,7 @@ angular.module('seniorprojectYoApp')
            // Populate organizers
            EventService.organizers.index($scope.event._id, {}, function(res) {
                $scope.event.organizers = res.data;
-                   console.log($scope.event);
+                   //console.log($scope.event);
            });
 
            // Populate volunteers
@@ -177,10 +177,10 @@ angular.module('seniorprojectYoApp')
             // Rebuild interests array
             // Checks if the interest selected is in the interest's array
             angular.forEach($scope.event.interests, function(currentInterest, index) {
-                console.log(currentInterest);
+                //console.log(currentInterest);
                 // If in array, remove class to show that it is now unselected
                 if (currentInterest === interest) {
-                    console.log("removed " + interest);
+                    //console.log("removed " + interest);
                     hasInterest = true;
                     switch (interest) {
                         case "Animals":
@@ -208,13 +208,13 @@ angular.module('seniorprojectYoApp')
                 }
                 // Otherwise, add to rebuilt array
                 else {
-                    console.log(currentInterest);
+                    //console.log(currentInterest);
                     newInterests.push(currentInterest);
                 }
             });
             // Add interest if it was not in array
             if (hasInterest === false) {
-                console.log("added " + interest);
+                //console.log("added " + interest);
                 newInterests.push(interest);
                 switch (interest) {
                     case "Animals":
@@ -242,7 +242,7 @@ angular.module('seniorprojectYoApp')
             }
             // Set the new interest array
             $scope.event.interests = newInterests;
-            console.log($scope.event.interests);
+            //console.log($scope.event.interests);
         }
 
         /***********************************************************************
@@ -323,7 +323,7 @@ angular.module('seniorprojectYoApp')
             }
             else {
                 $scope.alerts.push({type: "danger", msg: "Errors found, please fix them."});
-                console.log($scope.eventForm.$error);
+                //console.log($scope.eventForm.$error);
                 $scope.submitted = true;
             }
         }
@@ -379,13 +379,13 @@ angular.module('seniorprojectYoApp')
                              UserService.update($scope.user._id, { user: $scope.user },
                                  function(res) {  // success
                                      //$scope.user = res.data.user;
-                                     console.log(res.data.user);
+                                     //console.log(res.data.user);
                                      $scope.event.volunteers.push(res.data.user);
 
                                      EventService.update($scope.event._id, { event: $scope.event },
                                          function(res) {  // success
                                              //$scope.group.events[curEvent] = res.data.event;
-                                             console.log(res.data.event);
+                                             //console.log(res.data.event);
 
                                              populateEvent();
 
@@ -435,7 +435,7 @@ angular.module('seniorprojectYoApp')
                                      $scope.event.volunteers = res.data;
 
                                      $scope.isBusy = true;
-                                     
+
                                      $scope.user = Auth.getCurrentUser();
 
                                      // Remove event from user volunteer list
@@ -455,12 +455,12 @@ angular.module('seniorprojectYoApp')
                                      UserService.update($scope.user._id, { user: $scope.user },
                                          function(res) {  // success
                                              //$scope.user = res.data.user;
-                                             console.log(res.data.user);
+                                             //console.log(res.data.user);
 
                                              EventService.update($scope.event._id, { event: $scope.event },
                                                  function(res) {  // success
                                                      //$scope.group.events[curEvent] = res.data.event;
-                                                     console.log(res.data.event);
+                                                     //console.log(res.data.event);
 
                                                      populateEvent();
 
@@ -550,7 +550,7 @@ angular.module('seniorprojectYoApp')
          * Admin Testing
          **************************************************************************/
         $scope.toggleAdmin = function() {
-            $scope.isAdmin = !$scope.isAdmin;
+            //$scope.isAdmin = !$scope.isAdmin;
         }
 
     });

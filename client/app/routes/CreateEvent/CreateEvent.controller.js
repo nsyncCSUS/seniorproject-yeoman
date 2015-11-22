@@ -54,7 +54,7 @@ angular.module('seniorprojectYoApp')
                 }
             });
         } else {
-            console.log("no group found");
+            //console.log("no group found");
         }
 
 		$scope.event.organizers.push(Auth.getCurrentUser());
@@ -101,7 +101,7 @@ angular.module('seniorprojectYoApp')
                                 }
                             });
                         } else {
-                            console.log("no group found");
+                            //console.log("no group found");
                         }
 
 
@@ -250,10 +250,10 @@ angular.module('seniorprojectYoApp')
             // Rebuild interests array
             // Checks if the interest selected is in the interest's array
             angular.forEach($scope.event.interests, function(currentInterest, index) {
-                console.log(currentInterest);
+                //console.log(currentInterest);
                 // If in array, remove class to show that it is now unselected
                 if (currentInterest === interest) {
-                    console.log("removed " + interest);
+                    //console.log("removed " + interest);
                     hasInterest = true;
                     switch (interest) {
                         case "Animals":
@@ -281,13 +281,13 @@ angular.module('seniorprojectYoApp')
                 }
                 // Otherwise, add to rebuilt array
                 else {
-                    console.log(currentInterest);
+                    //console.log(currentInterest);
                     newInterests.push(currentInterest);
                 }
             });
             // Add interest if it was not in array
             if (hasInterest === false) {
-                console.log("added " + interest);
+                //console.log("added " + interest);
                 newInterests.push(interest);
                 switch (interest) {
                     case "Animals":
@@ -315,7 +315,7 @@ angular.module('seniorprojectYoApp')
             }
             // Set the new interest array
             $scope.event.interests = newInterests;
-            console.log($scope.event.interests);
+            //console.log($scope.event.interests);
         }
 
 

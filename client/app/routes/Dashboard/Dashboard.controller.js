@@ -22,8 +22,8 @@ angular.module('seniorprojectYoApp')
                  $scope.user = Auth.getCurrentUser();
 
                  populateUser();
-                     console.log($scope.user);
-                         console.log(Auth.getCurrentUser());
+                     //console.log($scope.user);
+                         //console.log(Auth.getCurrentUser());
              }
          });
 
@@ -78,8 +78,24 @@ angular.module('seniorprojectYoApp')
                          EventService.volunteers.index(event._id, {}, function(res) {
                              event.volunteers = res.data;
 
-                             console.log($scope.upcomingEvents);
+                             //console.log($scope.upcomingEvents);
                          });
+                     });
+                 });
+             });
+         }
+
+         function populateAnEvent(event) {
+             GroupService.show(event.group, function(res) {
+                 event.group = res.data.group;
+
+                 EventService.organizers.index(event._id, {}, function (res) {
+                     event.organizers = res.data;
+
+                     EventService.volunteers.index(event._id, {}, function(res) {
+                         event.volunteers = res.data;
+
+                         //console.log($scope.upcomingEvents);
                      });
                  });
              });
@@ -150,15 +166,16 @@ angular.module('seniorprojectYoApp')
                             UserService.update($scope.user._id, { user: $scope.user },
                                 function(res) {  // success
                                     //$scope.user = res.data.user;
-                                    console.log(res.data.user);
+                                    //console.log(res.data.user);
                                     $scope.upcomingEvents[eventIndex].volunteers.push(res.data.user);
 
                                     EventService.update($scope.upcomingEvents[eventIndex]._id, { event: $scope.upcomingEvents[eventIndex] },
                                         function(res) {  // success
-                                            //$scope.group.events[$scope.upcomingEvents[eventIndex]] = res.data.event;
-                                            console.log(res.data.event);
+                                            //$scope.upcomingEvents[eventIndex] = res.data.event;
+                                            //console.log(res.data.event);
 
                                             //populateUpcomingEvents();
+                                            populateAnEvent($scope.upcomingEvents[eventIndex]);
 
                                             $scope.alerts.push({
                                                 type: "success",
@@ -226,14 +243,15 @@ angular.module('seniorprojectYoApp')
                             UserService.update($scope.user._id, { user: $scope.user },
                                 function(res) {  // success
                                     //$scope.user = res.data.user;
-                                    console.log(res.data.user);
+                                    //console.log(res.data.user);
 
                                     EventService.update($scope.upcomingEvents[eventIndex]._id, { event: $scope.upcomingEvents[eventIndex] },
                                         function(res) {  // success
-                                            //$scope.group.events[$scope.upcomingEvents[eventIndex]] = res.data.event;
-                                            console.log(res.data.event);
+                                            //$scope.upcomingEvents[eventIndex] = res.data.event;
+                                            //console.log(res.data.event);
 
                                             //populateUpcomingEvents();
+                                            populateAnEvent($scope.upcomingEvents[eventIndex]);
 
                                             $scope.alerts.push({
                                                 type: "success",

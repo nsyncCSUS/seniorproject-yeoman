@@ -19,11 +19,7 @@ mongoose.set('debug', true);
 function handleError(res, err) {
   return res.status(500).send(err);
 }
-// Getting current date.
-var someDate = new Date(); // Date format is year/month/day
-var dd = someDate.getDate();
-var mm = someDate.getMonth() + 1;
-var y = someDate.getFullYear();
+
 
 
 
@@ -46,6 +42,14 @@ exports.index = function(req, res) {
 //Note: Mongoose has problems with some conditions specifically evaluateing 2 things
 // in the same document
 exports.events = function(req,res){
+  // Getting current date.
+  var currentDate = new Date(); // Date format is year/month/day
+  var curdd = currentDate.getDate();
+  var curmm = currentDate.getMonth() + 1;
+  var curyyyy = currentDate.getFullYear();
+  var curmin= currentDate.getMinutes();
+  var curhour = currentDate.getHours();
+
   //console.log(Object.keys(req.body)[0]); grabs first value in object
 //This code might be useful in refactoring since adding this line will grab the search value
 // regardless of its name
@@ -78,7 +82,7 @@ exports.events = function(req,res){
   Event.find({
      $or:[ {name:searchStringRegExObj}, {description:searchStringRegExObj}],
      interests :intrestsRegExObj,
-    endTimeDate: {$gte: new Date(y,mm,dd)}
+    endTimeDate: {$gte: new Date(curyyyy,curmm,curdd,curhour,curmin)}
   }, function(err, data) {
     if (err) {
       throw err;

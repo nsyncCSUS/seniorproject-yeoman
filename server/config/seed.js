@@ -22,8 +22,8 @@ if (mongoose.connection.readyState === 0) {
 
 // Run seeds
  //userSeed();
-//eventSeed();
-groupSeed();
+eventSeed();
+//groupSeed();
 
 function userSeed() {
   console.log('Seeding...');
@@ -198,9 +198,9 @@ function eventSeed() {
       _id: '000000000000000000000003',
       volunteers: ['000000000000000000000003', '000000000000000000000043'],
       description: "cat string",
-      creationDate: new Date(2017, 10, 10),
-      startTimeDate: new Date(2017, 10, 10),
-      endTimeDate: new Date(2017, 10, 10),
+      creationDate: new Date(2017, 10, 10,5,5),
+      startTimeDate: new Date(2017, 10, 10,5,5),
+      endTimeDate: new Date(2017, 10, 10,5,5),
       street: 'stree String',
       city: 'city strting',
       state: 'state String',
@@ -228,9 +228,9 @@ function eventSeed() {
       _id: '000000000000000000000005',
       volunteers: ['000000000000000000000003', '000000000000000000000043'],
       description: "dog string",
-      creationDate: new Date(2017, 10, 10),
-      startTimeDate: new Date(2017, 10, 10),
-      endTimeDate: new Date(2017, 10, 10),
+      creationDate: new Date(2017, 10, 10,5,5),
+      startTimeDate: new Date(2017, 10, 10,5,5),
+      endTimeDate: new Date(2017, 10, 10,5,5),
       street: 'stree String',
       city: 'city strting',
       state: 'state String',

@@ -3,7 +3,7 @@
 var should = require('should');
 var app = require('../../app');
 var request = require('supertest');
-
+var expect = require('chai').expect;
 
 
 
@@ -81,6 +81,25 @@ describe('GET /api/search/users/huyz', function() {
             .end(function(err, res) {
                 if (err) return done(err);
                 res.body.should.be.instanceof(Array);
+                done();
+            });
+    });
+});
+
+
+// testing query ordering numberVolunteers descending
+describe('GET /api/search/events/all', function() {
+    it('numberVolunteers should be ordered in descending order', function(done) {
+        this.timeout(10000);
+        request(app)
+            .get('/api/search/events/all')
+            .end(function(err, res) {
+                if (err) return done(err);
+                res.body.should.be.instanceof(Array);
+                for(var i=0; i< (res.body.length)-1; i++){
+                expect(res.body[i].numberVolunteers).to.be.above(res.body[i+1].numberVolunteers)||
+                expect(res.body[i].numberVolunteers).to.be.equal(res.body[i+1].numberVolunteers)
+              }
                 done();
             });
     });

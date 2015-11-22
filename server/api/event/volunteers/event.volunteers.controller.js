@@ -112,7 +112,7 @@ exports.destroy = function(req, res) {
         } else {
             return User.findByIdAndUpdate(req.params.volunteerId, {
                 $pull: {
-                    'event.volunteeredTo': req.params.id
+                    'events.volunteeredTo': req.params.id
                 }
             }, function(err, volunteer) {
                 if (err) {

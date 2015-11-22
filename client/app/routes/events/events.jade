@@ -5,10 +5,10 @@ div(ng-include='"components/navbar/navbar.html"')
 div(ng-show='isAdmin')
     div(ng-show='!getIsEditing()')
         .float-right
-            button.btn.btn-default(ng-show='!getIsEditing()', ng-disabled='getCurrentlyActive()', ng-click='enableEdit()') Edit Event
+            button.btn.btn-default(ng-show='!getIsEditing()', ng-disabled='isCurrentlyActive()', ng-click='enableEdit()') Edit Event
     div(ng-show='getIsEditing()')
         .float-right
-            button.btn.btn-info(ng-show='getIsEditing()', ng-click='submitEdit()', ng-disabled='isUpdating || getCurrentlyActive()') Save
+            button.btn.btn-info(ng-show='getIsEditing()', ng-click='submitEdit()', ng-disabled='isUpdating || isCurrentlyActive()') Save
             | &nbsp
             button.btn.btn-danger(ng-show='getIsEditing()', ng-click='cancelEdit()', ng-disabled='isUpdating') Cancel
 .float-btm.text-center
@@ -230,6 +230,8 @@ div(ng-show='!getIsEditing()')
                     .col-xs-12.col-sm-12.col-md-12.col-lg-12.cardBody
                         h5 {{event.street}} {{event.city}}, {{event.state}} {{event.zipcode}}
 
+                        h1(ng-show='isCurrentlyActive()', ng-class='{ "currentlyActive" : isCurrentlyActive() }') Currently Active
+
                         .navbar-btn
                             img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/{{interest}}.png', ng-repeat='interest in event.interests | orderBy:interest', uib-tooltip='{{interest}}')
                             hr
@@ -240,8 +242,8 @@ div(ng-show='!getIsEditing()')
                                 .col-xs-12.col-sm-12.col-md-12.col-lg-12
                                     h4.text-center {{event.volunteers.length}} / {{event.maxVolunteers}}
                                         | &nbsp
-                                        button.btn(ng-show='isVolunteering()', ng-click='optOut()', ng-disabled='getCurrentlyActive() || isOrganizer() || isBusy') Opt out
-                                        button.btn(ng-show='!isVolunteering()', ng-click='volunteer()', ng-disabled='getCurrentlyActive() || isOrganizer() || isBusy') Volunteer
+                                        button.btn(ng-show='isVolunteering()', ng-click='optOut()', ng-disabled='isCurrentlyActive() || isOrganizer() || isBusy') Opt out
+                                        button.btn(ng-show='!isVolunteering()', ng-click='volunteer()', ng-disabled='isCurrentlyActive() || isOrganizer() || isBusy') Volunteer
                                     hr
                                 .hidden-xs
                                     .col-xs-12.col-sm-12.col-md-12.col-lg-12

@@ -365,7 +365,7 @@ angular.module('seniorprojectYoApp')
          **************************************************************************/
          $scope.volunteer = function() {
              if (Auth.isLoggedIn()) {
-                 
+
                  $scope.isBusy = true;
                  EventService.show($scope.event._id, function(res) {
                      if (res.status === 404) {
@@ -467,7 +467,7 @@ angular.module('seniorprojectYoApp')
             return false;
         }
 
-        $scope.getCurrentlyActive = function() {
+        $scope.isCurrentlyActive = function() {
             var rightNow = new Date();
 
             if ($scope.event != null) {

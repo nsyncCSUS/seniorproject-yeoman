@@ -591,6 +591,22 @@ angular.module('seniorprojectYoApp')
             return false;
         }
 
+        $scope.isCurrentlyActive = function(curEvent) {
+            var rightNow = new Date();
+
+            if (curEvent != null) {
+                var startTime = new Date(curEvent.startTimeDate);
+                if ((startTime - rightNow) < 1) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         /***********************************************************************
          * Editing Functions
          **********************************************************************/

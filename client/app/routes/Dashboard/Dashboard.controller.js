@@ -216,20 +216,6 @@ angular.module('seniorprojectYoApp')
         /***********************************************************************
          * Boolean Functions
          **********************************************************************/
-        /*
-         * Checks if there are more than 1 upcoming events, the view will display
-         * arrows to move across events if that is the case.
-         */
-        $scope.hasMultipleEvents = function() {
-            if ($scope.upcomingEvents != null) {
-                if ($scope.upcomingEvents.length >= 2)
-                    return true;
-                else
-                    return false;
-            } else
-                return false;
-        }
-
         $scope.isVolunteering = function(curEvent) {
             if ($scope.user != null){
                 for (var i = 0; i < curEvent.volunteers.length; i++) {
@@ -248,6 +234,22 @@ angular.module('seniorprojectYoApp')
                 }
             }
             return false;
+        }
+
+        $scope.isCurrentlyActive = function(curEvent) {
+            var rightNow = new Date();
+
+            if (curEvent != null) {
+                var startTime = new Date(curEvent.startTimeDate);
+                if ((startTime - rightNow) < 1) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         /***************************************************************************

@@ -9,8 +9,6 @@ var EventSchema = new Schema({
       required: true
     },
 
-    description: String,
-
     creationUser: {
         type: Schema.ObjectId,
         ref: 'User'
@@ -36,7 +34,7 @@ var EventSchema = new Schema({
     state: String,
     zipcode: String,
     maxVolunteers: Number,
-    currentVolunteers: Number,
+    numberVolunteers: Number,
 
     organizers: [{
       type: Schema.ObjectId,

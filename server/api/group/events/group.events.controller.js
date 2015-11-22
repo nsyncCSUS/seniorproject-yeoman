@@ -57,30 +57,45 @@ exports.create = function(req, res) {
         return notFound(res);
     }
 
+    var user = req.user;
+    var params = req.body;
+    if(params._id) delete params._id;
+    params.creationUser = user._id;
+
     return Group.findById(req.params.id, function(err, group) {
         if(err) {
             return handleError(res, err);
         } else if(!group) {
             return notFound(res);
-        } else {
-            return Event.create(req.body, function(err, event) {
-                if(err) {
-                    console.log(err);
-                    return handleError(res, err);
-                } else {
-                    group.events.push(event._id);
-                    group.save(function(err) {
-                        if(err) {
-                            return handleError(res, err);
-                        } else {
-                            return res.status(201).json({
-                                event: event
-                            });
-                        }
-                    })
-                }
-            });
         }
+
+        return Event.create(params, function(err, event) {
+            if(err) {
+                return handleError(res, err);
+            }
+
+            return Group.findByIdAndUpdate(req.params.id, {
+                $addToSet: {
+                    'events': event._id,
+                }
+            }, function(err, group) {
+                if(err) {
+                    return handleError(res, err);
+                }
+
+                return User.findByIdAndUpdate(user._id, {
+                    $addToSet: {
+                        'events.organizerOf': event._id,
+                        'events.creatorOf': event._id
+                    }
+                }, function(err, user) {
+                    if(err) return handleError(res, err);
+                    return res.status(201).json({
+                        event: event
+                    });
+                });
+            });
+        });
     })
 }
 

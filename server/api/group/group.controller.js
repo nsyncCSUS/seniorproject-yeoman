@@ -46,9 +46,11 @@ exports.show = function(req, res) {
 exports.create = function(req, res) {
     var user = req.user;
 
-    if(req.body._id) delete req.body._id;
     var params = req.body;
+    if(params._id) delete params._id;
+    if(params.volunteers) delete params.volunteers;
     params.creationUser = user._id;
+    params.organizers = [user._id];
 
     return Group.create(params, function(err, group) {
         if (err) {
@@ -56,7 +58,10 @@ exports.create = function(req, res) {
         }
 
         return User.findByIdAndUpdate(user._id, {
-            $addToSet: group._id
+            $addToSet: {
+                'groups.organizerOf': group._id,
+                'groups.creationUser': group._id
+            }
         }, function(err, user) {
             if(err) {
                 return handleError(res, err);

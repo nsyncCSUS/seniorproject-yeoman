@@ -29,15 +29,14 @@ angular.module('seniorprojectYoApp')
          * Initialize form data
          **************************************************************************/
         $scope.event = {
-            name: "SUPER DUPER AWESOME EVENT!!!!",
-            description: "sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem blandit non.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vulputate pellentesque lorem. Donec erat ante, sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem bland center",
-            picture: "//placekitten.com/g/501/500/",
-            street: "1234 cool st",
-            city: "Sacramento",
-            state: "CA",
-            zipcode: "95828",
-            maxVolunteers: 5,
-            interests: ["Animals", "Education", "Environment", "People", "Recreation", "Technology", "Youth"],
+            name: "",
+            description: "",
+            street: "",
+            city: "",
+            state: "",
+            zipcode: "",
+            maxVolunteers: 1,
+            interests: [],
             organizers: []
         };
         $scope.event.startTimeDate = new Date();
@@ -76,6 +75,27 @@ angular.module('seniorprojectYoApp')
                 $scope.isCreating = true;
 
                 buildDuration();
+
+                /*
+                UserService.groups.events.create($scope.user._id, {event: $scope.event, groupId: $stateParams.groupId}, function(res) {
+
+                    $scope.alerts.push({type: "success", msg: "Successfully created event, redirecting in 3 seconds..."});
+
+                    $timeout(function() {
+                        $location.path("/groups/" + group._id + "/events/" + res.data.event._id).replace;
+                    }, 3000);
+                }, function(res){   // error
+
+                    $scope.alerts.push({type: "danger", msg: "Unsuccessfully created event"});
+                    $timeout(function() {
+                        $scope.isCreating = false;
+                    }, 3000);
+                });
+                */
+
+
+
+
                 EventService.create({event: $scope.event},
                     function(res) {     // success
 

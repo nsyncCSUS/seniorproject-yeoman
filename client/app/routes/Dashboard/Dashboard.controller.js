@@ -143,6 +143,58 @@ angular.module('seniorprojectYoApp')
          **************************************************************************/
         $scope.volunteer = function(curEvent) {
             if (Auth.isLoggedIn()) {
+
+
+
+                /*
+                $scope.isBusy = true;
+                var eventIndex = $scope.group.events.indexOf($filter('filter')($scope.group.events, {_id: curEvent._id}, true)[0]);
+                EventService.show(curEvent._id, function(res) {
+                    if (res.status === 404) {
+                        $scope.errorMessage = 'There was a problem retrieving the event';
+                    } else {
+                        var _event = res.data.event;
+                        if (_event.volunteers.length >= _event.maxVolunteers){
+                            $scope.alerts.push({
+                                type: "warning",
+                                msg: 'Event is full.'
+                            });
+                            $scope.isBusy = false;
+                        }
+                        else {
+                            EventService.volunteers.create(_event._id, $scope.user._id, function(res) {
+                                $scope.upcomingEvents[eventIndex] = res.data.event
+                                $scope.alerts.push({
+                                    type: "success",
+                                    msg: 'You have successfully volunteered'
+                                });
+
+                                $scope.isBusy = false;
+                            }, function(res) { // error
+
+                                $scope.alerts.push({
+                                    type: "danger",
+                                    msg: 'There was a problem volunteering'
+                                });
+
+                                $scope.isBusy = false;
+                            });
+                        }
+                    }
+                });
+                */
+
+
+
+
+
+
+
+
+
+
+
+
                 var eventIndex = $scope.upcomingEvents.indexOf($filter('filter')($scope.upcomingEvents, {_id: curEvent._id}, true)[0]);
                 // Get updated event before trying to
                 EventService.show($scope.upcomingEvents[eventIndex]._id, function(res) {
@@ -210,6 +262,37 @@ angular.module('seniorprojectYoApp')
 
         $scope.optOut = function(curEvent) {
             if (Auth.isLoggedIn()) {
+
+
+
+                /*
+                $scope.isBusy = true;
+                var eventIndex = $scope.upcomingEvents.indexOf($filter('filter')($scope.upcomingEvents, {_id: curEvent._id}, true)[0]);
+                EventService.volunteers.destory($scope.event._id, $scope.user._id, function(res) {
+                    $scope.upcomingEvents[eventIndex] = res.data.event;
+                    $scope.alerts.push({
+                        type: "success",
+                        msg: 'You have successfully volunteered'
+                    });
+
+                    $scope.isBusy = false;
+                }, function(res) { // error
+
+                    $scope.alerts.push({
+                        type: "danger",
+                        msg: 'There was a problem volunteering'
+                    });
+
+                    $scope.isBusy = false;
+                });
+                */
+
+
+
+
+
+
+
                 var eventIndex = $scope.upcomingEvents.indexOf($filter('filter')($scope.upcomingEvents, {_id: curEvent._id}, true)[0]);
 
                 // Get updated event before trying to

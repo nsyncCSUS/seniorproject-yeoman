@@ -357,6 +357,51 @@ angular.module('seniorprojectYoApp')
          $scope.volunteer = function() {
              if (Auth.isLoggedIn()) {
 
+                 /*
+                 $scope.isBusy = true;
+                 EventService.show($scope.event._id, function(res) {
+                     if (res.status === 404) {
+                         $scope.errorMessage = 'There was a problem retrieving the event';
+                     } else {
+                         $scope.event = res.data.event;
+                         if ($scope.event.volunteers.length >= $scope.event.maxVolunteers){
+                             $scope.alerts.push({
+                                 type: "warning",
+                                 msg: 'Event is full.'
+                             });
+                             $scope.isBusy = false;
+                         }
+                         else {
+                             EventService.volunteers.create($scope.event._id, $scope.user._id, function(res) {
+                                 $scope.event = res.data.event;
+                                 $scope.alerts.push({
+                                     type: "success",
+                                     msg: 'You have successfully volunteered'
+                                 });
+
+                                 $scope.isBusy = false;
+                             }, function(res) { // error
+
+                                 $scope.alerts.push({
+                                     type: "danger",
+                                     msg: 'There was a problem volunteering'
+                                 });
+
+                                 $scope.isBusy = false;
+                             });
+                         }
+                     }
+                 });
+                 */
+
+
+
+
+
+
+
+
+
                  // Get updated event before trying to
                  EventService.show($scope.event._id, function(res) {
                      if (res.status === 404) {
@@ -422,6 +467,33 @@ angular.module('seniorprojectYoApp')
 
                  $scope.optOut = function() {
                      if (Auth.isLoggedIn()) {
+
+
+
+                      /*
+                         $scope.isBusy = true;
+                         EventService.volunteers.destory($scope.event._id, $scope.user._id, function(res) {
+                             $scope.event = res.data.event;
+                             $scope.alerts.push({
+                                 type: "success",
+                                 msg: 'You have successfully volunteered'
+                             });
+
+                             $scope.isBusy = false;
+                         }, function(res) { // error
+
+                             $scope.alerts.push({
+                                 type: "danger",
+                                 msg: 'There was a problem volunteering'
+                             });
+
+                             $scope.isBusy = false;
+                         });
+                        */        
+
+
+
+
 
                          // Get updated event before trying to
                          EventService.show($scope.event._id, function(res) {

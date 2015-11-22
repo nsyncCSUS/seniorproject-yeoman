@@ -82,7 +82,7 @@ angular.module('seniorprojectYoApp')
                 angular.forEach($scope.group.events, function(event) {
                     GroupService.show(event.group, function(res) {
                         event.group = res.data.group;
-                        
+
                         EventService.organizers.index(event._id, {}, function (res) {
                             event.organizers = res.data;
 
@@ -389,6 +389,50 @@ angular.module('seniorprojectYoApp')
          **************************************************************************/
          $scope.volunteer = function(curEvent) {
              if (Auth.isLoggedIn()) {
+
+
+                 /*
+                 $scope.isBusy = true;
+                 var eventIndex = $scope.group.events.indexOf($filter('filter')($scope.group.events, {_id: curEvent._id}, true)[0]);
+                 EventService.show(curEvent._id, function(res) {
+                     if (res.status === 404) {
+                         $scope.errorMessage = 'There was a problem retrieving the event';
+                     } else {
+                         var _event = res.data.event;
+                         if (_event.volunteers.length >= _event.maxVolunteers){
+                             $scope.alerts.push({
+                                 type: "warning",
+                                 msg: 'Event is full.'
+                             });
+                             $scope.isBusy = false;
+                         }
+                         else {
+                             EventService.volunteers.create(_event._id, $scope.user._id, function(res) {
+                                 $scope.group.events[eventIndex] = res.data.event
+                                 $scope.alerts.push({
+                                     type: "success",
+                                     msg: 'You have successfully volunteered'
+                                 });
+
+                                 $scope.isBusy = false;
+                             }, function(res) { // error
+
+                                 $scope.alerts.push({
+                                     type: "danger",
+                                     msg: 'There was a problem volunteering'
+                                 });
+
+                                 $scope.isBusy = false;
+                             });
+                         }
+                     }
+                 });
+                 */
+
+
+
+
+
                  var eventIndex = $scope.group.events.indexOf($filter('filter')($scope.group.events, {_id: curEvent._id}, true)[0]);
                  // Get updated event before trying to
                  EventService.show($scope.group.events[eventIndex]._id, function(res) {
@@ -726,6 +770,24 @@ angular.module('seniorprojectYoApp')
          $scope.subscribe = function() {
              if (Auth.isLoggedIn()) {
 
+                 /*
+                 $scope.isSubbing = true;
+                 GroupService.volunteers.create($scope.group._id, $scope.user._id, function(res) {
+                     $scope.alerts.push({
+                         type: "success",
+                         msg: 'You have successfully subscribed'
+                     });
+
+                     $scope.isSubbing = false;
+                 }, function(res) { // error
+                     $scope.alerts.push({
+                         type: "danger",
+                         msg: 'There was a problem subscribing1'
+                     });
+                 });
+                 */
+
+
                  GroupService.show($scope.group._id, function(res) {
                      if (res.status === 404) {
                          $scope.errorMessage = 'There was a problem retrieving the group';
@@ -788,6 +850,34 @@ angular.module('seniorprojectYoApp')
 
         $scope.unsubscribe = function() {
             if (Auth.isLoggedIn()) {
+
+
+                /*
+                $scope.isSubbing = true;
+                GroupService.volunteers.destroy($scope.group._id, $scope.user._id, function(res) {
+                    $scope.alerts.push({
+                        type: "success",
+                        msg: 'You have successfully subscribed'
+                    });
+
+                    $scope.isSubbing = false;
+                }, function(res) { // error
+                    $scope.alerts.push({
+                        type: "danger",
+                        msg: 'There was a problem subscribing1'
+                    });
+                });
+                */
+
+
+
+
+
+
+
+
+
+
                 GroupService.show($scope.group._id, function(res) {
                     if (res.status === 404) {
                         $scope.errorMessage = 'There was a problem retrieving the group';

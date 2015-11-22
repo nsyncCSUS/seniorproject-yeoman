@@ -173,6 +173,33 @@ angular.module('seniorprojectYoApp')
     			$scope.group.creationDate = new Date();
     			$scope.isCreating = true;
 
+
+                /*
+                UserService.groups.create($scope.user._id, {group: $scope.group}, function(res) {
+
+                    $scope.alerts.push({type: "success", msg: "Successfully created group, redirecting in 3 seconds..."});
+
+                    $timeout(function() {
+                        $location.path("/groups/" + res.data.group._id).replace;
+                    }, 3000);
+                }, function(res) {  // error
+                    $scope.alerts.push({type: "danger", msg: "Unsuccessfully created group"});
+                    $timeout(function() {
+                        $scope.isCreating = false;
+                    }, 3000);
+                });
+                */
+
+
+
+
+
+
+
+
+
+
+
                 //console.log($scope.group);
 	             // Send new group to server
     			GroupService.create({group: $scope.group},

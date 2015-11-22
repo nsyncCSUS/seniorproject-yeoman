@@ -1,18 +1,18 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('EventsCtrl', function($stateParams, $scope, EventService, moment) {
-        $scope.message = 'Hello';
-
+    .controller('EventsCtrl', function($stateParams, $scope, $timeout, $location, EventService, GroupService, UserService, Auth) {
         /***************************************************************************
          * Variables (includes ones from scope too)
          **************************************************************************/
-        $scope.isAdmin = true;
+        $scope.isAdmin = false;
         $scope.eventId = $stateParams.eventId;
         $scope.isEditing = false;
         $scope.isUpdating = false;
         $scope.currentDate = new Date();
+        $scope.submitted = false;
         $scope.alerts = [];
+        $scope.isBusy = false;
 
         $scope.animalsSelected = "";
         $scope.educationSelected = "";
@@ -25,22 +25,71 @@ angular.module('seniorprojectYoApp')
         /***************************************************************************
          * Get Functions
          **************************************************************************/
-        // Gets the group data from server
-        if ($stateParams.id) {
-            console.log('Getting event');
-            EventService.show($stateParams.id, function(res) {
-                $scope.event = res.data.event;
-                console.log('Back from getting event');
-                buildDuration();
-                buildInterests();
-            });
-        } else {
-            $scope.event = {};
 
-            buildInterests();
-            buildDuration();
+        // Get event data
+        Auth.isLoggedInAsync(function(success) {
+            if (Auth.isLoggedIn()) {
+                $scope.user = Auth.getCurrentUser();
+            }
+           // Gets the event data from server
+           if ($stateParams.eventId) {
+               EventService.show($stateParams.eventId, function(res) {
+                   if (res.status === 404) {
+                       $scope.errorMessage = 'There was a problem retrieving the event';
+                   } else {
+                       $scope.event = res.data.event;
+                       populateEvent();
+                       checkAdmin();
+                   }
+               });
+           } else {
+               //console.log("no event found");
+           }
+
+        });
+
+
+        function populateEvent() {
+           // Populate group
+           GroupService.show($scope.event.group, function(res) {
+               if (res.status === 404) {
+                   $scope.errorMessage = 'There was a problem retrieving the group';
+               } else {
+                   $scope.event.group = res.data.group;
+               }
+           });
+
+           // Populate organizers
+           EventService.organizers.index($scope.event._id, {}, function(res) {
+               $scope.event.organizers = res.data;
+                   //console.log($scope.event);
+           });
+
+           // Populate volunteers
+           EventService.volunteers.index($scope.event._id, {}, function(res) {
+               $scope.event.volunteers = res.data;
+           });
+
+        };
+
+        function checkAdmin() {
+            if (Auth.isLoggedIn()) {
+                // Populate required user data first
+                UserService.events.organizerOf.index($scope.user._id, {}, function(res) {
+                    $scope.user.events.organizerOf = res.data;
+
+                    for (var i = 0; i < $scope.user.events.organizerOf.length; i++){
+                        if ($scope.user.events.organizerOf[i]._id == $stateParams.eventId){
+                            $scope.isAdmin = true;
+                            break;
+                        }
+                    }
+                });
+            }
+            else {
+                $scope.isAdmin = false;
+            }
         }
-
         /***************************************************************************
          * Building Functions
          **************************************************************************/
@@ -84,14 +133,38 @@ angular.module('seniorprojectYoApp')
 
         function buildDuration() {
             var duration = moment($scope.event.endTimeDate).diff(moment($scope.event.startTimeDate));
-            $scope.duration = {};
-            if (moment.duration(duration).get('days') > 0)
-                $scope.duration.days = moment.duration(duration).get('days');
-            if (moment.duration(duration).get('hours') > 0)
-                $scope.duration.hours = moment.duration(duration).get('hours');
-            if (moment.duration(duration).get('minutes') > 0)
-                $scope.duration.minutes = moment.duration(duration).get('minutes');
+            var years = moment.duration(duration).get('years');
+            var months = moment.duration(duration).get('years');
+            var days = moment.duration(duration).get('days');
+            var hours = moment.duration(duration).get('hours');
+            var minutes = moment.duration(duration).get('minutes');
 
+            $scope.event.duration = "";
+            if (years > 0) {
+                $scope.event.duration += " " + years + " year";
+                if (years > 1)
+                    $scope.event.duration += "s";
+            }
+            if (months > 0) {
+                $scope.event.duration += " " + months + " month";
+                if (months > 1)
+                    $scope.event.duration += "s";
+            }
+            if (days > 0) {
+                $scope.event.duration += " " + days + " day";
+                if (days > 1)
+                    $scope.event.duration += "s";
+            }
+            if (hours > 0) {
+                $scope.event.duration += " " + hours + " hour";
+                if (hours > 1)
+                    $scope.event.duration += "s";
+            }
+            if (minutes > 0) {
+                $scope.event.duration += " " + minutes + " minute";
+                if (minutes > 1)
+                    $scope.event.duration += "s";
+            }
         }
 
         /***************************************************************************
@@ -104,10 +177,10 @@ angular.module('seniorprojectYoApp')
             // Rebuild interests array
             // Checks if the interest selected is in the interest's array
             angular.forEach($scope.event.interests, function(currentInterest, index) {
-                console.log(currentInterest);
+                //console.log(currentInterest);
                 // If in array, remove class to show that it is now unselected
                 if (currentInterest === interest) {
-                    console.log("removed " + interest);
+                    //console.log("removed " + interest);
                     hasInterest = true;
                     switch (interest) {
                         case "Animals":
@@ -135,13 +208,13 @@ angular.module('seniorprojectYoApp')
                 }
                 // Otherwise, add to rebuilt array
                 else {
-                    console.log(currentInterest);
+                    //console.log(currentInterest);
                     newInterests.push(currentInterest);
                 }
             });
             // Add interest if it was not in array
             if (hasInterest === false) {
-                console.log("added " + interest);
+                //console.log("added " + interest);
                 newInterests.push(interest);
                 switch (interest) {
                     case "Animals":
@@ -169,7 +242,7 @@ angular.module('seniorprojectYoApp')
             }
             // Set the new interest array
             $scope.event.interests = newInterests;
-            console.log($scope.event.interests);
+            //console.log($scope.event.interests);
         }
 
         /***********************************************************************
@@ -181,6 +254,10 @@ angular.module('seniorprojectYoApp')
 
         $scope.enableEdit = function() {
             $scope.isEditing = true;
+            buildInterests();
+
+            checkStartTime();
+            checkEndTime();
 
             // Backup contents on page
             $scope.event_bak = {};
@@ -198,87 +275,268 @@ angular.module('seniorprojectYoApp')
             clearInterests();
             buildInterests();
 
+            checkStartTime();
+            checkEndTime();
+
             buildDuration();
         }
 
         $scope.submitEdit = function() {
-            $scope.isUpdating = true;
-            // Send changes to server
-            EventService.update($stateParams.id, {
-                event: $scope.event
-            }, function(res) {
-                $scope.event = res.data.event;
-                $scope.alerts.push({
-                    type: "success",
-                    msg: 'Event updated'
-//                    msg: res.data.msg
+
+            if ($scope.eventForm.$valid) {
+                $scope.isUpdating = true;
+
+                buildDuration();
+
+                // Send changes to server
+                EventService.update($scope.event._id, {
+                    event: $scope.event
+                }, function(res) {  // success
+                    $scope.event = res.data.event;
+                    $scope.alerts.push({
+                        type: "success",
+                        msg: 'Event has been updated'
+                    });
+
+                    $scope.isEditing = false;
+                    $scope.isUpdating = false;
+                    populateEvent();
+                }, function(res) {  // error
+                    $scope.alerts.push({
+                        type: "danger",
+                        msg: 'There was a problem updating the event'
+                    });
+
+                    $scope.isUpdating = false;
                 });
 
-                $scope.isEditing = false;
-                $scope.isUpdating = false;
-            }, function(res) {
-                $scope.alerts.push({
-                    type: "danger",
-                    msg: 'There was a problem updating the event'
-//                    msg: res.data.msg
-                });
+                // Keep changes made
+                $scope.event_bak = {};
+                $scope.animalsSelected_bak = "";
+                $scope.educationSelected_bak = "";
+                $scope.environmentSelected_bak = "";
+                $scope.peopleSelected_bak = "";
+                $scope.recreationSelected_bak = "";
+                $scope.technologySelected_bak = "";
+                $scope.youthSelected_bak = "";
 
-                $scope.isUpdating = false;
-            });
+            }
+            else {
+                $scope.alerts.push({type: "danger", msg: "Errors found, please fix them."});
+                //console.log($scope.eventForm.$error);
+                $scope.submitted = true;
+            }
+        }
 
-            // Keep changes made
-            $scope.event_bak = {};
-            $scope.animalsSelected_bak = "";
-            $scope.educationSelected_bak = "";
-            $scope.environmentSelected_bak = "";
-            $scope.peopleSelected_bak = "";
-            $scope.recreationSelected_bak = "";
-            $scope.technologySelected_bak = "";
-            $scope.youthSelected_bak = "";
+        function checkStartTime() {
+            var today = new Date();
+            var startTime = new Date($scope.eventForm.startTimeDate.$modelValue);
+            if ((startTime - today) < 1) {
+                $scope.eventForm.startTimeDate.$setValidity('startTimeDate', false);
+            }
+            else {
+                $scope.eventForm.startTimeDate.$setValidity('startTimeDate', true);
+            }
+        }
 
-            buildDuration();
+        function checkEndTime() {
+            var startTime = new Date($scope.eventForm.startTimeDate.$modelValue);
+            var endTime = new Date($scope.eventForm.endTimeDate.$modelValue);
+
+            if ((endTime - startTime) < 1) {
+                $scope.eventForm.endTimeDate.$setValidity('endTimeDate', false);
+            }
+            else {
+                $scope.eventForm.endTimeDate.$setValidity('endTimeDate', true);
+            }
         }
 
         /***************************************************************************
          * Volunteer Button
          **************************************************************************/
-        $scope.volunteer = function() {
+         $scope.volunteer = function() {
+             if (Auth.isLoggedIn()) {
 
-        }
+                 // Get updated event before trying to
+                 EventService.show($scope.event._id, function(res) {
+                     if (res.status === 404) {
+                         $scope.errorMessage = 'There was a problem retrieving the event';
+                     } else {
+                         $scope.event = res.data.event;
+                         if ($scope.event.volunteers.length >= $scope.event.maxVolunteers){
+                             $scope.alerts.push({
+                                 type: "warning",
+                                 msg: 'Event is full.'
+                             });
+                         }
+                         else {
+                             $scope.isBusy = true;
 
-        $scope.optOut = function() {
+                             $scope.user = Auth.getCurrentUser();
 
-        }
+                             $scope.user.events.volunteeredTo.push($scope.event);
 
-        /***************************************************************************
-         * Subscribe Button
-         **************************************************************************/
-        $scope.subscribe = function() {
+                             UserService.update($scope.user._id, { user: $scope.user },
+                                 function(res) {  // success
+                                     //$scope.user = res.data.user;
+                                     //console.log(res.data.user);
+                                     $scope.event.volunteers.push(res.data.user);
 
-        }
+                                     EventService.update($scope.event._id, { event: $scope.event },
+                                         function(res) {  // success
+                                             //$scope.group.events[curEvent] = res.data.event;
+                                             //console.log(res.data.event);
+
+                                             populateEvent();
+
+                                             $scope.alerts.push({
+                                                 type: "success",
+                                                 msg: 'You have successfully volunteered'
+                                             });
+
+                                             $scope.isBusy = false;
+
+                                         },
+                                         function(res) {  //error
+                                             $scope.alerts.push({
+                                                 type: "danger",
+                                                 msg: 'There was a problem volunteering'
+                                             });
+                                         });
+
+                                     },
+                                     function(res) {  // error
+                                         $scope.alerts.push({
+                                             type: "danger",
+                                             msg: 'There was a problem volunteering'
+                                         });
+                                     });
+                                 }
+                             }
+                         });
+                     }
+                     else {
+                         $location.path("/login/").replace;
+                     }
+                 }
+
+                 $scope.optOut = function() {
+                     if (Auth.isLoggedIn()) {
+
+                         // Get updated event before trying to
+                         EventService.show($scope.event._id, function(res) {
+                             if (res.status === 404) {
+                                 $scope.errorMessage = 'There was a problem retrieving the event';
+                             } else {
+                                 $scope.event = res.data.event;
+
+
+                                 EventService.volunteers.index($scope.event._id, {}, function(res) {
+                                     $scope.event.volunteers = res.data;
+
+                                     $scope.isBusy = true;
+
+                                     $scope.user = Auth.getCurrentUser();
+
+                                     // Remove event from user volunteer list
+                                     for (var i = 0; i < $scope.user.events.volunteeredTo.length; i++) {
+                                         if ($scope.user.events.volunteeredTo[i]._id === $scope.event._id){
+                                             $scope.user.events.volunteeredTo.splice(i, 1);
+                                         }
+                                     }
+
+                                     // Remove user from event volunteer list
+                                     for (var i = 0; i < $scope.event.volunteers.length; i++) {
+                                         if ($scope.event.volunteers[i]._id === $scope.user._id){
+                                             $scope.event.volunteers.splice(i, 1);
+                                         }
+                                     }
+
+                                     UserService.update($scope.user._id, { user: $scope.user },
+                                         function(res) {  // success
+                                             //$scope.user = res.data.user;
+                                             //console.log(res.data.user);
+
+                                             EventService.update($scope.event._id, { event: $scope.event },
+                                                 function(res) {  // success
+                                                     //$scope.group.events[curEvent] = res.data.event;
+                                                     //console.log(res.data.event);
+
+                                                     populateEvent();
+
+                                                     $scope.alerts.push({
+                                                         type: "success",
+                                                         msg: 'You have successfully opted out'
+                                                     });
+
+                                                     $scope.isBusy = false;
+
+                                                 },
+                                                 function(res) {  //error
+                                                     $scope.alerts.push({
+                                                         type: "danger",
+                                                         msg: 'There was a problem opting out'
+                                                     });
+                                                 });
+
+                                             },
+                                             function(res) {  // error
+                                                 $scope.alerts.push({
+                                                     type: "danger",
+                                                     msg: 'There was a problem opting out'
+                                                 });
+                                             });
+                                         });
+
+                                     }
+                                 });
+                             }
+                             else {
+                                 $location.path("/login/").replace;
+                             }
+
+                         }
 
 
         /***************************************************************************
          * Boolean functions
          **************************************************************************/
         $scope.isVolunteering = function() {
-            for (var i = 0; i < $scope.event.volunteers.length; i++) {
-                if ($scope.event.volunteers[i]._id === $scope.user._id)
-                    return true;
+            if ($scope.event != null){
+                for (var i = 0; i < $scope.event.volunteers.length; i++) {
+                    if ($scope.event.volunteers[i]._id === $scope.user._id)
+                        return true;
+                }
             }
             return false;
         }
 
-        $scope.hasDays = function() {
-            return $scope.duration.days != null
+        $scope.isOrganizer = function() {
+            if ($scope.user != null){
+                if ($scope.event != null){
+                    for (var i = 0; i < $scope.event.organizers.length; i++) {
+                        if ($scope.event.organizers[i]._id === $scope.user._id)
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
-        $scope.hasHours = function() {
-            return $scope.duration.hours != null
-        }
+        $scope.getCurrentlyActive = function() {
+            var rightNow = new Date();
 
-        $scope.hasMinutes = function() {
-            return $scope.duration.minutes != null
+            if ($scope.event != null) {
+                var startTime = new Date($scope.event.startTimeDate);
+                if ((startTime - rightNow) < 1) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         /***************************************************************************
@@ -292,89 +550,7 @@ angular.module('seniorprojectYoApp')
          * Admin Testing
          **************************************************************************/
         $scope.toggleAdmin = function() {
-            $scope.isAdmin = !$scope.isAdmin;
+            //$scope.isAdmin = !$scope.isAdmin;
         }
 
     });
-
-/*{
-                  _id : "event1",
-                  creationUser: {
-                      _id : "creatorid",
-                      firstName : "Anthony",
-                      lastName : "Nguyen",
-                      picture : "//placekitten.com/g/505/500/"
-                  },
-                  group: {
-                      _id: "nsync",
-                      name: "N.Sync().......... .............. ................ ............. ..........................",
-                      picture: "//placekitten.com/g/500/500/",
-                      creationDate: "2015-08-26T18:50:10.111Z"
-                  },
-                  name: "SUPER DUPER AWESOME EVENT!!!!",
-                  description: "sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem blandit non.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vulputate pellentesque lorem. Donec erat ante, sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem bland center",
-                  picture: "//placekitten.com/g/501/500/",
-                  startTimeDate: "2015-08-26T18:50:10.111Z",
-                  endTimeDate: "2015-08-27T19:50:10.111Z",
-                  street: "1234 cool st",
-                  city: "Sacramento",
-                  state: "CA",
-                  zipcode: "95828",
-                  maxVolunteers: 50,
-                  volunteers: [{
-                      _id: "v1",
-                      firstName: "Kitten 1",
-                      lastName: "1"
-                  }, {
-                      _id: "v2",
-                      firstName: "Kitten 2",
-                      lastName: "1",
-                      picture: "//placekitten.com/g/250/251"
-                  }, {
-                      _id: "v3",
-                      firstName: "Kitten 3",
-                      lastName: "1"
-                  }, {
-                      _id: "v4",
-                      firstName: "Kitten 4",
-                      lastName: "1",
-                      picture: "//placekitten.com/g/250/253"
-                  }, {
-                      _id: "v5",
-                      firstName: "Kitten 5",
-                      lastName: "1",
-                      picture: "//placekitten.com/g/250/254"
-                  }, {
-                      _id: "v6",
-                      firstName: "Kitten 6",
-                      lastName: "1",
-                      picture: "//placekitten.com/g/250/255"
-                  }, {
-                      _id: "v7",
-                      firstName: "Kitten 7",
-                      lastName: "1",
-                      picture: "//placekitten.com/g/250/256"
-                  }, {
-                      _id: "v8",
-                      firstName: "Kitten 8",
-                      lastName: "1",
-                      picture: "//placekitten.com/g/250/257"
-                  }, {
-                      _id: "v9",
-                      firstName: "Kitten 9",
-                      lastName: "1",
-                      picture: "//placekitten.com/g/250/258"
-                  }, {
-                      _id: "v10",
-                      firstName: "Kitten 10",
-                      lastName: "1",
-                      picture: "//placekitten.com/g/250/259"
-                  }, {
-                      _id: "v11",
-                      firstName: "Kitten 11",
-                      lastName: "1",
-                      picture: "//placekitten.com/g/250/260"
-                  }],
-                  interests: ["Animals", "Education", "Environment", "People", "Recreation", "Technology", "Youth"]
-
-              }*/

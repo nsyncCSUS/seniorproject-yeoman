@@ -41,7 +41,7 @@ angular.module('seniorprojectYoApp')
 
 
         this.update = function(id, params, callback, error) {
-            Groups.one(id).patch({group: params}).then(callback, error);
+            Groups.one(id).patch({group: params.group}).then(callback, error);
         };
 
 

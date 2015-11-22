@@ -1,6 +1,7 @@
 .col-xs-12.col-sm-12.col-md-12.col-lg-12.cardHeader
     h3 <strong>{{event.startTimeDate | date:'MMM d, yyyy'}}</strong>
-    h5 {{event.startTimeDate | date:'EEEE h:m a'}}
+    h5.timeRow {{event.startTimeDate | date:'EEEE h:mm a'}}
+        .duration for {{event.duration}}
 
 .col-xs-12.col-sm-12.col-md-12.col-lg-12.cardBody
 
@@ -9,7 +10,7 @@
             h5
                 a(ng-href='/groups/{{event.group._id}}/') {{event.group.name}}
         h4
-            a(ng-href='/events/{{event._id}}/') {{event.name}}
+            a(ng-href='/groups/{{event.group._id}}/events/{{event._id}}/') {{event.name}}
         h5 {{event.street}} {{event.city}}, {{event.state}} {{event.zipcode}}
 
     .col-xs-12.col-sm-12.col-md-12.col-lg-12

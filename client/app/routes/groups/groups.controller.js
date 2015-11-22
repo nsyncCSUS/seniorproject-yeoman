@@ -1,16 +1,18 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('GroupsCtrl', function($scope, $stateParams, $window, $anchorScroll, $timeout, GroupService, GroupFactory) {
+    .controller('GroupsCtrl', function($scope, $stateParams, $window, $filter, $anchorScroll, $location, $timeout, GroupService, UserService, EventService, Auth) {
 
         /***************************************************************************
          * Variables (includes ones from scope too)
          **************************************************************************/
-        $scope.isAdmin = true;
-        $scope.groupId = $stateParams.id;
+        $scope.isAdmin = false;
         $scope.isEditing = false;
         $scope.isSearching = false;
         $scope.isUpdating = false;
+        $scope.submitted = false;
+        $scope.isSubbing = false;
+        $scope.isBusy = false;
 
         $scope.organizersToAdd = [];
         $scope.searchResults = [];
@@ -26,6 +28,104 @@ angular.module('seniorprojectYoApp')
 
         $scope.selectedTab = "Upcoming Events";
         $scope.otherTabs = ["Past Events"];
+
+
+        /***************************************************************************
+         * Get Functions
+         **************************************************************************/
+        // Get group data
+        Auth.isLoggedInAsync(function(success) {
+            if (Auth.isLoggedIn()) {
+                $scope.user = Auth.getCurrentUser();
+            }
+            // Gets the group data from server
+            if ($stateParams.groupId) {
+                GroupService.show($stateParams.groupId, function(res) {
+                    if (res.status === 404) {
+                        $scope.errorMessage = 'There was a problem retrieving the group';
+                    } else {
+                        $scope.group = res.data.group;
+                        //console.log($scope.group);
+                        populate();
+                        checkAdmin();
+                    }
+                });
+            } else {
+                //console.log("no group found");
+            }
+
+        });
+
+        function populate() {
+            populateGroup();
+            populateUser();
+        }
+
+        function populateGroup() {
+            // Populate organizers
+            GroupService.organizers.index($scope.group._id, {}, function(res) {
+                $scope.group.organizers = res.data;
+            });
+
+            // Populate subscribers
+            GroupService.volunteers.index($scope.group._id, {}, function(res) {
+                //console.log(res.data);
+                $scope.group.volunteers = res.data;
+            });
+
+            // Populate events
+            GroupService.events.index($scope.group._id, {}, function(res) {
+                //console.log(res.data);
+                $scope.group.events = res.data;
+
+                // Populate organizers + volunteers for events
+                angular.forEach($scope.group.events, function(event) {
+                    GroupService.show(event.group, function(res) {
+                        event.group = res.data.group;
+                        
+                        EventService.organizers.index(event._id, {}, function (res) {
+                            event.organizers = res.data;
+
+                            EventService.volunteers.index(event._id, {}, function(res) {
+                                event.volunteers = res.data;
+                            });
+                        });
+                    });
+                });
+            });
+        };
+
+        function populateUser() {
+            // VolunteeredTo
+            UserService.events.volunteeredTo.index($scope.user._id, {}, function(res) {
+                $scope.user.events.volunteeredTo = res.data;
+            });
+
+            // Populate subscriptions
+            UserService.groups.volunteeredTo.index($scope.user._id, {}, function(res) {
+                $scope.user.groups.volunteeredTo = res.data;
+            });
+
+        };
+
+        function checkAdmin() {
+            if (Auth.isLoggedIn()) {
+                // Populate required user data first
+                UserService.groups.organizerOf.index($scope.user._id, {}, function(res) {
+                    $scope.user.groups.organizerOf = res.data;
+
+                    for (var i = 0; i < $scope.user.groups.organizerOf.length; i++){
+                        if ($scope.user.groups.organizerOf[i]._id == $stateParams.groupId){
+                            $scope.isAdmin = true;
+                            break;
+                        }
+                    }
+                });
+            }
+            else {
+                $scope.isAdmin = false;
+            }
+        }
 
         /***********************************************************************
          * Functions that controls tabs for searching
@@ -53,21 +153,6 @@ angular.module('seniorprojectYoApp')
             else
                 return false;
         }
-
-        /***************************************************************************
-         * Get Functions
-         **************************************************************************/
-        // Gets the group data from server
-        if ($stateParams.id) {
-            GroupService.show($stateParams.id, function(res) {
-                $scope.group = res.data.group;
-                buildInterests();
-            });
-        } else {
-            $scope.group = {};
-            buildInterests();
-        }
-
 
 
         /***************************************************************************
@@ -117,9 +202,9 @@ angular.module('seniorprojectYoApp')
                     $anchorScroll('searchResults');
                 }, 1);
             }
-            /***************************************************************************
-             * Building Functions
-             **************************************************************************/
+        /***************************************************************************
+         * Building Functions
+         **************************************************************************/
         function buildInterests() {
             angular.forEach($scope.group.interests, function(interest) {
                 switch (interest) {
@@ -243,7 +328,7 @@ angular.module('seniorprojectYoApp')
                 angular.forEach($scope.organizersToAdd, function(currentOrganizerToAdd) {
                     // If user is already in the array, flag will be true
                     if (currentOrganizerToAdd._id === $scope.searchResults[index]._id) {
-                        console.log(currentOrganizerToAdd + "already added");
+                        //console.log(currentOrganizerToAdd + "already added");
                         alreadyAdded = true;
                     }
                 });
@@ -254,7 +339,7 @@ angular.module('seniorprojectYoApp')
                 $scope.searchResultsPristine = false;
                 $scope.searchResults[index].added = "added";
             }
-            console.log($scope.organizersToAdd);
+            //console.log($scope.organizersToAdd);
         }
 
         /*
@@ -270,7 +355,7 @@ angular.module('seniorprojectYoApp')
                 //		- do not add to rebuilt array
                 //		- remove class in search results that shows that it has been added if applicable
                 if (currentOrganizerToAdd._id === $scope.organizersToAdd[index]._id) {
-                    console.log("removed " + currentOrganizerToAdd);
+                    //console.log("removed " + currentOrganizerToAdd);
                     angular.forEach($scope.searchResults, function(currentSearchResult) {
                         if (currentSearchResult._id === currentOrganizerToAdd._id)
                             currentSearchResult.added = "";
@@ -278,13 +363,13 @@ angular.module('seniorprojectYoApp')
                 }
                 // Otherwise, add organizer to be added to rebuilt array
                 else {
-                    console.log(currentOrganizerToAdd);
+                    //console.log(currentOrganizerToAdd);
                     newOrganizersToAdd.push(currentOrganizerToAdd);
                 }
             });
             // Sets the rebuilt array
             $scope.organizersToAdd = newOrganizersToAdd;
-            console.log($scope.organizersToAdd);
+            //console.log($scope.organizersToAdd);
         }
 
         $scope.scrollToAdd = function(id) {
@@ -298,6 +383,151 @@ angular.module('seniorprojectYoApp')
                 $anchorScroll('remove-' + id);
             }, 1);
         }
+
+        /***************************************************************************
+         * Volunteer Button
+         **************************************************************************/
+         $scope.volunteer = function(curEvent) {
+             if (Auth.isLoggedIn()) {
+                 var eventIndex = $scope.group.events.indexOf($filter('filter')($scope.group.events, {_id: curEvent._id}, true)[0]);
+                 // Get updated event before trying to
+                 EventService.show($scope.group.events[eventIndex]._id, function(res) {
+                     if (res.status === 404) {
+                         $scope.errorMessage = 'There was a problem retrieving the event';
+                     } else {
+                         $scope.group.events[eventIndex] = res.data.event;
+                         if ($scope.group.events[eventIndex].volunteers.length >= $scope.group.events[eventIndex].maxVolunteers){
+                             $scope.alerts.push({
+                                 type: "warning",
+                                 msg: 'Event is full.'
+                             });
+                         }
+                         else {
+                             $scope.isBusy = true;
+
+                             $scope.user = Auth.getCurrentUser();
+
+                             $scope.user.events.volunteeredTo.push($scope.group.events[eventIndex]);
+
+                             UserService.update($scope.user._id, { user: $scope.user },
+                                 function(res) {  // success
+                                     //$scope.user = res.data.user;
+                                     //console.log(res.data.user);
+                                     $scope.group.events[eventIndex].volunteers.push(res.data.user);
+
+                                     EventService.update($scope.group.events[eventIndex]._id, { event: $scope.group.events[eventIndex] },
+                                         function(res) {  // success
+                                             //$scope.group.events[eventIndex] = res.data.event;
+                                             //console.log(res.data.event);
+
+                                             //populateGroup();
+
+                                             $scope.alerts.push({
+                                                 type: "success",
+                                                 msg: 'You have successfully volunteered'
+                                             });
+
+                                             $scope.isBusy = false;
+
+                                         },
+                                         function(res) {  //error
+                                             $scope.alerts.push({
+                                                 type: "danger",
+                                                 msg: 'There was a problem volunteering'
+                                             });
+                                         });
+
+                                     },
+                                     function(res) {  // error
+                                         $scope.alerts.push({
+                                             type: "danger",
+                                             msg: 'There was a problem volunteering'
+                                         });
+                                     });
+                                 }
+                             }
+                         });
+                     }
+                     else {
+                         $location.path("/login/").replace;
+                     }
+                 }
+
+         $scope.optOut = function(curEvent) {
+             if (Auth.isLoggedIn()) {
+                 var eventIndex = $scope.group.events.indexOf($filter('filter')($scope.group.events, {_id: curEvent._id}, true)[0]);
+                 // Get updated event before trying to
+                 EventService.show($scope.group.events[eventIndex]._id, function(res) {
+                     if (res.status === 404) {
+                         $scope.errorMessage = 'There was a problem retrieving the event';
+                     } else {
+                         $scope.group.events[eventIndex] = res.data.event;
+
+                         EventService.volunteers.index($scope.group.events[eventIndex]._id, {}, function(res) {
+                             $scope.group.events[eventIndex].volunteers = res.data;
+
+                             $scope.isBusy = true;
+
+                             $scope.user = Auth.getCurrentUser();
+
+                             // Remove event from user volunteer list
+                             for (var i = 0; i < $scope.user.events.volunteeredTo.length; i++) {
+                                 if ($scope.user.events.volunteeredTo[i]._id === $scope.group.events[eventIndex]._id){
+                                     $scope.user.events.volunteeredTo.splice(i, 1);
+                                 }
+                             }
+
+                             // Remove user from event volunteer list
+                             for (var i = 0; i < $scope.group.events[eventIndex].volunteers.length; i++) {
+                                 if ($scope.group.events[eventIndex].volunteers[i]._id === $scope.user._id){
+                                     $scope.group.events[eventIndex].volunteers.splice(i, 1);
+                                 }
+                             }
+
+                             UserService.update($scope.user._id, { user: $scope.user },
+                                 function(res) {  // success
+                                     //$scope.user = res.data.user;
+                                     //console.log(res.data.user);
+
+                                     EventService.update($scope.group.events[eventIndex]._id, { event: $scope.group.events[eventIndex] },
+                                         function(res) {  // success
+                                             //$scope.group.events[eventIndex] = res.data.event;
+                                             //console.log(res.data.event);
+
+                                             //populateGroup();
+
+                                             $scope.alerts.push({
+                                                 type: "success",
+                                                 msg: 'You have successfully opted out'
+                                             });
+
+                                             $scope.isBusy = false;
+
+                                         },
+                                         function(res) {  //error
+                                             $scope.alerts.push({
+                                                 type: "danger",
+                                                 msg: 'There was a problem opting out'
+                                             });
+                                         });
+
+                                     },
+                                     function(res) {  // error
+                                         $scope.alerts.push({
+                                             type: "danger",
+                                             msg: 'There was a problem opting out'
+                                         });
+                                     });
+                                 });
+
+                             }
+                         });
+                     }
+                     else {
+                         $location.path("/login/").replace;
+                     }
+
+         }
 
         /***********************************************************************
          * Boolean Functions
@@ -378,14 +608,48 @@ angular.module('seniorprojectYoApp')
         }
 
         $scope.hasOrganizersToAdd = function() {
-                if ($scope.organizersToAdd != null && $scope.organizersToAdd.length > 0)
-                    return true;
-                else
-                    return false;
+            if ($scope.organizersToAdd != null && $scope.organizersToAdd.length > 0)
+                return true;
+            else
+                return false;
+        }
+
+        $scope.isVolunteering = function(curEvent) {
+            if ($scope.user != null){
+                for (var i = 0; i < curEvent.volunteers.length; i++) {
+                    if (curEvent.volunteers[i]._id === $scope.user._id)
+                        return true;
+                }
             }
-            /***********************************************************************
-             * Editing Functions
-             **********************************************************************/
+            return false;
+        }
+
+        $scope.isOrganizer = function(curEvent) {
+            if ($scope.user != null){
+                for (var i = 0; i < curEvent.organizers.length; i++) {
+                    if (curEvent.organizers[i]._id === $scope.user._id)
+                        return true;
+                }
+            }
+            return false;
+        }
+
+        $scope.isSubscribed = function() {
+            if ($scope.user != null) {
+                if ($scope.group != null) {
+                    for (var i = 0; i < $scope.user.groups.volunteeredTo.length; i++) {
+                        if ($scope.user.groups.volunteeredTo[i]._id === $stateParams.groupId)
+                            return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /***********************************************************************
+         * Editing Functions
+         **********************************************************************/
         $scope.getIsEditing = function() {
             if ($scope.isEditing === true)
                 return true;
@@ -395,6 +659,8 @@ angular.module('seniorprojectYoApp')
 
         $scope.enableEdit = function() {
             $scope.isEditing = true;
+
+            buildInterests();
 
             // Backup contents on page
             $scope.group_bak = {};
@@ -414,52 +680,184 @@ angular.module('seniorprojectYoApp')
         }
 
         $scope.submitEdit = function() {
-            $scope.isUpdating = true;
-            // Send changes to server
-            GroupService.update($stateParams.id, {
-                group: $scope.group
-            }, function(res) {
-                $scope.group = res.data.group;
-                $scope.alerts.push({
-                    type: "success",
-                    msg: 'Group has been updated'
-//                    msg: res.data.msg
-                });
+            if ($scope.groupForm.$valid) {
+                $scope.isUpdating = true;
+                // Send changes to server
+                GroupService.update($stateParams.groupId, { group: $scope.group },
+                    function(res) {  // success
+                        $scope.group = res.data.group;
+                        $scope.alerts.push({
+                            type: "success",
+                            msg: 'Group has been updated'
+                        });
 
-                $scope.isEditing = false;
-                $scope.isUpdating = false;
-            }, function(res) {
-                $scope.alerts.push({
-                    type: "danger",
-                    msg: 'There was a problem updating the group'
-//                    msg: res.data.msg
-                });
+                        $scope.isEditing = false;
+                        $scope.isUpdating = false;
+                    },
+                    function(res) {  //error
+                        $scope.alerts.push({
+                            type: "danger",
+                            msg: 'There was a problem updating the group'
+                        });
 
-                $scope.isUpdating = false;
-            });
-            // Keep changes made
-            $scope.group_bak = {};
-            $scope.animalsSelected_bak = "";
-            $scope.educationSelected_bak = "";
-            $scope.environmentSelected_bak = "";
-            $scope.peopleSelected_bak = "";
-            $scope.recreationSelected_bak = "";
-            $scope.technologySelected_bak = "";
-            $scope.youthSelected_bak = "";
+                        $scope.isUpdating = false;
+                });
+                // Keep changes made
+                $scope.group_bak = {};
+                $scope.animalsSelected_bak = "";
+                $scope.educationSelected_bak = "";
+                $scope.environmentSelected_bak = "";
+                $scope.peopleSelected_bak = "";
+                $scope.recreationSelected_bak = "";
+                $scope.technologySelected_bak = "";
+                $scope.youthSelected_bak = "";
+
+                populate();
+            }
+            else {
+                $scope.alerts.push({type: "danger", msg: "Errors found, please fix them."});
+                $scope.submitted = true;
+            }
         }
 
         /***************************************************************************
          * Subscribe Button
          **************************************************************************/
-        $scope.subscribe = function() {
+         $scope.subscribe = function() {
+             if (Auth.isLoggedIn()) {
 
+                 GroupService.show($scope.group._id, function(res) {
+                     if (res.status === 404) {
+                         $scope.errorMessage = 'There was a problem retrieving the group';
+                     } else {
+                         $scope.group.volunteers = res.data.group.volunteers;
+
+                         GroupService.volunteers.index($scope.group._id, {}, function(res) {
+                             $scope.group.volunteers = res.data;
+
+                             $scope.isSubbing = true;
+
+                             $scope.user = Auth.getCurrentUser();
+
+                             $scope.user.groups.volunteeredTo.push($scope.group);
+
+                             UserService.update($scope.user._id, { user: $scope.user },
+                                 function(res) {  // success
+                                     //$scope.user = res.data.user;
+                                     //console.log(res.data.user);
+                                     $scope.group.volunteers.push(res.data.user);
+
+                                     GroupService.update($stateParams.groupId, { group: $scope.group },
+                                         function(res) {  // success
+                                             //$scope.group = res.data.group;
+                                             //console.log(res.data.group);
+
+                                             //populate();
+
+                                             $scope.alerts.push({
+                                                 type: "success",
+                                                 msg: 'You have successfully subscribed'
+                                             });
+
+                                             $scope.isSubbing = false;
+
+                                         },
+                                         function(res) {  //error
+                                             $scope.alerts.push({
+                                                 type: "danger",
+                                                 msg: 'There was a problem subscribing2'
+                                             });
+                                         });
+                                     },
+                                     function(res) {  // error
+                                         $scope.alerts.push({
+                                             type: "danger",
+                                             msg: 'There was a problem subscribing1'
+                                         });
+                                     });
+                                 });
+                             }
+                         });
+
+
+                     }
+                     else {
+                         $location.path("/login/").replace;
+                     }
+                 }
+
+        $scope.unsubscribe = function() {
+            if (Auth.isLoggedIn()) {
+                GroupService.show($scope.group._id, function(res) {
+                    if (res.status === 404) {
+                        $scope.errorMessage = 'There was a problem retrieving the group';
+                    } else {
+                        $scope.group.volunteers = res.data.group.volunteers;
+
+                        GroupService.volunteers.index($scope.group._id, {}, function(res) {
+                            $scope.group.volunteers = res.data;
+
+
+                            $scope.isSubbing = true;
+
+                            $scope.user = Auth.getCurrentUser();
+
+                            // Remove group from user subscription list
+                            for (var i = 0; i < $scope.user.groups.volunteeredTo.length; i++) {
+                                if ($scope.user.groups.volunteeredTo[i]._id === $stateParams.groupId){
+                                    $scope.user.groups.volunteeredTo.splice(i, 1);
+                                }
+                            }
+
+                            // Remove user from group subscription list
+                            for (var i = 0; i < $scope.group.volunteers.length; i++) {
+                                if ($scope.group.volunteers[i]._id === $scope.user._id){
+                                    $scope.group.volunteers.splice(i, 1);
+                                }
+                            }
+
+                            UserService.update($scope.user._id, { user: $scope.user },
+                                function(res) {  // success
+                                    //$scope.user = res.data.user;
+
+                                    GroupService.update($stateParams.groupId, { group: $scope.group },
+                                        function(res) {  // success
+                                            //$scope.group = res.data.group;
+
+                                            //populate();
+
+                                            $scope.alerts.push({
+                                                type: "success",
+                                                msg: 'You have successfully unsubscribed'
+                                            });
+
+                                            $scope.isSubbing = false;
+
+                                        },
+                                        function(res) {  //error
+                                            $scope.alerts.push({
+                                                type: "danger",
+                                                msg: 'There was a problem unsubscribing'
+                                            });
+                                        });
+                                    },
+                                    function(res) {  // error
+
+                                    });
+                                });
+                            }
+                        });
+                    }
+                    else {
+                        $location.path("/login/").replace;
+                    }
         }
 
         /***************************************************************************
          * Admin Testing
          **************************************************************************/
         $scope.toggleAdmin = function() {
-            $scope.isAdmin = !$scope.isAdmin;
+            //$scope.isAdmin = !$scope.isAdmin;
         }
 
 
@@ -484,262 +882,3 @@ angular.module('seniorprojectYoApp')
         }
 
     });
-
-/*{
-                _id: "nsync",
-                name: "N.Sync().......... .............. ................ ............. ..........................",
-                picture: "//placekitten.com/g/500/500/",
-                creationDate: "2015-08-26T18:50:10.111Z",
-                city: "Sacramento",
-                state: "CA",
-                zipcode: 95828,
-                description: "sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem blandit non.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vulputate pellentesque lorem. Donec erat ante, sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem bland center",
-                googlePlusURL: "www.google.com",
-                facebookURL: "https://facebook.com",
-                linkedInURL: "https://linkedin.com",
-                twitterURL: "https://twitter.com",
-                events: [{
-                    _id: "event1",
-                    creatorId: "",
-                    groupId: "",
-                    name: "Awesome Event Number 1 asdf asdf asdf asdf",
-                    description: "sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem blandit non.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vulputate pellentesque lorem. Donec erat ante, sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem bland center",
-                    picture: "//placekitten.com/g/501/500/",
-                    startTimeDate: "2015-10-26T18:50:10.111Z",
-                    endTimeDate: "2015-10-27T18:50:10.111Z",
-                    street: "1234 cool st",
-                    city: "Sacramento",
-                    state: "CA",
-                    zipcode: "95828",
-                    maxVolunteers: 50,
-                    volunteers: [{
-                        id: "v1",
-                        firstName: "Kitten 1",
-                        lastName: "1"
-                    }, {
-                        id: "v2",
-                        firstName: "Kitten 2",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/250/251"
-                    }, {
-                        id: "v3",
-                        firstName: "Kitten 3",
-                        lastName: "1"
-                    }, {
-                        id: "v4",
-                        firstName: "Kitten 4",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/250/253"
-                    }, {
-                        id: "v5",
-                        firstName: "Kitten 5",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/250/254"
-                    }, {
-                        id: "v6",
-                        firstName: "Kitten 6",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/250/255"
-                    }, {
-                        id: "v7",
-                        firstName: "Kitten 7",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/250/256"
-                    }, {
-                        id: "v8",
-                        firstName: "Kitten 8",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/250/257"
-                    }, {
-                        id: "v9",
-                        firstName: "Kitten 9",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/250/258"
-                    }, {
-                        id: "v10",
-                        firstName: "Kitten 10",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/250/259"
-                    }, {
-                        id: "v11",
-                        firstName: "Kitten 11",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/250/260"
-                    }],
-                    interests: ["Animals", "Education", "Environment", "People", "Recreation", "Technology", "Youth"]
-
-                }, {
-                    _id: "event2",
-                    creatorId: "",
-                    groupId: "",
-                    name: "Awesome Event Number 2 asdf asdf asdf asdf",
-                    description: "aaaaaaaaaa bbbbbbbbbbbbbbb cccccccccccccccc dddddddddddddddddd eeeeeeeeeeeeeeeeeee fffffffffffffffffff gggggggggggggggggg hhhhhhhhhhhhhh iiiiiiiiiiiiiiiiiiii jjjjjjjjjjjjjjjjjjjj",
-                    picture: "//placekitten.com/g/503/500/",
-                    street: "4321 cool st",
-                    city: "Sacramento",
-                    state: "CA",
-                    zipcode: "95828",
-                    startTimeDate: "2015-10-28T18:50:10.111Z",
-                    endTimeDate: "2015-10-29T18:50:10.111Z",
-                    maxVolunteers: 50,
-                    volunteers: [{
-                        id: "v1",
-                        firstName: "Kitten 1",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/251/250"
-                    }, {
-                        id: "v2",
-                        firstName: "Kitten 2",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/251/251"
-                    }, {
-                        id: "v3",
-                        firstName: "Kitten 3",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/251/252"
-                    }, {
-                        id: "v4",
-                        firstName: "Kitten 4",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/251/253"
-                    }, {
-                        id: "v5",
-                        firstName: "Kitten 5",
-                        lastName: "1"
-                    }, {
-                        id: "v6",
-                        firstName: "Kitten 6",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/251/255"
-                    }, {
-                        id: "v7",
-                        firstName: "Kitten 7",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/251/256"
-                    }, {
-                        id: "v8",
-                        firstName: "Kitten 8",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/251/257"
-                    }, {
-                        id: "v9",
-                        firstName: "Kitten 9",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/251/258"
-                    }, {
-                        id: "v10",
-                        firstName: "Kitten 10",
-                        lastName: "1"
-                    }, {
-                        id: "v11",
-                        firstName: "Kitten 11",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/251/260"
-                    }, {
-                        id: "v12",
-                        firstName: "Kitten 12",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/251/261"
-                    }, {
-                        id: "v13",
-                        firstName: "Kitten 13",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/251/262"
-                    }, {
-                        id: "v14",
-                        firstName: "Kitten 14",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/251/263"
-                    }, {
-                        id: "v15",
-                        firstName: "Kitten 15",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/251/264"
-                    }, {
-                        id: "v16",
-                        firstName: "Kitten 16",
-                        lastName: "1",
-                        picture: "//placekitten.com/g/251/265"
-                    }],
-                    interests: ["Animals", "Education", "Environment", "People", "Recreation"]
-                }],
-                organizers: [{
-                    _id: "org1",
-                    firstName: "org1",
-                    lastName: "1"
-                }, {
-                    _id: "org2",
-                    firstName: "org2",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/351/350/"
-                }, {
-                    _id: "org3",
-                    firstName: "org3",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/352/350/"
-                }, {
-                    _id: "org4",
-                    firstName: "org4",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/353/350/"
-                }, {
-                    _id: "org5",
-                    firstName: "org5",
-                    lastName: "1"
-                }, {
-                    _id: "org6",
-                    firstName: "org6",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/355/350/"
-                }],
-                subscribers: [{
-                    _id: "sub1",
-                    firstName: "sub1",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/350/355/"
-                }, {
-                    _id: "sub2",
-                    firstName: "sub2",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/351/355/"
-                }, {
-                    _id: "sub3",
-                    firstName: "sub3",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/352/355/"
-                }, {
-                    _id: "sub4",
-                    firstName: "sub4",
-                    lastName: "1"
-                }, {
-                    _id: "sub5",
-                    firstName: "sub5",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/354/355/"
-                }, {
-                    _id: "sub6",
-                    firstName: "sub6",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/355/355/"
-                }, {
-                    _id: "sub7",
-                    firstName: "sub7",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/350/355/"
-                }, {
-                    _id: "sub8",
-                    firstName: "sub8",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/356/355/"
-                }, {
-                    _id: "sub9",
-                    firstName: "sub9",
-                    lastName: "1"
-                }, {
-                    _id: "sub10",
-                    firstName: "sub10",
-                    lastName: "1",
-                    picture: "//placekitten.com/g/358/355/"
-                }],
-                interests: ["Animals", "Environment", "People", "Recreation", "Technology", "Youth"]
-            }*/

@@ -8,8 +8,11 @@ var GroupSchema = new Schema({
         type: String,
         required: true
     },
+    creationUser: {
+        type: Schema.ObjectId,
+        ref: 'User'
+    },
 
-    info: String,
     active: Boolean,
 
     picture: {
@@ -31,6 +34,7 @@ var GroupSchema = new Schema({
     linkedInURL: String,
     twitterURL: String,
     personalWebsiteURL: String,
+    numberSubcribers: Number,
 
     events: [{
         type: Schema.ObjectId,

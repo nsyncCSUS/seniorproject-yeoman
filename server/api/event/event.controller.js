@@ -38,7 +38,7 @@ exports.show = function(req, res) {
 
 // Creates a new event in the DB.
 exports.create = function(req, res) {
-    Event.create(req.body, function(err, event) {
+    Event.create(req.body.event, function(err, event) {
         if (err) {
             return handleError(res, err);
         }
@@ -55,7 +55,7 @@ exports.update = function(req, res) {
     }
 
     if(req.body.event._id) delete req.body.event._id;
-    if(req.body.event.volunteers) delete req.body.event.volunteers;
+    //if(req.body.event.volunteers) delete req.body.event.volunteers;
     if(req.body.event.organizers) delete req.body.event.organizers;
     if(req.body.event.creationUser) delete req.body.event.creationUser;
 

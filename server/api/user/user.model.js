@@ -15,18 +15,15 @@ var UserSchema = new Schema({
         type: String,
         default: 'user'
     },
+    picture: {
+        type: String,
+        default: '//placehold.it/500x500/'
+    },
 
     hashedPassword: String,
     provider: String,
     salt: String,
-    facebook: {},
-    twitter: {},
-    google: {},
-    github: {},
 
-    firstName: String,
-    middleName: String,
-    lastName: String,
     description: String,
     birthday: Date,
     age: Number,
@@ -34,6 +31,10 @@ var UserSchema = new Schema({
     state: String,
     zipcode: String,
     phoneNum: String,
+    googlePlusURL: String,
+    facebookURL: String,
+    linkedInURL: String,
+    twitterURL: String,
 
     events: {
         volunteeredTo: [{
@@ -96,9 +97,7 @@ UserSchema
             'name': this.name,
             'role': this.role,
 
-            'firstName': this.firstName,
-            'middleName': this.middleName,
-            'lastName': this.lastName,
+            'picture': this.picture,
             'description': this.description,
             'birthday': this.birthday,
             'age': this.age,

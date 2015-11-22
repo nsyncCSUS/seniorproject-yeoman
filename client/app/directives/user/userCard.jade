@@ -1,5 +1,6 @@
 .col-xs-12.col-sm-12.col-md-12.col-lg-12.cardHeader
-    h3 <strong>{{user.firstName}} {{user.middleName}} {{user.lastName}}</strong>
+    a(ng-href='/user/{{user._id}}/')
+        h3 <strong>{{user.name}}</strong>
 
 .col-xs-12.col-sm-12.col-md-12.col-lg-12.cardBody
     .col-xs-12.col-sm-12.col-md-12.col-lg-12

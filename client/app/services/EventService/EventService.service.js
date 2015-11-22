@@ -40,16 +40,13 @@ angular.module('seniorprojectYoApp')
 
 
         this.update = function(id, params, callback, error) {
-            Events.one(id).patch({event: params}).then(callback, error);
+            Events.one(id).patch({event: params.event}).then(callback, error);
         };
 
 
-//        this.create = function(params, callback, error) {
-////            Restangular.one(Constants.routes.events)
-////                .post({event: params})
-////                .then(callback, error);
-//            Events.post(params).then(callback, error);
-//        };
+        this.create = function(params, callback, error) {
+            Events.post(params).then(callback, error);
+        };
 
 
         this.destroy = function(id, callback, error) {

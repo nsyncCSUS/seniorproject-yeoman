@@ -1,23 +1,17 @@
 div(ng-include='"components/navbar/navbar.html"')
 
-h1 Groups
-h6 {{group._id}}
-
-.well
-    .container
-        button.btn.btn-default(ng-click='toggleAdmin()') Toggle Admin
-        | {{isAdmin}}
+.adminPadding(ng-show='isAdmin')
 
 div(ng-show='isAdmin')
     div(ng-show='!getIsEditing()')
         .float-right
-            a(href='/create/event')
+            a(href='/groups/{{group._id}}/create/event')
                 button.btn.btn-default Create Event
             | &nbsp
             button.btn.btn-default(ng-show='!getIsEditing()', ng-click='enableEdit()') Edit Group
     div(ng-show='getIsEditing()')
         .float-right
-            button.btn.btn-info(ng-show='getIsEditing()', ng-click='submitEdit(groupForm.$valid)', ng-disabled='isUpdating') Save
+            button.btn.btn-info(ng-show='getIsEditing()', ng-click='submitEdit()', ng-disabled='isUpdating') Save
             | &nbsp
             button.btn.btn-danger(ng-show='getIsEditing()', ng-click='cancelEdit()', ng-disabled='isUpdating') Cancel
 .float-btm.text-center
@@ -31,7 +25,12 @@ div(ng-show='getIsEditing()')
                 .col-xs-12.col-sm-12.col-md-12.col-lg-12
                     .row
                         .col-xs-12.col-sm-12.col-md-8.col-lg-8
-                                h2 {{group.name}}
+                                .form-group(ng-class='{ "has-error" : groupForm.groupName.$invalid && submitted }')
+                                    label(for='groupName') Group Name*
+                                    input.form-control#groupName(type='text', name='groupName', ng-model='group.name', ng-minlength='3', required)
+                                    div(ng-messages='groupForm.groupName.$error', ng-show='submitted')
+                                        div.help-block(ng-message='required') Group name is required.
+                                        div.help-block(ng-message='minlength') Group name is too short!
                         .col-xs-12.col-sm-12.col-md-4.col-lg-4
                             label(for='interests') Interests
                             .navbar-btn
@@ -52,150 +51,155 @@ div(ng-show='getIsEditing()')
                     hr
 
                 .col-xs-12.col-sm-8.col-md-8.col-lg-8
-                    .form-group(ng-class='{ "has-error" : groupForm.description.$invalid && !groupForm.description.$pristine && submitted }')
+                    .form-group(ng-class='{ "has-error" : groupForm.description.$invalid && submitted }')
                         label(for='description') Description*
                         textarea.form-control#description(type='text', name='description', rows='10', ng-model='group.description', minlength='10', required)
-                        div(ng-messages='groupForm.description.$error', ng-show='groupForm.description.$dirty && submitted')
+                        div(ng-messages='groupForm.description.$error', ng-show='submitted')
                             div.help-block(ng-message='required') A description is required.
                             div.help-block(ng-message='minlength') Description is too short!
 
-                    .form-group(ng-class='{ "has-error" : groupForm.googlePlusURL.$invalid && !groupForm.googlePlusURL.$pristine && submitted }')
+                    .form-group(ng-class='{ "has-error" : groupForm.googlePlusURL.$invalid && submitted }')
                         label(for='googlePlus') Google Plus
                         input.form-control#googlePlus(type='url', name='googlePlusURL', ng-model='group.googlePlusURL')
-                        div(ng-messages='groupForm.googlePlusURL.$error', ng-show='groupForm.googlePlusURL.$dirty && submitted')
+                        div(ng-messages='groupForm.googlePlusURL.$error', ng-show='submitted')
                             div.help-block(ng-message='url') Url invalid. (Remember to add https:// to the beginning)
 
-                    .form-group(ng-class='{ "has-error" : groupForm.facebookURL.$invalid && !groupForm.facebookURL.$pristine && submitted }')
+                    .form-group(ng-class='{ "has-error" : groupForm.facebookURL.$invalid && submitted }')
                         label(for='facebook') Facebook
-                        input.form-control#facebook(type='url', name='facebookURL',  ng-model='group.facebookURL')
-                        div(ng-messages='groupForm.facebookURL.$error', ng-show='groupForm.facebookURL.$dirty && submitted')
+                        input.form-control#facebook(type='url', name='facebookURL', ng-model='group.facebookURL')
+                        div(ng-messages='groupForm.facebookURL.$error', ng-show='submitted')
                             div.help-block(ng-message='url') Url invalid. (Remember to add https:// to the beginning)
 
-                    .form-group(ng-class='{ "has-error" : groupForm.twitterURL.$invalid && !groupForm.twitterURL.$pristine && submitted }')
+                    .form-group(ng-class='{ "has-error" : groupForm.twitterURL.$invalid && submitted }')
                         label(for='twitter') Twitter
-                        input.form-control#twitter(type='url', name='twitterURL',  ng-model='group.twitterURL')
-                        div(ng-messages='groupForm.twitterURL.$error', ng-show='groupForm.twitterURL.$dirty && submitted')
+                        input.form-control#twitter(type='url', name='twitterURL', ng-model='group.twitterURL')
+                        div(ng-messages='groupForm.twitterURL.$error', ng-show='submitted')
                             div.help-block(ng-message='url') Url invalid. (Remember to add https:// to the beginning)
 
-                    .form-group(ng-class='{ "has-error" : groupForm.linkedInURL.$invalid && !groupForm.linkedInURL.$pristine && submitted }')
+                    .form-group(ng-class='{ "has-error" : groupForm.linkedInURL.$invalid && submitted }')
                         label(for='linkedIn') Linked In
-                        input.form-control#linkedIn(type='url', name='linkedInURL',  ng-model='group.linkedInURL')
-                        div(ng-messages='groupForm.linkedInURL.$error', ng-show='groupForm.linkedInURL.$dirty && submitted')
+                        input.form-control#linkedIn(type='url', name='linkedInURL', ng-model='group.linkedInURL')
+                        div(ng-messages='groupForm.linkedInURL.$error', ng-show='submitted')
                             div.help-block(ng-message='url') Url invalid. (Remember to add https:// to the beginning)
 
-                    .form-group(ng-class='{ "has-error" : groupForm.personalWebsiteURL.$invalid && !groupForm.personalWebsiteURL.$pristine && submitted }')
+                    .form-group(ng-class='{ "has-error" : groupForm.personalWebsiteURL.$invalid && submitted }')
                         label(for='website') Personal Website
-                        input.form-control#website(type='url', name='personalWebsiteURL',  ng-model='group.personalWebsiteURL')
-                        div(ng-messages='groupForm.personalWebsiteURL.$error', ng-show='groupForm.personalWebsiteURL.$dirty && submitted')
+                        input.form-control#website(type='url', name='personalWebsiteURL', ng-model='group.personalWebsiteURL')
+                        div(ng-messages='groupForm.personalWebsiteURL.$error', ng-show='submitted')
                             div.help-block(ng-message='url') Url invalid. (Remember to add https:// to the beginning)
 
                         hr
                         .row
                             .col-xs-12.col-sm-6.col-md-6.col-lg-6
-                                label(for='city') City
-                                input.form-control#city(type='text', name='city', ng-model='group.city')
+                                .form-group
+                                    label(for='city') City
+                                    input.form-control#city(type='text', name='city', ng-model='group.city')
                             .col-xs-5.col-sm-3.col-md-2.col-lg-2
-                                label(for='state') State
-                                select.form-control#state(type='text', name='state', ng-model='group.state')
-                                     option(value='AL') AL
-                                     option(value='AK') AK
-                                     option(value='AZ') AZ
-                                     option(value='AR') AR
-                                     option(value='CA') CA
-                                     option(value='CO') CO
-                                     option(value='CT') CT
-                                     option(value='DE') DE
-                                     option(value='DC') DC
-                                     option(value='FL') FL
-                                     option(value='GA') GA
-                                     option(value='HI') HI
-                                     option(value='ID') ID
-                                     option(value='IL') IL
-                                     option(value='IN') IN
-                                     option(value='IA') IA
-                                     option(value='KS') KS
-                                     option(value='KY') KY
-                                     option(value='LA') LA
-                                     option(value='ME') ME
-                                     option(value='MD') MD
-                                     option(value='MA') MA
-                                     option(value='MI') MI
-                                     option(value='MN') MN
-                                     option(value='MS') MS
-                                     option(value='MO') MO
-                                     option(value='MT') MT
-                                     option(value='NE') NE
-                                     option(value='NV') NV
-                                     option(value='NH') NH
-                                     option(value='NJ') NJ
-                                     option(value='NM') NM
-                                     option(value='NY') NY
-                                     option(value='NC') NC
-                                     option(value='ND') ND
-                                     option(value='OH') OH
-                                     option(value='OK') OK
-                                     option(value='OR') OR
-                                     option(value='PA') PA
-                                     option(value='RI') RI
-                                     option(value='SC') SC
-                                     option(value='SD') SD
-                                     option(value='TN') TN
-                                     option(value='TX') TX
-                                     option(value='UT') UT
-                                     option(value='VT') VT
-                                     option(value='VA') VA
-                                     option(value='WA') WA
-                                     option(value='WV') WV
-                                     option(value='WI') WI
-                                     option(value='WY') WY
+                                .form-group
+                                    label(for='state') State
+                                    select.form-control#state(type='text', name='state', ng-model='group.state')
+                                        option(value='') Select
+                                        option(value='AL') AL
+                                        option(value='AK') AK
+                                        option(value='AZ') AZ
+                                        option(value='AR') AR
+                                        option(value='CA') CA
+                                        option(value='CO') CO
+                                        option(value='CT') CT
+                                        option(value='DE') DE
+                                        option(value='DC') DC
+                                        option(value='FL') FL
+                                        option(value='GA') GA
+                                        option(value='HI') HI
+                                        option(value='ID') ID
+                                        option(value='IL') IL
+                                        option(value='IN') IN
+                                        option(value='IA') IA
+                                        option(value='KS') KS
+                                        option(value='KY') KY
+                                        option(value='LA') LA
+                                        option(value='ME') ME
+                                        option(value='MD') MD
+                                        option(value='MA') MA
+                                        option(value='MI') MI
+                                        option(value='MN') MN
+                                        option(value='MS') MS
+                                        option(value='MO') MO
+                                        option(value='MT') MT
+                                        option(value='NE') NE
+                                        option(value='NV') NV
+                                        option(value='NH') NH
+                                        option(value='NJ') NJ
+                                        option(value='NM') NM
+                                        option(value='NY') NY
+                                        option(value='NC') NC
+                                        option(value='ND') ND
+                                        option(value='OH') OH
+                                        option(value='OK') OK
+                                        option(value='OR') OR
+                                        option(value='PA') PA
+                                        option(value='RI') RI
+                                        option(value='SC') SC
+                                        option(value='SD') SD
+                                        option(value='TN') TN
+                                        option(value='TX') TX
+                                        option(value='UT') UT
+                                        option(value='VT') VT
+                                        option(value='VA') VA
+                                        option(value='WA') WA
+                                        option(value='WV') WV
+                                        option(value='WI') WI
+                                        option(value='WY') WY
                             .col-xs-7.col-sm-3.col-md-4.col-lg-4
-                                .form-group(ng-class='{ "has-error" : groupForm.zip.$invalid && !groupForm.zip.$pristine && submitted }')
+                                .form-group(ng-class='{ "has-error" : groupForm.zip.$invalid && submitted }')
                                     label(for='zipcode') Zipcode
                                     input.form-control#zipcode(type='text', name='zip', ng-model='group.zipcode', pattern='\\d{5}')
-                                    div(ng-messages='groupForm.zip.$error', ng-show='groupForm.zip.$dirty && submitted')
+                                    div(ng-messages='groupForm.zip.$error', ng-show='submitted')
                                         div.help-block(ng-message='pattern') Invalid zip code.
 
-                .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                    hr
-                    form.form-horizontal
-                        .form-group
-                            .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                                label Invite Organizers
-                            .col-xs-8.col-sm-10.col-md-11.col-lg-11
-                                input.form-control#searchBox(type='text', placeholder='Enter a user to invite', ng-model='searchbox')
-                            .col-xs-4.col-sm-2.col-md-1.col-lg-1
-                                button.btn.btn-default#searchButton(ng-click='searchUsers(searchbox); scrollToResults()') Search
 
-                div(ng-show='getIsSearching()')
-                    .row
-                        .col-xs-12.col-sm-12.col-md-12.col-lg-12#searchResults
+
+            .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                hr
+                form.form-horizontal
+                    .form-group
+                        .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                            label Invite Organizers
+                        .col-xs-8.col-sm-10.col-md-11.col-lg-11
+                            input.form-control#searchBox(type='text', placeholder='Enter a user to invite', ng-model='searchbox')
+                        .col-xs-4.col-sm-2.col-md-1.col-lg-1
+                            button.btn.btn-default#searchButton(ng-click='searchUsers(searchbox); scrollToResults()') Search
+
+            div(ng-show='getIsSearching()')
+                .row
+                    .col-xs-12.col-sm-12.col-md-12.col-lg-12#searchResults
+                        .col-xs-12.col-sm-6.col-md-6.col-lg-6
+                            label(for='searchResults') Search Results
+                            div(ng-show='!hasResults()')
+                                h3 No Users found, try again
+                            .row
+                                .col-xs-4.col-sm-3.col-md-3.col-lg-2.cursor-pointer(id='add-{{user._id}}', ng-repeat='user in searchResults', ng-click='addOrganizer($index); scrollToRemove(user._id)')
+                                    .add
+                                        img.img-responsive.img-thumbnail(src='{{user.picture}}', ng-class='user.added', ng-show='hasPicture("searchedUser", $index)')
+                                        img.img-responsive.img-thumbnail(src='//placehold.it/350x350', ng-class='user.added', ng-show='!hasPicture("searchedUser", $index)')
+                                        .addOverlay
+                                            span.glyphicon.glyphicon-plus.glyphicon-lg-center
+                                    h6.text-center {{user.firstName}} {{user.lastName}}
+
+                        div(ng-show='hasOrganizersToAdd()')
                             .col-xs-12.col-sm-6.col-md-6.col-lg-6
-                                label(for='searchResults') Search Results
-                                div(ng-show='!hasResults()')
-                                    h3 No Users found, try again
-                                .row
-                                    .col-xs-4.col-sm-3.col-md-3.col-lg-2.cursor-pointer(id='add-{{user._id}}', ng-repeat='user in searchResults', ng-click='addOrganizer($index); scrollToRemove(user._id)')
-                                        .add
-                                            img.img-responsive.img-thumbnail(src='{{user.picture}}', ng-class='user.added', ng-show='hasPicture("searchedUser", $index)')
-                                            img.img-responsive.img-thumbnail(src='//placehold.it/350x350', ng-class='user.added', ng-show='!hasPicture("searchedUser", $index)')
-                                            .addOverlay
-                                                span.glyphicon.glyphicon-plus.glyphicon-lg-center
-                                        h6.text-center {{user.firstName}} {{user.lastName}}
-
-                            div(ng-show='hasOrganizersToAdd()')
-                                .col-xs-12.col-sm-6.col-md-6.col-lg-6
-                                    .visible-xs
-                                        hr
-                                    label(for='searchResults') Organizers to be invited
-                                    .col-xs-12.col-sm-12.col-md-12.col-lg-12#organizersAdded
-                                        .row
-                                            .col-xs-4.col-sm-3.col-md-3.col-lg-2.cursor-pointer(id='remove-{{user._id}}', ng-repeat='user in organizersToAdd', ng-click='removeOrganizer($index); scrollToAdd(user._id)')
-                                                .remove
-                                                    img.img-responsive.img-thumbnail(src='{{user.picture}}', ng-show='hasPicture("organizerToAdd", $index)')
-                                                    img.img-responsive.img-thumbnail(src='//placehold.it/350x350', ng-show='!hasPicture("organizerToAdd", $index)')
-                                                    .removeOverlay
-                                                        span.glyphicon.glyphicon-minus.glyphicon-lg-center
-                                                h6.text-center {{user.firstName}} {{user.lastName}}
+                                .visible-xs
+                                    hr
+                                label(for='searchResults') Organizers to be invited
+                                .col-xs-12.col-sm-12.col-md-12.col-lg-12#organizersAdded
+                                    .row
+                                        .col-xs-4.col-sm-3.col-md-3.col-lg-2.cursor-pointer(id='remove-{{user._id}}', ng-repeat='user in organizersToAdd', ng-click='removeOrganizer($index); scrollToAdd(user._id)')
+                                            .remove
+                                                img.img-responsive.img-thumbnail(src='{{user.picture}}', ng-show='hasPicture("organizerToAdd", $index)')
+                                                img.img-responsive.img-thumbnail(src='//placehold.it/350x350', ng-show='!hasPicture("organizerToAdd", $index)')
+                                                .removeOverlay
+                                                    span.glyphicon.glyphicon-minus.glyphicon-lg-center
+                                            h6.text-center {{user.firstName}} {{user.lastName}}
 div(ng-show='!getIsEditing()')
     .container
         .row
@@ -233,12 +237,14 @@ div(ng-show='!getIsEditing()')
                             h5 {{group.city}}, {{group.state}}
                             h5 Founded on: {{group.creationDate | date:'MMM dd, yyyy'}}
                             hr
-                            button.btn.btn-default.center-item(ng-click='subscribe()')
+                            button.btn.btn-default.center-item(ng-show='!isSubscribed()', ng-click='subscribe()', ng-disabled='isSubbing')
                                 h4 Subscribe
+                            button.btn.btn-default.center-item(ng-show='isSubscribed()', ng-click='unsubscribe()', ng-disabled='isSubbing')
+                                h4 Unsubscribe
 
 
                         .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                            .panel-default
+                            .panel-default.cursor-pointer
                                 .panel-heading(role='button', data-toggle='collapse', data-target='#organizers', aria-expanded='true', aria-controls='organizers')
                                     h4.panel-title
                                         a <strong>{{group.organizers.length}} Organizers</strong>
@@ -251,23 +257,24 @@ div(ng-show='!getIsEditing()')
                                                     .row
                                                         .col-xs-12.col-sm-12.col-md-12.col-lg-12
                                                             a(href='/users/{{organizer._id}}')
-                                                                h6.oneline {{organizer.firstName}} {{organizer.lastName}}
+                                                                h6.oneline {{organizer.name}}
                                                         .col-xs-12.col-sm-12.col-md-12.col-lg-12
                                                             .col-xs-6.col-sm-6.col-md-6.col-lg-6
-                                                                img.img-responsive.img-rounded(src='{{organizer.picture}}')
+                                                                a(href='/users/{{organizer._id}}')
+                                                                    img.img-responsive.img-rounded(src='{{organizer.picture}}')
                                                             .col-xs-6.col-sm-6.col-md-6.col-lg-6
                                                                 button.btn.btn-default.btn-xs Contact
-                            .panel-default
-                                .panel-heading(role='button', data-toggle='collapse', data-target='#subscribers', aria-expanded='true', aria-controls='subscribers')
+                            .panel-default.cursor-pointer
+                                .panel-heading(role='button', data-toggle='collapse', data-target='#volunteers', aria-expanded='true', aria-controls='volunteers')
                                     h4.panel-title
-                                        a <strong>{{group.subscribers.length}} Subscribers</strong>
+                                        a <strong>{{group.volunteers.length}} Subscribers</strong>
                                             span.glyphicon.glyphicon-chevron-down.pull-right(aria-hidden='true')
-                                .panel-collapse.collapse#subscribers
+                                .panel-collapse.collapse#volunteers
                                     .panel-body
                                         .row
                                             .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                                                a(ng-href='/users/{{subscriber._id}}/', ng-repeat='subscriber in group.subscribers | limitTo: 100')
-                                                    img.img-thumbnail.subscriber-thumbnail.cursor-pointer(src="{{subscriber.picture}}", uib-tooltip='{{subscriber.firstName}} {{subscriber.lastName}}')
+                                                a(ng-href='/users/{{volunteers._id}}/', ng-repeat='volunteers in group.volunteers | limitTo: 100')
+                                                    img.img-thumbnail.subscriber-thumbnail.cursor-pointer(src="{{volunteers.picture}}", uib-tooltip='{{volunteers.name}}')
 
                     .col-xs-12.col-sm-8.col-md-8.col-lg-8.panel-success
                         h3.panel-heading About Us

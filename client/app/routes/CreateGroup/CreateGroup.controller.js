@@ -450,9 +450,6 @@ angular.module('seniorprojectYoApp')
 		/***************************************************************************
 		 * MISC Functions
 		 **************************************************************************/
-		$scope.cancelCreateGroup = function() {
-			$location.path("/home").replace;
-		}
 
 		$scope.closeAlert = function(index) {
 			$scope.alerts.splice(index, 1);

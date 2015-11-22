@@ -55,7 +55,7 @@ var UserSchema = new Schema({
 
 
     groups: {
-        subscribedTo: [{
+        volunteeredTo: [{
             type: Schema.ObjectId,
             ref: 'Group'
         }],

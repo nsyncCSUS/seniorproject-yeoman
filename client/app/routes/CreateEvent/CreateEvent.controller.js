@@ -345,10 +345,6 @@ angular.module('seniorprojectYoApp')
         /***************************************************************************
          * MISC Functions
          **************************************************************************/
-        $scope.cancelCreateEvent = function() {
-            $location.path("/home").replace;
-        }
-
         $scope.closeAlert = function(index) {
             $scope.alerts.splice(index, 1);
         }

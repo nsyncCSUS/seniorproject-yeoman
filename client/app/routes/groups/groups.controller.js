@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('GroupsCtrl', function($scope, $stateParams, $window, $anchorScroll, $timeout, GroupService, UserService, EventService, Auth) {
+    .controller('GroupsCtrl', function($scope, $stateParams, $window, $anchorScroll, $location, $timeout, GroupService, UserService, EventService, Auth) {
 
         /***************************************************************************
          * Variables (includes ones from scope too)
@@ -11,6 +11,7 @@ angular.module('seniorprojectYoApp')
         $scope.isSearching = false;
         $scope.isUpdating = false;
         $scope.submitted = false;
+        $scope.isSubbing = false;
 
         $scope.organizersToAdd = [];
         $scope.searchResults = [];
@@ -44,7 +45,7 @@ angular.module('seniorprojectYoApp')
                     } else {
                         $scope.group = res.data.group;
                         console.log($scope.group);
-                        populateGroup();
+                        populate();
                         checkAdmin();
                     }
                 });
@@ -54,17 +55,21 @@ angular.module('seniorprojectYoApp')
 
         });
 
+        function populate() {
+            populateGroup();
+            populateUser();
+        }
 
         function populateGroup() {
             // Populate organizers
             GroupService.organizers.index($scope.group._id, {}, function(res) {
-                console.log(res.data);
                 $scope.group.organizers = res.data;
             });
 
             // Populate subscribers
             GroupService.volunteers.index($scope.group._id, {}, function(res) {
-                $scope.group.organizers = res.data;
+                console.log(res.data);
+                $scope.group.volunteers = res.data;
             });
 
             // Populate events
@@ -83,6 +88,19 @@ angular.module('seniorprojectYoApp')
                     });
                 });
             });
+        };
+
+        function populateUser() {
+            // VolunteeredTo
+            UserService.events.volunteeredTo.index($scope.user._id, {}, function(res) {
+                $scope.user.events.volunteeredTo = res.data;
+            });
+
+            // Populate subscriptions
+            UserService.groups.volunteeredTo.index($scope.user._id, {}, function(res) {
+                $scope.user.groups.volunteeredTo = res.data;
+            });
+
         };
 
         function checkAdmin() {
@@ -461,7 +479,7 @@ angular.module('seniorprojectYoApp')
             if ($scope.user != null){
                 for (var i = 0; i < $scope.group.events[curEvent].volunteers.length; i++) {
                     if ($scope.group.events[curEvent].volunteers[i]._id === $scope.user._id)
-                    return true;
+                        return true;
                 }
             }
             return false;
@@ -471,11 +489,25 @@ angular.module('seniorprojectYoApp')
             if ($scope.user != null){
                 for (var i = 0; i < $scope.group.events[curEvent].organizers.length; i++) {
                     if ($scope.group.events[curEvent].organizers[i]._id === $scope.user._id)
-                    return true;
+                        return true;
                 }
             }
             return false;
         }
+
+        $scope.isSubscribed = function() {
+            if ($scope.user != null) {
+                if ($scope.group != null) {
+                    for (var i = 0; i < $scope.user.groups.volunteeredTo.length; i++) {
+                        if ($scope.user.groups.volunteeredTo[i]._id === $stateParams.groupId)
+                            return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         /***********************************************************************
          * Editing Functions
          **********************************************************************/
@@ -541,7 +573,7 @@ angular.module('seniorprojectYoApp')
                 $scope.technologySelected_bak = "";
                 $scope.youthSelected_bak = "";
 
-                populateGroup();
+                populate();
             }
             else {
                 $scope.alerts.push({type: "danger", msg: "Errors found, please fix them."});
@@ -553,7 +585,105 @@ angular.module('seniorprojectYoApp')
          * Subscribe Button
          **************************************************************************/
         $scope.subscribe = function() {
+            if (Auth.isLoggedIn()) {
 
+                $scope.isSubbing = true;
+
+                $scope.user.groups.volunteeredTo.push($scope.group);
+
+                UserService.update($scope.user._id, { user: $scope.user },
+                    function(res) {  // success
+                        //$scope.user = res.data.user;
+                        console.log(res.data.user);
+                        $scope.group.volunteers.push(res.data.user);
+
+                        GroupService.update($stateParams.groupId, { group: $scope.group },
+                            function(res) {  // success
+                                //$scope.group = res.data.group;
+                                console.log(res.data.group);
+
+                                populate();
+
+                                $scope.alerts.push({
+                                    type: "success",
+                                    msg: 'You have successfully subscribed'
+                                });
+
+                                $scope.isSubbing = false;
+
+                            },
+                            function(res) {  //error
+                                $scope.alerts.push({
+                                    type: "danger",
+                                    msg: 'There was a problem subscribing2'
+                                });
+                            });
+                        },
+                        function(res) {  // error
+                            $scope.alerts.push({
+                                type: "danger",
+                                msg: 'There was a problem subscribing1'
+                            });
+                        });
+                    }
+                    else {
+                        $location.path("/login/").replace;
+                    }
+        }
+
+        $scope.unsubscribe = function() {
+            if (Auth.isLoggedIn()) {
+
+                $scope.isSubbing = true;
+
+                $scope.user = Auth.getCurrentUser();
+
+                // Remove group from user subscription list
+                for (var i = 0; i < $scope.user.groups.volunteeredTo.length; i++) {
+                    if ($scope.user.groups.volunteeredTo[i]._id === $stateParams.groupId){
+                        $scope.user.groups.volunteeredTo.splice(i, 1);
+                    }
+                }
+
+                // Remove user from group subscription list
+                for (var i = 0; i < $scope.group.volunteers.length; i++) {
+                    if ($scope.group.volunteers[i]._id === $scope.user._id){
+                        $scope.group.volunteers.splice(i, 1);
+                    }
+                }
+
+                UserService.update($scope.user._id, { user: $scope.user },
+                    function(res) {  // success
+                        //$scope.user = res.data.user;
+
+                        GroupService.update($stateParams.groupId, { group: $scope.group },
+                            function(res) {  // success
+                                //$scope.group = res.data.group;
+
+                                populate();
+
+                                $scope.alerts.push({
+                                    type: "success",
+                                    msg: 'You have successfully unsubscribed'
+                                });
+
+                                $scope.isSubbing = false;
+
+                            },
+                            function(res) {  //error
+                                $scope.alerts.push({
+                                    type: "danger",
+                                    msg: 'There was a problem unsubscribing'
+                                });
+                        });
+                    },
+                    function(res) {  // error
+
+                });
+            }
+            else {
+                $location.path("/login/").replace;
+            }
         }
 
         /***************************************************************************

@@ -10,7 +10,8 @@ div
             | &nbsp
             button.btn.btn-info(ng-click='createEvent()', ng-disabled='isCreating') Create
             | &nbsp
-            button.btn.btn-danger(ng-click='cancelCreateEvent()', ng-disabled='isCreating') Cancel
+            a(href='/groups/{{event.group._id}}')
+                button.btn.btn-danger(ng-click='cancelCreateEvent()', ng-disabled='isCreating') Cancel
 .float-btm.text-center
     uib-alert(ng-repeat='alert in alerts', type='{{alert.type}}', close='closeAlert($index)', dismiss-on-timeout='5000') {{alert.msg}}
 

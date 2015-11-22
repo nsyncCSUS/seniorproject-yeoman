@@ -28,25 +28,12 @@ div(ng-show='getIsEditing()')
                 .row
                     .col-xs-12.col-sm-12.col-md-8.col-lg-8
                         .row
-                            .col-xs-4.col-sm-4.col-md-4.col-lg-4
-                                .form-group(ng-class='{ "has-error" : userForm.firstName.$invalid && submitted }')
-                                    label(for='firstName') First Name*
-                                    input.form-control#firstName(type='text', ng-model='user.firstName', name='firstName', required)
-                                    div(ng-messages='userForm.firstName.$error', ng-show='submitted')
-                                        div.help-block(ng-message='required') First name is required.
-
-                            .col-xs-4.col-sm-4.col-md-4.col-lg-4
-                                .form-group(ng-class='{ "has-error" : userForm.middleName.$invalid && submitted }')
-                                    label(for='middleName') Middle Name
-                                    input.form-control#middleName(type='text', ng-model='user.middleName', name='middleName')
-                                    div(ng-messages='userForm.middleName.$error', ng-show='submitted')
-
-                            .col-xs-4.col-sm-4.col-md-4.col-lg-4
-                                .form-group(ng-class='{ "has-error" : userForm.lastName.$invalid && submitted }')
-                                    label(for='lastName') Last Name*
-                                    input.form-control#lastName(type='text', ng-model='user.lastName', name='lastName', required)
-                                    div(ng-messages='userForm.lastName.$error', ng-show='submitted')
-                                        div.help-block(ng-message='required') Last name is required.
+                            .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                                .form-group(ng-class='{ "has-error" : userForm.name.$invalid && submitted }')
+                                    label(for='name') Name*
+                                    input.form-control#name(type='text', ng-model='user.name', name='name', required)
+                                    div(ng-messages='userForm.name.$error', ng-show='submitted')
+                                        div.help-block(ng-message='required') Name is required.
 
                             hr
 
@@ -217,9 +204,9 @@ div(ng-show='!getIsEditing()')
                             past-group-event-sm-card
 
                     .panel-body.eventRow(ng-show='getCurrentTab("Subscriptions")')
-                        a(ng-href='/group/{{group._id}}/', ng-repeat='group in user.groups.subscribedTo | limitTo: 100')
+                        a(ng-href='/groups/{{group._id}}/', ng-repeat='group in user.groups.volunteeredTo | limitTo: 100')
                             img.img-thumbnail.subscriber-thumbnail.cursor-pointer(src="{{group.picture}}", uib-tooltip='{{group.name}}')
 
                     .panel-body.eventRow(ng-show='getCurrentTab("Organizer Of")')
-                        a(ng-href='/group/{{group._id}}/', ng-repeat='group in user.groups.organizerOf | limitTo: 100')
+                        a(ng-href='/groups/{{group._id}}/', ng-repeat='group in user.groups.organizerOf | limitTo: 100')
                             img.img-thumbnail.subscriber-thumbnail.cursor-pointer(src="{{group.picture}}", uib-tooltip='{{group.name}}')

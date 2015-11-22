@@ -243,8 +243,10 @@ div(ng-show='!getIsEditing()')
                             h5 {{group.city}}, {{group.state}}
                             h5 Founded on: {{group.creationDate | date:'MMM dd, yyyy'}}
                             hr
-                            button.btn.btn-default.center-item(ng-click='subscribe()')
+                            button.btn.btn-default.center-item(ng-show='!isSubscribed()', ng-click='subscribe()', ng-disabled='isSubbing')
                                 h4 Subscribe
+                            button.btn.btn-default.center-item(ng-show='isSubscribed()', ng-click='unsubscribe()', ng-disabled='isSubbing')
+                                h4 Unsubscribe
 
 
                         .col-xs-12.col-sm-12.col-md-12.col-lg-12
@@ -269,16 +271,16 @@ div(ng-show='!getIsEditing()')
                                                             .col-xs-6.col-sm-6.col-md-6.col-lg-6
                                                                 button.btn.btn-default.btn-xs Contact
                             .panel-default.cursor-pointer
-                                .panel-heading(role='button', data-toggle='collapse', data-target='#subscribers', aria-expanded='true', aria-controls='subscribers')
+                                .panel-heading(role='button', data-toggle='collapse', data-target='#volunteers', aria-expanded='true', aria-controls='volunteers')
                                     h4.panel-title
-                                        a <strong>{{group.subscribers.length}} Subscribers</strong>
+                                        a <strong>{{group.volunteers.length}} Volunteers</strong>
                                             span.glyphicon.glyphicon-chevron-down.pull-right(aria-hidden='true')
-                                .panel-collapse.collapse#subscribers
+                                .panel-collapse.collapse#volunteers
                                     .panel-body
                                         .row
                                             .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                                                a(ng-href='/users/{{subscriber._id}}/', ng-repeat='subscriber in group.subscribers | limitTo: 100')
-                                                    img.img-thumbnail.subscriber-thumbnail.cursor-pointer(src="{{subscriber.picture}}", uib-tooltip='{{subscriber.firstName}} {{subscriber.lastName}}')
+                                                a(ng-href='/users/{{volunteers._id}}/', ng-repeat='volunteers in group.volunteers | limitTo: 100')
+                                                    img.img-thumbnail.subscriber-thumbnail.cursor-pointer(src="{{volunteers.picture}}", uib-tooltip='{{volunteers.name}}')
 
                     .col-xs-12.col-sm-8.col-md-8.col-lg-8.panel-success
                         h3.panel-heading About Us

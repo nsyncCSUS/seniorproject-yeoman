@@ -24,7 +24,7 @@ angular.module('seniorprojectYoApp')
 
 
         $scope.selectedTab = "Volunteered To";
-        $scope.otherTabs = ["Past Events", "Subscriptions"];
+        $scope.otherTabs = ["Past Events", "Subscriptions", "Organizer Of"];
 
         /***************************************************************************
          * Get Functions
@@ -56,7 +56,12 @@ angular.module('seniorprojectYoApp')
 
              // Populate subscriptions
              UserService.groups.volunteeredTo.index($scope.user._id, {}, function(res) {
-                 $scope.user.groups.subscriptions = res.data;
+                 $scope.user.groups.volunteeredTo = res.data;
+             });
+
+             // Populate organizerOf
+             UserService.groups.organizerOf.index($scope.user._id, {}, function(res) {
+                 $scope.user.groups.organizerOf = res.data;
              });
 
          };
@@ -80,14 +85,22 @@ angular.module('seniorprojectYoApp')
                 case "Volunteered To":
                     $scope.otherTabs[0] = "Past Events";
                     $scope.otherTabs[1] = "Subscriptions";
+                    $scope.otherTabs[2] = "Organizer Of";
                     break;
                 case "Past Events":
                     $scope.otherTabs[0] = "Volunteered To";
                     $scope.otherTabs[1] = "Subscriptions";
+                    $scope.otherTabs[2] = "Organizer Of";
                     break;
                 case "Subscriptions":
                     $scope.otherTabs[0] = "Volunteered To";
                     $scope.otherTabs[1] = "Past Events";
+                    $scope.otherTabs[2] = "Organizer Of";
+                    break;
+                case "Organizer Of":
+                    $scope.otherTabs[0] = "Volunteered To";
+                    $scope.otherTabs[1] = "Past Events";
+                    $scope.otherTabs[2] = "Subscriptions";
                     break;
             }
 
@@ -237,41 +250,37 @@ angular.module('seniorprojectYoApp')
         }
 
         $scope.submitEdit = function() {
-            $scope.isUpdating = true;
+            if ($scope.userForm.$valid) {
+                $scope.isUpdating = true;
 
-            // Keep changes made
-            $scope.user_bak = {};
-            $scope.animalsSelected_bak = "";
-            $scope.educationSelected_bak = "";
-            $scope.environmentSelected_bak = "";
-            $scope.peopleSelected_bak = "";
-            $scope.recreationSelected_bak = "";
-            $scope.technologySelected_bak = "";
-            $scope.youthSelected_bak = "";
+                // Keep changes made
+                $scope.user_bak = {};
+                $scope.animalsSelected_bak = "";
+                $scope.educationSelected_bak = "";
+                $scope.environmentSelected_bak = "";
+                $scope.peopleSelected_bak = "";
+                $scope.recreationSelected_bak = "";
+                $scope.technologySelected_bak = "";
+                $scope.youthSelected_bak = "";
 
-            console.log('In submitUser');
-            UserService.update($stateParams.id, {
-                user: $scope.user
-            }, function(res) {
-                console.log('Updated');
-                console.log(res.data);
-                console.log(res.data.user);
-                $scope.user = res.data.user;
-//                $scope.alerts.push({
-//                    type: "success",
-//                    msg: res.data.msg
-//                });
+                UserService.update($scope.user._id, { user: $scope.user },
+                    function(res) {  // success
+                        $scope.alerts.push({type: "success", msg: "Successfully updated user."});
+                        $scope.user = res.data.user;
 
-                $scope.isEditing = false;
-                $scope.isUpdating = false;
-            }, function(res) {
-//                $scope.alerts.push({
-//                    type: "danger",
-//                    msg: res.data.msg
-//                });
+                        $scope.isEditing = false;
+                        $scope.isUpdating = false;
+                    },
+                    function(res) {  // error
+                        $scope.alerts.push({type: "danger", msg: "Unsuccessfully updated user."});
 
-                $scope.isUpdating = false;
-            });
+                        $scope.isUpdating = false;
+                });
+            }
+            else {
+                $scope.alerts.push({type: "danger", msg: "Errors found, please fix them."});
+                $scope.submitted = true;
+            }
         }
 
         /***********************************************************************

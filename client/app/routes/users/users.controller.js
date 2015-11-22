@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('UsersCtrl', function($scope, $stateParams, $anchorScroll, $timeout, UserService, $http, Auth) {
+    .controller('UsersCtrl', function($scope, $stateParams, $anchorScroll, $timeout, UserService, GroupService, Auth) {
 
 
         /***************************************************************************
@@ -54,6 +54,11 @@ angular.module('seniorprojectYoApp')
                  $scope.user.events.volunteeredTo = res.data;
 
                  // Populate groups
+                 angular.forEach($scope.user.events.volunteeredTo, function(event) {
+                     GroupService.show(event.group, function(res) {
+                         event.group = res.data.group;
+                     });
+                 });
              });
 
              // Populate subscriptions

@@ -173,7 +173,7 @@ angular.module('seniorprojectYoApp')
     			$scope.group.creationDate = new Date();
     			$scope.isCreating = true;
 
-                console.log($scope.group);
+                //console.log($scope.group);
 	             // Send new group to server
     			GroupService.create({group: $scope.group},
                     function(res) {     // success
@@ -305,7 +305,7 @@ angular.module('seniorprojectYoApp')
 				angular.forEach($scope.organizersToAdd, function(currentOrganizerToAdd) {
 					// If user is already in the array, flag will be true
 					if (currentOrganizerToAdd._id === $scope.searchResults[index]._id){
-						console.log(currentOrganizerToAdd + "already added");
+						//console.log(currentOrganizerToAdd + "already added");
 						alreadyAdded = true;
 					}
 				});
@@ -316,7 +316,7 @@ angular.module('seniorprojectYoApp')
 				$scope.searchResultsPristine = false;
 				$scope.searchResults[index].added = "added";
 			}
-			console.log($scope.organizersToAdd);
+			//console.log($scope.organizersToAdd);
 		}
 
 		/*
@@ -332,7 +332,7 @@ angular.module('seniorprojectYoApp')
 				//		- do not add to rebuilt array
 				//		- remove class in search results that shows that it has been added if applicable
 				if (currentOrganizerToAdd._id === $scope.organizersToAdd[index]._id){
-					console.log("removed " + currentOrganizerToAdd);
+					//console.log("removed " + currentOrganizerToAdd);
 					angular.forEach($scope.searchResults, function(currentSearchResult) {
 						if (currentSearchResult._id === currentOrganizerToAdd._id)
 							currentSearchResult.added = "";
@@ -340,13 +340,13 @@ angular.module('seniorprojectYoApp')
 				}
 				// Otherwise, add organizer to be added to rebuilt array
 				else {
-					console.log(currentOrganizerToAdd);
+					//console.log(currentOrganizerToAdd);
 					newOrganizersToAdd.push(currentOrganizerToAdd);
 				}
 			});
 			// Sets the rebuilt array
 			$scope.organizersToAdd = newOrganizersToAdd;
-			console.log($scope.organizersToAdd);
+			//console.log($scope.organizersToAdd);
 		}
 
 		$scope.scrollToAdd = function(id) {

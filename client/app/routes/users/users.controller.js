@@ -43,7 +43,7 @@ angular.module('seniorprojectYoApp')
                      }
                  });
              } else {
-                 console.log("no user found");
+                 //console.log("no user found");
              }
 
          });
@@ -334,7 +334,7 @@ angular.module('seniorprojectYoApp')
          * Admin Testing
          **************************************************************************/
         $scope.toggleAdmin = function() {
-            $scope.isAdmin = !$scope.isAdmin;
+            //$scope.isAdmin = !$scope.isAdmin;
         }
 
         /***************************************************************************

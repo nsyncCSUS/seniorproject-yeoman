@@ -45,13 +45,13 @@ angular.module('seniorprojectYoApp')
                         $scope.errorMessage = 'There was a problem retrieving the group';
                     } else {
                         $scope.group = res.data.group;
-                        console.log($scope.group);
+                        //console.log($scope.group);
                         populate();
                         checkAdmin();
                     }
                 });
             } else {
-                console.log("no group found");
+                //console.log("no group found");
             }
 
         });
@@ -69,22 +69,26 @@ angular.module('seniorprojectYoApp')
 
             // Populate subscribers
             GroupService.volunteers.index($scope.group._id, {}, function(res) {
-                console.log(res.data);
+                //console.log(res.data);
                 $scope.group.volunteers = res.data;
             });
 
             // Populate events
             GroupService.events.index($scope.group._id, {}, function(res) {
-                console.log(res.data);
+                //console.log(res.data);
                 $scope.group.events = res.data;
 
                 // Populate organizers + volunteers for events
                 angular.forEach($scope.group.events, function(event) {
-                    EventService.organizers.index(event._id, {}, function (res) {
-                        event.organizers = res.data;
+                    GroupService.show(event.group, function(res) {
+                        event.group = res.data.group;
+                        
+                        EventService.organizers.index(event._id, {}, function (res) {
+                            event.organizers = res.data;
 
-                        EventService.volunteers.index(event._id, {}, function(res) {
-                            event.volunteers = res.data;
+                            EventService.volunteers.index(event._id, {}, function(res) {
+                                event.volunteers = res.data;
+                            });
                         });
                     });
                 });
@@ -324,7 +328,7 @@ angular.module('seniorprojectYoApp')
                 angular.forEach($scope.organizersToAdd, function(currentOrganizerToAdd) {
                     // If user is already in the array, flag will be true
                     if (currentOrganizerToAdd._id === $scope.searchResults[index]._id) {
-                        console.log(currentOrganizerToAdd + "already added");
+                        //console.log(currentOrganizerToAdd + "already added");
                         alreadyAdded = true;
                     }
                 });
@@ -335,7 +339,7 @@ angular.module('seniorprojectYoApp')
                 $scope.searchResultsPristine = false;
                 $scope.searchResults[index].added = "added";
             }
-            console.log($scope.organizersToAdd);
+            //console.log($scope.organizersToAdd);
         }
 
         /*
@@ -351,7 +355,7 @@ angular.module('seniorprojectYoApp')
                 //		- do not add to rebuilt array
                 //		- remove class in search results that shows that it has been added if applicable
                 if (currentOrganizerToAdd._id === $scope.organizersToAdd[index]._id) {
-                    console.log("removed " + currentOrganizerToAdd);
+                    //console.log("removed " + currentOrganizerToAdd);
                     angular.forEach($scope.searchResults, function(currentSearchResult) {
                         if (currentSearchResult._id === currentOrganizerToAdd._id)
                             currentSearchResult.added = "";
@@ -359,13 +363,13 @@ angular.module('seniorprojectYoApp')
                 }
                 // Otherwise, add organizer to be added to rebuilt array
                 else {
-                    console.log(currentOrganizerToAdd);
+                    //console.log(currentOrganizerToAdd);
                     newOrganizersToAdd.push(currentOrganizerToAdd);
                 }
             });
             // Sets the rebuilt array
             $scope.organizersToAdd = newOrganizersToAdd;
-            console.log($scope.organizersToAdd);
+            //console.log($scope.organizersToAdd);
         }
 
         $scope.scrollToAdd = function(id) {
@@ -408,13 +412,13 @@ angular.module('seniorprojectYoApp')
                              UserService.update($scope.user._id, { user: $scope.user },
                                  function(res) {  // success
                                      //$scope.user = res.data.user;
-                                     console.log(res.data.user);
+                                     //console.log(res.data.user);
                                      $scope.group.events[eventIndex].volunteers.push(res.data.user);
 
                                      EventService.update($scope.group.events[eventIndex]._id, { event: $scope.group.events[eventIndex] },
                                          function(res) {  // success
                                              //$scope.group.events[eventIndex] = res.data.event;
-                                             console.log(res.data.event);
+                                             //console.log(res.data.event);
 
                                              //populateGroup();
 
@@ -483,12 +487,12 @@ angular.module('seniorprojectYoApp')
                              UserService.update($scope.user._id, { user: $scope.user },
                                  function(res) {  // success
                                      //$scope.user = res.data.user;
-                                     console.log(res.data.user);
+                                     //console.log(res.data.user);
 
                                      EventService.update($scope.group.events[eventIndex]._id, { event: $scope.group.events[eventIndex] },
                                          function(res) {  // success
                                              //$scope.group.events[eventIndex] = res.data.event;
-                                             console.log(res.data.event);
+                                             //console.log(res.data.event);
 
                                              //populateGroup();
 
@@ -740,13 +744,13 @@ angular.module('seniorprojectYoApp')
                              UserService.update($scope.user._id, { user: $scope.user },
                                  function(res) {  // success
                                      //$scope.user = res.data.user;
-                                     console.log(res.data.user);
+                                     //console.log(res.data.user);
                                      $scope.group.volunteers.push(res.data.user);
 
                                      GroupService.update($stateParams.groupId, { group: $scope.group },
                                          function(res) {  // success
                                              //$scope.group = res.data.group;
-                                             console.log(res.data.group);
+                                             //console.log(res.data.group);
 
                                              //populate();
 
@@ -853,7 +857,7 @@ angular.module('seniorprojectYoApp')
          * Admin Testing
          **************************************************************************/
         $scope.toggleAdmin = function() {
-            $scope.isAdmin = !$scope.isAdmin;
+            //$scope.isAdmin = !$scope.isAdmin;
         }
 
 

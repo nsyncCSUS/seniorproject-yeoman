@@ -49,9 +49,11 @@ angular.module('seniorprojectYoApp')
          });
 
          function populateUser() {
-             // VolunteeredTo
+             // Populate volunteeredTo
              UserService.events.volunteeredTo.index($scope.user._id, {}, function(res) {
                  $scope.user.events.volunteeredTo = res.data;
+
+                 // Populate groups
              });
 
              // Populate subscriptions

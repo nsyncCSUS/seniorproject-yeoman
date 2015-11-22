@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('EventsCtrl', function($stateParams, $scope, $timeout, EventService, GroupService, UserService, Auth) {
+    .controller('EventsCtrl', function($stateParams, $scope, $timeout, $location, EventService, GroupService, UserService, Auth) {
         /***************************************************************************
          * Variables (includes ones from scope too)
          **************************************************************************/
@@ -12,6 +12,7 @@ angular.module('seniorprojectYoApp')
         $scope.currentDate = new Date();
         $scope.submitted = false;
         $scope.alerts = [];
+        $scope.isBusy = false;
 
         $scope.animalsSelected = "";
         $scope.educationSelected = "";
@@ -353,20 +354,154 @@ angular.module('seniorprojectYoApp')
         /***************************************************************************
          * Volunteer Button
          **************************************************************************/
-        $scope.volunteer = function() {
+         $scope.volunteer = function() {
+             if (Auth.isLoggedIn()) {
 
-        }
+                 // Get updated event before trying to
+                 EventService.show($scope.event._id, function(res) {
+                     if (res.status === 404) {
+                         $scope.errorMessage = 'There was a problem retrieving the event';
+                     } else {
+                         $scope.event = res.data.event;
+                         if ($scope.event.volunteers.length >= $scope.event.maxVolunteers){
+                             $scope.alerts.push({
+                                 type: "warning",
+                                 msg: 'Event is full.'
+                             });
+                         }
+                         else {
+                             $scope.isBusy = true;
 
-        $scope.optOut = function() {
+                             $scope.user = Auth.getCurrentUser();
 
-        }
+                             $scope.user.events.volunteeredTo.push($scope.event);
 
-        /***************************************************************************
-         * Subscribe Button
-         **************************************************************************/
-        $scope.subscribe = function() {
+                             UserService.update($scope.user._id, { user: $scope.user },
+                                 function(res) {  // success
+                                     //$scope.user = res.data.user;
+                                     console.log(res.data.user);
+                                     $scope.event.volunteers.push(res.data.user);
 
-        }
+                                     EventService.update($scope.event._id, { event: $scope.event },
+                                         function(res) {  // success
+                                             //$scope.group.events[curEvent] = res.data.event;
+                                             console.log(res.data.event);
+
+                                             //populateEvent();
+
+                                             $scope.alerts.push({
+                                                 type: "success",
+                                                 msg: 'You have successfully volunteered'
+                                             });
+
+                                             $scope.isBusy = false;
+
+                                         },
+                                         function(res) {  //error
+                                             $scope.alerts.push({
+                                                 type: "danger",
+                                                 msg: 'There was a problem volunteering'
+                                             });
+                                         });
+
+                                     },
+                                     function(res) {  // error
+                                         $scope.alerts.push({
+                                             type: "danger",
+                                             msg: 'There was a problem volunteering'
+                                         });
+                                     });
+                                 }
+                             }
+                         });
+                     }
+                     else {
+                         $location.path("/login/").replace;
+                     }
+                 }
+
+                 $scope.optOut = function() {
+                     if (Auth.isLoggedIn()) {
+
+                         // Get updated event before trying to
+                         EventService.show($scope.event._id, function(res) {
+                             if (res.status === 404) {
+                                 $scope.errorMessage = 'There was a problem retrieving the event';
+                             } else {
+                                 $scope.event = res.data.event;
+                                 if ($scope.event.volunteers.length >= $scope.event.maxVolunteers){
+                                     $scope.alerts.push({
+                                         type: "warning",
+                                         msg: 'Event is full.'
+                                     });
+                                 }
+                                 else {
+
+                                     EventService.volunteers.index($scope.event._id, {}, function(res) {
+                                         $scope.event.volunteers = res.data;
+
+                                         $scope.isBusy = true;
+
+                                         $scope.user = Auth.getCurrentUser();
+
+                                         // Remove event from user volunteer list
+                                         for (var i = 0; i < $scope.user.events.volunteeredTo.length; i++) {
+                                             if ($scope.user.events.volunteeredTo[i]._id === $scope.event._id){
+                                                 $scope.user.events.volunteeredTo.splice(i, 1);
+                                             }
+                                         }
+
+                                         // Remove user from event volunteer list
+                                         for (var i = 0; i < $scope.event.volunteers.length; i++) {
+                                             if ($scope.event.volunteers[i]._id === $scope.user._id){
+                                                 $scope.event.volunteers.splice(i, 1);
+                                             }
+                                         }
+
+                                         UserService.update($scope.user._id, { user: $scope.user },
+                                             function(res) {  // success
+                                                 //$scope.user = res.data.user;
+                                                 console.log(res.data.user);
+
+                                                 EventService.update($scope.event._id, { event: $scope.event },
+                                                     function(res) {  // success
+                                                         //$scope.group.events[curEvent] = res.data.event;
+                                                         console.log(res.data.event);
+
+                                                         //populateEvent();
+
+                                                         $scope.alerts.push({
+                                                             type: "success",
+                                                             msg: 'You have successfully opted out'
+                                                         });
+
+                                                         $scope.isBusy = false;
+
+                                                     },
+                                                     function(res) {  //error
+                                                         $scope.alerts.push({
+                                                             type: "danger",
+                                                             msg: 'There was a problem opting out'
+                                                         });
+                                                     });
+
+                                                 },
+                                                 function(res) {  // error
+                                                     $scope.alerts.push({
+                                                         type: "danger",
+                                                         msg: 'There was a problem opting out'
+                                                     });
+                                                 });
+                                             });
+                                         }
+                                     }
+                                 });
+                             }
+                             else {
+                                 $location.path("/login/").replace;
+                             }
+
+                         }
 
 
         /***************************************************************************
@@ -425,85 +560,3 @@ angular.module('seniorprojectYoApp')
         }
 
     });
-
-/*{
-                  _id : "event1",
-                  creationUser: {
-                      _id : "creatorid",
-                      firstName : "Anthony",
-                      lastName : "Nguyen",
-                      picture : "//placekitten.com/g/505/500/"
-                  },
-                  group: {
-                      _id: "nsync",
-                      name: "N.Sync().......... .............. ................ ............. ..........................",
-                      picture: "//placekitten.com/g/500/500/",
-                      creationDate: "2015-08-26T18:50:10.111Z"
-                  },
-                  name: "SUPER DUPER AWESOME EVENT!!!!",
-                  description: "sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem blandit non.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vulputate pellentesque lorem. Donec erat ante, sodales malesuada accumsan vel, condimentum eget eros. Mauris consectetur nisi in ex pharetra commodo. Nullam aliquam velit sem, nec molestie risus eleifend ac. In fringilla, nisl ac gravida convallis, turpis eros accumsan urna, sed molestie tortor libero sit amet lacus. Nulla porttitor euismod purus, ut hendrerit leo vehicula sed. Aenean a lobortis metus, ut ornare erat. Suspendisse tincidunt molestie lacus, non molestie sem bland center",
-                  picture: "//placekitten.com/g/501/500/",
-                  startTimeDate: "2015-08-26T18:50:10.111Z",
-                  endTimeDate: "2015-08-27T19:50:10.111Z",
-                  street: "1234 cool st",
-                  city: "Sacramento",
-                  state: "CA",
-                  zipcode: "95828",
-                  maxVolunteers: 50,
-                  volunteers: [{
-                      _id: "v1",
-                      firstName: "Kitten 1",
-                      lastName: "1"
-                  }, {
-                      _id: "v2",
-                      firstName: "Kitten 2",
-                      lastName: "1",
-                      picture: "//placekitten.com/g/250/251"
-                  }, {
-                      _id: "v3",
-                      firstName: "Kitten 3",
-                      lastName: "1"
-                  }, {
-                      _id: "v4",
-                      firstName: "Kitten 4",
-                      lastName: "1",
-                      picture: "//placekitten.com/g/250/253"
-                  }, {
-                      _id: "v5",
-                      firstName: "Kitten 5",
-                      lastName: "1",
-                      picture: "//placekitten.com/g/250/254"
-                  }, {
-                      _id: "v6",
-                      firstName: "Kitten 6",
-                      lastName: "1",
-                      picture: "//placekitten.com/g/250/255"
-                  }, {
-                      _id: "v7",
-                      firstName: "Kitten 7",
-                      lastName: "1",
-                      picture: "//placekitten.com/g/250/256"
-                  }, {
-                      _id: "v8",
-                      firstName: "Kitten 8",
-                      lastName: "1",
-                      picture: "//placekitten.com/g/250/257"
-                  }, {
-                      _id: "v9",
-                      firstName: "Kitten 9",
-                      lastName: "1",
-                      picture: "//placekitten.com/g/250/258"
-                  }, {
-                      _id: "v10",
-                      firstName: "Kitten 10",
-                      lastName: "1",
-                      picture: "//placekitten.com/g/250/259"
-                  }, {
-                      _id: "v11",
-                      firstName: "Kitten 11",
-                      lastName: "1",
-                      picture: "//placekitten.com/g/250/260"
-                  }],
-                  interests: ["Animals", "Education", "Environment", "People", "Recreation", "Technology", "Youth"]
-
-              }*/

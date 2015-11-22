@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('EventsCtrl', function($stateParams, $scope, $timeout, EventService, GroupService, Auth) {
+    .controller('EventsCtrl', function($stateParams, $scope, $timeout, EventService, GroupService, UserService, Auth) {
         /***************************************************************************
          * Variables (includes ones from scope too)
          **************************************************************************/
@@ -27,17 +27,9 @@ angular.module('seniorprojectYoApp')
 
         // Get event data
         Auth.isLoggedInAsync(function(success) {
-           if (Auth.isLoggedIn()) {
-               for (var i = 0; i < Auth.getCurrentUser().events.organizerOf.length; i++){
-                   if (Auth.getCurrentUser().events.organizerOf[i] == $stateParams.eventId){
-                       $scope.isAdmin = true;
-                       break;
-                   }
-               }
-           }
-           else {
-               $scope.isAdmin = false;
-           }
+            if (Auth.isLoggedIn()) {
+                $scope.user = Auth.getCurrentUser();
+            }
            // Gets the event data from server
            if ($stateParams.eventId) {
                EventService.show($stateParams.eventId, function(res) {
@@ -46,6 +38,7 @@ angular.module('seniorprojectYoApp')
                    } else {
                        $scope.event = res.data.event;
                        populateEvent();
+                       checkAdmin();
                    }
                });
            } else {
@@ -66,16 +59,36 @@ angular.module('seniorprojectYoApp')
            });
 
            // Populate organizers
-           EventService.organizers.index($scope.event._id, function(res) {
-               $scope.event.organizes = res.data;
+           EventService.organizers.index($scope.event._id, {}, function(res) {
+               $scope.event.organizers = res.data;
+                   console.log($scope.event);
            });
 
            // Populate volunteers
-           EventService.volunteers.index($scope.event._id, function(res) {
+           EventService.volunteers.index($scope.event._id, {}, function(res) {
                $scope.event.volunteers = res.data;
            });
 
         };
+
+        function checkAdmin() {
+            if (Auth.isLoggedIn()) {
+                // Populate required user data first
+                UserService.events.organizerOf.index($scope.user._id, {}, function(res) {
+                    $scope.user.events.organizerOf = res.data;
+
+                    for (var i = 0; i < $scope.user.events.organizerOf.length; i++){
+                        if ($scope.user.events.organizerOf[i]._id == $stateParams.eventId){
+                            $scope.isAdmin = true;
+                            break;
+                        }
+                    }
+                });
+            }
+            else {
+                $scope.isAdmin = false;
+            }
+        }
         /***************************************************************************
          * Building Functions
          **************************************************************************/
@@ -364,6 +377,18 @@ angular.module('seniorprojectYoApp')
                 for (var i = 0; i < $scope.event.volunteers.length; i++) {
                     if ($scope.event.volunteers[i]._id === $scope.user._id)
                         return true;
+                }
+            }
+            return false;
+        }
+
+        $scope.isOrganizer = function() {
+            if ($scope.user != null){
+                if ($scope.event != null){
+                    for (var i = 0; i < $scope.event.organizers.length; i++) {
+                        if ($scope.event.organizers[i]._id === $scope.user._id)
+                        return true;
+                    }
                 }
             }
             return false;

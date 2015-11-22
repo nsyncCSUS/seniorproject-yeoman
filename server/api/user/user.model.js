@@ -24,9 +24,6 @@ var UserSchema = new Schema({
     provider: String,
     salt: String,
 
-    firstName: String,
-    middleName: String,
-    lastName: String,
     description: String,
     birthday: Date,
     age: Number,
@@ -100,9 +97,7 @@ UserSchema
             'name': this.name,
             'role': this.role,
 
-            'firstName': this.firstName,
-            'middleName': this.middleName,
-            'lastName': this.lastName,
+            'picture': this.picture,
             'description': this.description,
             'birthday': this.birthday,
             'age': this.age,

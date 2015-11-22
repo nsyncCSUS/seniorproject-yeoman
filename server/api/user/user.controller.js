@@ -72,8 +72,8 @@ exports.update = function(req, res) {
     }
 
     if(req.body.user.id) delete req.body.user.id;
-    if(req.body.user.events) delete req.body.user.events;
-    if(req.body.user.groups) delete req.body.user.groups;
+    //if(req.body.user.events) delete req.body.user.events;
+    //if(req.body.user.groups) delete req.body.user.groups;
     if(req.body.user.hashedPassword) delete req.body.user.hashedPassword;
     if(req.body.user.creationDate) delete req.body.user.creationDate;
 

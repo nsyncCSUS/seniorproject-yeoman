@@ -29,5 +29,5 @@
                 h4 Current Events
 
             .col-xs-12.col-sm-9.col-md-10.col-lg-11
-                a(ng-href='/events/{{event._id}}/', ng-repeat='event in group.events | limitTo:9', uib-tooltip='{{event.name}}')
+                a(ng-href='/groups/{{event.group._id}}/events/{{event._id}}/', ng-repeat='event in group.events | limitTo:9', uib-tooltip='{{event.name}}')
                     img.img-rounded.volunteer-thumbnail(src='{{event.picture}}')

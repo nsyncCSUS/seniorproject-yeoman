@@ -8,11 +8,12 @@ h1 Dashboard Page
             img.img-responsive.img-thumbnail.center-item(src="{{user.picture}}")
         .col-xs-6.col-sm-12.col-md-12.col-lg-12.text-center.infoRow
             a(href='/users/{{user._id}}')
-                h5 {{user.firstName}} {{user.middleName}} {{user.lastName}}
+                h5 {{user.name}}
             | Member since: {{user.creationDate | date:'MMM dd, yyyy'}}
             hr
-            button.btn.btn-default.center-item(ng-click='')
-                h4 Create Group
+            a(href='/create/group')
+                button.btn.btn-default.center-item
+                    h4 Create Group
 
 
         .col-xs-12.col-sm-12.col-md-12.col-lg-12
@@ -55,11 +56,11 @@ h1 Dashboard Page
 
     .col-xs-12.col-sm-8.col-md-8.col-lg-8
         .panel-body.eventRow(ng-show='getCurrentTab("Upcoming Events")')
-            .row.eventRow(ng-repeat='event in user.events.volunteeredTo | orderBy:"startTimeDate" | CheckExpired:false')
+            .row.eventRow(ng-repeat='event in upcomingEvents | orderBy:"startTimeDate" | CheckExpired:false')
                 group-event-card
 
         .panel-body.eventRow(ng-show='getCurrentTab("Past Events")')
-            .row.eventRow(ng-repeat='event in user.events.volunteeredTo | orderBy:"-startTimeDate" | CheckExpired:true')
+            .row.eventRow(ng-repeat='event in upcomingEvents | orderBy:"-startTimeDate" | CheckExpired:true')
                 past-group-event-card
 
         .panel-body.eventRow(ng-show='getCurrentTab("Recommended Events")')

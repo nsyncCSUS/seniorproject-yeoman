@@ -100,12 +100,28 @@ input::-webkit-inner-spin-button {
 **********************************************************************/
 .cardHeader {
     border-left: solid thick #ff0000;
+    position: relative;
 }
 
 .cardBody {
     border-left: solid;
     border-bottom: solid;
     border-top: solid;
+}
+
+.organizerCardHeader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: -1;
+    overflow: hidden;
+    opacity: .2;
+    text-align: right;
+    -ms-transform: rotate(10deg); /* IE 9 */
+    -webkit-transform: rotate(10deg); /* Chrome, Safari, Opera */
+    transform: rotate(10deg);
 }
 
 .volunteerRow {

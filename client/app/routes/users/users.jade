@@ -175,8 +175,8 @@ div(ng-show='!getIsEditing()')
     .container
         .row
             .col-xs-12.col-sm-8.col-md-8.col-lg-8
-                h2.hidden-xs {{user.firstName}} {{user.middleName}} {{user.lastName}}
-                h2.visible-xs.text-center {{user.firstName}} {{user.middleName}} {{user.lastName}}
+                h2.hidden-xs {{user.name}}
+                h2.visible-xs.text-center {{user.name}}
             .col-xs-12.col-sm-4.col-md-4.col-lg-4
                 h2.pull-right.hidden-xs
                     img.btn.btn-sm(ng-src='/images/social-media/googlePlus.png', ng-disabled='!checkIfHas("googlePlus")', ng-click='goTo(user.googlePlusURL)', uib-tooltip='{{user.googlePlusURL}}')

@@ -62,8 +62,8 @@ exports.update = function(req, res) {
     }
 
     if(req.body.group._id) delete req.body.group._id
-    if(req.body.group.events) delete req.body.group.events;
-    if(req.body.group.volunteers) delete req.body.group.volunteers;
+    //if(req.body.group.events) delete req.body.group.events;
+    //if(req.body.group.volunteers) delete req.body.group.volunteers;
     if(req.body.group.organizers) delete req.body.group.organizers;
 
     Group.findByIdAndUpdate(req.params.id, req.body.group, {

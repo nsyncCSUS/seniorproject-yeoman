@@ -46,7 +46,7 @@ angular.module('seniorprojectYoApp')
 
 
         this.update = function(id, params, callback, error) {
-            Users.one(id).patch({user: params}).then(callback, error);
+            Users.one(id).patch({user: params.user}).then(callback, error);
         };
 
 

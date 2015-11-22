@@ -261,10 +261,11 @@ div(ng-show='!getIsEditing()')
                                                     .row
                                                         .col-xs-12.col-sm-12.col-md-12.col-lg-12
                                                             a(href='/users/{{organizer._id}}')
-                                                                h6.oneline {{organizer.firstName}} {{organizer.lastName}}
+                                                                h6.oneline {{organizer.name}}
                                                         .col-xs-12.col-sm-12.col-md-12.col-lg-12
                                                             .col-xs-6.col-sm-6.col-md-6.col-lg-6
-                                                                img.img-responsive.img-rounded(src='{{organizer.picture}}')
+                                                                a(href='/users/{{organizer._id}}')
+                                                                    img.img-responsive.img-rounded(src='{{organizer.picture}}')
                                                             .col-xs-6.col-sm-6.col-md-6.col-lg-6
                                                                 button.btn.btn-default.btn-xs Contact
                             .panel-default.cursor-pointer

@@ -83,17 +83,17 @@ angular.module('seniorprojectYoApp')
 
                         // Add newly created event to group
                         var group = {};
+                        var event = res.data.event;
                         if ($stateParams.groupId) {
                             GroupService.show($stateParams.groupId, function(res) {
                                 if (res.status === 404) {
                                     $scope.errorMessage = 'There was a problem retrieving the group';
                                 } else {
                                     group = res.data.group;
-                                    group.events.push(res.data.event);
+                                    group.events.push(event);
 
                                     GroupService.update( $stateParams.groupId, { group: group },
                                         function(res) { // success
-
                                         },
                                         function(res) { // error
 

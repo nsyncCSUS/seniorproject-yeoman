@@ -204,11 +204,12 @@ div(ng-show='getIsPreviewing()')
                         .col-xs-12.col-sm-12.col-md-12.col-lg-12
                             h3.text-center Organizers
                             hr
-                            .col-xs-6.col-sm-6.col-md-4.col-lg-4
-                                img.img-responsive.img-rounded(src='{{event.creationUser.picture}}')
-                            .col-xs-6.col-sm-6.col-md-8.col-lg-8
-                                h6 {{event.creationUser.firstName}} {{event.creationUser.lastName}}
-                                button.btn.btn-default.btn-xs Contact
+                            .col-xs-12.col-sm-12.col-md-12.col-lg-12(ng-repeat='organizer in event.organizers')
+                                .col-xs-6.col-sm-6.col-md-4.col-lg-4
+                                    img.img-responsive.img-rounded(src='{{organizer.picture}}')
+                                .col-xs-6.col-sm-6.col-md-8.col-lg-8
+                                    h6 {{organizer.name}}
+                                    button.btn.btn-default.btn-xs(ng-click='') Contact
                 hr
 
         .col-xs-12.col-sm-8.col-md-8.col-lg-8

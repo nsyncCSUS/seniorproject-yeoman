@@ -14,5 +14,11 @@ angular.module('seniorprojectYoApp')
         url: '/users/:userId',
         templateUrl: 'app/routes/users/users.html',
         controller: 'UsersCtrl'
+      })
+      .state('users3', {
+        isFree: true,
+        url: '/users/:userId/',
+        templateUrl: 'app/routes/users/users.html',
+        controller: 'UsersCtrl'
       });
   });

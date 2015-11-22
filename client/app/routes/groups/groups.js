@@ -12,5 +12,10 @@ angular.module('seniorprojectYoApp')
         url: '/groups/:groupId',
         templateUrl: 'app/routes/groups/groups.html',
         controller: 'GroupsCtrl'
+      })
+      .state('groups3', {
+        url: '/groups/:groupId/',
+        templateUrl: 'app/routes/groups/groups.html',
+        controller: 'GroupsCtrl'
       });
   });

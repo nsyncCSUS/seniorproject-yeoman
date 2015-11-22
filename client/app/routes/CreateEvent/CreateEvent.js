@@ -12,5 +12,10 @@ angular.module('seniorprojectYoApp')
             url: '/groups/:groupId/create/event',
             templateUrl: 'app/routes/CreateEvent/CreateEvent.html',
             controller: 'CreateEventCtrl'
+        })
+        .state('CreateEvent3', {
+            url: '/groups/:groupId/create/event/',
+            templateUrl: 'app/routes/CreateEvent/CreateEvent.html',
+            controller: 'CreateEventCtrl'
         });
   });

@@ -17,31 +17,71 @@ angular.module('seniorprojectYoApp')
          // Get user data
          Auth.isLoggedInAsync(function(success) {
              if (Auth.isLoggedIn()) {
-                 console.log(Auth.getCurrentUser());
                  $scope.user = Auth.getCurrentUser();
 
                  populateUser();
+                     console.log($scope.user);
+                         console.log(Auth.getCurrentUser());
              }
          });
 
          function populateUser() {
-             // Populate organizerOf
-             UserService.groups.organizerOf.index($scope.user._id, function(res) {
+             // Populate organizerOf Groups
+             UserService.groups.organizerOf.index($scope.user._id, {}, function(res) {
                  $scope.user.groups.organizerOf = res.data;
              });
 
              // Populate subscribedTo
-             UserService.groups.subscribedTo.index($scope.user._id, function(res) {
-                 $scope.user.groups.subscribedTo = res.data;
+             UserService.groups.volunteeredTo.index($scope.user._id, {}, function(res) {
+                 $scope.user.groups.volunteeredTo = res.data;
              });
 
-             // Populate volunteeredTo
-             UserService.events.volunteeredTo.index($scope.user._id, function(res) {
+             // Populate upcomingEvents = volunteeredTo + organizerOf
+             $scope.upcomingEvents = [];
+             // VolunteeredTo
+             UserService.events.volunteeredTo.index($scope.user._id, {}, function(res) {
                  $scope.user.events.volunteeredTo = res.data;
+
+                 // Combine all events into 1 array
+                 angular.forEach($scope.user.events.volunteeredTo, function(event) {
+                     $scope.upcomingEvents.push(event);
+                 });
+
+                 // OrganizerOf
+                 UserService.events.organizerOf.index($scope.user._id, {}, function(res) {
+                     $scope.user.events.organizerOf = res.data;
+
+                     // Combine all events into 1 array
+                     angular.forEach($scope.user.events.organizerOf, function(event) {
+                         $scope.upcomingEvents.push(event);
+                     });
+
+                     populateUpcomingEvents();
+
+                 });
              });
 
              // Populate recommended events
          };
+
+         function populateUpcomingEvents() {
+             // Populate group + organizerOf + volunteers for all events
+             angular.forEach($scope.upcomingEvents, function(event) {
+                 GroupService.show(event.group, function(res) {
+                     event.group = res.data.group;
+
+                     EventService.organizers.index(event._id, {}, function (res) {
+                         event.organizers = res.data;
+
+                         EventService.volunteers.index(event._id, {}, function(res) {
+                             event.volunteers = res.data;
+
+                             console.log($scope.upcomingEvents);
+                         });
+                     });
+                 });
+             });
+         }
 
         /***********************************************************************
          * Building Functions
@@ -109,12 +149,23 @@ angular.module('seniorprojectYoApp')
         }
 
         $scope.isVolunteering = function(curEvent) {
-            for (var i = 0; i < $scope.user.volunteeredTo[curEvent].volunteers.length; i++) {
-                if ($scope.user.volunteeredTo[curEvent].volunteers[i]._id === $scope.user._id)
-                    return true;
+            if ($scope.user != null){
+                for (var i = 0; i < $scope.upcomingEvents[curEvent].volunteers.length; i++) {
+                    if ($scope.upcomingEvents[curEvent].volunteers[i]._id === $scope.user._id)
+                        return true;
+                }
             }
             return false;
         }
 
+        $scope.isOrganizer = function(curEvent) {
+            if ($scope.user != null){
+                for (var i = 0; i < $scope.upcomingEvents[curEvent].organizers.length; i++) {
+                    if ($scope.upcomingEvents[curEvent].organizers[i]._id === $scope.user._id)
+                        return true;
+                }
+            }
+            return false;
+        }
 
     });

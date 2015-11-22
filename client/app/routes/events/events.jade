@@ -211,12 +211,14 @@ div(ng-show='!getIsEditing()')
                         .col-xs-12.col-sm-12.col-md-12.col-lg-12
                             h3.text-center Organizers
                             hr
-                            .col-xs-6.col-sm-6.col-md-4.col-lg-4
-                                img.img-responsive.img-rounded(src='{{event.creationUser.picture}}')
-                            .col-xs-6.col-sm-6.col-md-8.col-lg-8
-                                a(href='/users/{{event.creationUser._id}}')
-                                    h6 {{event.creationUser.firstName}} {{event.creationUser.lastName}}
-                                button.btn.btn-default.btn-xs(ng-click='contact()') Contact
+                            .col-xs-12.col-sm-12.col-md-12.col-lg-12(ng-repeat='organizer in event.organizers')
+                                .col-xs-6.col-sm-6.col-md-4.col-lg-4
+                                    a(href='/users/{{organizer._id}}')
+                                        img.img-responsive.img-rounded(src='{{organizer.picture}}')
+                                .col-xs-6.col-sm-6.col-md-8.col-lg-8
+                                    a(href='/users/{{organizer._id}}')
+                                        h6 {{organizer.name}}
+                                    button.btn.btn-default.btn-xs(ng-click='contact($index)') Contact
                 hr
 
         .col-xs-12.col-sm-8.col-md-8.col-lg-8
@@ -224,7 +226,9 @@ div(ng-show='!getIsEditing()')
                 .col-xs-12.col-sm-12.col-md-12.col-lg-12
                     h2 <strong> {{event.name}} </strong>
 
-                    .col-xs-12.col-sm-12.col-md-12.col-lg-12.dateRow
+                    .col-xs-12.col-sm-12.col-md-12.col-lg-12.cardHeader
+                        h1(ng-show='isOrganizer($index)', ng-class='{ "organizerCardHeader" : isOrganizer($index) }') ORGANIZER
+
                         h3 {{event.startTimeDate | date:'MMM d, yyyy'}}
 
                         h5.timeRow {{event.startTimeDate | date:'EEEE h:mm a'}}
@@ -243,8 +247,8 @@ div(ng-show='!getIsEditing()')
                                 .col-xs-12.col-sm-12.col-md-12.col-lg-12
                                     h4.text-center {{event.volunteers.length}} / {{event.maxVolunteers}}
                                         | &nbsp
-                                        button.btn(ng-show='isVolunteering()', ng-click='optOut()', ng-disabled='getCurrentlyActive()') Opt out
-                                        button.btn(ng-show='!isVolunteering()', ng-click='volunteer()', ng-disabled='getCurrentlyActive()') Volunteer
+                                        button.btn(ng-show='isVolunteering()', ng-click='optOut()', ng-disabled='getCurrentlyActive() || isOrganizer()') Opt out
+                                        button.btn(ng-show='!isVolunteering()', ng-click='volunteer()', ng-disabled='getCurrentlyActive() || isOrganizer()') Volunteer
                                     hr
                                 .hidden-xs
                                     .col-xs-12.col-sm-12.col-md-12.col-lg-12

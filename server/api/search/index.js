@@ -10,7 +10,7 @@ var router = express.Router();
 
 //router.get('/', controller.index);
 router.get('/events/:searchstring',controller.events);
-//router.get('/:id', controller.show);
+router.get('/users/:username', controller.users);
 //router.get('/:id', controller.show);
 
 

@@ -50,7 +50,7 @@ exports.events = function(req,res){
 // regardless of its name
 // right now its binded to req.body.searchString
 
-  // RegExp(String , Flags) g=global(?resets some internal counter ) i= ignore case
+  // RegExp(String , Flags) g=global(find all matches ) i= ignore case
  // need regEXP object to put search vairable in
  // you cant put in variables directly into a regex
  // req.body.searchString is the string from angular
@@ -71,4 +71,24 @@ exports.events = function(req,res){
     res.send(data);
 
 }).$where('this.maxVolunteers > this.currentVolunteers').sort({currentVolunteers: -1}).limit(100);
+};
+
+
+exports.users = function(req,res){
+  var searchStringRegExObj = new RegExp(req.params.username, "gi");
+  if(req.params.username ==='all'){
+     searchStringRegExObj = new RegExp('.*', "gi");
+  }
+
+
+  User.find({
+    name: searchStringRegExObj
+  }, function(err, data) {
+    if (err) {
+      throw err;
+    }
+
+      res.send(data);
+  }).limit(100);
+
 };

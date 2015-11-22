@@ -64,14 +64,14 @@ exports.events = function(req,res){
     //console.log(req.query);
     var intrestsRegExObj;
     var parsedIntrests= Object.keys(req.query)[0];
-
+    console.log(parsedIntrests);
     var parsedSearch = req.params.searchstring.replace(/\s/gi, "|");
     var searchStringRegExObj = new RegExp(parsedSearch, "gi");
 
     if(req.params.searchstring ==='all'){
       searchStringRegExObj = new RegExp('.*', "gi");
     }
-     if(parsedIntrests=== undefined){
+     if(parsedIntrests=== 'undefined' ||parsedIntrests=== undefined ){
       intrestsRegExObj = new RegExp('.*', "gi");
     }else{
        parsedIntrests = parsedIntrests.replace(/\s/gi, "|");
@@ -126,7 +126,7 @@ exports.groups = function(req,res){
   if(req.params.groupname ==='all'){
     searchStringRegExObj = new RegExp('.*', "gi");
   }
-   if(parsedIntrests=== undefined){
+   if(parsedIntrests=== 'undefined' || parsedIntrests=== undefined){
     intrestsRegExObj = new RegExp('.*', "gi");
   }else{
      parsedIntrests = parsedIntrests.replace(/\s/gi, "|");

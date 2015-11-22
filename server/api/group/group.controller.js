@@ -44,12 +44,29 @@ exports.show = function(req, res) {
 
 // Creates a new group in the DB.
 exports.create = function(req, res) {
-    return Group.create(req.body.group, function(err, group) {
+    var user = req.user;
+
+    if(req.body._id) delete req.body._id;
+    var params = req.body;
+    params.creationUser = user._id;
+
+    return Group.create(params, function(err, group) {
         if (err) {
             return handleError(res, err);
         }
-        return res.status(201).json({
-            group: group
+
+        return User.findByIdAndUpdate(user._id, {
+            $addToSet: group._id
+        }, function(err, user) {
+            if(err) {
+                return handleError(res, err);
+            } else if(!user) {
+                return notFound(res);
+            } else {
+                return res.status(201).json({
+                    group: group
+                });
+            }
         });
     });
 };

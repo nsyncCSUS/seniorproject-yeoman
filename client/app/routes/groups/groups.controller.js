@@ -58,6 +58,7 @@ angular.module('seniorprojectYoApp')
 
         function populate() {
             populateGroup();
+            populateSubscribers();
             populateUser();
         }
 
@@ -67,11 +68,6 @@ angular.module('seniorprojectYoApp')
                 $scope.group.organizers = res.data;
             });
 
-            // Populate subscribers
-            GroupService.volunteers.index($scope.group._id, {}, function(res) {
-                //console.log(res.data);
-                $scope.group.volunteers = res.data;
-            });
 
             // Populate events
             GroupService.events.index($scope.group._id, {}, function(res) {
@@ -82,7 +78,7 @@ angular.module('seniorprojectYoApp')
                 angular.forEach($scope.group.events, function(event) {
                     GroupService.show(event.group, function(res) {
                         event.group = res.data.group;
-                        
+
                         EventService.organizers.index(event._id, {}, function (res) {
                             event.organizers = res.data;
 
@@ -94,6 +90,14 @@ angular.module('seniorprojectYoApp')
                 });
             });
         };
+
+        function populateSubscribers() {
+            // Populate subscribers
+            GroupService.volunteers.index($scope.group._id, {}, function(res) {
+                //console.log(res.data);
+                $scope.group.volunteers = res.data;
+            });
+        }
 
         function populateUser() {
             // VolunteeredTo
@@ -107,6 +111,12 @@ angular.module('seniorprojectYoApp')
             });
 
         };
+
+        function populateAnEventVolunteers(event) {
+            EventService.volunteers.index(event._id, {}, function(res) {
+                event.volunteers = res.data;
+            });
+        }
 
         function checkAdmin() {
             if (Auth.isLoggedIn()) {
@@ -389,143 +399,77 @@ angular.module('seniorprojectYoApp')
          **************************************************************************/
          $scope.volunteer = function(curEvent) {
              if (Auth.isLoggedIn()) {
+
+                 $scope.isBusy = true;
                  var eventIndex = $scope.group.events.indexOf($filter('filter')($scope.group.events, {_id: curEvent._id}, true)[0]);
-                 // Get updated event before trying to
                  EventService.show($scope.group.events[eventIndex]._id, function(res) {
                      if (res.status === 404) {
                          $scope.errorMessage = 'There was a problem retrieving the event';
                      } else {
-                         $scope.group.events[eventIndex] = res.data.event;
+                         $scope.group.events[eventIndex].volunteers = res.data.event.volunteers;
+                         $scope.group.events[eventIndex].maxVolunteers = res.data.event.maxVolunteers;
                          if ($scope.group.events[eventIndex].volunteers.length >= $scope.group.events[eventIndex].maxVolunteers){
                              $scope.alerts.push({
                                  type: "warning",
                                  msg: 'Event is full.'
                              });
+                             $scope.isBusy = false;
                          }
                          else {
-                             $scope.isBusy = true;
+                             EventService.volunteers.create($scope.group.events[eventIndex]._id, $scope.user._id, function(res) {
+                                 $scope.group.events[eventIndex].volunteers = res.data;
+                                 populateAnEventVolunteers($scope.group.events[eventIndex]);
+                                 $scope.alerts.push({
+                                     type: "success",
+                                     msg: 'You have successfully volunteered'
+                                 });
 
-                             $scope.user = Auth.getCurrentUser();
+                                 $scope.isBusy = false;
+                             }, function(res) { // error
 
-                             $scope.user.events.volunteeredTo.push($scope.group.events[eventIndex]);
+                                 $scope.alerts.push({
+                                     type: "danger",
+                                     msg: 'There was a problem volunteering'
+                                 });
 
-                             UserService.update($scope.user._id, { user: $scope.user },
-                                 function(res) {  // success
-                                     //$scope.user = res.data.user;
-                                     //console.log(res.data.user);
-                                     $scope.group.events[eventIndex].volunteers.push(res.data.user);
-
-                                     EventService.update($scope.group.events[eventIndex]._id, { event: $scope.group.events[eventIndex] },
-                                         function(res) {  // success
-                                             //$scope.group.events[eventIndex] = res.data.event;
-                                             //console.log(res.data.event);
-
-                                             //populateGroup();
-
-                                             $scope.alerts.push({
-                                                 type: "success",
-                                                 msg: 'You have successfully volunteered'
-                                             });
-
-                                             $scope.isBusy = false;
-
-                                         },
-                                         function(res) {  //error
-                                             $scope.alerts.push({
-                                                 type: "danger",
-                                                 msg: 'There was a problem volunteering'
-                                             });
-                                         });
-
-                                     },
-                                     function(res) {  // error
-                                         $scope.alerts.push({
-                                             type: "danger",
-                                             msg: 'There was a problem volunteering'
-                                         });
-                                     });
-                                 }
-                             }
-                         });
+                                 $scope.isBusy = false;
+                             });
+                         }
                      }
-                     else {
-                         $location.path("/login/").replace;
-                     }
-                 }
+                 });
+             }
+             else {
+                 $location.path("/login/").replace;
+             }
+         }
 
          $scope.optOut = function(curEvent) {
              if (Auth.isLoggedIn()) {
+
+                 $scope.isBusy = true;
                  var eventIndex = $scope.group.events.indexOf($filter('filter')($scope.group.events, {_id: curEvent._id}, true)[0]);
-                 // Get updated event before trying to
-                 EventService.show($scope.group.events[eventIndex]._id, function(res) {
-                     if (res.status === 404) {
-                         $scope.errorMessage = 'There was a problem retrieving the event';
-                     } else {
-                         $scope.group.events[eventIndex] = res.data.event;
+                 EventService.volunteers.destroy($scope.group.events[eventIndex]._id, $scope.user._id, function(res) {
+                     $scope.group.events[eventIndex].volunteers = res.data;
+                     populateAnEventVolunteers($scope.group.events[eventIndex]);
+                     $scope.alerts.push({
+                         type: "success",
+                         msg: 'You have successfully unvolunteered'
+                     });
 
-                         EventService.volunteers.index($scope.group.events[eventIndex]._id, {}, function(res) {
-                             $scope.group.events[eventIndex].volunteers = res.data;
+                     $scope.isBusy = false;
+                 }, function(res) { // error
 
-                             $scope.isBusy = true;
+                     $scope.alerts.push({
+                         type: "danger",
+                         msg: 'There was a problem unvolunteering'
+                     });
 
-                             $scope.user = Auth.getCurrentUser();
-
-                             // Remove event from user volunteer list
-                             for (var i = 0; i < $scope.user.events.volunteeredTo.length; i++) {
-                                 if ($scope.user.events.volunteeredTo[i]._id === $scope.group.events[eventIndex]._id){
-                                     $scope.user.events.volunteeredTo.splice(i, 1);
-                                 }
-                             }
-
-                             // Remove user from event volunteer list
-                             for (var i = 0; i < $scope.group.events[eventIndex].volunteers.length; i++) {
-                                 if ($scope.group.events[eventIndex].volunteers[i]._id === $scope.user._id){
-                                     $scope.group.events[eventIndex].volunteers.splice(i, 1);
-                                 }
-                             }
-
-                             UserService.update($scope.user._id, { user: $scope.user },
-                                 function(res) {  // success
-                                     //$scope.user = res.data.user;
-                                     //console.log(res.data.user);
-
-                                     EventService.update($scope.group.events[eventIndex]._id, { event: $scope.group.events[eventIndex] },
-                                         function(res) {  // success
-                                             //$scope.group.events[eventIndex] = res.data.event;
-                                             //console.log(res.data.event);
-
-                                             //populateGroup();
-
-                                             $scope.alerts.push({
-                                                 type: "success",
-                                                 msg: 'You have successfully opted out'
-                                             });
-
-                                             $scope.isBusy = false;
-
-                                         },
-                                         function(res) {  //error
-                                             $scope.alerts.push({
-                                                 type: "danger",
-                                                 msg: 'There was a problem opting out'
-                                             });
-                                         });
-
-                                     },
-                                     function(res) {  // error
-                                         $scope.alerts.push({
-                                             type: "danger",
-                                             msg: 'There was a problem opting out'
-                                         });
-                                     });
-                                 });
-
-                             }
-                         });
-                     }
-                     else {
-                         $location.path("/login/").replace;
-                     }
+                     $scope.isBusy = false;
+                 });
+             }
+             else {
+                 $location.path("/login/").replace;
+             }
 
          }
 
@@ -647,6 +591,22 @@ angular.module('seniorprojectYoApp')
             return false;
         }
 
+        $scope.isCurrentlyActive = function(curEvent) {
+            var rightNow = new Date();
+
+            if (curEvent != null) {
+                var startTime = new Date(curEvent.startTimeDate);
+                if ((startTime - rightNow) < 1) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         /***********************************************************************
          * Editing Functions
          **********************************************************************/
@@ -726,132 +686,62 @@ angular.module('seniorprojectYoApp')
          $scope.subscribe = function() {
              if (Auth.isLoggedIn()) {
 
-                 GroupService.show($scope.group._id, function(res) {
-                     if (res.status === 404) {
-                         $scope.errorMessage = 'There was a problem retrieving the group';
-                     } else {
-                         $scope.group.volunteers = res.data.group.volunteers;
+                 $scope.isSubbing = true;
+                 GroupService.volunteers.create($scope.group._id, $scope.user._id, function(res) {
+                     $scope.group.volunteers = res.data;
+                     $scope.user = Auth.getCurrentUser();
 
-                         GroupService.volunteers.index($scope.group._id, {}, function(res) {
-                             $scope.group.volunteers = res.data;
+                     populateSubscribers();
+                     populateUser();
 
-                             $scope.isSubbing = true;
+                     $scope.alerts.push({
+                         type: "success",
+                         msg: 'You have successfully subscribed'
+                     });
 
-                             $scope.user = Auth.getCurrentUser();
+                     $scope.isSubbing = false;
+                 }, function(res) { // error
+                     $scope.alerts.push({
+                         type: "danger",
+                         msg: 'There was a problem subscribing1'
+                     });
+                     $scope.isSubbing = false;
+                 });
+             }
+             else {
+                 $location.path("/login/").replace;
+             }
+         }
 
-                             $scope.user.groups.volunteeredTo.push($scope.group);
+         $scope.unsubscribe = function() {
+             if (Auth.isLoggedIn()) {
 
-                             UserService.update($scope.user._id, { user: $scope.user },
-                                 function(res) {  // success
-                                     //$scope.user = res.data.user;
-                                     //console.log(res.data.user);
-                                     $scope.group.volunteers.push(res.data.user);
+                 $scope.isSubbing = true;
+                 GroupService.volunteers.destroy($scope.group._id, $scope.user._id, function(res) {
+                     $scope.group.volunteers = res.data;
+                     $scope.user = Auth.getCurrentUser();
 
-                                     GroupService.update($stateParams.groupId, { group: $scope.group },
-                                         function(res) {  // success
-                                             //$scope.group = res.data.group;
-                                             //console.log(res.data.group);
+                     populateSubscribers();
+                     populateUser();
 
-                                             //populate();
+                     $scope.alerts.push({
+                         type: "success",
+                         msg: 'You have successfully subscribed'
+                     });
 
-                                             $scope.alerts.push({
-                                                 type: "success",
-                                                 msg: 'You have successfully subscribed'
-                                             });
-
-                                             $scope.isSubbing = false;
-
-                                         },
-                                         function(res) {  //error
-                                             $scope.alerts.push({
-                                                 type: "danger",
-                                                 msg: 'There was a problem subscribing2'
-                                             });
-                                         });
-                                     },
-                                     function(res) {  // error
-                                         $scope.alerts.push({
-                                             type: "danger",
-                                             msg: 'There was a problem subscribing1'
-                                         });
-                                     });
-                                 });
-                             }
-                         });
-
-
-                     }
-                     else {
-                         $location.path("/login/").replace;
-                     }
-                 }
-
-        $scope.unsubscribe = function() {
-            if (Auth.isLoggedIn()) {
-                GroupService.show($scope.group._id, function(res) {
-                    if (res.status === 404) {
-                        $scope.errorMessage = 'There was a problem retrieving the group';
-                    } else {
-                        $scope.group.volunteers = res.data.group.volunteers;
-
-                        GroupService.volunteers.index($scope.group._id, {}, function(res) {
-                            $scope.group.volunteers = res.data;
-
-
-                            $scope.isSubbing = true;
-
-                            $scope.user = Auth.getCurrentUser();
-
-                            // Remove group from user subscription list
-                            for (var i = 0; i < $scope.user.groups.volunteeredTo.length; i++) {
-                                if ($scope.user.groups.volunteeredTo[i]._id === $stateParams.groupId){
-                                    $scope.user.groups.volunteeredTo.splice(i, 1);
-                                }
-                            }
-
-                            // Remove user from group subscription list
-                            for (var i = 0; i < $scope.group.volunteers.length; i++) {
-                                if ($scope.group.volunteers[i]._id === $scope.user._id){
-                                    $scope.group.volunteers.splice(i, 1);
-                                }
-                            }
-
-                            UserService.update($scope.user._id, { user: $scope.user },
-                                function(res) {  // success
-                                    //$scope.user = res.data.user;
-
-                                    GroupService.update($stateParams.groupId, { group: $scope.group },
-                                        function(res) {  // success
-                                            //$scope.group = res.data.group;
-
-                                            //populate();
-
-                                            $scope.alerts.push({
-                                                type: "success",
-                                                msg: 'You have successfully unsubscribed'
-                                            });
-
-                                            $scope.isSubbing = false;
-
-                                        },
-                                        function(res) {  //error
-                                            $scope.alerts.push({
-                                                type: "danger",
-                                                msg: 'There was a problem unsubscribing'
-                                            });
-                                        });
-                                    },
-                                    function(res) {  // error
-
-                                    });
-                                });
-                            }
-                        });
-                    }
-                    else {
-                        $location.path("/login/").replace;
-                    }
-        }
+                     $scope.isSubbing = false;
+                 }, function(res) { // error
+                     $scope.alerts.push({
+                         type: "danger",
+                         msg: 'There was a problem subscribing1'
+                     });
+                     $scope.isSubbing = false;
+                 });
+             }
+             else {
+                 $location.path("/login/").replace;
+             }
+         }
 
         /***************************************************************************
          * Admin Testing

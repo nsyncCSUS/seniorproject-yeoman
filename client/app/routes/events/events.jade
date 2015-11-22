@@ -218,7 +218,7 @@ div(ng-show='!getIsEditing()')
                                 .col-xs-6.col-sm-6.col-md-8.col-lg-8
                                     a(href='/users/{{organizer._id}}')
                                         h6 {{organizer.name}}
-                                    button.btn.btn-default.btn-xs(ng-click='contact($index)') Contact
+                                    button.btn.btn-default.btn-xs(ng-click='contact(organizer)') Contact
                 hr
 
         .col-xs-12.col-sm-8.col-md-8.col-lg-8
@@ -227,7 +227,7 @@ div(ng-show='!getIsEditing()')
                     h2 <strong> {{event.name}} </strong>
 
                     .col-xs-12.col-sm-12.col-md-12.col-lg-12.cardHeader
-                        h1(ng-show='isOrganizer($index)', ng-class='{ "organizerCardHeader" : isOrganizer($index) }') ORGANIZER
+                        h1(ng-show='isOrganizer()', ng-class='{ "organizerCardHeader" : isOrganizer() }') ORGANIZER
 
                         h3 {{event.startTimeDate | date:'MMM d, yyyy'}}
 

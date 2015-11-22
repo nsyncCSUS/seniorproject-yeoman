@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('GroupsCtrl', function($scope, $stateParams, $window, $anchorScroll, $location, $timeout, GroupService, UserService, EventService, Auth) {
+    .controller('GroupsCtrl', function($scope, $stateParams, $window, $filter, $anchorScroll, $location, $timeout, GroupService, UserService, EventService, Auth) {
 
         /***************************************************************************
          * Variables (includes ones from scope too)
@@ -385,14 +385,14 @@ angular.module('seniorprojectYoApp')
          **************************************************************************/
          $scope.volunteer = function(curEvent) {
              if (Auth.isLoggedIn()) {
-
+                 var eventIndex = $scope.group.events.indexOf($filter('filter')($scope.group.events, {_id: curEvent._id}, true)[0]);
                  // Get updated event before trying to
-                 EventService.show($scope.group.events[curEvent]._id, function(res) {
+                 EventService.show($scope.group.events[eventIndex]._id, function(res) {
                      if (res.status === 404) {
                          $scope.errorMessage = 'There was a problem retrieving the event';
                      } else {
-                         $scope.group.events[curEvent] = res.data.event;
-                         if ($scope.group.events[curEvent].volunteers.length >= $scope.group.events[curEvent].maxVolunteers){
+                         $scope.group.events[eventIndex] = res.data.event;
+                         if ($scope.group.events[eventIndex].volunteers.length >= $scope.group.events[eventIndex].maxVolunteers){
                              $scope.alerts.push({
                                  type: "warning",
                                  msg: 'Event is full.'
@@ -403,17 +403,17 @@ angular.module('seniorprojectYoApp')
 
                              $scope.user = Auth.getCurrentUser();
 
-                             $scope.user.events.volunteeredTo.push($scope.group.events[curEvent]);
+                             $scope.user.events.volunteeredTo.push($scope.group.events[eventIndex]);
 
                              UserService.update($scope.user._id, { user: $scope.user },
                                  function(res) {  // success
                                      //$scope.user = res.data.user;
                                      console.log(res.data.user);
-                                     $scope.group.events[curEvent].volunteers.push(res.data.user);
+                                     $scope.group.events[eventIndex].volunteers.push(res.data.user);
 
-                                     EventService.update($scope.group.events[curEvent]._id, { event: $scope.group.events[curEvent] },
+                                     EventService.update($scope.group.events[eventIndex]._id, { event: $scope.group.events[eventIndex] },
                                          function(res) {  // success
-                                             //$scope.group.events[curEvent] = res.data.event;
+                                             //$scope.group.events[eventIndex] = res.data.event;
                                              console.log(res.data.event);
 
                                              //populateGroup();
@@ -451,16 +451,16 @@ angular.module('seniorprojectYoApp')
 
          $scope.optOut = function(curEvent) {
              if (Auth.isLoggedIn()) {
-
+                 var eventIndex = $scope.group.events.indexOf($filter('filter')($scope.group.events, {_id: curEvent._id}, true)[0]);
                  // Get updated event before trying to
-                 EventService.show($scope.group.events[curEvent]._id, function(res) {
+                 EventService.show($scope.group.events[eventIndex]._id, function(res) {
                      if (res.status === 404) {
                          $scope.errorMessage = 'There was a problem retrieving the event';
                      } else {
-                         $scope.group.events[curEvent] = res.data.event;
+                         $scope.group.events[eventIndex] = res.data.event;
 
-                         EventService.volunteers.index($scope.group.events[curEvent]._id, {}, function(res) {
-                             $scope.group.events[curEvent].volunteers = res.data;
+                         EventService.volunteers.index($scope.group.events[eventIndex]._id, {}, function(res) {
+                             $scope.group.events[eventIndex].volunteers = res.data;
 
                              $scope.isBusy = true;
 
@@ -468,15 +468,15 @@ angular.module('seniorprojectYoApp')
 
                              // Remove event from user volunteer list
                              for (var i = 0; i < $scope.user.events.volunteeredTo.length; i++) {
-                                 if ($scope.user.events.volunteeredTo[i]._id === $scope.group.events[curEvent]._id){
+                                 if ($scope.user.events.volunteeredTo[i]._id === $scope.group.events[eventIndex]._id){
                                      $scope.user.events.volunteeredTo.splice(i, 1);
                                  }
                              }
 
                              // Remove user from event volunteer list
-                             for (var i = 0; i < $scope.group.events[curEvent].volunteers.length; i++) {
-                                 if ($scope.group.events[curEvent].volunteers[i]._id === $scope.user._id){
-                                     $scope.group.events[curEvent].volunteers.splice(i, 1);
+                             for (var i = 0; i < $scope.group.events[eventIndex].volunteers.length; i++) {
+                                 if ($scope.group.events[eventIndex].volunteers[i]._id === $scope.user._id){
+                                     $scope.group.events[eventIndex].volunteers.splice(i, 1);
                                  }
                              }
 
@@ -485,9 +485,9 @@ angular.module('seniorprojectYoApp')
                                      //$scope.user = res.data.user;
                                      console.log(res.data.user);
 
-                                     EventService.update($scope.group.events[curEvent]._id, { event: $scope.group.events[curEvent] },
+                                     EventService.update($scope.group.events[eventIndex]._id, { event: $scope.group.events[eventIndex] },
                                          function(res) {  // success
-                                             //$scope.group.events[curEvent] = res.data.event;
+                                             //$scope.group.events[eventIndex] = res.data.event;
                                              console.log(res.data.event);
 
                                              //populateGroup();
@@ -612,8 +612,8 @@ angular.module('seniorprojectYoApp')
 
         $scope.isVolunteering = function(curEvent) {
             if ($scope.user != null){
-                for (var i = 0; i < $scope.group.events[curEvent].volunteers.length; i++) {
-                    if ($scope.group.events[curEvent].volunteers[i]._id === $scope.user._id)
+                for (var i = 0; i < curEvent.volunteers.length; i++) {
+                    if (curEvent.volunteers[i]._id === $scope.user._id)
                         return true;
                 }
             }
@@ -622,8 +622,8 @@ angular.module('seniorprojectYoApp')
 
         $scope.isOrganizer = function(curEvent) {
             if ($scope.user != null){
-                for (var i = 0; i < $scope.group.events[curEvent].organizers.length; i++) {
-                    if ($scope.group.events[curEvent].organizers[i]._id === $scope.user._id)
+                for (var i = 0; i < curEvent.organizers.length; i++) {
+                    if (curEvent.organizers[i]._id === $scope.user._id)
                         return true;
                 }
             }

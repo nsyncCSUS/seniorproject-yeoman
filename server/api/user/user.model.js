@@ -24,6 +24,8 @@ var UserSchema = new Schema({
     provider: String,
     salt: String,
 
+    creationDate: Date,
+
     description: String,
     birthday: Date,
     age: Number,

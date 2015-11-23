@@ -95,11 +95,25 @@ describe('GET /api/search/events/all', function() {
             .get('/api/search/events/all')
             .end(function(err, res) {
                 if (err) return done(err);
-                res.body.should.be.instanceof(Array);
+
                 for(var i=0; i< (res.body.length)-1; i++){
                 expect(res.body[i].numberVolunteers).to.be.above(res.body[i+1].numberVolunteers)||
                 expect(res.body[i].numberVolunteers).to.be.equal(res.body[i+1].numberVolunteers)
               }
+                done();
+            });
+    });
+});
+
+// testing query to limit amount to 100
+describe('GET /api/search/events/all', function() {
+    it('Query should not return more then 100 items', function(done) {
+        this.timeout(10000);
+        request(app)
+            .get('/api/search/events/all')
+            .end(function(err, res) {
+                if (err) return done(err);
+                expect(res.body.length).to.be.below(100);
                 done();
             });
     });

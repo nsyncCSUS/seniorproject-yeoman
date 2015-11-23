@@ -59,7 +59,9 @@ angular.module('seniorprojectYoApp')
         function populate() {
             populateGroup();
             populateSubscribers();
-            populateUser();
+            if (Auth.isLoggedIn()) {
+                populateUser();
+            }
         }
 
         function populateGroup() {
@@ -603,7 +605,7 @@ angular.module('seniorprojectYoApp')
                     return false;
                 }
             }
-            
+
             if ($scope.user != null) {
                 return true;
             }

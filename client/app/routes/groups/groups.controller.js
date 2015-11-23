@@ -439,7 +439,7 @@ angular.module('seniorprojectYoApp')
                  });
              }
              else {
-                 $location.path("/login/").replace;
+                 $location.path("/login").replace;
              }
          }
 
@@ -468,7 +468,7 @@ angular.module('seniorprojectYoApp')
                  });
              }
              else {
-                 $location.path("/login/").replace;
+                 $location.path("/login").replace;
              }
 
          }
@@ -603,8 +603,13 @@ angular.module('seniorprojectYoApp')
                     return false;
                 }
             }
-
-            return true;
+            
+            if ($scope.user != null) {
+                return true;
+            }
+            else {
+                return false;
+            }
         }
 
         /***********************************************************************
@@ -709,7 +714,7 @@ angular.module('seniorprojectYoApp')
                  });
              }
              else {
-                 $location.path("/login/").replace;
+                 $location.path("/login").replace;
              }
          }
 
@@ -739,7 +744,7 @@ angular.module('seniorprojectYoApp')
                  });
              }
              else {
-                 $location.path("/login/").replace;
+                 $location.path("/login").replace;
              }
          }
 

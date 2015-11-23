@@ -406,7 +406,7 @@ angular.module('seniorprojectYoApp')
              }
 
              else {
-                 $location.path("/login/").replace;
+                 $location.path("/login").replace;
              }
          }
 
@@ -436,7 +436,7 @@ angular.module('seniorprojectYoApp')
              }
 
              else {
-                 $location.path("/login/").replace;
+                 $location.path("/login").replace;
              }
 
          }
@@ -446,10 +446,12 @@ angular.module('seniorprojectYoApp')
          * Boolean functions
          **************************************************************************/
         $scope.isVolunteering = function() {
-            if ($scope.event != null){
-                for (var i = 0; i < $scope.event.volunteers.length; i++) {
-                    if ($scope.event.volunteers[i]._id === $scope.user._id)
+            if ($scope.user != null){
+                if ($scope.event != null){
+                    for (var i = 0; i < $scope.event.volunteers.length; i++) {
+                        if ($scope.event.volunteers[i]._id === $scope.user._id)
                         return true;
+                    }
                 }
             }
             return false;
@@ -470,17 +472,24 @@ angular.module('seniorprojectYoApp')
         $scope.isCurrentlyActive = function() {
             var rightNow = new Date();
 
-            if ($scope.event != null) {
-                var startTime = new Date($scope.event.startTimeDate);
-                if ((startTime - rightNow) < 1) {
-                    return true;
-                }
-                else {
-                    return false;
+            if ($scope.user != null){
+                if ($scope.event != null) {
+                    var startTime = new Date($scope.event.startTimeDate);
+                    if ((startTime - rightNow) < 1) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
                 }
             }
 
-            return true;
+            if ($scope.user != null) {
+                return true;
+            }
+            else {
+                return false;
+            }
         }
 
         /***************************************************************************

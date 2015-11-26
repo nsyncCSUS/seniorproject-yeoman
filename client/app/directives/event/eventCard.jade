@@ -1,5 +1,5 @@
 .col-xs-12.col-sm-12.col-md-12.col-lg-12.cardHeader
-    h1(ng-show='isOrganizer(event)', ng-class='{ "organizerCardHeader" : isOrganizer(event) }') ORGANIZER
+    h1(ng-show='isOrganizer(event)', ng-class='{ "cardHeaderUnderlay" : isOrganizer(event) }') ORGANIZER
     h3 <strong>{{event.startTimeDate | date:'MMM d, yyyy'}}</strong>
     h5.timeRow {{event.startTimeDate | date:'EEEE h:mm a'}}
         .duration for {{event.duration}}
@@ -12,8 +12,9 @@
                 a(ng-href='/groups/{{event.group._id}}/events/{{event._id}}/') {{event.name}}
             h5 {{event.street}} {{event.city}}, {{event.state}} {{event.zipcode}}
 
-            h1(ng-show='isCurrentlyActive(event)', ng-class='{ "currentlyActive" : isCurrentlyActive(event) }') Currently Active
-            
+            h1(ng-show='isCurrentlyActive(event)', ng-class='{ "cardBodyUnderlay" : isCurrentlyActive(event) }') Currently Active
+            h1(ng-show='!isCurrentlyActive(event)', ng-class='{ "cardBodyUnderlay" : !isCurrentlyActive(event) }') Ended
+
     .col-xs-12.col-sm-12.col-md-12.col-lg-12
         .row
             .col-xs-12.col-sm-12.col-md-12.col-lg-12.navbar-btn

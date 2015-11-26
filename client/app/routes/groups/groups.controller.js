@@ -598,19 +598,13 @@ angular.module('seniorprojectYoApp')
 
             if (curEvent != null) {
                 var startTime = new Date(curEvent.startTimeDate);
-                if ((startTime - rightNow) < 1) {
+                var endTime = new Date(curEvent.endTimeDate);
+                if (((startTime - rightNow) < 1) && ((endTime - rightNow) > 1)) {
                     return true;
                 }
                 else {
                     return false;
                 }
-            }
-
-            if ($scope.user != null) {
-                return true;
-            }
-            else {
-                return false;
             }
         }
 

@@ -472,24 +472,17 @@ angular.module('seniorprojectYoApp')
         $scope.isCurrentlyActive = function() {
             var rightNow = new Date();
 
-            if ($scope.user != null){
-                if ($scope.event != null) {
-                    var startTime = new Date($scope.event.startTimeDate);
-                    if ((startTime - rightNow) < 1) {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
+            if ($scope.event != null) {
+                var startTime = new Date($scope.event.startTimeDate);
+                var endTime = new Date($scope.event.endTimeDate);
+                if (((startTime - rightNow) < 1) && ((endTime - rightNow) > 1)) {
+                    return true;
+                }
+                else {
+                    return false;
                 }
             }
 
-            if ($scope.user != null) {
-                return true;
-            }
-            else {
-                return false;
-            }
         }
 
         /***************************************************************************

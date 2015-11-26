@@ -220,7 +220,7 @@ div(ng-show='!getIsEditing()')
                     h2 <strong> {{event.name}} </strong>
 
                     .col-xs-12.col-sm-12.col-md-12.col-lg-12.cardHeader
-                        h1(ng-show='isOrganizer()', ng-class='{ "organizerCardHeader" : isOrganizer() }') ORGANIZER
+                        h1(ng-show='isOrganizer()', ng-class='{ "cardHeaderUnderlay" : isOrganizer() }') ORGANIZER
 
                         h3 {{event.startTimeDate | date:'MMM d, yyyy'}}
 
@@ -230,7 +230,8 @@ div(ng-show='!getIsEditing()')
                     .col-xs-12.col-sm-12.col-md-12.col-lg-12.cardBody
                         h5 {{event.street}} {{event.city}}, {{event.state}} {{event.zipcode}}
 
-                        h1(ng-show='isCurrentlyActive()', ng-class='{ "currentlyActive" : isCurrentlyActive() }') Currently Active
+                        h1(ng-show='isCurrentlyActive()', ng-class='{ "cardBodyUnderlay" : isCurrentlyActive() }') Currently Active
+                        h1(ng-show='!isCurrentlyActive()', ng-class='{ "cardBodyUnderlay" : !isCurrentlyActive() }') Ended
 
                         .navbar-btn
                             img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/{{interest}}.png', ng-repeat='interest in event.interests | orderBy:interest', uib-tooltip='{{interest}}')

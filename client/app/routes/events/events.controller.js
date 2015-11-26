@@ -9,6 +9,7 @@ angular.module('seniorprojectYoApp')
         $scope.eventId = $stateParams.eventId;
         $scope.isEditing = false;
         $scope.isUpdating = false;
+        $scope.isRemoving = false;
         $scope.currentDate = new Date();
         $scope.submitted = false;
         $scope.alerts = [];
@@ -257,9 +258,6 @@ angular.module('seniorprojectYoApp')
         /***********************************************************************
          * Editing Functions
          **********************************************************************/
-        $scope.getIsEditing = function() {
-            return $scope.isEditing === true
-        }
 
         $scope.enableEdit = function() {
             $scope.isEditing = true;
@@ -288,6 +286,14 @@ angular.module('seniorprojectYoApp')
             checkEndTime();
 
             buildDuration();
+        }
+
+        $scope.confirmRemove = function() {
+            $scope.isRemoving = true;
+        }
+
+        $scope.cancelRemove = function() {
+            $scope.isRemoving = false;
         }
 
         $scope.submitEdit = function() {
@@ -334,6 +340,35 @@ angular.module('seniorprojectYoApp')
                 $scope.alerts.push({type: "danger", msg: "Errors found, please fix them."});
                 //console.log($scope.eventForm.$error);
                 $scope.submitted = true;
+            }
+        }
+
+        $scope.removeEvent = function() {
+            if ($scope.isOrganizer()) {
+                $scope.isUpdating = true;
+
+                EventService.destroy($scope.event._id,
+                function(res) {     // success
+                    $scope.alerts.push({
+                        type: "success",
+                        msg: 'Event has been removed'
+                    });
+
+                    $timeout(function() {
+                        $location.path("/groups/" + $stateParams.groupId).replace;
+                    }, 3000);
+                }, function(res) {  // error
+                    $scope.alerts.push({
+                        type: "danger",
+                        msg: 'Error. Event was not removed'
+                    });
+                });
+            }
+            else {
+                $scope.alerts.push({type: "danger", msg: "You are not an organizer."});
+                //console.log($scope.eventForm.$error);
+                $scope.isRemoving = false;
+                $scope.cancelEdit();
             }
         }
 
@@ -484,6 +519,21 @@ angular.module('seniorprojectYoApp')
             }
 
         }
+
+        $scope.isEnded = function() {
+            var rightNow = new Date();
+
+            if ($scope.event != null) {
+                var endTime = new Date($scope.event.endTimeDate);
+                if ((endTime - rightNow) < 1) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+        }
+
 
         /***************************************************************************
          * MISC Functions

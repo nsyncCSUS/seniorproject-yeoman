@@ -3,20 +3,30 @@ div(ng-include='"components/navbar/navbar.html"')
 .adminPadding(ng-show='isAdmin')
 
 div(ng-show='isAdmin')
-    div(ng-show='!getIsEditing()')
+    div(ng-show='!isEditing && !isRemoving')
         .float-right
-            button.btn.btn-default(ng-show='!getIsEditing()', ng-disabled='isCurrentlyActive()', ng-click='enableEdit()') Edit Event
-    div(ng-show='getIsEditing()')
+            button.btn.btn-default(ng-show='!isEditing', ng-disabled='isCurrentlyActive()', ng-click='enableEdit()') Edit Event
+    div(ng-show='isEditing')
         .float-right
-            button.btn.btn-info(ng-show='getIsEditing()', ng-click='submitEdit()', ng-disabled='isUpdating || isCurrentlyActive()') Save
+            button.btn.btn-danger(ng-show='isEditing && !isRemoving', ng-click='confirmRemove()', ng-disabled='isUpdating') Remove Event
+            button.btn.btn-danger(ng-show='isRemoving', ng-click='removeEvent()', ng-disabled='isUpdating') Yes
             | &nbsp
-            button.btn.btn-danger(ng-show='getIsEditing()', ng-click='cancelEdit()', ng-disabled='isUpdating') Cancel
+            button.btn.btn-warning(ng-show='isRemoving', ng-click='cancelRemove()', ng-disabled='isUpdating') No
+            | &nbsp |
+            | &nbsp
+            button.btn.btn-info(ng-show='isEditing', ng-click='submitEdit()', ng-disabled='isUpdating || isCurrentlyActive()') Save
+            | &nbsp
+            button.btn.btn-warning(ng-show='isEditing', ng-click='cancelEdit()', ng-disabled='isUpdating') Cancel
+    div(ng-show='isRemoving')
+        .float-right
+
+
 .float-btm.text-center
     uib-alert(ng-repeat='alert in alerts', type='{{alert.type}}', close='closeAlert($index)', dismiss-on-timeout='5000') {{alert.msg}}
 
 .loadingOverlay(ng-show='isUpdating')
 
-div(ng-show='getIsEditing()')
+div(ng-show='isEditing')
     form(name='eventForm', novalidate)
         .container
             .col-xs-12.col-sm-12.col-md-12.col-lg-12
@@ -186,7 +196,7 @@ div(ng-show='getIsEditing()')
                                     div.help-block(ng-message='required') Zip code is required.
                                     div.help-block(ng-message='pattern') Invalid zip code.
 
-div(ng-show='!getIsEditing()')
+div(ng-show='!isEditing')
     .container
         .col-xs-12.col-sm-4.col-md-4.col-lg-4
             .row
@@ -231,7 +241,7 @@ div(ng-show='!getIsEditing()')
                         h5 {{event.street}} {{event.city}}, {{event.state}} {{event.zipcode}}
 
                         h1(ng-show='isCurrentlyActive()', ng-class='{ "cardBodyUnderlay" : isCurrentlyActive() }') Currently Active
-                        h1(ng-show='!isCurrentlyActive()', ng-class='{ "cardBodyUnderlay" : !isCurrentlyActive() }') Ended
+                        h1(ng-show='isEnded()', ng-class='{ "cardBodyUnderlay" : isEnded() }') Ended
 
                         .navbar-btn
                             img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/{{interest}}.png', ng-repeat='interest in event.interests | orderBy:interest', uib-tooltip='{{interest}}')

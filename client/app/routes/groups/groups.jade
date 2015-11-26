@@ -3,23 +3,23 @@ div(ng-include='"components/navbar/navbar.html"')
 .adminPadding(ng-show='isAdmin')
 
 div(ng-show='isAdmin')
-    div(ng-show='!getIsEditing()')
+    div(ng-show='!isEditing')
         .float-right
             a(href='/groups/{{group._id}}/create/event')
                 button.btn.btn-default Create Event
             | &nbsp
-            button.btn.btn-default(ng-show='!getIsEditing()', ng-click='enableEdit()') Edit Group
-    div(ng-show='getIsEditing()')
+            button.btn.btn-default(ng-show='!isEditing', ng-click='enableEdit()') Edit Group
+    div(ng-show='isEditing')
         .float-right
-            button.btn.btn-info(ng-show='getIsEditing()', ng-click='submitEdit()', ng-disabled='isUpdating') Save
+            button.btn.btn-info(ng-show='isEditing', ng-click='submitEdit()', ng-disabled='isUpdating') Save
             | &nbsp
-            button.btn.btn-danger(ng-show='getIsEditing()', ng-click='cancelEdit()', ng-disabled='isUpdating') Cancel
+            button.btn.btn-danger(ng-show='isEditing', ng-click='cancelEdit()', ng-disabled='isUpdating') Cancel
 .float-btm.text-center
     uib-alert(ng-repeat='alert in alerts', type='{{alert.type}}', close='closeAlert($index)', dismiss-on-timeout='5000') {{alert.msg}}
 
 .loadingOverlay(ng-show='isUpdating')
 
-div(ng-show='getIsEditing()')
+div(ng-show='isEditing')
     form(name='groupForm', novalidate)
         .container
                 .col-xs-12.col-sm-12.col-md-12.col-lg-12
@@ -200,7 +200,7 @@ div(ng-show='getIsEditing()')
                                                 .removeOverlay
                                                     span.glyphicon.glyphicon-minus.glyphicon-lg-center
                                             h6.text-center {{user.firstName}} {{user.lastName}}
-div(ng-show='!getIsEditing()')
+div(ng-show='!isEditing')
     .container
         .row
             .col-xs-12.col-sm-12.col-md-12.col-lg-12.panel-primary
@@ -214,7 +214,7 @@ div(ng-show='!getIsEditing()')
 
                             .hidden-xs
                                 .col-xs-12.col-sm-6.col-md-6.col-lg-6
-                                    div.pull-right(ng-show='!getIsEditing()')
+                                    div.pull-right(ng-show='!isEditing')
                                         img.btn.btn-sm(ng-src='/images/social-media/googlePlus.png', ng-disabled='!checkIfHas("googlePlus")', ng-click='goTo(group.googlePlusURL)', uib-tooltip='{{group.googlePlusURL}}')
                                         img.btn.btn-sm(ng-src='/images/social-media/facebook.png', ng-disabled='!checkIfHas("facebook")', ng-click='goTo(group.facebookURL)', uib-tooltip='{{group.facebookURL}}')
                                         img.btn.btn-sm(ng-src='/images/social-media/twitter.png', ng-disabled='!checkIfHas("twitter")', ng-click='goTo(group.twitterURL)', uib-tooltip='{{group.twitterURL}}')
@@ -222,7 +222,7 @@ div(ng-show='!getIsEditing()')
                                         img.btn.btn-sm(ng-src='/images/social-media/website.png', ng-disabled='!checkIfHas("website")', ng-click='goTo(group.personalWebsiteURL)', uib-tooltip='{{group.personalWebsiteURL}}')
                             .visible-xs
                                 .col-xs-6.col-sm-6.col-md-6.col-lg-6
-                                    div.pull-right(ng-show='!getIsEditing()')
+                                    div.pull-right(ng-show='!isEditing')
                                         img.btn.btn-sm(ng-src='/images/social-media/googlePlus.png', ng-disabled='!checkIfHas("googlePlus")', ng-click='goTo(group.googlePlusURL)', uib-tooltip='{{group.googlePlusURL}}')
                                         img.btn.btn-sm(ng-src='/images/social-media/facebook.png', ng-disabled='!checkIfHas("facebook")', ng-click='goTo(group.facebookURL)', uib-tooltip='{{group.facebookURL}}')
                                         img.btn.btn-sm(ng-src='/images/social-media/twitter.png', ng-disabled='!checkIfHas("twitter")', ng-click='goTo(group.twitterURL)', uib-tooltip='{{group.twitterURL}}')

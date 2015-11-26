@@ -242,7 +242,21 @@ angular.module('seniorprojectYoApp')
             if (curEvent != null) {
                 var startTime = new Date(curEvent.startTimeDate);
                 var endTime = new Date(curEvent.endTimeDate);
-                if (((startTime - rightNow) < 1) && ((endTime - rightNow) > 1)) {
+                if (((startTime - rightNow) < 1) && ((endTime - startTime) > 1)) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+        }
+
+        $scope.isEnded = function(curEvent) {
+            var rightNow = new Date();
+
+            if (curEvent != null) {
+                var endTime = new Date(curEvent.endTimeDate);
+                if ((endTime - rightNow) < 1) {
                     return true;
                 }
                 else {

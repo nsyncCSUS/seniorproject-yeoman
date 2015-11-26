@@ -3,20 +3,20 @@ div(ng-include='"components/navbar/navbar.html"')
 .adminPadding(ng-show='isAdmin')
 
 div(ng-show='isAdmin')
-    div(ng-show='!getIsEditing()')
+    div(ng-show='!isEditing')
         .float-right
-            button.btn.btn-default(ng-show='!getIsEditing()', ng-click='enableEdit()') Edit Profile
-    div(ng-show='getIsEditing()')
+            button.btn.btn-default(ng-show='!isEditing', ng-click='enableEdit()') Edit Profile
+    div(ng-show='isEditing')
         .float-right
-            button.btn.btn-info(ng-show='getIsEditing()', ng-click='submitEdit()', ng-disabled='isUpdating') Save
+            button.btn.btn-info(ng-show='isEditing', ng-click='submitEdit()', ng-disabled='isUpdating') Save
             | &nbsp
-            button.btn.btn-danger(ng-show='getIsEditing()', ng-click='cancelEdit()', ng-disabled='isUpdating') Cancel
+            button.btn.btn-danger(ng-show='isEditing', ng-click='cancelEdit()', ng-disabled='isUpdating') Cancel
 .float-btm.text-center
     uib-alert(ng-repeat='alert in alerts', type='{{alert.type}}', close='closeAlert($index)', dismiss-on-timeout='5000') {{alert.msg}}
 
 .loadingOverlay(ng-show='isUpdating')
 
-div(ng-show='getIsEditing()')
+div(ng-show='isEditing')
     form(name='userForm', novalidate)
         .container
             .col-xs-12.col-sm-12.col-md-12.col-lg-12
@@ -46,7 +46,7 @@ div(ng-show='getIsEditing()')
 
             .col-xs-12.col-sm-4.col-md-4.col-lg-4
                 img.img-responsive.img-thumbnail.center-item(src="{{user.picture}}")
-                div(ng-show='getIsEditing()')
+                div(ng-show='isEditing')
                     .form-group
                         input(type='file')
                         | Might have to use external module for file inputs
@@ -153,7 +153,7 @@ div(ng-show='getIsEditing()')
                                     div.help-block(ng-message='pattern') Invalid zip code.
 
 
-div(ng-show='!getIsEditing()')
+div(ng-show='!isEditing')
     .container
         .row
             .col-xs-12.col-sm-8.col-md-8.col-lg-8

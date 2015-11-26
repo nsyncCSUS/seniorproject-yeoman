@@ -208,12 +208,12 @@ div(ng-show='getIsPreviewing()')
                     .col-xs-12.col-sm-12.col-md-12.col-lg-12.panel-heading
                         .row
                             .col-xs-6.col-sm-6.col-md-6.col-lg-6
-                                div(ng-show='!getIsEditing()')
+                                div
                                     img.img-thumbnail(ng-src='/images/interests/{{interest}}.png', ng-repeat='interest in group.interests | orderBy:interest', uib-tooltip='{{interest}}')
 
                             .hidden-xs
                                 .col-xs-12.col-sm-6.col-md-6.col-lg-6
-                                    div.pull-right(ng-show='!getIsEditing()')
+                                    div.pull-right
                                         img.btn.btn-sm(ng-src='/assets/images/social-media/googlePlus.png', ng-disabled='!checkIfHas("googlePlus")', ng-click='goTo(group.googlePlusURL)', uib-tooltip='{{group.googlePlusURL}}')
                                         img.btn.btn-sm(ng-src='/assets/images/social-media/facebook.png', ng-disabled='!checkIfHas("facebook")', ng-click='goTo(group.facebookURL)', uib-tooltip='{{group.facebookURL}}')
                                         img.btn.btn-sm(ng-src='/assets/images/social-media/twitter.png', ng-disabled='!checkIfHas("twitter")', ng-click='goTo(group.twitterURL)', uib-tooltip='{{group.twitterURL}}')
@@ -221,7 +221,7 @@ div(ng-show='getIsPreviewing()')
                                         img.btn.btn-sm(ng-src='/assets/images/social-media/website.png', ng-disabled='!checkIfHas("website")', ng-click='goTo(group.personalWebsiteURL)', uib-tooltip='{{group.personalWebsiteURL}}')
                             .visible-xs
                                 .col-xs-6.col-sm-6.col-md-6.col-lg-6
-                                    div.pull-right(ng-show='!getIsEditing()')
+                                    div.pull-right
                                         img.btn.btn-sm(ng-src='/assets/images/social-media/googlePlus.png', ng-disabled='!checkIfHas("googlePlus")', ng-click='goTo(group.googlePlusURL)', uib-tooltip='{{group.googlePlusURL}}')
                                         img.btn.btn-sm(ng-src='/assets/images/social-media/facebook.png', ng-disabled='!checkIfHas("facebook")', ng-click='goTo(group.facebookURL)', uib-tooltip='{{group.facebookURL}}')
                                         img.btn.btn-sm(ng-src='/assets/images/social-media/twitter.png', ng-disabled='!checkIfHas("twitter")', ng-click='goTo(group.twitterURL)', uib-tooltip='{{group.twitterURL}}')

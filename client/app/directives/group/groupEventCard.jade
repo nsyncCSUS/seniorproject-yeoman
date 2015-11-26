@@ -15,7 +15,7 @@
         h5 {{event.street}} {{event.city}}, {{event.state}} {{event.zipcode}}
 
         h1(ng-show='isCurrentlyActive(event)', ng-class='{ "cardBodyUnderlay" : isCurrentlyActive(event) }') Currently Active
-        h1(ng-show='!isCurrentlyActive(event)', ng-class='{ "cardBodyUnderlay" : !isCurrentlyActive(event) }') Ended
+        h1(ng-show='isEnded(event)', ng-class='{ "cardBodyUnderlay" : isEnded(event) }') Ended
 
     .col-xs-12.col-sm-12.col-md-12.col-lg-12
         .row

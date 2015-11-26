@@ -74,7 +74,7 @@ angular.module('seniorprojectYoApp')
             },
 
             create: function(id, params, callback, error) {
-                Groups.one(id).one(Constants.events).post(params).then(callback, error);
+                Groups.one(id).all(Constants.events).post(params).then(callback, error);
             },
 
             destroy: function(id, eventId, callback, error) {

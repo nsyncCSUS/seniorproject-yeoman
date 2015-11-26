@@ -2,6 +2,7 @@
 
 var Group = require('../group.model');
 var Event = require('../../event/event.model');
+var User = require('../../user/user.model');
 
 
 exports.index = function(req, res) {
@@ -61,6 +62,7 @@ exports.create = function(req, res) {
     var params = req.body;
     if(params._id) delete params._id;
     params.creationUser = user._id;
+    params.organizers.push(user._id);
 
     return Group.findById(req.params.id, function(err, group) {
         if(err) {

@@ -81,7 +81,7 @@ angular.module('seniorprojectYoApp')
 
 
                         $timeout(function() {
-                            $location.path("/groups/" + res.data.event.group._id + "/events/" + res.data.event._id).replace;
+                            $location.path("/groups/" + res.data.event.group + "/events/" + res.data.event._id).replace;
                         }, 3000);
                     },
                     function(res) {     // error

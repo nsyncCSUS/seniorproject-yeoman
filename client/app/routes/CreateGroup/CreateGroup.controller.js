@@ -46,8 +46,6 @@ angular.module('seniorprojectYoApp')
 		};
 
         buildInterests();
-		$scope.group.organizers.push(Auth.getCurrentUser());
-		$scope.group.creationUser = Auth.getCurrentUser();
 
 		/***************************************************************************
 		 * Building Functions
@@ -202,25 +200,11 @@ angular.module('seniorprojectYoApp')
 
                 //console.log($scope.group);
 	             // Send new group to server
-    			GroupService.create({group: $scope.group},
+    			GroupService.create($scope.group,
                     function(res) {     // success
 
     					$scope.alerts.push({type: "success", msg: "Successfully created group, redirecting in 3 seconds..."});
 
-                        // Add newly created group to user
-                        var user = Auth.getCurrentUser();
-                        user.groups.organizerOf.push(res.data.group);
-                        user.groups.creatorOf.push(res.data.group);
-
-                        //console.log(user);
-
-                        UserService.update( user._id, { user: user },
-                            function(res) { // success
-                            //console.log(res.data.user);
-                            },
-                            function(res) { // error
-
-                            });
 
                         $timeout(function() {
                             $location.path("/groups/" + res.data.group._id).replace;

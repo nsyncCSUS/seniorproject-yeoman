@@ -2,6 +2,7 @@
 
 var _ = require('lodash');
 var Group = require('./group.model');
+var User = require('../user/user.model');
 
 // Get list of groups
 exports.index = function(req, res) {

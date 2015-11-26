@@ -56,8 +56,6 @@ angular.module('seniorprojectYoApp')
             //console.log("no group found");
         }
 
-		$scope.event.organizers.push(Auth.getCurrentUser());
-		$scope.event.creationUser = Auth.getCurrentUser();
 
         buildInterests();
         buildDuration();
@@ -76,72 +74,14 @@ angular.module('seniorprojectYoApp')
 
                 buildDuration();
 
-                /*
-                UserService.groups.events.create($scope.user._id, {event: $scope.event, groupId: $stateParams.groupId}, function(res) {
-
-                    $scope.alerts.push({type: "success", msg: "Successfully created event, redirecting in 3 seconds..."});
-
-                    $timeout(function() {
-                        $location.path("/groups/" + group._id + "/events/" + res.data.event._id).replace;
-                    }, 3000);
-                }, function(res){   // error
-
-                    $scope.alerts.push({type: "danger", msg: "Unsuccessfully created event"});
-                    $timeout(function() {
-                        $scope.isCreating = false;
-                    }, 3000);
-                });
-                */
-
-
-
-
-                EventService.create({event: $scope.event},
+                GroupService.events.create($stateParams.groupId, $scope.event,
                     function(res) {     // success
 
                         $scope.alerts.push({type: "success", msg: "Successfully created event, redirecting in 3 seconds..."});
 
-                        // Add newly created event to group
-                        var group = {};
-                        var event = res.data.event;
-                        if ($stateParams.groupId) {
-                            GroupService.show($stateParams.groupId, function(res) {
-                                if (res.status === 404) {
-                                    $scope.errorMessage = 'There was a problem retrieving the group';
-                                } else {
-                                    group = res.data.group;
-                                    group.events.push(event);
-
-                                    GroupService.update( $stateParams.groupId, { group: group },
-                                        function(res) { // success
-                                        },
-                                        function(res) { // error
-
-                                        });
-                                }
-                            });
-                        } else {
-                            //console.log("no group found");
-                        }
-
-
-                        // Add newly created event to user
-                        var user = Auth.getCurrentUser();
-                        user.events.organizerOf.push(res.data.event);
-                        user.events.creatorOf.push(res.data.event);
-
-                        //console.log(user);
-
-                        UserService.update( user._id, { user: user },
-                            function(res) { // success
-                            //console.log(res.data.user);
-                            },
-                            function(res) { // error
-
-                            });
 
                         $timeout(function() {
-                            $location.path("/groups/" + group._id + "/events/" + res.data.event._id).replace;
+                            $location.path("/groups/" + res.data.event.group._id + "/events/" + res.data.event._id).replace;
                         }, 3000);
                     },
                     function(res) {     // error

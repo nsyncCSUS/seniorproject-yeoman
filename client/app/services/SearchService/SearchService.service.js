@@ -15,8 +15,12 @@ angular.module('seniorprojectYoApp')
         return $http.get('/api/search/events/'+searchString+'?'+interests);
       };
 
+      this.eventSearchAll = function(){
+        return $http.get('/api/search/events/all');
+      };
+
       //Search matches the username
-      this.userSearch = function(username){
+      this.peopleSearch = function(username){
         return $http.get('/api/search/users/'+username);
       };
 

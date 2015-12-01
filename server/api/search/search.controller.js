@@ -34,6 +34,7 @@ exports.index = function(req, res) {
 };
 
 // Note: set Searchstring to 'all' to find all events
+// Note:  Intrests should be seperated by spaces Ex 'sports animals youth'
 // Get all events that match searchstring for event name or description and
 // endTimeDate > current date
 // Events sorted in descending order of currentVolunteers

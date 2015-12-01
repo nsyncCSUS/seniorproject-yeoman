@@ -36,14 +36,21 @@ div(ng-include='"components/navbar/navbar.html"')
                                       label.btn.btn-default(uib-tooltip='Find a cause', uib-tooltip-append-to-body='true', ng-model='advbtn', uib-btn-radio="'Groups'") Groups
                         .col-xs-12.col-sm-6.col-md-4.col-lg-4
                             .visible-xs
-                                |</br></br>
-                            img.img-thumbnail(ng-src='/images/interests/animals.png',  width='35', height='35', uib-tooltip='Animals', style='background-color: lightgrey')
-                            img.img-thumbnail(ng-src='/images/interests/education.png',  width='35', height='35', uib-tooltip='Education')
-                            img.img-thumbnail(ng-src='/images/interests/environment.png',  width='35', height='35', uib-tooltip='Environment')
-                            img.img-thumbnail(ng-src='/images/interests/people.png',  width='35', height='35', uib-tooltip='People')
-                            img.img-thumbnail(ng-src='/images/interests/recreation.png',  width='35', height='35', uib-tooltip='Recreation')
-                            img.img-thumbnail(ng-src='/images/interests/technology.png',  width='35', height='35', uib-tooltip='Technology')
-                            img.img-thumbnail(ng-src='/images/interests/youth.png',  width='35', height='35', uib-tooltip='Youth')
+                            br
+                            br
+                            form(role='form')
+                              .btn-group
+                                img.img-thumbnail(ng-src='/images/interests/animals.png',  width='35', height='35', uib-tooltip='Animal',style='{{animalButton}}',ng-click='addAnimal()')
+                                img.img-thumbnail(ng-src='/images/interests/education.png',  width='35', height='35', uib-tooltip='Education' ,style='{{educationButton}}',ng-click='addEducation()')
+                                img.img-thumbnail(ng-src='/images/interests/environment.png',  width='35', height='35', uib-tooltip='Environment',style='{{environmentButton}}',ng-click='addEnvironment()')
+                                img.img-thumbnail(ng-src='/images/interests/people.png',  width='35', height='35', uib-tooltip='People',style='{{peopleButton}}',ng-click='addPeople()')
+                                img.img-thumbnail(ng-src='/images/interests/recreation.png',  width='35', height='35', uib-tooltip='Recreation',style='{{recreationButton}}',ng-click='addRecreation()')
+                                img.img-thumbnail(ng-src='/images/interests/technology.png',  width='35', height='35', uib-tooltip='Technology',style='{{technologyButton}}',ng-click='addTechnology()')
+                                img.img-thumbnail(ng-src='/images/interests/youth.png',  width='35', height='35', uib-tooltip='Youth',style='{{youthButton}}',ng-click='addYouth()')
+                          
+                          
+
+
 
 
 
@@ -80,7 +87,7 @@ div(ng-include='"components/navbar/navbar.html"')
                                             button.btn.btn-primary Volunteer Now
 
     .panel-group 
-        .col-xs-12.col-sm-12.col-md-6.col-lg-6(ng-repeat='event in events | orderBy:"startTimeDate"', ng-show='getSearchType("Events")')              
+        .col-xs-12.col-sm-12.col-md-6.col-lg-6(ng-repeat='event in events | orderBy:"startTimeDate"', ng-show='getSearchType("Groups")')              
             .panel.panel-default
                 .panel-heading
                     h3 <strong>{{event.startTimeDate | date:'MMM d'}}</strong> 
@@ -110,4 +117,36 @@ div(ng-include='"components/navbar/navbar.html"')
                                         h4.text-right {{event.volunteers.length}} / {{event.maxVolunteers}}
                                             | &nbsp
                                             button.btn.btn-primary Volunteer Now
+                                            
+    .panel-group 
+        .col-xs-12.col-sm-12.col-md-6.col-lg-6(ng-repeat='event in events | orderBy:"startTimeDate"', ng-show='getSearchType("People")')              
+            .panel.panel-default
+                .panel-heading
+                    h3 <strong>{{event.name | date:'MMM d'}}</strong> 
+                    h5 test
+                .panel-body
+                    .row
+                        .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                            h4
+                                a(ng-href='/events/{{event._id}}/') {{event.name}}
+                                h5 {{event.street}} {{event.city}}, {{event.state}} {{event.zipcode}} 
+                            .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                                .row
+                                    .col-xs-12.col-sm-12.col-md-12.col-lg-12.navbar-btn
+                                        img(ng-src='/images/interests/{{interest}}.png',  width='25', height='25', ng-repeat='interest in event.Interests', uib-tooltip='{{interest}}')
+                            .col-xs-12.col-sm-3.col-md-5.col-lg-4
+                                .row
+                                    .col-xs-4.col-sm-12.col-md-12.col-lg-12
+                                        a(ng-href='/events/{{event._id}}/')
+                                            img(src='/images/event/{{event.picture}}.jpg', width='150', height='150')
+                            .col-xs-12.col-sm-9.col-md-7.col-lg-8
+                                .row
+                                    .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                                        h5 {{event.description | limitTo:350}}
+                            .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                                .row
+                                    .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                                        h4.text-right {{event.volunteers.length}} / {{event.maxVolunteers}}
+                                            | &nbsp
+                                            button.btn.btn-primary Volunteer Now                                            
                  

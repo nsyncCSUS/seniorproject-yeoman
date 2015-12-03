@@ -59,9 +59,9 @@ div(ng-include='"components/navbar/navbar.html"')
             group-event-card
 
     .panel-group(ng-show='getSearchType("Groups")')
-        .col-xs-12.col-sm-12.col-md-6.col-lg-6.cardRow(ng-repeat='group in events')
+        .col-xs-12.col-sm-12.col-md-6.col-lg-6.cardRow(ng-repeat='group in groups')
             group-card
 
     .panel-group(ng-show='getSearchType("People")')
-        .col-xs-12.col-sm-12.col-md-6.col-lg-6.cardRow(ng-repeat='user in events')
+        .col-xs-12.col-sm-12.col-md-6.col-lg-6.cardRow(ng-repeat='user in users')
             user-card

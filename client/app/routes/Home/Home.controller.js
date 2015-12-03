@@ -23,7 +23,9 @@ angular.module('seniorprojectYoApp')
 
     $scope.advbtn = 'Events';
 
-
+    $scope.events = [];
+    $scope.groups = [];
+    $scope.users = [];
 
     SearchService.eventSearchAll().then(function(data) {
       console.log(data.data);
@@ -67,13 +69,13 @@ angular.module('seniorprojectYoApp')
           SearchService.groupSearch($scope.search.text,intrestString)
             .then(function(data) {
               console.log(data.data);
-              $scope.events = data.data;
+              $scope.groups = data.data;
             });
         } else if ($scope.advbtn === 'People') {
           SearchService.peopleSearch($scope.search.text)
             .then(function(data) {
               console.log(data.data);
-              $scope.events = data.data;
+              $scope.users = data.data;
             });
         }
       }

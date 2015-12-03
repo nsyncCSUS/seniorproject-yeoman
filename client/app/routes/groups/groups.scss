@@ -15,11 +15,6 @@
     z-index: 2;
 }
 
-.volunteer-thumbnail {
-    width: 64px;
-    height: 64px;
-}
-
 .add:hover {
     border: 2px solid #000000;
     position:relative;
@@ -94,6 +89,7 @@
 .cardRow {
     padding-top: 5px;
     padding-bottom: 5px;
+    position: relative;
 }
 
 .infoRow {

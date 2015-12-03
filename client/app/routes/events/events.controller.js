@@ -36,7 +36,7 @@ angular.module('seniorprojectYoApp')
            if ($stateParams.eventId) {
                EventService.show($stateParams.eventId, function(res) {
                    if (res.status === 404) {
-                       $scope.errorMessage = 'There was a problem retrieving the event';
+                       $scope.alerts.push({type: "danger", msg: "There was a problem retrieving user."});
                    } else {
                        $scope.event = res.data.event;
                        populate();
@@ -409,6 +409,7 @@ angular.module('seniorprojectYoApp')
                          $scope.event.volunteers = res.data.event.volunteers;
                          $scope.event.maxVolunteers = res.data.event.maxVolunteers;
                          if ($scope.event.volunteers.length >= $scope.event.maxVolunteers){
+                             $scope.alerts = [];
                              $scope.alerts.push({
                                  type: "warning",
                                  msg: 'Event is full.'
@@ -419,6 +420,7 @@ angular.module('seniorprojectYoApp')
                              EventService.volunteers.create($scope.event._id, $scope.user._id, function(res) {
                                  $scope.event.volunteers = res.data;
                                  populateVolunteers();
+                                 $scope.alerts = [];
                                  $scope.alerts.push({
                                      type: "success",
                                      msg: 'You have successfully volunteered'
@@ -427,6 +429,7 @@ angular.module('seniorprojectYoApp')
                                  $scope.isBusy = false;
                              }, function(res) { // error
 
+                                 $scope.alerts = [];
                                  $scope.alerts.push({
                                      type: "danger",
                                      msg: 'There was a problem volunteering'
@@ -452,17 +455,19 @@ angular.module('seniorprojectYoApp')
                  EventService.volunteers.destroy($scope.event._id, $scope.user._id, function(res) {
                      $scope.event.volunteers = res.data;
                      populateVolunteers();
+                     $scope.alerts = [];
                      $scope.alerts.push({
                          type: "success",
-                         msg: 'You have successfully unvolunteered'
+                         msg: 'You have successfully opted out'
                      });
 
                      $scope.isBusy = false;
                  }, function(res) { // error
 
+                     $scope.alerts = [];
                      $scope.alerts.push({
                          type: "danger",
-                         msg: 'There was a problem unvolunteering'
+                         msg: 'There was a problem opting out'
                      });
 
                      $scope.isBusy = false;

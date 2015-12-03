@@ -56,12 +56,12 @@ div(ng-include='"components/navbar/navbar.html"')
     .col-xs-12.col-sm-8.col-md-8.col-lg-8
         .panel-body.cardRow(ng-show='getCurrentTab("Upcoming Events")')
             .row.cardRow(ng-repeat='event in upcomingEvents | orderBy:"startTimeDate" | CheckExpired:false')
-                group-event-card
+                group-event-card(event='event')
 
         .panel-body.cardRow(ng-show='getCurrentTab("Past Events")')
             .row.cardRow(ng-repeat='event in upcomingEvents | orderBy:"-startTimeDate" | CheckExpired:true')
-                past-group-event-card
+                past-group-event-card(event='event')
 
         .panel-body.cardRow(ng-show='getCurrentTab("Recommended Events")')
             .row.cardRow(ng-repeat='event in user.recommendedEvents | orderBy:"startTimeDate"')
-                group-event-card
+                group-event-card(event='event')

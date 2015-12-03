@@ -117,19 +117,19 @@ angular.module('seniorprojectYoApp')
     };
 
     $scope.getSearchType = function(category) {
-      if (category === 'Events') {
+      if (category === $scope.advbtn) {
         return true;
       } else {
         return false;
       }
 
-      if (category === 'Groups') {
+      if (category === $scope.advbtn) {
         return true;
       } else {
         return false;
       }
 
-      if (category === 'People') {
+      if (category === $scope.advbtn) {
         return true;
       } else {
         return false;

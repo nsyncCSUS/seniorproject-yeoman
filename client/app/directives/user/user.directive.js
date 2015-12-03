@@ -4,6 +4,6 @@ angular.module('seniorprojectYoApp')
     .directive('userCard', function() {
         return {
             restrict: 'E',
-            templateUrl: 'app/directives/group/userCard.html'
+            templateUrl: 'app/directives/user/userCard.html'
         };
     });

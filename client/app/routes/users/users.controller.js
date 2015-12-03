@@ -12,7 +12,6 @@ angular.module('seniorprojectYoApp')
         $scope.isUpdating = false;
         $scope.userId = $stateParams.id;
         $scope.alerts = [];
-        $scope.errorMessage = '';
 
         $scope.animalsSelected = "";
         $scope.educationSelected = "";
@@ -35,7 +34,7 @@ angular.module('seniorprojectYoApp')
              if ($stateParams.userId) {
                  UserService.show($stateParams.userId, function(res) {
                      if (res.status === 404) {
-                         $scope.errorMessage = 'There was a problem retrieving the user';
+                         $scope.alerts.push({type: "danger", msg: "There was a problem retrieving user."});
                      } else {
                          $scope.user = res.data.user;
                          populateUser();
@@ -52,13 +51,6 @@ angular.module('seniorprojectYoApp')
              // Populate volunteeredTo
              UserService.events.volunteeredTo.index($scope.user._id, {}, function(res) {
                  $scope.user.events.volunteeredTo = res.data;
-
-                 // Populate groups
-                 angular.forEach($scope.user.events.volunteeredTo, function(event) {
-                     GroupService.show(event.group, function(res) {
-                         event.group = res.data.group;
-                     });
-                 });
              });
 
              // Populate subscriptions
@@ -331,28 +323,8 @@ angular.module('seniorprojectYoApp')
         }
 
         /***************************************************************************
-         * Admin Testing
-         **************************************************************************/
-        $scope.toggleAdmin = function() {
-            //$scope.isAdmin = !$scope.isAdmin;
-        }
-
-        /***************************************************************************
          * MISC Functions
          **************************************************************************/
-        /*
-         * Opens an external link
-         */
-        $scope.goTo = function(url) {
-            if (url.indexOf("//") > -1)
-                $window.open(url, '_blank');
-            else {
-                var validURL = "//" + url;
-                $window.open(validURL, '_blank');
-            }
-
-        }
-
         $scope.closeAlert = function(index) {
             $scope.alerts.splice(index, 1);
         }

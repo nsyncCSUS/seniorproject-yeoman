@@ -1,4 +1,5 @@
 .col-xs-12.col-sm-12.col-md-12.col-lg-12.cardBody
+    h1(ng-show='isOrganizer()', ng-class='{ "cardHeaderUnderlay" : isOrganizer() }') ORGANIZER
 
     .col-xs-12.col-sm-12.col-md-12.col-lg-12
         .row
@@ -25,9 +26,9 @@
 
     .col-xs-12.col-sm-12.col-md-12.col-lg-12.volunteerRow.hidden-xs
         .row
-            .col-xs-12.col-sm-3.col-md-2.col-lg-1
+            .col-xs-12.col-sm-3.col-md-2.col-lg-2
                 h4 Current Events
 
-            .col-xs-12.col-sm-9.col-md-10.col-lg-11
-                a(ng-href='/groups/{{event.group._id}}/events/{{event._id}}/', ng-repeat='event in group.events | limitTo:9', uib-tooltip='{{event.name}}')
+            .col-xs-12.col-sm-9.col-md-10.col-lg-10
+                a(ng-href='/groups/{{group._id}}/events/{{event._id}}/', ng-repeat='event in group.events | limitTo:15 | CheckExpired:false', uib-tooltip='{{event.name}}')
                     img.img-rounded.volunteer-thumbnail(src='{{event.picture}}')

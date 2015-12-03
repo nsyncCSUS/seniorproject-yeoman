@@ -54,14 +54,14 @@ div(ng-include='"components/navbar/navbar.html"')
             button.btn.btn-xs.btn-default.cursor-pointer.otherTab(ng-repeat='tab in otherTabs', ng-click='setCurrentTab(otherTabs[$index])') {{otherTabs[$index]}}
 
     .col-xs-12.col-sm-8.col-md-8.col-lg-8
-        .panel-body.eventRow(ng-show='getCurrentTab("Upcoming Events")')
-            .row.eventRow(ng-repeat='event in upcomingEvents | orderBy:"startTimeDate" | CheckExpired:false')
-                group-event-card
+        .panel-body.cardRow(ng-show='getCurrentTab("Upcoming Events")')
+            .row.cardRow(ng-repeat='event in upcomingEvents | orderBy:"startTimeDate" | CheckExpired:false')
+                group-event-card(event='event')
 
-        .panel-body.eventRow(ng-show='getCurrentTab("Past Events")')
-            .row.eventRow(ng-repeat='event in upcomingEvents | orderBy:"-startTimeDate" | CheckExpired:true')
-                past-group-event-card
+        .panel-body.cardRow(ng-show='getCurrentTab("Past Events")')
+            .row.cardRow(ng-repeat='event in upcomingEvents | orderBy:"-startTimeDate" | CheckExpired:true')
+                past-group-event-card(event='event')
 
-        .panel-body.eventRow(ng-show='getCurrentTab("Recommended Events")')
-            .row.eventRow(ng-repeat='event in user.recommendedEvents | orderBy:"startTimeDate"')
-                group-event-card
+        .panel-body.cardRow(ng-show='getCurrentTab("Recommended Events")')
+            .row.cardRow(ng-repeat='event in user.recommendedEvents | orderBy:"startTimeDate"')
+                group-event-card(event='event')

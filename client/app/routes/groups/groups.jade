@@ -285,10 +285,10 @@ div(ng-show='!isEditing')
                                 .selectedTab
                                     | {{selectedTab}}
                                 button.btn.btn-xs.btn-default.cursor-pointer.otherTab(ng-repeat='tab in otherTabs', ng-click='setCurrentTab(otherTabs[$index])') {{otherTabs[$index]}}
-                            .panel-body.eventRow(ng-show='getCurrentTab("Upcoming Events")')
-                                .row.eventRow(ng-repeat='event in group.events | orderBy:"startTimeDate" | CheckExpired:false')
-                                    event-card
+                            .panel-body.cardRow(ng-show='getCurrentTab("Upcoming Events")')
+                                .row.cardRow(ng-repeat='event in group.events | orderBy:"startTimeDate" | CheckExpired:false')
+                                    event-card(event='event')
 
-                            .panel-body.eventRow(ng-show='getCurrentTab("Past Events")')
-                                .row.eventRow(ng-repeat='event in group.events | orderBy:"-startTimeDate" | CheckExpired:true')
-                                    past-event-card
+                            .panel-body.cardRow(ng-show='getCurrentTab("Past Events")')
+                                .row.cardRow(ng-repeat='event in group.events | orderBy:"-startTimeDate" | CheckExpired:true')
+                                    past-event-card(event='event')

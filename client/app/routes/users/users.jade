@@ -190,18 +190,18 @@ div(ng-show='!isEditing')
                             | {{selectedTab}}
                         button.btn.btn-xs.btn-default.cursor-pointer.otherTab(ng-repeat='tab in otherTabs', ng-click='setCurrentTab(otherTabs[$index])') {{otherTabs[$index]}}
 
-                    .panel-body.eventRow(ng-show='getCurrentTab("Volunteered To")')
-                        .row.eventRow(ng-repeat='event in user.events.volunteeredTo | orderBy:"startTimeDate" | CheckExpired:false')
-                            group-event-sm-card
+                    .panel-body.cardRow(ng-show='getCurrentTab("Volunteered To")')
+                        .row.cardRow(ng-repeat='event in user.events.volunteeredTo | orderBy:"startTimeDate" | CheckExpired:false')
+                            group-event-sm-card(event='event')
 
-                    .panel-body.eventRow(ng-show='getCurrentTab("Past Events")')
-                        .row.eventRow(ng-repeat='event in user.events.volunteeredTo | orderBy:"-startTimeDate" | CheckExpired:true')
-                            past-group-event-sm-card
+                    .panel-body.cardRow(ng-show='getCurrentTab("Past Events")')
+                        .row.cardRow(ng-repeat='event in user.events.volunteeredTo | orderBy:"-startTimeDate" | CheckExpired:true')
+                            past-group-event-sm-card(event='event')
 
-                    .panel-body.eventRow(ng-show='getCurrentTab("Subscriptions")')
+                    .panel-body.cardRow(ng-show='getCurrentTab("Subscriptions")')
                         a(ng-href='/groups/{{group._id}}/', ng-repeat='group in user.groups.volunteeredTo | limitTo: 100')
                             img.img-thumbnail.subscriber-thumbnail.cursor-pointer(src="{{group.picture}}", uib-tooltip='{{group.name}}')
 
-                    .panel-body.eventRow(ng-show='getCurrentTab("Organizer Of")')
+                    .panel-body.cardRow(ng-show='getCurrentTab("Organizer Of")')
                         a(ng-href='/groups/{{group._id}}/', ng-repeat='group in user.groups.organizerOf | limitTo: 100')
                             img.img-thumbnail.subscriber-thumbnail.cursor-pointer(src="{{group.picture}}", uib-tooltip='{{group.name}}')

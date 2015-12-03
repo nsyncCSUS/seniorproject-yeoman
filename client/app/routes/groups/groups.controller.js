@@ -42,7 +42,7 @@ angular.module('seniorprojectYoApp')
             if ($stateParams.groupId) {
                 GroupService.show($stateParams.groupId, function(res) {
                     if (res.status === 404) {
-                        $scope.errorMessage = 'There was a problem retrieving the group';
+                        $scope.alerts.push({type: "danger", msg: "There was a problem retrieving group."});
                     } else {
                         $scope.group = res.data.group;
                         //console.log($scope.group);
@@ -75,21 +75,6 @@ angular.module('seniorprojectYoApp')
             GroupService.events.index($scope.group._id, {}, function(res) {
                 //console.log(res.data);
                 $scope.group.events = res.data;
-
-                // Populate organizers + volunteers for events
-                angular.forEach($scope.group.events, function(event) {
-                    GroupService.show(event.group, function(res) {
-                        event.group = res.data.group;
-
-                        EventService.organizers.index(event._id, {}, function (res) {
-                            event.organizers = res.data;
-
-                            EventService.volunteers.index(event._id, {}, function(res) {
-                                event.volunteers = res.data;
-                            });
-                        });
-                    });
-                });
             });
         };
 
@@ -113,12 +98,6 @@ angular.module('seniorprojectYoApp')
             });
 
         };
-
-        function populateAnEventVolunteers(event) {
-            EventService.volunteers.index(event._id, {}, function(res) {
-                event.volunteers = res.data;
-            });
-        }
 
         function checkAdmin() {
             if (Auth.isLoggedIn()) {
@@ -396,85 +375,6 @@ angular.module('seniorprojectYoApp')
             }, 1);
         }
 
-        /***************************************************************************
-         * Volunteer Button
-         **************************************************************************/
-         $scope.volunteer = function(curEvent) {
-             if (Auth.isLoggedIn()) {
-
-                 $scope.isBusy = true;
-                 var eventIndex = $scope.group.events.indexOf($filter('filter')($scope.group.events, {_id: curEvent._id}, true)[0]);
-                 EventService.show($scope.group.events[eventIndex]._id, function(res) {
-                     if (res.status === 404) {
-                         $scope.errorMessage = 'There was a problem retrieving the event';
-                     } else {
-                         $scope.group.events[eventIndex].volunteers = res.data.event.volunteers;
-                         $scope.group.events[eventIndex].maxVolunteers = res.data.event.maxVolunteers;
-                         if ($scope.group.events[eventIndex].volunteers.length >= $scope.group.events[eventIndex].maxVolunteers){
-                             $scope.alerts.push({
-                                 type: "warning",
-                                 msg: 'Event is full.'
-                             });
-                             $scope.isBusy = false;
-                         }
-                         else {
-                             EventService.volunteers.create($scope.group.events[eventIndex]._id, $scope.user._id, function(res) {
-                                 $scope.group.events[eventIndex].volunteers = res.data;
-                                 populateAnEventVolunteers($scope.group.events[eventIndex]);
-                                 $scope.alerts.push({
-                                     type: "success",
-                                     msg: 'You have successfully volunteered'
-                                 });
-
-                                 $scope.isBusy = false;
-                             }, function(res) { // error
-
-                                 $scope.alerts.push({
-                                     type: "danger",
-                                     msg: 'There was a problem volunteering'
-                                 });
-
-                                 $scope.isBusy = false;
-                             });
-                         }
-                     }
-                 });
-             }
-             else {
-                 $location.path("/login").replace;
-             }
-         }
-
-         $scope.optOut = function(curEvent) {
-             if (Auth.isLoggedIn()) {
-
-                 $scope.isBusy = true;
-                 var eventIndex = $scope.group.events.indexOf($filter('filter')($scope.group.events, {_id: curEvent._id}, true)[0]);
-                 EventService.volunteers.destroy($scope.group.events[eventIndex]._id, $scope.user._id, function(res) {
-                     $scope.group.events[eventIndex].volunteers = res.data;
-                     populateAnEventVolunteers($scope.group.events[eventIndex]);
-                     $scope.alerts.push({
-                         type: "success",
-                         msg: 'You have successfully unvolunteered'
-                     });
-
-                     $scope.isBusy = false;
-                 }, function(res) { // error
-
-                     $scope.alerts.push({
-                         type: "danger",
-                         msg: 'There was a problem unvolunteering'
-                     });
-
-                     $scope.isBusy = false;
-                 });
-             }
-             else {
-                 $location.path("/login").replace;
-             }
-
-         }
-
         /***********************************************************************
          * Boolean Functions
          **********************************************************************/
@@ -515,33 +415,6 @@ angular.module('seniorprojectYoApp')
             return false;
         }
 
-        /*
-         * Checks if there are more than 1 upcoming events, the view will display
-         * arrows to move across events if that is the case.
-         */
-        $scope.hasMultipleEvents = function() {
-            if ($scope.group.events != null) {
-                if ($scope.group.events.length >= 2)
-                    return true;
-                else
-                    return false;
-            } else
-                return false;
-        }
-
-        /*
-         * Checks if there are more than n organizers
-         */
-        $scope.hasOrganizers = function(amount) {
-            if ($scope.group.organizers != null) {
-                if ($scope.group.organizers.length >= amount)
-                    return true;
-                else
-                    return false;
-            } else
-                return false;
-        }
-
         $scope.getIsSearching = function() {
             return $scope.isSearching;
         }
@@ -560,26 +433,6 @@ angular.module('seniorprojectYoApp')
                 return false;
         }
 
-        $scope.isVolunteering = function(curEvent) {
-            if ($scope.user != null){
-                for (var i = 0; i < curEvent.volunteers.length; i++) {
-                    if (curEvent.volunteers[i]._id === $scope.user._id)
-                        return true;
-                }
-            }
-            return false;
-        }
-
-        $scope.isOrganizer = function(curEvent) {
-            if ($scope.user != null){
-                for (var i = 0; i < curEvent.organizers.length; i++) {
-                    if (curEvent.organizers[i]._id === $scope.user._id)
-                        return true;
-                }
-            }
-            return false;
-        }
-
         $scope.isSubscribed = function() {
             if ($scope.user != null) {
                 if ($scope.group != null) {
@@ -593,34 +446,6 @@ angular.module('seniorprojectYoApp')
             return false;
         }
 
-        $scope.isCurrentlyActive = function(curEvent) {
-            var rightNow = new Date();
-
-            if (curEvent != null) {
-                var startTime = new Date(curEvent.startTimeDate);
-                var endTime = new Date(curEvent.endTimeDate);
-                if (((startTime - rightNow) < 1) && ((endTime - startTime) > 1)) {
-                    return true;
-                }
-                else {
-                    return false;
-                }
-            }
-        }
-
-        $scope.isEnded = function(curEvent) {
-            var rightNow = new Date();
-
-            if (curEvent != null) {
-                var endTime = new Date(curEvent.endTimeDate);
-                if ((endTime - rightNow) < 1) {
-                    return true;
-                }
-                else {
-                    return false;
-                }
-            }
-        }
 
         /***********************************************************************
          * Editing Functions
@@ -712,7 +537,7 @@ angular.module('seniorprojectYoApp')
                  }, function(res) { // error
                      $scope.alerts.push({
                          type: "danger",
-                         msg: 'There was a problem subscribing1'
+                         msg: 'There was a problem subscribing'
                      });
                      $scope.isSubbing = false;
                  });
@@ -735,14 +560,14 @@ angular.module('seniorprojectYoApp')
 
                      $scope.alerts.push({
                          type: "success",
-                         msg: 'You have successfully subscribed'
+                         msg: 'You have successfully unsubscribed'
                      });
 
                      $scope.isSubbing = false;
                  }, function(res) { // error
                      $scope.alerts.push({
                          type: "danger",
-                         msg: 'There was a problem subscribing1'
+                         msg: 'There was a problem unsubscribing'
                      });
                      $scope.isSubbing = false;
                  });
@@ -753,28 +578,8 @@ angular.module('seniorprojectYoApp')
          }
 
         /***************************************************************************
-         * Admin Testing
-         **************************************************************************/
-        $scope.toggleAdmin = function() {
-            //$scope.isAdmin = !$scope.isAdmin;
-        }
-
-
-        /***************************************************************************
          * MISC Functions
          **************************************************************************/
-        /*
-         * Opens an external link
-         */
-        $scope.goTo = function(url) {
-            if (url.indexOf("//") > -1)
-                $window.open(url, '_blank');
-            else {
-                var validURL = "//" + url;
-                $window.open(validURL, '_blank');
-            }
-
-        }
 
         $scope.closeAlert = function(index) {
             $scope.alerts.splice(index, 1);

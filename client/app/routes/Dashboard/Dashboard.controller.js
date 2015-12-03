@@ -40,7 +40,7 @@ angular.module('seniorprojectYoApp')
 
              // Populate upcomingEvents = volunteeredTo + organizerOf
              $scope.upcomingEvents = [];
-             // VolunteeredTo
+             // VolunteeredTo Events
              UserService.events.volunteeredTo.index($scope.user._id, {}, function(res) {
                  $scope.user.events.volunteeredTo = res.data;
 
@@ -49,7 +49,7 @@ angular.module('seniorprojectYoApp')
                      $scope.upcomingEvents.push(event);
                  });
 
-                 // OrganizerOf
+                 // OrganizerOf Events
                  UserService.events.organizerOf.index($scope.user._id, {}, function(res) {
                      $scope.user.events.organizerOf = res.data;
 
@@ -57,45 +57,11 @@ angular.module('seniorprojectYoApp')
                      angular.forEach($scope.user.events.organizerOf, function(event) {
                          $scope.upcomingEvents.push(event);
                      });
-
-                     populateUpcomingEvents();
-
                  });
              });
 
              // Populate recommended events
          };
-
-         function populateUpcomingEvents() {
-             // Populate group + organizerOf + volunteers for all events
-             angular.forEach($scope.upcomingEvents, function(event) {
-                 GroupService.show(event.group, function(res) {
-                     event.group = res.data.group;
-
-                     EventService.organizers.index(event._id, {}, function (res) {
-                         event.organizers = res.data;
-
-                         EventService.volunteers.index(event._id, {}, function(res) {
-                             event.volunteers = res.data;
-
-                             //console.log($scope.upcomingEvents);
-                         });
-                     });
-                 });
-             });
-         }
-
-         function populateAnEvent(event) {
-             EventService.organizers.index(event._id, {}, function (res) {
-                 event.organizers = res.data;
-
-                 EventService.volunteers.index(event._id, {}, function(res) {
-                     event.volunteers = res.data;
-
-                     //console.log($scope.upcomingEvents);
-                 });
-             });
-         }
 
         /***********************************************************************
          * Building Functions
@@ -134,136 +100,9 @@ angular.module('seniorprojectYoApp')
                 return false;
         }
 
-        /***************************************************************************
-         * Volunteer Button
-         **************************************************************************/
-         $scope.volunteer = function(curEvent) {
-             if (Auth.isLoggedIn()) {
-
-                 $scope.isBusy = true;
-                 var eventIndex = $scope.upcomingEvents.indexOf($filter('filter')($scope.upcomingEvents, {_id: curEvent._id}, true)[0]);
-                 EventService.show($scope.upcomingEvents[eventIndex]._id, function(res) {
-                     if (res.status === 404) {
-                         $scope.errorMessage = 'There was a problem retrieving the event';
-                     } else {
-                         $scope.upcomingEvents[eventIndex].volunteers = res.data.event.volunteers;
-                         $scope.upcomingEvents[eventIndex].maxVolunteers = res.data.event.maxVolunteers;
-                         if ($scope.upcomingEvents[eventIndex].volunteers.length >= $scope.upcomingEvents[eventIndex].maxVolunteers){
-                             $scope.alerts.push({
-                                 type: "warning",
-                                 msg: 'Event is full.'
-                             });
-                             $scope.isBusy = false;
-                         }
-                         else {
-                             EventService.volunteers.create($scope.upcomingEvents[eventIndex]._id, $scope.user._id, function(res) {
-                                 $scope.upcomingEvents[eventIndex].volunteers = res.data;
-                                 populateAnEvent($scope.upcomingEvents[eventIndex]);
-                                 $scope.alerts.push({
-                                     type: "success",
-                                     msg: 'You have successfully volunteered'
-                                 });
-
-                                 $scope.isBusy = false;
-                             }, function(res) { // error
-
-                                 $scope.alerts.push({
-                                     type: "danger",
-                                     msg: 'There was a problem volunteering'
-                                 });
-
-                                 $scope.isBusy = false;
-                             });
-                         }
-                     }
-                 });
-             }
-             else {
-                 $location.path("/login").replace;
-             }
-         }
-
-         $scope.optOut = function(curEvent) {
-             if (Auth.isLoggedIn()) {
-
-                 $scope.isBusy = true;
-                 var eventIndex = $scope.upcomingEvents.indexOf($filter('filter')($scope.upcomingEvents, {_id: curEvent._id}, true)[0]);
-                 EventService.volunteers.destroy($scope.upcomingEvents[eventIndex]._id, $scope.user._id, function(res) {
-                     $scope.upcomingEvents[eventIndex].volunteers = res.data;
-                     populateAnEvent($scope.upcomingEvents[eventIndex]);
-                     $scope.alerts.push({
-                         type: "success",
-                         msg: 'You have successfully unvolunteered'
-                     });
-
-                     $scope.isBusy = false;
-                 }, function(res) { // error
-
-                     $scope.alerts.push({
-                         type: "danger",
-                         msg: 'There was a problem unvolunteering'
-                     });
-
-                     $scope.isBusy = false;
-                 });
-             }
-             else {
-                 $location.path("/login").replace;
-             }
-
-         }
-
         /***********************************************************************
          * Boolean Functions
          **********************************************************************/
-        $scope.isVolunteering = function(curEvent) {
-            if ($scope.user != null){
-                for (var i = 0; i < curEvent.volunteers.length; i++) {
-                    if (curEvent.volunteers[i]._id === $scope.user._id)
-                        return true;
-                }
-            }
-            return false;
-        }
-
-        $scope.isOrganizer = function(curEvent) {
-            if ($scope.user != null){
-                for (var i = 0; i < curEvent.organizers.length; i++) {
-                    if (curEvent.organizers[i]._id === $scope.user._id)
-                        return true;
-                }
-            }
-            return false;
-        }
-
-        $scope.isCurrentlyActive = function(curEvent) {
-            var rightNow = new Date();
-
-            if (curEvent != null) {
-                var startTime = new Date(curEvent.startTimeDate);
-                var endTime = new Date(curEvent.endTimeDate);
-                if (((startTime - rightNow) < 1) && ((endTime - startTime) > 1)) {
-                    return true;
-                }
-                else {
-                    return false;
-                }
-            }
-        }
-
-        $scope.isEnded = function(curEvent) {
-            var rightNow = new Date();
-
-            if (curEvent != null) {
-                var endTime = new Date(curEvent.endTimeDate);
-                if ((endTime - rightNow) < 1) {
-                    return true;
-                }
-                else {
-                    return false;
-                }
-            }
-        }
 
         /***************************************************************************
         * MISC Functions

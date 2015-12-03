@@ -1,5 +1,4 @@
 .col-xs-12.col-sm-12.col-md-12.col-lg-12.cardHeader
-    h1(ng-show='isOrganizer(event)', ng-class='{ "cardHeaderUnderlay" : isOrganizer(event) }') ORGANIZER
     h3 <strong>{{event.startTimeDate | date:'MMM d, yyyy'}}</strong>
     h5.timeRow {{event.startTimeDate | date:'EEEE h:mm a'}}
         .duration for {{event.duration}}
@@ -18,18 +17,10 @@
         .row
             .col-xs-12.col-sm-12.col-md-12.col-lg-12.navbar-btn
                 img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/{{interest}}.png', ng-repeat='interest in event.interests | orderBy:interest', uib-tooltip='{{interest}}')
-    .col-xs-12.col-sm-4.col-md-4.col-lg-4.hidden-xs
-        .row
-            .col-xs-4.col-sm-12.col-md-12.col-lg-12
-                a(ng-href='/groups/{{event.group._id}}/events/{{event._id}}/')
-                    img.img-responsive.img-thumbnail(src='{{event.picture}}')
-    .col-xs-12.col-sm-8.col-md-8.col-lg-8
+
+    .col-xs-12.col-sm-12.col-md-12.col-lg-12
         .row
             .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                h5 {{event.description | limitTo:10000}}
-
-    .col-xs-12.col-sm-12.col-md-12.col-lg-12.volunteerRow
-        .row
-            .hidden-xs
-                .col-xs-12.col-sm-12.col-md-12.col-lg-12.oneline
-                    img.img-rounded.volunteer-thumbnail(ng-repeat='volunteer in event.volunteers | limitTo:20', src='{{volunteer.picture}}')
+                .row
+                    .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                        h5 {{event.description | limitTo:150}} 

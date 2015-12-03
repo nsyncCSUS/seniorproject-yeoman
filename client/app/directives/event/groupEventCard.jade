@@ -1,5 +1,8 @@
+.card-alert.text-center
+    uib-alert(ng-repeat='alert in alerts', type='{{alert.type}}', close='closeAlert($index)', dismiss-on-timeout='5000') {{alert.msg}}
+
 .col-xs-12.col-sm-12.col-md-12.col-lg-12.cardHeader
-    h1(ng-show='isOrganizer(event)', ng-class='{ "cardHeaderUnderlay" : isOrganizer(event) }') ORGANIZER
+    h1(ng-show='isOrganizer()', ng-class='{ "cardHeaderUnderlay" : isOrganizer() }') ORGANIZER
     h3 <strong>{{event.startTimeDate | date:'MMM d, yyyy'}}</strong>
     h5.timeRow {{event.startTimeDate | date:'EEEE h:mm a'}}
         .duration for {{event.duration}}
@@ -14,8 +17,8 @@
             a(ng-href='/groups/{{event.group._id}}/events/{{event._id}}/') {{event.name}}
         h5 {{event.street}} {{event.city}}, {{event.state}} {{event.zipcode}}
 
-        h1(ng-show='isCurrentlyActive(event)', ng-class='{ "cardBodyUnderlay" : isCurrentlyActive(event) }') Currently Active
-        h1(ng-show='isEnded(event)', ng-class='{ "cardBodyUnderlay" : isEnded(event) }') Ended
+        h1(ng-show='isCurrentlyActive()', ng-class='{ "cardBodyUnderlay" : isCurrentlyActive() }') Currently Active
+        h1(ng-show='isEnded(event)', ng-class='{ "cardBodyUnderlay" : isEnded() }') Ended
 
     .col-xs-12.col-sm-12.col-md-12.col-lg-12
         .row
@@ -42,5 +45,5 @@
             .col-xs-12.col-sm-6.col-md-5.col-lg-4
                 h4.text-right {{event.volunteers.length}} / {{event.maxVolunteers}}
                     | &nbsp
-                    button.btn(ng-show='isVolunteering(event)', ng-click='optOut(event)', ng-disabled='isOrganizer(event) || isCurrentlyActive(event) || isBusy') Opt out
-                    button.btn(ng-show='!isVolunteering(event)', ng-click='volunteer(event)', ng-disabled='isOrganizer(event) || isCurrentlyActive(event) || isBusy') Volunteer
+                    button.btn(ng-show='isVolunteering()', ng-click='optOut()', ng-disabled='isOrganizer() || isCurrentlyActive() || !isLoaded || isEnded() || isBusy') Opt out
+                    button.btn(ng-show='!isVolunteering()', ng-click='volunteer()', ng-disabled='isOrganizer() || isCurrentlyActive() || !isLoaded || isEnded() || isBusy') Volunteer

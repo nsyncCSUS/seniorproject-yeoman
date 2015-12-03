@@ -253,8 +253,8 @@ div(ng-show='!isEditing')
                                 .col-xs-12.col-sm-12.col-md-12.col-lg-12
                                     h4.text-center {{event.volunteers.length}} / {{event.maxVolunteers}}
                                         | &nbsp
-                                        button.btn(ng-show='isVolunteering()', ng-click='optOut()', ng-disabled='isCurrentlyActive() || isOrganizer() || isBusy') Opt out
-                                        button.btn(ng-show='!isVolunteering()', ng-click='volunteer()', ng-disabled='isCurrentlyActive() || isOrganizer() || isBusy') Volunteer
+                                        button.btn(ng-show='isVolunteering()', ng-click='optOut()', ng-disabled='isCurrentlyActive() || isOrganizer() || isEnded() || isBusy') Opt out
+                                        button.btn(ng-show='!isVolunteering()', ng-click='volunteer()', ng-disabled='isCurrentlyActive() || isOrganizer() || isEnded() || isBusy') Volunteer
                                     hr
                                 .hidden-xs
                                     .col-xs-12.col-sm-12.col-md-12.col-lg-12

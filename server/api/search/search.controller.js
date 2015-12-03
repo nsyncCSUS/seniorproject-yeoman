@@ -45,11 +45,12 @@ exports.index = function(req, res) {
 exports.events = function(req,res){
   // Getting current date.
   var currentDate = new Date(); // Date format is year/month/day
-  var curdd = currentDate.getDate();
-  var curmm = currentDate.getMonth() + 1;
-  var curyyyy = currentDate.getFullYear();
-  var curmin= currentDate.getMinutes();
-  var curhour = currentDate.getHours();
+  console.log(currentDate);
+  //var curdd = currentDate.getDate();
+  //var curmm = currentDate.getMonth() + 1;
+  //var curyyyy = currentDate.getFullYear()-1;
+  //var curmin= currentDate.getMinutes();
+//  var curhour = currentDate.getHours();
 
   //console.log(Object.keys(req.body)[0]); grabs first value in object
 //This code might be useful in refactoring since adding this line will grab the search value
@@ -83,16 +84,17 @@ exports.events = function(req,res){
   Event.find({
      $or:[ {name:searchStringRegExObj}, {description:searchStringRegExObj}],
      interests :intrestsRegExObj,
-    endTimeDate: {$gte: new Date(curyyyy,curmm,curdd,curhour,curmin)}
+    endTimeDate: {$gte: currentDate }
   }, function(err, data) {
     if (err) {
       throw err;
     }
     res.send(data);
 
-}).$where('this.maxVolunteers > this.numberVolunteers').sort({numberVolunteers: -1}).limit(100);
+}).sort({numberVolunteers: -1}).limit(100);
 };
-
+//taken outa line 94 $where('this.maxVolunteers > this.numberVolunteers').
+//
 
 
 // find the users given

@@ -1,13 +1,13 @@
 .card-alert.text-center
     uib-alert(ng-repeat='alert in alerts', type='{{alert.type}}', close='closeAlert($index)', dismiss-on-timeout='5000') {{alert.msg}}
 
-.col-xs-12.col-sm-12.col-md-12.col-lg-12.cardHeader
-    h1(ng-show='isOrganizer()', ng-class='{ "cardHeaderUnderlay" : isOrganizer() }') ORGANIZER
+.col-xs-12.col-sm-12.col-md-12.col-lg-12.card-header
+    h1(ng-show='isOrganizer()', ng-class='{ "card-headerUnderlay" : isOrganizer() }') ORGANIZER
     h3 <strong>{{event.startTimeDate | date:'MMM d, yyyy'}}</strong>
     h5.timeRow {{event.startTimeDate | date:'EEEE h:mm a'}}
         .duration for {{event.duration}}
 
-.col-xs-12.col-sm-12.col-md-12.col-lg-12.cardBody
+.col-xs-12.col-sm-12.col-md-12.col-lg-12.card-body
 
     .col-xs-12.col-sm-12.col-md-12.col-lg-12
         .row
@@ -15,8 +15,8 @@
                 a(ng-href='/groups/{{event.group._id}}/events/{{event._id}}/') {{event.name}}
             h5 {{event.street}} {{event.city}}, {{event.state}} {{event.zipcode}}
 
-            h1(ng-show='isCurrentlyActive()', ng-class='{ "cardBodyUnderlay" : isCurrentlyActive() }') Currently Active
-            h1(ng-show='isEnded(event)', ng-class='{ "cardBodyUnderlay" : isEnded(event) }') Ended
+            h1(ng-show='isCurrentlyActive()', ng-class='{ "card-bodyUnderlay" : isCurrentlyActive() }') Currently Active
+            h1(ng-show='isEnded(event)', ng-class='{ "card-bodyUnderlay" : isEnded(event) }') Ended
 
     .col-xs-12.col-sm-12.col-md-12.col-lg-12
         .row
@@ -35,7 +35,7 @@
                     .col-xs-12.col-sm-12.col-md-12.col-lg-12
                         h5.card-description {{event.description}}
 
-    .col-xs-12.col-sm-12.col-md-12.col-lg-12.volunteerRow
+    .col-xs-12.col-sm-12.col-md-12.col-lg-12.volunteer-row
         .row
             .hidden-xs
                 .col-xs-12.col-sm-6.col-md-6.col-lg-7.oneline

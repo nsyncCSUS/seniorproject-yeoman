@@ -1,6 +1,6 @@
 div(ng-include='"components/navbar/navbar.html"')
 
-.adminPadding
+.admin-padding
 
 div
     div
@@ -15,9 +15,9 @@ div
 .float-btm.text-center
     uib-alert(ng-repeat='alert in alerts', type='{{alert.type}}', close='closeAlert($index)', dismiss-on-timeout='5000') {{alert.msg}}
 
-.loadingOverlay(ng-show='isCreating')
+.loading-overlay(ng-show='isCreating')
 
-div.cardRow(ng-show='!getIsPreviewing()')
+div.card-row(ng-show='!getIsPreviewing()')
     form(name='eventForm', novalidate)
         .container
             .col-xs-12.col-sm-12.col-md-12.col-lg-12
@@ -218,13 +218,13 @@ div(ng-show='getIsPreviewing()')
                 .col-xs-12.col-sm-12.col-md-12.col-lg-12
                     h2 <strong> {{event.name}} </strong>
 
-                    .col-xs-12.col-sm-12.col-md-12.col-lg-12.dateRow
+                    .col-xs-12.col-sm-12.col-md-12.col-lg-12.date-row
                         h3 {{event.startTimeDate | date:'MMM d, yyyy'}}
 
                         h5.timeRow {{event.startTimeDate | date:'EEEE h:mm a'}}
                             .duration for {{event.duration}}
 
-                    .col-xs-12.col-sm-12.col-md-12.col-lg-12.cardBody
+                    .col-xs-12.col-sm-12.col-md-12.col-lg-12.card-body
                         h5 {{event.street}} {{event.city}}, {{event.state}} {{event.zipcode}}
 
                         .navbar-btn
@@ -232,7 +232,7 @@ div(ng-show='getIsPreviewing()')
                             hr
                             h5 {{event.description | limitTo:10000}}
 
-                        .col-xs-12.col-sm-12.col-md-12.col-lg-12.volunteerRow
+                        .col-xs-12.col-sm-12.col-md-12.col-lg-12.volunteer-row
                             .row
                                 .col-xs-12.col-sm-12.col-md-12.col-lg-12
                                     h4.text-center 0 / {{event.maxVolunteers}}

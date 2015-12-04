@@ -7,7 +7,7 @@ div(ng-include='"components/navbar/navbar.html"')
     .col-xs-12.col-sm-4.col-md-4.col-lg-4
         .col-xs-12.col-sm-12.col-md-12.col-lg-12
             img.img-responsive.img-thumbnail.center-item(src="{{user.picture}}")
-        .col-xs-12.col-sm-12.col-md-12.col-lg-12.text-center.infoRow
+        .col-xs-12.col-sm-12.col-md-12.col-lg-12.text-center.info-row
             a(href='/users/{{user._id}}')
                 h5 {{user.name}}
             | Member since: {{user.creationDate | date:'MMM dd, yyyy'}}
@@ -49,19 +49,19 @@ div(ng-include='"components/navbar/navbar.html"')
 
     .col-xs-12.col-sm-8.col-md-8.col-lg-8.panel-info#tabs
         .panel-heading
-            .selectedTab
+            .selected-tab
                 | {{selectedTab}}
-            button.btn.btn-xs.btn-default.cursor-pointer.otherTab(ng-repeat='tab in otherTabs', ng-click='setCurrentTab(otherTabs[$index])') {{otherTabs[$index]}}
+            button.btn.btn-xs.btn-default.cursor-pointer.other-tab(ng-repeat='tab in otherTabs', ng-click='setCurrentTab(otherTabs[$index])') {{otherTabs[$index]}}
 
     .col-xs-12.col-sm-8.col-md-8.col-lg-8
-        .panel-body.cardRow(ng-show='getCurrentTab("Upcoming Events")')
-            .row.cardRow(ng-repeat='event in upcomingEvents | orderBy:"startTimeDate" | CheckExpired:false')
+        .panel-body.card-row(ng-show='getCurrentTab("Upcoming Events")')
+            .row.card-row(ng-repeat='event in upcomingEvents | orderBy:"startTimeDate" | CheckExpired:false')
                 group-event-card(event='event')
 
-        .panel-body.cardRow(ng-show='getCurrentTab("Past Events")')
-            .row.cardRow(ng-repeat='event in upcomingEvents | orderBy:"-startTimeDate" | CheckExpired:true')
+        .panel-body.card-row(ng-show='getCurrentTab("Past Events")')
+            .row.card-row(ng-repeat='event in upcomingEvents | orderBy:"-startTimeDate" | CheckExpired:true')
                 past-group-event-card(event='event')
 
-        .panel-body.cardRow(ng-show='getCurrentTab("Recommended Events")')
-            .row.cardRow(ng-repeat='event in user.recommendedEvents | orderBy:"startTimeDate"')
+        .panel-body.card-row(ng-show='getCurrentTab("Recommended Events")')
+            .row.card-row(ng-repeat='event in user.recommendedEvents | orderBy:"startTimeDate"')
                 group-event-card(event='event')

@@ -1,6 +1,6 @@
 div(ng-include='"components/navbar/navbar.html"')
 
-.adminPadding(ng-show='isAdmin')
+.admin-padding(ng-show='isAdmin')
 
 div(ng-show='isAdmin')
     div(ng-show='!isEditing')
@@ -17,7 +17,7 @@ div(ng-show='isAdmin')
 .float-btm.text-center
     uib-alert(ng-repeat='alert in alerts', type='{{alert.type}}', close='closeAlert($index)', dismiss-on-timeout='5000') {{alert.msg}}
 
-.loadingOverlay(ng-show='isUpdating')
+.loading-overlay(ng-show='isUpdating')
 
 div(ng-show='isEditing')
     form(name='groupForm', novalidate)
@@ -231,9 +231,9 @@ div(ng-show='!isEditing')
 
                 .row
                     .col-xs-12.col-sm-4.col-md-4.col-lg-4
-                        .col-xs-6.col-sm-12.col-md-12.col-lg-12
+                        .col-xs-6.col-sm-12.col-md-12.col-lg-12.group-picture
                             img.img-responsive.img-thumbnail.center-item(src='{{group.picture}}')
-                        .col-xs-6.col-sm-12.col-md-12.col-lg-12.text-center.infoRow
+                        .col-xs-6.col-sm-12.col-md-12.col-lg-12.text-center.info-row
                             h5 {{group.city}}, {{group.state}}
                             h5 Founded on: {{group.creationDate | date:'MMM dd, yyyy'}}
                             hr
@@ -282,13 +282,13 @@ div(ng-show='!isEditing')
 
                         .panel-info#tabs
                             .panel-heading
-                                .selectedTab
+                                .selected-tab
                                     | {{selectedTab}}
-                                button.btn.btn-xs.btn-default.cursor-pointer.otherTab(ng-repeat='tab in otherTabs', ng-click='setCurrentTab(otherTabs[$index])') {{otherTabs[$index]}}
-                            .panel-body.cardRow(ng-show='getCurrentTab("Upcoming Events")')
-                                .row.cardRow(ng-repeat='event in group.events | orderBy:"startTimeDate" | CheckExpired:false')
+                                button.btn.btn-xs.btn-default.cursor-pointer.other-tab(ng-repeat='tab in otherTabs', ng-click='setCurrentTab(otherTabs[$index])') {{otherTabs[$index]}}
+                            .panel-body.card-row(ng-show='getCurrentTab("Upcoming Events")')
+                                .row.card-row(ng-repeat='event in group.events | orderBy:"startTimeDate" | CheckExpired:false')
                                     event-card(event='event')
 
-                            .panel-body.cardRow(ng-show='getCurrentTab("Past Events")')
-                                .row.cardRow(ng-repeat='event in group.events | orderBy:"-startTimeDate" | CheckExpired:true')
+                            .panel-body.card-row(ng-show='getCurrentTab("Past Events")')
+                                .row.card-row(ng-repeat='event in group.events | orderBy:"-startTimeDate" | CheckExpired:true')
                                     past-event-card(event='event')

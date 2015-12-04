@@ -1,6 +1,6 @@
 div(ng-include='"components/navbar/navbar.html"')
 
-.adminPadding(ng-show='isAdmin')
+.admin-padding(ng-show='isAdmin')
 
 div(ng-show='isAdmin')
     div(ng-show='!isEditing && !isRemoving')
@@ -24,7 +24,7 @@ div(ng-show='isAdmin')
 .float-btm.text-center
     uib-alert(ng-repeat='alert in alerts', type='{{alert.type}}', close='closeAlert($index)', dismiss-on-timeout='5000') {{alert.msg}}
 
-.loadingOverlay(ng-show='isUpdating')
+.loading-overlay(ng-show='isUpdating')
 
 div(ng-show='isEditing')
     form(name='eventForm', novalidate)
@@ -229,26 +229,26 @@ div(ng-show='!isEditing')
                 .col-xs-12.col-sm-12.col-md-12.col-lg-12
                     h2 <strong> {{event.name}} </strong>
 
-                    .col-xs-12.col-sm-12.col-md-12.col-lg-12.cardHeader
-                        h1(ng-show='isOrganizer()', ng-class='{ "cardHeaderUnderlay" : isOrganizer() }') ORGANIZER
+                    .col-xs-12.col-sm-12.col-md-12.col-lg-12.card-header
+                        h1(ng-show='isOrganizer()', ng-class='{ "card-headerUnderlay" : isOrganizer() }') ORGANIZER
 
                         h3 {{event.startTimeDate | date:'MMM d, yyyy'}}
 
                         h5.timeRow {{event.startTimeDate | date:'EEEE h:mm a'}}
                             .duration for {{event.duration}}
 
-                    .col-xs-12.col-sm-12.col-md-12.col-lg-12.cardBody
+                    .col-xs-12.col-sm-12.col-md-12.col-lg-12.card-body
                         h5 {{event.street}} {{event.city}}, {{event.state}} {{event.zipcode}}
 
-                        h1(ng-show='isCurrentlyActive()', ng-class='{ "cardBodyUnderlay" : isCurrentlyActive() }') Currently Active
-                        h1(ng-show='isEnded()', ng-class='{ "cardBodyUnderlay" : isEnded() }') Ended
+                        h1(ng-show='isCurrentlyActive()', ng-class='{ "card-bodyUnderlay" : isCurrentlyActive() }') Currently Active
+                        h1(ng-show='isEnded()', ng-class='{ "card-bodyUnderlay" : isEnded() }') Ended
 
                         .navbar-btn
                             img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/{{interest}}.png', ng-repeat='interest in event.interests | orderBy:interest', uib-tooltip='{{interest}}')
                             hr
                             h5 {{event.description | limitTo:10000}}
 
-                        .col-xs-12.col-sm-12.col-md-12.col-lg-12.volunteerRow
+                        .col-xs-12.col-sm-12.col-md-12.col-lg-12.volunteer-row
                             .row
                                 .col-xs-12.col-sm-12.col-md-12.col-lg-12
                                     h4.text-center {{event.volunteers.length}} / {{event.maxVolunteers}}

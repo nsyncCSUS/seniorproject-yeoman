@@ -35,14 +35,14 @@
             .col-xs-12.col-sm-8.col-md-8.col-lg-8
                 .row
                     .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                        h5 {{event.description | limitTo:10000}}
+                        h5.card-description {{event.description}}
 
     .col-xs-12.col-sm-12.col-md-12.col-lg-12.volunteerRow
         .row
             .hidden-xs
-                .col-xs-12.col-sm-6.col-md-7.col-lg-8.oneline
+                .col-xs-12.col-sm-6.col-md-6.col-lg-7.oneline
                     img.img-rounded.volunteer-thumbnail(ng-repeat='volunteer in event.volunteers | limitTo:15', src='{{volunteer.picture}}')
-            .col-xs-12.col-sm-6.col-md-5.col-lg-4
+            .col-xs-12.col-sm-6.col-md-6.col-lg-5
                 h4.text-right {{event.volunteers.length}} / {{event.maxVolunteers}}
                     | &nbsp
                     button.btn(ng-show='isVolunteering()', ng-click='optOut()', ng-disabled='isOrganizer() || isCurrentlyActive() || !isLoaded || isEnded() || isBusy') Opt out

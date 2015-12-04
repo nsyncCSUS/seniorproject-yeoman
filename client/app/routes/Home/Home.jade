@@ -55,7 +55,7 @@ div(ng-include='"components/navbar/navbar.html"')
 
 
     .panel-group(ng-show='getSearchType("Events")')
-        .col-xs-12.col-sm-12.col-md-6.col-lg-6.cardRow(ng-repeat='event in events | orderBy:"startTimeDate | CheckExpired:false"')
+        .col-xs-12.col-sm-12.col-md-6.col-lg-6.cardRow(ng-repeat='event in events | orderBy:"startTimeDate" | CheckExpired:false')
             group-event-card(event='event')
 
     .panel-group(ng-show='getSearchType("Groups")')

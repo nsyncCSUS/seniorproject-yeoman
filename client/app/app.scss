@@ -150,6 +150,19 @@ input::-webkit-inner-spin-button {
     border-top: solid thin ;
 }
 
+.card-description {
+    display: block;
+    display: -webkit-box;
+    height: 84px;   // 6 rows = 14px * 6
+    margin: 0 auto;
+    font-size: 14px;
+    line-height: 1;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 /**********************************************************************
     Tab Control CSS START
 **********************************************************************/

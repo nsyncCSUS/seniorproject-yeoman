@@ -107,12 +107,15 @@ exports.users = function(req,res){
 
   User.find({
     name: searchStringRegExObj
-  }, function(err, data) {
-    if (err) {
-      throw err;
-    }
+}, function(err, users) {
+      if (err) return res.status(500).send(err);
 
-      res.send(data);
+      // return user profile
+      var _users = users.map(function(user) {
+          return user.profile;
+      });
+
+      res.status(200).json(_users);
   }).limit(100);
 
 };

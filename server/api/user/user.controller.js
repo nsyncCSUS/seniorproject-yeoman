@@ -25,7 +25,7 @@ exports.upload = function(req,res){
     var filename = req.files.file.path;
        filename = filename.split("\\").pop();
        console.log(filename);
-       fs.remove('./temppic/' + filename, function(err) {
+       fs.remove('./server/temppic/' + filename, function(err) {
          if (!err) console.log('success!');
        });
   res.status(200).json(result.url);

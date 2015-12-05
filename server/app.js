@@ -37,7 +37,7 @@ if(config.seedDB) { require('./config/seed'); }
 var app = express();
 
 app.use(multipart({
-    uploadDir: './temppic/'
+    uploadDir: './server/temppic/'
 }));
 //app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static('./client'));

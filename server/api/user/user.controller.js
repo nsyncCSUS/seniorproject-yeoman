@@ -4,10 +4,35 @@ var User = require('./user.model');
 var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
+var cloudinary = require('cloudinary');
+var multipart = require('connect-multiparty');
+ var fs = require('fs-extra');
+
 
 var validationError = function(res, err) {
     return res.status(422).json(err);
 };
+
+
+// Image upload
+exports.upload = function(req,res){
+  console.log(req.files);
+
+  cloudinary.uploader.upload(req.files.file.path, function(result) {
+    console.log(result);
+
+    // deltes the temp file that is created in temppic
+    var filename = req.files.file.path;
+       filename = filename.split("\\").pop();
+       console.log(filename);
+       fs.remove('./temppic/' + filename, function(err) {
+         if (!err) console.log('success!');
+       });
+  res.status(200).json(result.url);
+  });
+
+};
+
 
 /**
  * Get list of users
@@ -20,7 +45,7 @@ exports.index = function(req, res) {
 
         // return user profile
         var _users = users.map(function(user) {
-        	return user.profile;
+          return user.profile;
         });
 
         res.status(200).json(_users);
@@ -60,7 +85,7 @@ exports.show = function(req, res, next) {
         if (err) return next(err);
         if (!user) return notFound(res);
         res.json({
-        	user: user.profile
+          user: user.profile
         });
     });
 };

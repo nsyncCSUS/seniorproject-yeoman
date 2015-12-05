@@ -1,2 +1,16 @@
 div(ng-include='"components/navbar/navbar.html"')
 h1 {{data}}
+form(name='myForm')
+    fieldset
+      legend Upload on form submit
+      br
+      | Photo:
+      input.btn.btn-default(type='file', ngf-select='', ng-model='picFile', name='file', accept='image/*', ngf-max-size='2MB')
+      img.thumb(ng-show='myForm.file.$valid', ngf-src='picFile')
+      br
+      button.btn.btn-default(ng-click='picFile = null', ng-show='picFile') Remove
+      br
+      button.btn.btn-default(ng-disabled='!myForm.$valid', ng-click='upload(picFile)') Submit
+      span.progress(ng-show='picFile.progress >= 0')
+        div(style='width:{{picFile.progress}}%', ng-bind="picFile.progress + '%'")
+      span(ng-show='picFile.result') Upload Successful

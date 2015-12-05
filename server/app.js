@@ -10,9 +10,18 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 var express = require('express');
 var mongoose = require('mongoose');
 var config = require('./config/environment');
+var cloudinary = require('cloudinary');
+var multipart = require('connect-multiparty');
 
 
 
+// Cloudary config (Image uplod )
+
+cloudinary.config({
+  cloud_name: 'dh6yzadp7',
+  api_key: '129624214939534',
+  api_secret: 'DfjThuKRtTyQ8FUFXik1N1jxPUI'
+});
 
 
 // Connect to database
@@ -27,6 +36,9 @@ if(config.seedDB) { require('./config/seed'); }
 
 var app = express();
 
+app.use(multipart({
+    uploadDir: './temppic/'
+}));
 //app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static('./client'));
 app.use(express.static('./client/assets'));

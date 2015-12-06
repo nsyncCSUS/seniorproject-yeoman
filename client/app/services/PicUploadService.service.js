@@ -3,12 +3,14 @@
 angular.module('seniorprojectYoApp')
     .service('PicUploadService', function(Upload) {
 
-      this.picUpload = function(file){
+      this.picUpload = function(file,width,height){
         var promise =
         Upload.upload({
           url: '/api/users/upload', // which route to post
           fields: {
-            'username': 'test' // any fields you would like specified
+            'width': width,
+            'height': height, // any fields you would like specified
+            'crop': 'fill'
           },
           file: file // the actual image file being passed
         }).progress(function(evt) { // Useful debugging lines
@@ -21,7 +23,7 @@ angular.module('seniorprojectYoApp')
           console.log('Http status: ' + status);
         });
         //once the upload has completed these 3 lines clear the form fields
-        
+
         return promise;
       };
 

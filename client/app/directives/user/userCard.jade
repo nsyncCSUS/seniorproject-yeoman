@@ -11,9 +11,10 @@
                     h3 <strong>{{user.name}}</strong>
 
     .col-xs-12.col-sm-12.col-md-12.col-lg-12.card-body
-        .col-xs-12.col-sm-12.col-md-12.col-lg-12
+        .row
             .col-xs-12.col-sm-12.col-md-12.col-lg-12
                 h5(ng-show='user.city && user.state') {{user.city}}, {{user.state}}
-                h5(ng-show='!user.city || !user.state') Location Unknown
+                h5(ng-show='!user.city || !user.state') <i>Location Unknown</i>
             .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                h5.oneline {{user.description | limitTo:100}}
+                h5.oneline(ng-show='user.description') {{user.description | limitTo:100}}
+                h5.oneline(ng-show='!user.description') <i>No Description</i>

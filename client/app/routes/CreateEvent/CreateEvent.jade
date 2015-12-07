@@ -225,7 +225,10 @@ div(ng-show='getIsPreviewing()')
                             .duration for {{event.duration}}
 
                     .col-xs-12.col-sm-12.col-md-12.col-lg-12.card-body
-                        h5 {{event.street}} {{event.city}}, {{event.state}} {{event.zipcode}}
+                        h5
+                            span.glyphicon.glyphicon-globe
+                            | &nbsp
+                            | {{event.street}} {{event.city}}, {{event.state}} {{event.zipcode}}
 
                         .navbar-btn
                             img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/{{interest}}.png', ng-repeat='interest in event.interests | orderBy:interest', uib-tooltip='{{interest}}')

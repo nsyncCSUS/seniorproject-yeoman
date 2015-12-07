@@ -12,10 +12,15 @@
     .col-xs-12.col-sm-12.col-md-12.col-lg-12
         .row
             h5
-                a(ng-href='/groups/{{event.group._id}}/') {{event.group.name}}
+                button.btn.btn-default.btn-xs
+                    a(ng-href='/groups/{{event.group._id}}/') {{event.group.name}}
         h4
             a(ng-href='/groups/{{event.group._id}}/events/{{event._id}}/') {{event.name}}
-        h5 {{event.street}} {{event.city}}, {{event.state}} {{event.zipcode}}
+        h5
+            span.glyphicon.glyphicon-globe
+            | &nbsp
+            a(ng-href='https://www.google.com/maps/place/{{event.street}},{{event.city}},{{event.state}}+{{event.zipcode}}', target='_blank')
+                | {{event.street}} {{event.city}}, {{event.state}} {{event.zipcode}}
 
         h1(ng-show='isCurrentlyActive()', ng-class='{ "card-bodyUnderlay" : isCurrentlyActive() }') Currently Active
         h1(ng-show='isEnded(event)', ng-class='{ "card-bodyUnderlay" : isEnded() }') Ended

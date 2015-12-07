@@ -99,19 +99,23 @@ UserSchema
             'name': this.name,
             'role': this.role,
 
+            'creationDate': this.creationDate,
+
             'picture': this.picture,
             'description': this.description,
             'birthday': this.birthday,
             'age': this.age,
             'city': this.city,
             'state': this.state,
-            'zipcode': this.zipcode,
-            'phoneNum': this.phoneNum,
 
             'events': this.events,
             'groups': this.groups,
-            'interests': this.interests
+            'interests': this.interests,
 
+            'googlePlusURL': this.googlePlusURL,
+            'facebookURL': this.facebookURL,
+            'linkedInURL': this.linkedInURL,
+            'twitterURL': this.twitterURL
         };
     });
 

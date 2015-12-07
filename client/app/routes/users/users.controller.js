@@ -12,7 +12,6 @@ angular.module('seniorprojectYoApp')
         $scope.isUpdating = false;
         $scope.userId = $stateParams.id;
         $scope.alerts = [];
-        $scope.newPic = false;
 
         $scope.animalsSelected = "";
         $scope.educationSelected = "";
@@ -268,6 +267,7 @@ angular.module('seniorprojectYoApp')
                 if ($scope.picFile){
                     PicUploadService.picUpload($scope.picFile).then(function(data){
                       $scope.user.picture = data.data;
+                      $scope.picFile = null;
 
                       UserService.update($scope.user._id, { user: $scope.user },
                           function(res) {  // success
@@ -342,7 +342,7 @@ angular.module('seniorprojectYoApp')
                         break;
                 }
             }
-
+            
             return false;
         }
 

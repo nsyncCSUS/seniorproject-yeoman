@@ -265,7 +265,7 @@ angular.module('seniorprojectYoApp')
 
                 // Check to see if a new picture is inputted
                 if ($scope.picFile){
-                    PicUploadService.picUpload($scope.picFile).then(function(data){
+                    PicUploadService.picUpload($scope.picFile).then(function(data) {
                       $scope.user.picture = data.data;
                       $scope.picFile = null;
 
@@ -342,7 +342,7 @@ angular.module('seniorprojectYoApp')
                         break;
                 }
             }
-            
+
             return false;
         }
 

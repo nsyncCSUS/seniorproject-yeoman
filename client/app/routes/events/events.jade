@@ -102,10 +102,16 @@ div(ng-show='isEditing')
 
 
             .col-xs-12.col-sm-4.col-md-4.col-lg-4
-                img.img-responsive.img-thumbnail.center-item(src="{{event.picture}}")
-                .form-group
-                    input(type='file')
-                    | Might have to use external module for file inputs
+                label(for='pic') Picture
+                img.img-responsive.img-thumbnail.center-item(ng-show='eventForm.pic.$invalid || picFile == null', ng-src='{{event.picture}}')
+                img.img-responsive.img-thumbnail.center-item(ng-show='eventForm.pic.$valid', ngf-src='picFile')
+                hr
+                .form-group(ng-class='{ "has-error" : eventForm.pic.$invalid }')
+                    input.btn.center-item#pic(type='file', ngf-select='', ng-model='picFile', name='pic', accept='image/*', ngf-max-size='2MB')
+                    button.btn.btn-default.center-item(ng-show='picFile', ng-click='picFile = null') Remove
+                    div(ng-messages='eventForm.pic.$error', ng-show='eventForm.pic.$error')
+                        div.help-block(ng-message='file') Picture file error
+                        div.help-block(ng-message='maxSize') Picture file too big (Max 2MB)
                 hr
 
             .col-xs-12.col-sm-8.col-md-8.col-lg-8

@@ -49,7 +49,7 @@ div(ng-show='isEditing')
                 img.img-responsive.img-thumbnail.center-item(ng-show='userForm.pic.$invalid || picFile == null', ng-src='{{user.picture}}')
                 img.img-responsive.img-thumbnail.center-item(ng-show='userForm.pic.$valid', ngf-src='picFile')
                 hr
-                div(ng-show='isEditing')
+                div
                     .form-group(ng-class='{ "has-error" : userForm.pic.$invalid }')
                         input.btn.center-item#pic(type='file', ngf-select='', ng-model='picFile', name='pic', accept='image/*', ngf-max-size='2MB')
                         button.btn.btn-default.center-item(ng-show='picFile', ng-click='picFile = null') Remove

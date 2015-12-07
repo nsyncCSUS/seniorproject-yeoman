@@ -29,4 +29,6 @@ router.post('/', controller.create);
 router.use('/:id/events', events);
 router.use('/:id/groups', groups);
 
+router.use('/upload',controller.upload);
+
 module.exports = router;

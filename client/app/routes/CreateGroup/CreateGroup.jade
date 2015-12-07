@@ -42,10 +42,15 @@ div(ng-show='!getIsPreviewing()')
                     hr
 
                 .col-xs-12.col-sm-4.col-md-4.col-lg-4
-                    img.img-responsive.img-thumbnail.center-item(src="{{group.picture}}")
-                    .form-group
-                        input(type='file')
-                        | Might have to use external module for file inputs
+                    label(for='pic') Picture
+                    img.img-responsive.img-thumbnail.center-item(ng-show='groupForm.pic.$valid', ngf-src='picFile')
+                    hr
+                    .form-group(ng-class='{ "has-error" : groupForm.pic.$invalid }')
+                        input.btn.center-item#pic(type='file', ngf-select='', ng-model='picFile', name='pic', accept='image/*', ngf-max-size='2MB')
+                        button.btn.btn-default.center-item(ng-show='picFile', ng-click='picFile = null') Remove
+                        div(ng-messages='groupForm.pic.$error', ng-show='groupForm.pic.$error')
+                            div.help-block(ng-message='file') Picture file error
+                            div.help-block(ng-message='maxSize') Picture file too big (Max 2MB)
                     hr
 
                 .col-xs-12.col-sm-8.col-md-8.col-lg-8
@@ -211,30 +216,27 @@ div(ng-show='getIsPreviewing()')
                                 div
                                     img.img-thumbnail(ng-src='/images/interests/{{interest}}.png', ng-repeat='interest in group.interests | orderBy:interest', uib-tooltip='{{interest}}')
 
-                            .hidden-xs
-                                .col-xs-12.col-sm-6.col-md-6.col-lg-6
-                                    div.pull-right
-                                        img.btn.btn-sm(ng-src='/assets/images/social-media/googlePlus.png', ng-disabled='!checkIfHas("googlePlus")', ng-click='goTo(group.googlePlusURL)', uib-tooltip='{{group.googlePlusURL}}')
-                                        img.btn.btn-sm(ng-src='/assets/images/social-media/facebook.png', ng-disabled='!checkIfHas("facebook")', ng-click='goTo(group.facebookURL)', uib-tooltip='{{group.facebookURL}}')
-                                        img.btn.btn-sm(ng-src='/assets/images/social-media/twitter.png', ng-disabled='!checkIfHas("twitter")', ng-click='goTo(group.twitterURL)', uib-tooltip='{{group.twitterURL}}')
-                                        img.btn.btn-sm(ng-src='/assets/images/social-media/linkedIn.png', ng-disabled='!checkIfHas("linkedIn")', ng-click='goTo(group.linkedInURL)', uib-tooltip='{{group.linkedInURL}}')
-                                        img.btn.btn-sm(ng-src='/assets/images/social-media/website.png', ng-disabled='!checkIfHas("website")', ng-click='goTo(group.personalWebsiteURL)', uib-tooltip='{{group.personalWebsiteURL}}')
-                            .visible-xs
-                                .col-xs-6.col-sm-6.col-md-6.col-lg-6
-                                    div.pull-right
-                                        img.btn.btn-sm(ng-src='/assets/images/social-media/googlePlus.png', ng-disabled='!checkIfHas("googlePlus")', ng-click='goTo(group.googlePlusURL)', uib-tooltip='{{group.googlePlusURL}}')
-                                        img.btn.btn-sm(ng-src='/assets/images/social-media/facebook.png', ng-disabled='!checkIfHas("facebook")', ng-click='goTo(group.facebookURL)', uib-tooltip='{{group.facebookURL}}')
-                                        img.btn.btn-sm(ng-src='/assets/images/social-media/twitter.png', ng-disabled='!checkIfHas("twitter")', ng-click='goTo(group.twitterURL)', uib-tooltip='{{group.twitterURL}}')
-                                        img.btn.btn-sm(ng-src='/assets/images/social-media/linkedIn.png', ng-disabled='!checkIfHas("linkedIn")', ng-click='goTo(group.linkedInURL)', uib-tooltip='{{group.linkedInURL}}')
-                                        img.btn.btn-sm(ng-src='/assets/images/social-media/website.png', ng-disabled='!checkIfHas("website")', ng-click='goTo(group.personalWebsiteURL)', uib-tooltip='{{group.personalWebsiteURL}}')
+                            .col-xs-6.col-sm-6.col-md-6.col-lg-6
+                                div.pull-right
+                                    a(ng-href='{{group.googlePlusURL}}', target='_blank')
+                                        img.btn.btn-sm(ng-src='/images/social-media/googlePlus.png', ng-disabled='!checkIfHas("googlePlus")', uib-tooltip='{{group.googlePlusURL}}')
+                                    a(ng-href='{{group.facebookURL}}', target='_blank')
+                                        img.btn.btn-sm(ng-src='/images/social-media/facebook.png', ng-disabled='!checkIfHas("facebook")', uib-tooltip='{{group.facebookURL}}')
+                                    a(ng-href='{{group.twitterURL}}', target='_blank')
+                                        img.btn.btn-sm(ng-src='/images/social-media/twitter.png', ng-disabled='!checkIfHas("twitter")', uib-tooltip='{{group.twitterURL}}')
+                                    a(ng-href='{{group.linkedInURL}}', target='_blank')
+                                        img.btn.btn-sm(ng-src='/images/social-media/linkedIn.png', ng-disabled='!checkIfHas("linkedIn")', uib-tooltip='{{group.linkedInURL}}')
+                                    a(ng-href='{{group.personalWebsiteURL}}', target='_blank')
+                                        img.btn.btn-sm(ng-src='/images/social-media/website.png', ng-disabled='!checkIfHas("website")', uib-tooltip='{{group.personalWebsiteURL}}')
 
                 .row
                     .col-xs-12.col-sm-4.col-md-4.col-lg-4
                         .col-xs-6.col-sm-12.col-md-12.col-lg-12.group-picture
-                            img.img-responsive.img-thumbnail.center-item(src='{{group.picture}}')
+                            img.img-responsive.img-thumbnail.center-item(ng-show='groupForm.pic.$valid', ngf-src='picFile')
                         .col-xs-6.col-sm-12.col-md-12.col-lg-12.text-center.info-row
-                            h5 {{group.city}}, {{group.state}}
                             h5 Founded on: {{group.creationDate | date:'MMM dd, yyyy'}}
+                            h5(ng-show='group.city && group.state && group.zipcode') {{group.city}}, {{group.state}} {{group.zipcode}}
+                            h5(ng-show='!group.city || !group.state || !group.zipcode') Location Unknown
                             hr
                             button.btn.btn-default.center-item(ng-click='subscribe()')
                                 h4 Subscribe

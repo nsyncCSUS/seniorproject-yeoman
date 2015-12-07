@@ -22,7 +22,7 @@ if (mongoose.connection.readyState === 0) {
 
 // Run seeds
  //userSeed();
-eventSeed();
+//eventSeed();
 //groupSeed();
 
 function userSeed() {

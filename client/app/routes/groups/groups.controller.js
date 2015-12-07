@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('GroupsCtrl', function($scope, $stateParams, $window, $filter, $anchorScroll, $location, $timeout, GroupService, UserService, EventService, Auth) {
+    .controller('GroupsCtrl', function($scope, $stateParams, $window, $filter, $anchorScroll, $location, $timeout, GroupService, UserService, EventService, PicUploadService, Auth) {
 
         /***************************************************************************
          * Variables (includes ones from scope too)
@@ -476,26 +476,59 @@ angular.module('seniorprojectYoApp')
         $scope.submitEdit = function() {
             if ($scope.groupForm.$valid) {
                 $scope.isUpdating = true;
-                // Send changes to server
-                GroupService.update($stateParams.groupId, { group: $scope.group },
-                    function(res) {  // success
-                        $scope.group = res.data.group;
-                        $scope.alerts.push({
-                            type: "success",
-                            msg: 'Group has been updated'
-                        });
 
-                        $scope.isEditing = false;
-                        $scope.isUpdating = false;
-                    },
-                    function(res) {  //error
-                        $scope.alerts.push({
-                            type: "danger",
-                            msg: 'There was a problem updating the group'
-                        });
+                // Check to see if a new picture is inputted
+                if ($scope.picFile) {
+                    PicUploadService.picUpload($scope.picFile).then(function(data) {
+                        $scope.group.picture = data.data;
+                        $scope.picFile = null;
 
-                        $scope.isUpdating = false;
-                });
+                        // Send changes to server
+                        GroupService.update($stateParams.groupId, { group: $scope.group },
+                            function(res) {  // success
+                                $scope.group = res.data.group;
+                                $scope.alerts.push({
+                                    type: "success",
+                                    msg: 'Group has been updated'
+                                });
+
+                                $scope.isEditing = false;
+                                $scope.isUpdating = false;
+                            },
+                            function(res) {  //error
+                                $scope.alerts.push({
+                                    type: "danger",
+                                    msg: 'There was a problem updating the group'
+                                });
+
+                                $scope.isUpdating = false;
+                        });
+                    });
+                }
+                else {
+                    // Send changes to server
+                    GroupService.update($stateParams.groupId, { group: $scope.group },
+                        function(res) {  // success
+                            $scope.group = res.data.group;
+                            $scope.alerts.push({
+                                type: "success",
+                                msg: 'Group has been updated'
+                            });
+
+                            $scope.isEditing = false;
+                            $scope.isUpdating = false;
+                        },
+                        function(res) {  //error
+                            $scope.alerts.push({
+                                type: "danger",
+                                msg: 'There was a problem updating the group'
+                            });
+
+                            $scope.isUpdating = false;
+                    });
+                }
+
+
                 // Keep changes made
                 $scope.group_bak = {};
                 $scope.animalsSelected_bak = "";

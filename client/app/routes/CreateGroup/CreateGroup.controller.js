@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('CreateGroupCtrl', function($scope, $location, $anchorScroll, $timeout, GroupService, UserService, Auth) {
+    .controller('CreateGroupCtrl', function($scope, $location, $anchorScroll, $timeout, GroupService, UserService, PicUploadService, Auth) {
 
 		/***************************************************************************
 		 * Variables (includes ones from scope too)
@@ -171,24 +171,53 @@ angular.module('seniorprojectYoApp')
     			$scope.group.creationDate = new Date();
     			$scope.isCreating = true;
 
-	             // Send new group to server
-    			GroupService.create($scope.group,
-                    function(res) {     // success
+                // Check to see if a new picture is inputted
+                if ($scope.picFile) {
+                    PicUploadService.picUpload($scope.picFile).then(function(data) {
+                        $scope.group.picture = data.data;
+                        $scope.picFile = null;
 
-    					$scope.alerts.push({type: "success", msg: "Successfully created group, redirecting in 3 seconds..."});
+                        // Send new group to server
+                        GroupService.create($scope.group,
+                           function(res) {     // success
+
+                               $scope.alerts.push({type: "success", msg: "Successfully created group, redirecting in 3 seconds..."});
 
 
-                        $timeout(function() {
-                            $location.path("/groups/" + res.data.group._id).replace;
-                        }, 3000);
-                    },
-                    function(res) {     // error
-    					$scope.alerts.push({type: "danger", msg: "Unsuccessfully created group"});
-    					$timeout(function() {
-    						$scope.isCreating = false;
-    					}, 3000);
+                               $timeout(function() {
+                                   $location.path("/groups/" + res.data.group._id).replace;
+                               }, 3000);
+                           },
+                           function(res) {     // error
+                               $scope.alerts.push({type: "danger", msg: "Unsuccessfully created group"});
+                               $timeout(function() {
+                                   $scope.isCreating = false;
+                               }, 3000);
 
-	             });
+                        });
+                    });
+                }
+                else {
+                    // Send new group to server
+           			GroupService.create($scope.group,
+                           function(res) {     // success
+
+           					$scope.alerts.push({type: "success", msg: "Successfully created group, redirecting in 3 seconds..."});
+
+
+                               $timeout(function() {
+                                   $location.path("/groups/" + res.data.group._id).replace;
+                               }, 3000);
+                           },
+                           function(res) {     // error
+           					$scope.alerts.push({type: "danger", msg: "Unsuccessfully created group"});
+           					$timeout(function() {
+           						$scope.isCreating = false;
+           					}, 3000);
+
+       	             });
+                }
+
             }
             else {
                 $scope.alerts.push({type: "danger", msg: "Errors found, please fix them."});

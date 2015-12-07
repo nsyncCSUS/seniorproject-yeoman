@@ -6,7 +6,7 @@ div(ng-include='"components/navbar/navbar.html"')
 .container
     .col-xs-12.col-sm-4.col-md-4.col-lg-4
         .col-xs-12.col-sm-12.col-md-12.col-lg-12
-            img.img-responsive.img-thumbnail.center-item(src="{{user.picture}}")
+            img.img-responsive.img-thumbnail.center-item(ng-src="{{user.picture}}")
         .col-xs-12.col-sm-12.col-md-12.col-lg-12.text-center.info-row
             a(href='/users/{{user._id}}')
                 h5 {{user.name}}

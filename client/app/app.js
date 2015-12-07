@@ -10,7 +10,8 @@ angular.module('seniorprojectYoApp', [
   'ui.bootstrap',
   'ui.bootstrap.datetimepicker',
   'angularMoment',
-  'restangular'
+  'restangular',
+  'ngFileUpload'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider

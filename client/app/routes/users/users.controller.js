@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('UsersCtrl', function($scope, $stateParams, $anchorScroll, $timeout, UserService, GroupService, Auth) {
+    .controller('UsersCtrl', function($scope, $stateParams, $anchorScroll, $timeout, UserService, GroupService, PicUploadService, Auth) {
 
 
         /***************************************************************************
@@ -12,6 +12,7 @@ angular.module('seniorprojectYoApp')
         $scope.isUpdating = false;
         $scope.userId = $stateParams.id;
         $scope.alerts = [];
+        $scope.newPic = false;
 
         $scope.animalsSelected = "";
         $scope.educationSelected = "";
@@ -39,6 +40,7 @@ angular.module('seniorprojectYoApp')
                          $scope.user = res.data.user;
                          populateUser();
                          checkAdmin();
+                         console.log($scope.user);
                      }
                  });
              } else {
@@ -262,19 +264,41 @@ angular.module('seniorprojectYoApp')
                 $scope.technologySelected_bak = "";
                 $scope.youthSelected_bak = "";
 
-                UserService.update($scope.user._id, { user: $scope.user },
-                    function(res) {  // success
-                        $scope.alerts.push({type: "success", msg: "Successfully updated user."});
-                        $scope.user = res.data.user;
+                // Check to see if a new picture is inputted
+                if ($scope.picFile){
+                    PicUploadService.picUpload($scope.picFile).then(function(data){
+                      $scope.user.picture = data.data;
 
-                        $scope.isEditing = false;
-                        $scope.isUpdating = false;
-                    },
-                    function(res) {  // error
-                        $scope.alerts.push({type: "danger", msg: "Unsuccessfully updated user."});
+                      UserService.update($scope.user._id, { user: $scope.user },
+                          function(res) {  // success
+                              $scope.alerts.push({type: "success", msg: "Successfully updated user."});
+                              $scope.user = res.data.user;
 
-                        $scope.isUpdating = false;
-                });
+                              $scope.isEditing = false;
+                              $scope.isUpdating = false;
+                          },
+                          function(res) {  // error
+                              $scope.alerts.push({type: "danger", msg: "Unsuccessfully updated user."});
+
+                              $scope.isUpdating = false;
+                      });
+                    });
+                }
+                else {
+                    UserService.update($scope.user._id, { user: $scope.user },
+                        function(res) {  // success
+                            $scope.alerts.push({type: "success", msg: "Successfully updated user."});
+                            $scope.user = res.data.user;
+
+                            $scope.isEditing = false;
+                            $scope.isUpdating = false;
+                        },
+                        function(res) {  // error
+                            $scope.alerts.push({type: "danger", msg: "Unsuccessfully updated user."});
+
+                            $scope.isUpdating = false;
+                    });
+                }
             }
             else {
                 $scope.alerts.push({type: "danger", msg: "Errors found, please fix them."});

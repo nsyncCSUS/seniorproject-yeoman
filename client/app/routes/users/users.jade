@@ -44,6 +44,21 @@ div(ng-show='isEditing')
                             img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/youth.png', ng-class='youthSelected', ng-click='addInterest("Youth")', uib-tooltip='Youth')
                 hr
 
+                .row
+                    .col-xs-12.col-sm-6.col-md-6.col-lg-6
+                        label(for='birthday') Birthday
+                        .input-group
+                            input.form-control(type='date', uib-datepicker-popup='format', ng-model='user.birthday', is-open='status.opened', max-date='today', datepicker-mode='year', close-text='Close')
+                            span.input-group-btn
+                                button.btn.btn-default(type='button', ng-click='open($event)')
+                                    i.glyphicon.glyphicon-calendar
+
+                        div.help-block(ng-show='eventForm.birthday.$invalid && submitted')
+                            | Start time cannot start before today.
+
+
+                hr
+
             .col-xs-12.col-sm-4.col-md-4.col-lg-4
                 label(for='pic') Picture
                 img.img-responsive.img-thumbnail.center-item(ng-show='userForm.pic.$invalid || picFile == null', ng-src='{{user.picture}}')
@@ -164,8 +179,8 @@ div(ng-show='!isEditing')
     .container
         .row
             .col-xs-12.col-sm-8.col-md-8.col-lg-8
-                h2.hidden-xs {{user.name}}
-                h2.visible-xs.text-center {{user.name}}
+                h2.hidden-xs <strong>{{user.name}}</strong>
+                h2.visible-xs.text-center <strong>{{user.name}}</strong>
             .col-xs-12.col-sm-4.col-md-4.col-lg-4
                 h2.pull-right.hidden-xs
                     a(ng-href='{{user.googlePlusURL}}', target='_blank')
@@ -192,13 +207,20 @@ div(ng-show='!isEditing')
 
         .row
             .col-xs-12.col-sm-4.col-md-4.col-lg-4
-                .col-xs-4.col-sm-12.col-md-12.col-lg-12
+                .col-xs-4.col-sm-12.col-md-12.col-lg-12.profile-picture
                     img.img-responsive.img-thumbnail.center-item(src="{{user.picture}}")
                 .col-xs-8.col-sm-12.col-md-12.col-lg-12.text-center.info-row
                     h5 Member since: {{user.creationDate | date:'MMM dd, yyyy'}}
-                    h5(ng-show='user.city && user.state') {{user.city}}, {{user.state}}
-                    h5(ng-show='!user.city || !user.state') Location Unknown
+
                     hr
+
+                    h5(ng-show='user.city && user.state') {{user.city}}, {{user.state}}
+                    h5(ng-show='!user.city || !user.state') <i>Location Unknown</i>
+                    h5(ng-show='user.birthday') Age: {{user.age}}
+                    h5(ng-show='!user.birthday') <i>Age: Unknown</i>
+
+                    hr
+
                     button.btn.btn-info.center-item(ng-click='messageUser()') Contact {{user.firstName}}
 
             .col-xs-12.col-sm-8.col-md-8.col-lg-8.panel-success
@@ -220,9 +242,9 @@ div(ng-show='!isEditing')
                             past-group-event-sm-card(event='event')
 
                     .panel-body.card-row(ng-show='getCurrentTab("Subscriptions")')
-                        a(ng-href='/groups/{{user._id}}/', ng-repeat='group in user.groups.volunteeredTo | limitTo: 100')
-                            img.img-thumbnail.subscriber-thumbnail.cursor-pointer(src="{{user.picture}}", uib-tooltip='{{user.name}}')
+                        a(ng-href='/groups/{{group._id}}/', ng-repeat='group in user.groups.volunteeredTo | limitTo: 100')
+                            img.img-thumbnail.subscriber-thumbnail.cursor-pointer(src="{{group.picture}}", uib-tooltip='{{group.name}}')
 
                     .panel-body.card-row(ng-show='getCurrentTab("Organizer Of")')
-                        a(ng-href='/groups/{{user._id}}/', ng-repeat='group in user.groups.organizerOf | limitTo: 100')
-                            img.img-thumbnail.subscriber-thumbnail.cursor-pointer(src="{{user.picture}}", uib-tooltip='{{user.name}}')
+                        a(ng-href='/groups/{{group._id}}/', ng-repeat='group in user.groups.organizerOf | limitTo: 100')
+                            img.img-thumbnail.subscriber-thumbnail.cursor-pointer(src="{{group.picture}}", uib-tooltip='{{group.name}}')

@@ -231,12 +231,16 @@ div(ng-show='getIsPreviewing()')
 
                 .row
                     .col-xs-12.col-sm-4.col-md-4.col-lg-4
-                        .col-xs-6.col-sm-12.col-md-12.col-lg-12.group-picture
+                        .col-xs-6.col-sm-12.col-md-12.col-lg-12.profile-picture
                             img.img-responsive.img-thumbnail.center-item(ng-show='groupForm.pic.$valid', ngf-src='picFile')
                         .col-xs-6.col-sm-12.col-md-12.col-lg-12.text-center.info-row
                             h5 Founded on: {{group.creationDate | date:'MMM dd, yyyy'}}
+
+                            hr
+
                             h5(ng-show='group.city && group.state && group.zipcode') {{group.city}}, {{group.state}} {{group.zipcode}}
-                            h5(ng-show='!group.city || !group.state || !group.zipcode') Location Unknown
+                            h5(ng-show='!group.city || !group.state || !group.zipcode') <i>Location Unknown</i>
+
                             hr
                             button.btn.btn-default.center-item(ng-click='subscribe()')
                                 h4 Subscribe

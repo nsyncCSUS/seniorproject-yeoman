@@ -28,7 +28,7 @@ angular.module('seniorprojectYoApp')
     $scope.users = [];
 
     SearchService.eventSearchAll().then(function(data) {
-      console.log(data.data);
+      //console.log(data.data);
 
       $scope.events = data.data;
 
@@ -49,7 +49,7 @@ angular.module('seniorprojectYoApp')
         $scope.search.text = searchbox;
         //$scope.searchbox = '';
         //  $scope.currentTab = 'events';
-        console.log($scope.search.text);
+        //console.log($scope.search.text);
 
         for(let i of intrestArray){
           if(i !== undefined ){
@@ -61,20 +61,20 @@ angular.module('seniorprojectYoApp')
         if ($scope.advbtn === 'Events') {
           SearchService.eventSearch($scope.search.text,intrestString)
             .then(function(data) {
-              console.log(data.data);
+              //console.log(data.data);
               $scope.events = data.data;
             });
 
         } else if ($scope.advbtn === 'Groups') {
           SearchService.groupSearch($scope.search.text,intrestString)
             .then(function(data) {
-              console.log(data.data);
+              //console.log(data.data);
               $scope.groups = data.data;
             });
         } else if ($scope.advbtn === 'People') {
           SearchService.peopleSearch($scope.search.text)
             .then(function(data) {
-              console.log(data.data);
+              //console.log(data.data);
               $scope.users = data.data;
             });
         }
@@ -169,11 +169,11 @@ angular.module('seniorprojectYoApp')
       if ($scope.animalButton === 'background-color: white') {
         $scope.animalButton = 'background-color: lightgray';
         intrestArray[0] = 'Animal';
-        console.log(intrestArray);
+        //console.log(intrestArray);
       } else {
         $scope.animalButton = 'background-color: white';
         intrestArray[0] = undefined;
-        console.log(intrestArray);
+        //console.log(intrestArray);
       }
     };
 
@@ -182,12 +182,12 @@ angular.module('seniorprojectYoApp')
         $scope.educationButton = 'background-color: lightgray';
 
         intrestArray[1] = 'Education';
-        console.log(intrestArray);
+        //console.log(intrestArray);
 
       } else {
         $scope.educationButton = 'background-color: white';
         intrestArray[1] = undefined;
-        console.log(intrestArray);
+        //console.log(intrestArray);
       }
     };
 
@@ -196,12 +196,12 @@ angular.module('seniorprojectYoApp')
         $scope.environmentButton = 'background-color: lightgray';
 
         intrestArray[2] = 'Environment';
-        console.log(intrestArray);
+        //console.log(intrestArray);
 
       } else {
         $scope.environmentButton = 'background-color: white';
         intrestArray[2] = undefined;
-        console.log(intrestArray);
+        //console.log(intrestArray);
       }
     };
 
@@ -210,12 +210,12 @@ angular.module('seniorprojectYoApp')
         $scope.peopleButton = 'background-color: lightgray';
 
         intrestArray[3] = 'People';
-        console.log(intrestArray);
+        //console.log(intrestArray);
 
       } else {
         $scope.peopleButton = 'background-color: white';
         intrestArray[3] = undefined;
-        console.log(intrestArray);
+        //console.log(intrestArray);
       }
     };
 
@@ -224,12 +224,12 @@ angular.module('seniorprojectYoApp')
         $scope.recreationButton = 'background-color: lightgray';
 
         intrestArray[4] = 'Recreation';
-        console.log(intrestArray);
+        //console.log(intrestArray);
 
       } else {
         $scope.recreationButton = 'background-color: white';
         intrestArray[4] = undefined;
-        console.log(intrestArray);
+        //console.log(intrestArray);
       }
     };
 
@@ -238,12 +238,12 @@ angular.module('seniorprojectYoApp')
         $scope.technologyButton = 'background-color: lightgray';
 
         intrestArray[5] = 'Technology';
-        console.log(intrestArray);
+        //console.log(intrestArray);
 
       } else {
         $scope.technologyButton = 'background-color: white';
         intrestArray[5] = undefined;
-        console.log(intrestArray);
+        //console.log(intrestArray);
       }
     };
 
@@ -253,7 +253,7 @@ angular.module('seniorprojectYoApp')
         $scope.youthButton = 'background-color: lightgray';
 
         intrestArray[6] = 'Technology';
-        console.log(intrestArray);
+        //console.log(intrestArray);
 
       } else {
         $scope.youthButton = 'background-color: white';

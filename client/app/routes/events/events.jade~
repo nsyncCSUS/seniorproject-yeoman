@@ -254,7 +254,7 @@ div(ng-show='!isEditing')
                         h1(ng-show='isEnded()', ng-class='{ "card-bodyUnderlay" : isEnded() }') Ended
 
                         .navbar-btn
-                            img.img-thumbnail.interests-thumbnail(ng-src='images/interests/{{interest}}.png', ng-repeat='interest in event.interests | orderBy:interest', uib-tooltip='{{interest}}')
+                            img.img-thumbnail.interests-thumbnail(ng-src='/assets/images/interests/{{interest}}.png', ng-repeat='interest in event.interests | orderBy:interest', uib-tooltip='{{interest}}')
                             hr
                             h5 {{event.description | limitTo:10000}}
 

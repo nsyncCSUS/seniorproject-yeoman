@@ -47,5 +47,5 @@
             .col-xs-12.col-sm-6.col-md-6.col-lg-5
                 h4.text-right {{event.volunteers.length}} / {{event.maxVolunteers}}
                     | &nbsp
-                    button.btn(ng-show='isVolunteering()', ng-click='optOut()', ng-disabled='isOrganizer() || isCurrentlyActive() || !isLoaded || isEnded() || isBusy') Opt out
-                    button.btn(ng-show='!isVolunteering()', ng-click='volunteer()', ng-disabled='isOrganizer() || isCurrentlyActive() || !isLoaded || isEnded() || isBusy') Volunteer
+                    button.btn.btn-danger(ng-show='isVolunteering()', ng-click='optOut()', ng-disabled='isOrganizer() || isCurrentlyActive() || !isLoaded || isEnded() || isBusy') Opt out
+                    button.btn.btn-success(ng-show='!isVolunteering()', ng-click='volunteer()', ng-disabled='isOrganizer() || isCurrentlyActive() || !isLoaded || isEnded() || isBusy') Volunteer

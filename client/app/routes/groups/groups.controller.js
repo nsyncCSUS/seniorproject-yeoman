@@ -13,6 +13,7 @@ angular.module('seniorprojectYoApp')
         $scope.submitted = false;
         $scope.isSubbing = false;
         $scope.isBusy = false;
+        $scope.isLoaded = false;
 
         $scope.organizersToAdd = [];
         $scope.searchResults = [];
@@ -95,6 +96,7 @@ angular.module('seniorprojectYoApp')
             // Populate subscriptions
             UserService.groups.volunteeredTo.index($scope.user._id, {}, function(res) {
                 $scope.user.groups.volunteeredTo = res.data;
+                $scope.isLoaded = true;
             });
 
         };

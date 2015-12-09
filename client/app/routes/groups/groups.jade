@@ -246,15 +246,15 @@ div(ng-show='!isEditing')
 
                             hr
 
-                            button.btn.btn-default.center-item(ng-show='!isSubscribed()', ng-click='subscribe()', ng-disabled='isSubbing')
+                            button.btn.btn-default.center-item(ng-show='!isSubscribed()', ng-click='subscribe()', ng-disabled='isSubbing || !isLoaded')
                                 h4 Subscribe
-                            button.btn.btn-default.center-item(ng-show='isSubscribed()', ng-click='unsubscribe()', ng-disabled='isSubbing')
+                            button.btn.btn-default.center-item(ng-show='isSubscribed()', ng-click='unsubscribe()', ng-disabled='isSubbing || !isLoaded')
                                 h4 Unsubscribe
 
 
                         .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                            .panel-default.cursor-pointer
-                                .panel-heading(role='button', data-toggle='collapse', data-target='#organizers', aria-expanded='true', aria-controls='organizers')
+                            .panel-default
+                                .panel-heading.cursor-pointer(role='button', data-toggle='collapse', data-target='#organizers', aria-expanded='true', aria-controls='organizers')
                                     h4.panel-title
                                         a <strong>{{group.organizers.length}} Organizers</strong>
                                             span.glyphicon.glyphicon-chevron-down.pull-right(aria-hidden='true')
@@ -272,9 +272,9 @@ div(ng-show='!isEditing')
                                                                 a(href='/users/{{organizer._id}}')
                                                                     img.img-responsive.img-rounded(src='{{organizer.picture}}')
                                                             .col-xs-6.col-sm-6.col-md-6.col-lg-6
-                                                                button.btn.btn-default.btn-xs Contact
-                            .panel-default.cursor-pointer
-                                .panel-heading(role='button', data-toggle='collapse', data-target='#volunteers', aria-expanded='true', aria-controls='volunteers')
+                                                                button.btn.btn-default.btn-sm Contact
+                            .panel-default
+                                .panel-heading.cursor-pointer(role='button', data-toggle='collapse', data-target='#volunteers', aria-expanded='true', aria-controls='volunteers')
                                     h4.panel-title
                                         a <strong>{{group.volunteers.length}} Subscribers</strong>
                                             span.glyphicon.glyphicon-chevron-down.pull-right(aria-hidden='true')

@@ -28,7 +28,7 @@
     .col-xs-12.col-sm-12.col-md-12.col-lg-12
         .row
             .col-xs-12.col-sm-12.col-md-12.col-lg-12.navbar-btn
-                img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/{{interest}}.png', width='35', height='35', ng-repeat='interest in event.interests | orderBy:interest', uib-tooltip='{{interest}}')
+                img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/{{interest}}.png', ng-repeat='interest in event.interests | orderBy:interest', uib-tooltip='{{interest}}')
 
     .col-xs-12.col-sm-12.col-md-12.col-lg-12
         .row
@@ -36,7 +36,7 @@
                 .row
                     .col-xs-4.col-sm-12.col-md-12.col-lg-12
                         a(ng-href='/groups/{{event.group._id}}/events/{{event._id}}/')
-                            img.img-responsive.img-thumbnail(src='{{event.picture}}')   
+                            img.img-responsive.img-thumbnail(src='{{event.picture}}')
             .col-xs-12.col-sm-8.col-md-8.col-lg-8
                 .row
                     .col-xs-12.col-sm-12.col-md-12.col-lg-12
@@ -50,5 +50,5 @@
             .col-xs-12.col-sm-6.col-md-6.col-lg-6
                 h4.text-right {{event.volunteers.length}} / {{event.maxVolunteers}}
                     | &nbsp
-                    button.btn(ng-show='isVolunteering()', ng-click='optOut()', ng-disabled='isOrganizer() || isCurrentlyActive() || !isLoaded || isEnded() || isBusy') Opt out
-                    button.btn-success(ng-show='!isVolunteering()', ng-click='volunteer()', ng-disabled='isOrganizer() || isCurrentlyActive() || !isLoaded || isEnded() || isBusy') Volunteer Now
+                    button.btn.btn-danger(ng-show='isVolunteering()', ng-click='optOut()', ng-disabled='isOrganizer() || isCurrentlyActive() || !isLoaded || isEnded() || isBusy') Opt out
+                    button.btn.btn-success(ng-show='!isVolunteering()', ng-click='volunteer()', ng-disabled='isOrganizer() || isCurrentlyActive() || !isLoaded || isEnded() || isBusy') Volunteer Now

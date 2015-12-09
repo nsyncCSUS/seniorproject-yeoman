@@ -14,6 +14,7 @@ angular.module('seniorprojectYoApp')
         $scope.submitted = false;
         $scope.alerts = [];
         $scope.isBusy = false;
+        $scope.isLoaded = false;
 
         $scope.animalsSelected = "";
         $scope.educationSelected = "";
@@ -70,6 +71,7 @@ angular.module('seniorprojectYoApp')
             // Populate organizers
             EventService.organizers.index($scope.event._id, {}, function(res) {
                 $scope.event.organizers = res.data;
+                $scope.isLoaded = true;
                 //console.log($scope.event);
             });
         }

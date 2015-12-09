@@ -11,7 +11,7 @@
     .col-xs-12.col-sm-12.col-md-12.col-lg-12
         .row
             .col-xs-12.col-sm-12.col-md-12.col-lg-12.navbar-btn
-                img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/{{interest}}.png', width='35', height='35', ng-repeat='interest in group.interests | orderBy:interest', uib-tooltip='{{interest}}')
+                img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/{{interest}}.png', ng-repeat='interest in group.interests | orderBy:interest', uib-tooltip='{{interest}}')
 
     .col-xs-12.col-sm-12.col-md-12.col-lg-12
         .row

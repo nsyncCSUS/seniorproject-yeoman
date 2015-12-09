@@ -45,6 +45,11 @@ body {
 
 a {
     //color: #00B7FF;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
 }
 
 label {
@@ -56,6 +61,10 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
+}
+
+input::-webkit-calendar-picker-indicator{
+    display: none;
 }
 
 .box-one {

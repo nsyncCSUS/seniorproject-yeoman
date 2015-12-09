@@ -44,12 +44,30 @@ div(ng-show='isEditing')
                             img.img-thumbnail.not-selected.cursor-pointer(src='/images/interests/youth.png', ng-class='youthSelected', ng-click='addInterest("Youth")', uib-tooltip='Youth')
                 hr
 
+                .row
+                    .col-xs-12.col-sm-6.col-md-6.col-lg-6
+                        label(for='birthday') Birthday
+                        .input-group
+                            input.form-control(type='date', uib-datepicker-popup='MMMM dd,yyyy', ng-model='user.birthday', is-open='status.opened', max-date='today', datepicker-mode='year', close-text='Close')
+                            span.input-group-btn
+                                button.btn.btn-default(type='button', ng-click='open($event)')
+                                    i.glyphicon.glyphicon-calendar
+
+                hr
+
             .col-xs-12.col-sm-4.col-md-4.col-lg-4
-                img.img-responsive.img-thumbnail.center-item(src="{{user.picture}}")
-                div(ng-show='isEditing')
-                    .form-group
-                        input(type='file')
-                        | Might have to use external module for file inputs
+                label(for='pic') Picture
+                img.img-responsive.img-thumbnail.center-item(ng-show='userForm.pic.$invalid || picFile == null', ng-src='{{user.picture}}')
+                img.img-responsive.img-thumbnail.center-item(ng-show='userForm.pic.$valid', ngf-src='picFile')
+                hr
+                div
+                    .form-group(ng-class='{ "has-error" : userForm.pic.$invalid }')
+                        input.btn.center-item#pic(type='file', ngf-select='', ng-model='picFile', name='pic', accept='image/*', ngf-max-size='2MB')
+                        button.btn.btn-default.center-item(ng-show='picFile', ng-click='picFile = null') Remove
+                        div(ng-messages='userForm.pic.$error', ng-show='userForm.pic.$error')
+                            div.help-block(ng-message='file') Picture file error
+                            div.help-block(ng-message='maxSize') Picture file too big (Max 2MB)
+
                 hr
 
             .col-xs-12.col-sm-8.col-md-8.col-lg-8
@@ -157,27 +175,48 @@ div(ng-show='!isEditing')
     .container
         .row
             .col-xs-12.col-sm-8.col-md-8.col-lg-8
-                h2.hidden-xs {{user.name}}
-                h2.visible-xs.text-center {{user.name}}
+                h2.hidden-xs <strong>{{user.name}}</strong>
+                h2.visible-xs.text-center <strong>{{user.name}}</strong>
             .col-xs-12.col-sm-4.col-md-4.col-lg-4
                 h2.pull-right.hidden-xs
-                    img.btn.btn-sm(ng-src='/images/social-media/googlePlus.png', ng-disabled='!checkIfHas("googlePlus")', ng-click='goTo(user.googlePlusURL)', uib-tooltip='{{user.googlePlusURL}}')
-                    img.btn.btn-sm(ng-src='/images/social-media/facebook.png', ng-disabled='!checkIfHas("facebook")', ng-click='goTo(user.facebookURL)', uib-tooltip='{{user.facebookURL}}')
-                    img.btn.btn-sm(ng-src='/images/social-media/twitter.png', ng-disabled='!checkIfHas("twitter")', ng-click='goTo(user.twitterURL)', uib-tooltip='{{user.twitterURL}}')
-                    img.btn.btn-sm(ng-src='/images/social-media/linkedIn.png', ng-disabled='!checkIfHas("linkedIn")', ng-click='goTo(user.linkedInURL)', uib-tooltip='{{user.linkedInURL}}')
+                    a(ng-href='{{user.googlePlusURL}}', target='_blank')
+                        img.btn.btn-sm(ng-src='/images/social-media/googlePlus.png', ng-disabled='!checkIfHas("googlePlus")', uib-tooltip='{{user.googlePlusURL}}')
+                    a(ng-href='{{user.facebookURL}}', target='_blank')
+                        img.btn.btn-sm(ng-src='/images/social-media/facebook.png', ng-disabled='!checkIfHas("facebook")', uib-tooltip='{{user.facebookURL}}')
+                    a(ng-href='{{user.twitterURL}}', target='_blank')
+                        img.btn.btn-sm(ng-src='/images/social-media/twitter.png', ng-disabled='!checkIfHas("twitter")', uib-tooltip='{{user.twitterURL}}')
+                    a(ng-href='{{user.linkedInURL}}', target='_blank')
+                        img.btn.btn-sm(ng-src='/images/social-media/linkedIn.png', ng-disabled='!checkIfHas("linkedIn")', uib-tooltip='{{user.linkedInURL}}')
+                    a(ng-href='{{user.personalWebsiteURL}}', target='_blank')
+                        img.btn.btn-sm(ng-src='/images/social-media/website.png', ng-disabled='!checkIfHas("website")', uib-tooltip='{{user.personalWebsiteURL}}')
                 .visible-xs.text-center
-                    img.btn.btn-sm(ng-src='/images/social-media/googlePlus.png', ng-disabled='!checkIfHas("googlePlus")', ng-click='goTo(user.googlePlusURL)', uib-tooltip='{{user.googlePlusURL}}')
-                    img.btn.btn-sm(ng-src='/images/social-media/facebook.png', ng-disabled='!checkIfHas("facebook")', ng-click='goTo(user.facebookURL)', uib-tooltip='{{user.facebookURL}}')
-                    img.btn.btn-sm(ng-src='/images/social-media/twitter.png', ng-disabled='!checkIfHas("twitter")', ng-click='goTo(user.twitterURL)', uib-tooltip='{{user.twitterURL}}')
-                    img.btn.btn-sm(ng-src='/images/social-media/linkedIn.png', ng-disabled='!checkIfHas("linkedIn")', ng-click='goTo(user.linkedInURL)', uib-tooltip='{{user.linkedInURL}}')
+                    a(ng-href='{{user.googlePlusURL}}', target='_blank')
+                        img.btn.btn-sm(ng-src='/images/social-media/googlePlus.png', ng-disabled='!checkIfHas("googlePlus")', uib-tooltip='{{user.googlePlusURL}}')
+                    a(ng-href='{{user.facebookURL}}', target='_blank')
+                        img.btn.btn-sm(ng-src='/images/social-media/facebook.png', ng-disabled='!checkIfHas("facebook")', uib-tooltip='{{user.facebookURL}}')
+                    a(ng-href='{{user.twitterURL}}', target='_blank')
+                        img.btn.btn-sm(ng-src='/images/social-media/twitter.png', ng-disabled='!checkIfHas("twitter")', uib-tooltip='{{user.twitterURL}}')
+                    a(ng-href='{{user.linkedInURL}}', target='_blank')
+                        img.btn.btn-sm(ng-src='/images/social-media/linkedIn.png', ng-disabled='!checkIfHas("linkedIn")', uib-tooltip='{{user.linkedInURL}}')
+                    a(ng-href='{{user.personalWebsiteURL}}', target='_blank')
+                        img.btn.btn-sm(ng-src='/images/social-media/website.png', ng-disabled='!checkIfHas("website")', uib-tooltip='{{user.personalWebsiteURL}}')
 
         .row
             .col-xs-12.col-sm-4.col-md-4.col-lg-4
-                .col-xs-4.col-sm-12.col-md-12.col-lg-12
-                    img.img-responsive.img-thumbnail(src="//placehold.it/500x500")
+                .col-xs-4.col-sm-12.col-md-12.col-lg-12.profile-picture
+                    img.img-responsive.img-thumbnail.center-item(src="{{user.picture}}")
                 .col-xs-8.col-sm-12.col-md-12.col-lg-12.text-center.info-row
                     h5 Member since: {{user.creationDate | date:'MMM dd, yyyy'}}
+
                     hr
+
+                    h5(ng-show='user.city && user.state') {{user.city}}, {{user.state}}
+                    h5(ng-show='!user.city || !user.state') <i>Location Unknown</i>
+                    h5(ng-show='user.birthday') Age: {{user.age}}
+                    h5(ng-show='!user.birthday') <i>Age: Unknown</i>
+
+                    hr
+
                     button.btn.btn-info.center-item(ng-click='messageUser()') Contact {{user.firstName}}
 
             .col-xs-12.col-sm-8.col-md-8.col-lg-8.panel-success

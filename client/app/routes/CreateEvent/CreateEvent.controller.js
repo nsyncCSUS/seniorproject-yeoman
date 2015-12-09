@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('CreateEventCtrl', function($stateParams, $scope, $location, $timeout, EventService, UserService, GroupService, Auth) {
+    .controller('CreateEventCtrl', function($stateParams, $scope, $location, $timeout, EventService, UserService, GroupService, PicUploadService, Auth) {
         /***************************************************************************
          * Variables (includes ones from scope too)
          **************************************************************************/
@@ -74,29 +74,58 @@ angular.module('seniorprojectYoApp')
 
                 buildDuration();
 
-                GroupService.events.create($stateParams.groupId, $scope.event,
-                    function(res) {     // success
+                // Check to see if a new picture is inputted
+                if ($scope.picFile) {
+                    PicUploadService.picUpload($scope.picFile).then(function(data) {
+                        $scope.event.picture = data.data;
+                        $scope.picFile = null;
 
-                        $scope.alerts.push({type: "success", msg: "Successfully created event, redirecting in 3 seconds..."});
+                        GroupService.events.create($stateParams.groupId, $scope.event,
+                            function(res) {     // success
+
+                                $scope.alerts.push({type: "success", msg: "Successfully created event, redirecting in 3 seconds..."});
 
 
-                        $timeout(function() {
-                            $location.path("/groups/" + res.data.event.group + "/events/" + res.data.event._id).replace;
-                        }, 3000);
-                    },
-                    function(res) {     // error
-                        $scope.alerts.push({type: "danger", msg: "Unsuccessfully created event"});
-                        $timeout(function() {
-                            $scope.isCreating = false;
-                        }, 3000);
+                                $timeout(function() {
+                                    $location.path("/groups/" + res.data.event.group + "/events/" + res.data.event._id).replace;
+                                }, 3000);
+                            },
+                            function(res) {     // error
+                                $scope.alerts.push({type: "danger", msg: "Unsuccessfully created event"});
+                                $timeout(function() {
+                                    $scope.isCreating = false;
+                                }, 3000);
 
-                    });
-                }
-                else {
-                    $scope.alerts.push({type: "danger", msg: "Errors found, please fix them."});
-                    $scope.submitted = true;
-                    //console.log("invalid");
-                }
+                            });
+                        });
+                    }
+                    else {
+                        GroupService.events.create($stateParams.groupId, $scope.event,
+                            function(res) {     // success
+
+                                $scope.alerts.push({type: "success", msg: "Successfully created event, redirecting in 3 seconds..."});
+
+
+                                $timeout(function() {
+                                    $location.path("/groups/" + res.data.event.group + "/events/" + res.data.event._id).replace;
+                                }, 3000);
+                            },
+                            function(res) {     // error
+                                $scope.alerts.push({type: "danger", msg: "Unsuccessfully created event"});
+                                $timeout(function() {
+                                    $scope.isCreating = false;
+                                }, 3000);
+
+                            });
+                        }
+
+
+            }
+            else {
+                $scope.alerts.push({type: "danger", msg: "Errors found, please fix them."});
+                $scope.submitted = true;
+                //console.log("invalid");
+            }
         }
 
         function checkStartTime() {

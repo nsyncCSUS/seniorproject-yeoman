@@ -5,7 +5,8 @@
         .row
             h4
                 a(ng-href='/groups/{{group._id}}/') {{group.name}}
-            h5 {{group.city}}, {{group.state}} {{group.zipcode}}
+            h5(ng-show='group.city && group.state && group.zipcode') {{group.city}}, {{group.state}} {{group.zipcode}}
+            h5(ng-show='!group.city || !group.state || !group.zipcode') <i>Location Unknown</i>
 
     .col-xs-12.col-sm-12.col-md-12.col-lg-12
         .row

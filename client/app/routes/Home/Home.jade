@@ -20,33 +20,24 @@ div(ng-include='"components/navbar/navbar.html"')
                 .col-xs-12.col-sm-2.col-md-1.col-lg-1
                     .text-right
                         button.btn.btn-default(ng-click='search(search.text)') Search
-                .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                    .advancedSearchLabel.text-right
-                        label(ng-click='toggleAdvancedSearch()')
-                            | Advanced Search
-
-            .well.box-one(ng-show='advancedSearch')
-                form.form-inline
-                    .form-group
-                        .col-xs-12.col-sm-6.col-md-4.col-lg-4
-                            form(role='form')
-                                .btn-group(data-toggle)
-                                      label.btn.active.btn-default(uib-tooltip='Find something to do', ng-model='advbtn', uib-btn-radio="'Events'") Events
-                                      label.btn.btn-default(uib-tooltip='Find your friends', ng-model='advbtn', uib-btn-radio="'People'") People
-                                      label.btn.btn-default(uib-tooltip='Find a cause', ng-model='advbtn', uib-btn-radio="'Groups'") Groups
-                        .col-xs-12.col-sm-6.col-md-4.col-lg-4
-                            .visible-xs
-                            br
-                            br
-                            form(role='form')
-                              .btn-group
-                                img.img-thumbnail(ng-src='/images/interests/animals.png',  width='35', height='35', uib-tooltip='Animal',style='{{animalButton}}',ng-click='addAnimal()')
-                                img.img-thumbnail(ng-src='/images/interests/education.png',  width='35', height='35', uib-tooltip='Education' ,style='{{educationButton}}',ng-click='addEducation()')
-                                img.img-thumbnail(ng-src='/images/interests/environment.png',  width='35', height='35', uib-tooltip='Environment',style='{{environmentButton}}',ng-click='addEnvironment()')
-                                img.img-thumbnail(ng-src='/images/interests/people.png',  width='35', height='35', uib-tooltip='People',style='{{peopleButton}}',ng-click='addPeople()')
-                                img.img-thumbnail(ng-src='/images/interests/recreation.png',  width='35', height='35', uib-tooltip='Recreation',style='{{recreationButton}}',ng-click='addRecreation()')
-                                img.img-thumbnail(ng-src='/images/interests/technology.png',  width='35', height='35', uib-tooltip='Technology',style='{{technologyButton}}',ng-click='addTechnology()')
-                                img.img-thumbnail(ng-src='/images/interests/youth.png',  width='35', height='35', uib-tooltip='Youth',style='{{youthButton}}',ng-click='addYouth()')
+            form.form-inline
+                .form-group
+                    .col-xs-12.col-sm-6.col-md-4.col-lg-4
+                        form(role='form')
+                            .btn-group(data-toggle)
+                                  label.btn.active.btn-default(uib-tooltip='Find something to do', ng-model='advbtn', uib-btn-radio="'Events'") Events
+                                  label.btn.btn-default(uib-tooltip='Find your friends', ng-model='advbtn', uib-btn-radio="'People'") People
+                                  label.btn.btn-default(uib-tooltip='Find a cause', ng-model='advbtn', uib-btn-radio="'Groups'") Groups
+                    .col-xs-12.col-sm-6.col-md-4.col-lg-4
+                        form(role='form')
+                          .btn-group.selectInterests
+                            img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/Animals.png', uib-tooltip='Animal',style='{{animalButton}}',ng-click='addAnimal()')
+                            img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/Education.png', uib-tooltip='Education' ,style='{{educationButton}}',ng-click='addEducation()')
+                            img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/Environment.png', uib-tooltip='Environment',style='{{environmentButton}}',ng-click='addEnvironment()')
+                            img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/People.png', uib-tooltip='People',style='{{peopleButton}}',ng-click='addPeople()')
+                            img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/Recreation.png', uib-tooltip='Recreation',style='{{recreationButton}}',ng-click='addRecreation()')
+                            img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/Technology.png', uib-tooltip='Technology',style='{{technologyButton}}',ng-click='addTechnology()')
+                            img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/Youth.png', uib-tooltip='Youth',style='{{youthButton}}',ng-click='addYouth()')
 
 
 

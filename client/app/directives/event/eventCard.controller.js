@@ -28,7 +28,6 @@ angular.module('seniorprojectYoApp')
 
         function populate() {
             populateEvent();
-            $scope.isLoaded = true;
         }
 
         // Populate event
@@ -39,6 +38,7 @@ angular.module('seniorprojectYoApp')
                 // Populate organizers
                 EventService.organizers.index($scope.event._id, {}, function (res) {
                     $scope.event.organizers = res.data;
+                    $scope.isLoaded = true;
                 });
 
                 // Populate volunteers

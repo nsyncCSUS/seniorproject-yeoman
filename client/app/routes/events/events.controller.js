@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('EventsCtrl', function($stateParams, $scope, $timeout, $location, EventService, GroupService, UserService, Auth) {
+    .controller('EventsCtrl', function($stateParams, $scope, $timeout, $location, EventService, GroupService, UserService, PicUploadService, Auth) {
         /***************************************************************************
          * Variables (includes ones from scope too)
          **************************************************************************/
@@ -14,6 +14,7 @@ angular.module('seniorprojectYoApp')
         $scope.submitted = false;
         $scope.alerts = [];
         $scope.isBusy = false;
+        $scope.isLoaded = false;
 
         $scope.animalsSelected = "";
         $scope.educationSelected = "";
@@ -70,6 +71,7 @@ angular.module('seniorprojectYoApp')
             // Populate organizers
             EventService.organizers.index($scope.event._id, {}, function(res) {
                 $scope.event.organizers = res.data;
+                $scope.isLoaded = true;
                 //console.log($scope.event);
             });
         }
@@ -303,27 +305,59 @@ angular.module('seniorprojectYoApp')
 
                 buildDuration();
 
-                // Send changes to server
-                EventService.update($scope.event._id, {
-                    event: $scope.event
-                }, function(res) {  // success
-                    $scope.event = res.data.event;
-                    $scope.alerts.push({
-                        type: "success",
-                        msg: 'Event has been updated'
-                    });
+                // Check to see if a new picture is inputted
+                if ($scope.picFile) {
+                    PicUploadService.picUpload($scope.picFile).then(function(data) {
+                        $scope.event.picture = data.data;
+                        $scope.picFile = null;
 
-                    $scope.isEditing = false;
-                    $scope.isUpdating = false;
-                    populate();
-                }, function(res) {  // error
-                    $scope.alerts.push({
-                        type: "danger",
-                        msg: 'There was a problem updating the event'
-                    });
+                        // Send changes to server
+                        EventService.update($scope.event._id, {
+                            event: $scope.event
+                        }, function(res) {  // success
+                            $scope.event = res.data.event;
+                            $scope.alerts.push({
+                                type: "success",
+                                msg: 'Event has been updated'
+                            });
 
-                    $scope.isUpdating = false;
-                });
+                            $scope.isEditing = false;
+                            $scope.isUpdating = false;
+                            populate();
+                        }, function(res) {  // error
+                            $scope.alerts.push({
+                                type: "danger",
+                                msg: 'There was a problem updating the event'
+                            });
+
+                            $scope.isUpdating = false;
+                        });
+                    });
+                }
+                else {
+                    // Send changes to server
+                    EventService.update($scope.event._id, {
+                        event: $scope.event
+                    }, function(res) {  // success
+                        $scope.event = res.data.event;
+                        $scope.alerts.push({
+                            type: "success",
+                            msg: 'Event has been updated'
+                        });
+
+                        $scope.isEditing = false;
+                        $scope.isUpdating = false;
+                        populate();
+                    }, function(res) {  // error
+                        $scope.alerts.push({
+                            type: "danger",
+                            msg: 'There was a problem updating the event'
+                        });
+
+                        $scope.isUpdating = false;
+                    });
+                }
+
 
                 // Keep changes made
                 $scope.event_bak = {};

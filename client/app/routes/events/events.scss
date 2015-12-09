@@ -19,6 +19,11 @@
     margin-right: 2px;
 }
 
+.interests-thumbnail {
+    width: 35px;
+    height: 35px;
+}
+
 @media screen and (max-width: 768px) {
     .interests-thumbnail {
         width: 30px;
@@ -31,10 +36,6 @@
         width: 48px;
         height: 48px;
         margin-right: 2px;
-    }
-    .interests-thumbnail {
-        width: 36px;
-        height: 36px;
     }
 }
 

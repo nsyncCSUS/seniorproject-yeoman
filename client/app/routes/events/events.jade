@@ -102,10 +102,16 @@ div(ng-show='isEditing')
 
 
             .col-xs-12.col-sm-4.col-md-4.col-lg-4
-                img.img-responsive.img-thumbnail.center-item(src="{{event.picture}}")
-                .form-group
-                    input(type='file')
-                    | Might have to use external module for file inputs
+                label(for='pic') Picture
+                img.img-responsive.img-thumbnail.center-item(ng-show='eventForm.pic.$invalid || picFile == null', ng-src='{{event.picture}}')
+                img.img-responsive.img-thumbnail.center-item(ng-show='eventForm.pic.$valid', ngf-src='picFile')
+                hr
+                .form-group(ng-class='{ "has-error" : eventForm.pic.$invalid }')
+                    input.btn.center-item#pic(type='file', ngf-select='', ng-model='picFile', name='pic', accept='image/*', ngf-max-size='2MB')
+                    button.btn.btn-default.center-item(ng-show='picFile', ng-click='picFile = null') Remove
+                    div(ng-messages='eventForm.pic.$error', ng-show='eventForm.pic.$error')
+                        div.help-block(ng-message='file') Picture file error
+                        div.help-block(ng-message='maxSize') Picture file too big (Max 2MB)
                 hr
 
             .col-xs-12.col-sm-8.col-md-8.col-lg-8
@@ -238,13 +244,17 @@ div(ng-show='!isEditing')
                             .duration for {{event.duration}}
 
                     .col-xs-12.col-sm-12.col-md-12.col-lg-12.card-body
-                        h5 {{event.street}} {{event.city}}, {{event.state}} {{event.zipcode}}
+                        h5
+                            span.glyphicon.glyphicon-globe
+                            | &nbsp
+                            a(ng-href='https://www.google.com/maps/place/{{event.street}},{{event.city}},{{event.state}}+{{event.zipcode}}', target='_blank')
+                                | {{event.street}} {{event.city}}, {{event.state}} {{event.zipcode}}
 
                         h1(ng-show='isCurrentlyActive()', ng-class='{ "card-bodyUnderlay" : isCurrentlyActive() }') Currently Active
                         h1(ng-show='isEnded()', ng-class='{ "card-bodyUnderlay" : isEnded() }') Ended
 
                         .navbar-btn
-                            img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/{{interest}}.png', ng-repeat='interest in event.interests | orderBy:interest', uib-tooltip='{{interest}}')
+                            img.img-thumbnail.interests-thumbnail(ng-src='images/interests/{{interest}}.png', ng-repeat='interest in event.interests | orderBy:interest', uib-tooltip='{{interest}}')
                             hr
                             h5 {{event.description | limitTo:10000}}
 
@@ -253,8 +263,8 @@ div(ng-show='!isEditing')
                                 .col-xs-12.col-sm-12.col-md-12.col-lg-12
                                     h4.text-center {{event.volunteers.length}} / {{event.maxVolunteers}}
                                         | &nbsp
-                                        button.btn(ng-show='isVolunteering()', ng-click='optOut()', ng-disabled='isCurrentlyActive() || isOrganizer() || isEnded() || isBusy') Opt out
-                                        button.btn(ng-show='!isVolunteering()', ng-click='volunteer()', ng-disabled='isCurrentlyActive() || isOrganizer() || isEnded() || isBusy') Volunteer
+                                        button.btn(ng-show='isVolunteering()', ng-click='optOut()', ng-disabled='isCurrentlyActive() || isOrganizer() || !isLoaded || isEnded() || isBusy') Opt out
+                                        button.btn(ng-show='!isVolunteering()', ng-click='volunteer()', ng-disabled='isCurrentlyActive() || isOrganizer() || !isLoaded || isEnded() || isBusy') Volunteer
                                     hr
                                 .hidden-xs
                                     .col-xs-12.col-sm-12.col-md-12.col-lg-12

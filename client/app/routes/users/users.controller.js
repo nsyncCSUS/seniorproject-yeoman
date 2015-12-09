@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('seniorprojectYoApp')
-    .controller('UsersCtrl', function($scope, $stateParams, $anchorScroll, $timeout, UserService, GroupService, Auth) {
+    .controller('UsersCtrl', function($scope, $stateParams, $anchorScroll, $timeout, UserService, GroupService, PicUploadService, Auth) {
 
 
         /***************************************************************************
@@ -12,6 +12,8 @@ angular.module('seniorprojectYoApp')
         $scope.isUpdating = false;
         $scope.userId = $stateParams.id;
         $scope.alerts = [];
+        $scope.status = {opened: false};
+        $scope.today = new Date();
 
         $scope.animalsSelected = "";
         $scope.educationSelected = "";
@@ -37,8 +39,10 @@ angular.module('seniorprojectYoApp')
                          $scope.alerts.push({type: "danger", msg: "There was a problem retrieving user."});
                      } else {
                          $scope.user = res.data.user;
+                         buildAge();
                          populateUser();
                          checkAdmin();
+                         //console.log($scope.user);
                      }
                  });
              } else {
@@ -74,6 +78,14 @@ angular.module('seniorprojectYoApp')
                      $scope.isAdmin = false;
                  }
              }
+         }
+
+         function buildAge() {
+             $scope.user.birthday = new Date($scope.user.birthday); // fix angular problem
+             var today = moment(new Date());
+             var birthday = moment($scope.user.birthday);
+             var age = moment(new Date()).diff(moment($scope.user.birthday));
+             $scope.user.age = moment.duration(age).get('years');
          }
         /***********************************************************************
          * Functions that controls tabs for searching
@@ -262,19 +274,44 @@ angular.module('seniorprojectYoApp')
                 $scope.technologySelected_bak = "";
                 $scope.youthSelected_bak = "";
 
-                UserService.update($scope.user._id, { user: $scope.user },
-                    function(res) {  // success
-                        $scope.alerts.push({type: "success", msg: "Successfully updated user."});
-                        $scope.user = res.data.user;
+                // Check to see if a new picture is inputted
+                if ($scope.picFile){
+                    PicUploadService.picUpload($scope.picFile).then(function(data) {
+                      $scope.user.picture = data.data;
+                      $scope.picFile = null;
 
-                        $scope.isEditing = false;
-                        $scope.isUpdating = false;
-                    },
-                    function(res) {  // error
-                        $scope.alerts.push({type: "danger", msg: "Unsuccessfully updated user."});
+                      UserService.update($scope.user._id, { user: $scope.user },
+                          function(res) {  // success
+                              $scope.alerts.push({type: "success", msg: "Successfully updated user."});
+                              $scope.user = res.data.user;
+                              buildAge();
 
-                        $scope.isUpdating = false;
-                });
+                              $scope.isEditing = false;
+                              $scope.isUpdating = false;
+                          },
+                          function(res) {  // error
+                              $scope.alerts.push({type: "danger", msg: "Unsuccessfully updated user."});
+
+                              $scope.isUpdating = false;
+                      });
+                    });
+                }
+                else {
+                    UserService.update($scope.user._id, { user: $scope.user },
+                        function(res) {  // success
+                            $scope.alerts.push({type: "success", msg: "Successfully updated user."});
+                            $scope.user = res.data.user;
+                            buildAge();
+
+                            $scope.isEditing = false;
+                            $scope.isUpdating = false;
+                        },
+                        function(res) {  // error
+                            $scope.alerts.push({type: "danger", msg: "Unsuccessfully updated user."});
+
+                            $scope.isUpdating = false;
+                    });
+                }
             }
             else {
                 $scope.alerts.push({type: "danger", msg: "Errors found, please fix them."});
@@ -329,4 +366,7 @@ angular.module('seniorprojectYoApp')
             $scope.alerts.splice(index, 1);
         }
 
+        $scope.open = function($event) {
+            $scope.status.opened = true;
+          };
     });

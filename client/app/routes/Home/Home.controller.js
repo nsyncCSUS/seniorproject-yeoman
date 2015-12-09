@@ -51,7 +51,7 @@ angular.module('seniorprojectYoApp')
         //  $scope.currentTab = 'events';
         //console.log($scope.search.text);
 
-        for(let i of intrestArray){
+        for(var i in intrestArray){
           if(i !== undefined ){
                 intrestString += i;
                 intrestString +=' ';

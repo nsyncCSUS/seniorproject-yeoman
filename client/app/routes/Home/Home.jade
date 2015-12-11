@@ -1,58 +1,60 @@
 div(ng-include='"components/navbar/navbar.html"')
 
 .container
-    .box-one(ng-show='!isSearching')
-        .row
-            .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                .img-responsive
-                    img(src='/images/banner/1.png', alt='Cinque Terre', width='320', height='250')
-                    img(src='/images/banner/2.png', alt='Cinque Terre', width='320', height='250')
-                    img(src='/images/banner/3.png', alt='Cinque Terre', width='320', height='250')
-
-    div(ng-click='stopSearching()')
-        |</br> </br>
-
-    .well
-        form.form-horizontal
-            .form-group
-                .col-xs-12.col-sm-10.col-md-11.col-lg-11
-                    input.form-control#searchBox(type='text', placeholder='search', ng-model='search.text')
-                .col-xs-12.col-sm-2.col-md-1.col-lg-1
-                    .text-right
-                        button.btn.btn-default(ng-click='search(search.text)') Search
-            form.form-inline
-                .form-group
-                    .col-xs-12.col-sm-6.col-md-4.col-lg-4
-                        form(role='form')
-                            .btn-group(data-toggle)
-                                  label.btn.active.btn-default(uib-tooltip='Find something to do', ng-model='advbtn', uib-btn-radio="'Events'") Events
-                                  label.btn.btn-default(uib-tooltip='Find your friends', ng-model='advbtn', uib-btn-radio="'People'") People
-                                  label.btn.btn-default(uib-tooltip='Find a cause', ng-model='advbtn', uib-btn-radio="'Groups'") Groups
-                    .col-xs-12.col-sm-6.col-md-4.col-lg-4
-                        form(role='form')
-                          .btn-group.selectInterests
-                            img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/Animals.png', uib-tooltip='Animal',style='{{animalButton}}',ng-click='addAnimal()')
-                            img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/Education.png', uib-tooltip='Education' ,style='{{educationButton}}',ng-click='addEducation()')
-                            img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/Environment.png', uib-tooltip='Environment',style='{{environmentButton}}',ng-click='addEnvironment()')
-                            img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/People.png', uib-tooltip='People',style='{{peopleButton}}',ng-click='addPeople()')
-                            img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/Recreation.png', uib-tooltip='Recreation',style='{{recreationButton}}',ng-click='addRecreation()')
-                            img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/Technology.png', uib-tooltip='Technology',style='{{technologyButton}}',ng-click='addTechnology()')
-                            img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/Youth.png', uib-tooltip='Youth',style='{{youthButton}}',ng-click='addYouth()')
+	.box-one(ng-show='!isSearching')
+		.row
+			.col-xs-12.col-sm-12.col-md-12.col-lg-12
+				.img-responsive
+					img(src='/images/banner/1.png', alt='Cinque Terre')
+					img(src='/images/banner/2.png', alt='Cinque Terre')
+					img(src='/images/banner/3.png', alt='Cinque Terre')
 
 
 
 
 
+	.well
+		form.form-horizontal
+			.form-group
+				.col-xs-12.col-sm-12.col-md-12.col-lg-12
+					.input-group
+						input.form-control(type='text', placeholder='Search', ng-model='search.text')
+						span.input-group-btn
+							button.btn.btn-default(type='button', ng-click='search(search.text)') Search
+			form.form-inline
+				.form-group
+					.col-xs-12.col-sm-6.col-md-4.col-lg-4
+						.btn-group(data-toggle)
+							label.btn.active.btn-default(uib-tooltip='Find something to do', ng-model='advbtn', uib-btn-radio="'Events'") Events
+							label.btn.btn-default(uib-tooltip='Find your friends', ng-model='advbtn', uib-btn-radio="'People'") People
+							label.btn.btn-default(uib-tooltip='Find a cause', ng-model='advbtn', uib-btn-radio="'Groups'") Groups
+
+					.col-xs-12.col-sm-6.col-md-4.col-lg-4
+						.btn-group.selectInterests
+							img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/Animals.png', uib-tooltip='Animal',style='{{animalButton}}',ng-click='addAnimal()')
+							img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/Education.png', uib-tooltip='Education' ,style='{{educationButton}}',ng-click='addEducation()')
+							img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/Environment.png', uib-tooltip='Environment',style='{{environmentButton}}',ng-click='addEnvironment()')
+							img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/People.png', uib-tooltip='People',style='{{peopleButton}}',ng-click='addPeople()')
+							img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/Recreation.png', uib-tooltip='Recreation',style='{{recreationButton}}',ng-click='addRecreation()')
+							img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/Technology.png', uib-tooltip='Technology',style='{{technologyButton}}',ng-click='addTechnology()')
+							img.img-thumbnail.interests-thumbnail(ng-src='/images/interests/Youth.png', uib-tooltip='Youth',style='{{youthButton}}',ng-click='addYouth()')
 
 
-    .panel-group(ng-show='getSearchType("Events")')
-        .col-xs-12.col-sm-12.col-md-6.col-lg-6.card-row(ng-repeat='event in events | orderBy:"startTimeDate" | CheckExpired:false')
-            group-event-card(event='event')
 
-    .panel-group(ng-show='getSearchType("Groups")')
-        .col-xs-12.col-sm-12.col-md-6.col-lg-6.card-row(ng-repeat='group in groups')
-            group-card(group='group')
 
-    .panel-group(ng-show='getSearchType("People")')
-        .col-xs-12.col-sm-12.col-md-6.col-lg-6.card-row(ng-repeat='user in users')
-            user-card
+
+	.col-xs-12.col-sm-12.col-md-12.col-lg-12.float-btm
+		uib-progressbar.progress-striped(value='search.progress', animate='true', ng-show='search.progress < 100')
+
+
+	.panel-group(ng-show='getSearchType("Events")')
+		.col-xs-12.col-sm-12.col-md-6.col-lg-6.card-row(ng-repeat='event in events | orderBy:"startTimeDate" | CheckExpired:false')
+			group-event-card(event='event')
+
+	.panel-group(ng-show='getSearchType("Groups")')
+		.col-xs-12.col-sm-12.col-md-6.col-lg-6.card-row(ng-repeat='group in groups')
+			group-card(group='group')
+
+	.panel-group(ng-show='getSearchType("People")')
+		.col-xs-12.col-sm-12.col-md-6.col-lg-6.card-row(ng-repeat='user in users')
+			user-card

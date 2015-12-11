@@ -63,6 +63,9 @@ angular.module('seniorprojectYoApp')
             if (Auth.isLoggedIn()) {
                 populateUser();
             }
+            else {
+                $scope.isLoaded = true;
+            }
         }
 
         function populateGroup() {

@@ -263,10 +263,10 @@ div(ng-show='!isEditing')
                                 .col-xs-12.col-sm-12.col-md-12.col-lg-12
                                     h4.text-center {{event.volunteers.length}} / {{event.maxVolunteers}}
                                         | &nbsp
-                                        button.btn(ng-show='isVolunteering()', ng-click='optOut()', ng-disabled='isCurrentlyActive() || isOrganizer() || !isLoaded || isEnded() || isBusy') Opt out
-                                        button.btn(ng-show='!isVolunteering()', ng-click='volunteer()', ng-disabled='isCurrentlyActive() || isOrganizer() || !isLoaded || isEnded() || isBusy') Volunteer
+                                        button.btn.btn-danger(ng-show='isVolunteering()', ng-click='optOut()', ng-disabled='isCurrentlyActive() || isOrganizer() || !isLoaded || isEnded() || isBusy') Opt out
+                                        button.btn.btn-success(ng-show='!isVolunteering()', ng-click='volunteer()', ng-disabled='isCurrentlyActive() || isOrganizer() || !isLoaded || isEnded() || isBusy') Volunteer
                                     hr
                                 .hidden-xs
                                     .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                                        a(ng-href='/users/{{volunteer._id}}', ng-repeat='volunteer in event.volunteers | limitTo:15')
-                                            img.img-rounded.volunteer-thumbnail(src='{{volunteer.picture}}')
+                                        a(ng-href='/users/{{volunteer._id}}', ng-repeat='volunteer in event.volunteers')
+                                            img.img-rounded.volunteer-thumbnail(src='{{volunteer.picture}}', uib-tooltip='{{volunteer.name}}')

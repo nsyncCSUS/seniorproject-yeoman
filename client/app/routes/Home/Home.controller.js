@@ -53,7 +53,7 @@ angular.module('seniorprojectYoApp')
             $scope.search.text = searchbox;
 
             $scope.search.progress = 50;
-            for(var i in intrestArray){
+            for(let i of intrestArray){
                 if(i !== undefined ){
                     intrestString += i;
                     intrestString +=' ';
